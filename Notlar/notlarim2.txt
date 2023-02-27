@@ -1,0 +1,18 @@
+python yorumlayıcısı olan bir dildir. kütüphaneleri çok geniştir. bilgisayarlar sadece makine dilini kullanır. sadece 0101011 gibi bir dilden anlarlar.
+pythonda satırlar c java gibi ; ile bölünmediği için hangi hizada olduğu önemlidir kodların. 
+mesela class emre(): yapınca sınıfın içindeki her şeyin belirlenebilmesi için sana verilen hiza içerisinde kodları yazmak lazı. 
+
+cmd'de python yazarsak eğer python kodlarını çalıştıracak şekle gelir o moda geçer quit() yaparsak cmd eski haline windows yönetici ekranı olarak çalışmaya başlar.
+   yani python dil paketi yüklenince ide olmadanda kodlar çalışacak çünkü python paketi sayesinde bilgisayar bu kodları anlayabilecek. ama daha iyi bir yazım için en iyisi her zaman ide kullanmaktır. yoksa direkt olarak cmd ile bile kodlar çalışabilir eğer python paketi varsa... o paket ile kodlar bilgisayar diline döner.
+
+windows + r...powershell...
+   ls komutu ile bulunduğumuz dizideki tüm dosyaları görürüz.
+   cd ile istenen dosya yoluna gideriz. cd.. ile geri gideriz cd desktop dersek eğer istenen bir dosya yoluna geçeriz.
+   mkdir ad ile klasör vs oluştururuz bulunduğumuz dosya yolu üzerinde.
+   cmd'de mkdir için uzantı belirtirsek eğer uuzantıya göre dosya oluşturur uzantıı belirtmezsek eğer o zaman klasör oluşturur.
+   rmdir isim yapısı ile istenen klasör,dosya vs silinir. ama dosya yolu silinecek'in dosya yolunda olmalı. (uzantılı bir dosya silinicekse uzantısı yazılmalı.)
+   cmd'ye code . yazarsak eğer vscode çalışır. eğer mesela python dosyalarının olduğu klasör'ün dosya yolunda iken code . yaparsak direkt oolarak o klasör içindekiler ile açılacak.
+   dir ile cmd ekranında bulunan dosya yolundaki tüm klasörler dosyalar vs görürüz...
+
+python dosyalarının uzantısı .py javanın .java c'nin ise .c
+    
