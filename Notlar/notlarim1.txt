@@ -121,6 +121,10 @@ tıpkı c dilinde olduğu gibi istenen sıradaki karaktere ulaşmak istersek eğ
     yaziyi tersten işlemlemek için ise yazi[sondanbasagidecekindex(dahilolacak):gidilecekindex(dahildeğil):gerigidişmiktari] mesela yazi[len(yazi)-1: :-1]
     yazi[:a:] nereden gelirsen gel a kısmının indexi dahil değil orası sınır.
     
+    ters mevzuda ise
+    mesela yazi[-1] demek en sondaki karakter demek yazi[-2] demek en sonun bir önü demek 
+    yazi = "emre" olsun yazi[-1] e , yazi[-2] r yazi[-3] m yazi[-4] e olur...
+ 
     f"{bölge1}{bölge2}" bu yapı ile string ve işlem vs birleştirme yapabiliriz. f'{bölge1}{bölge2}' gibi bir sistem ile kullanabiliriz. 
        veya "isim: {bölge1}, soyisim{bölge2}".format(isim,soyisim) .format(veriler) ile biz {}'ler içerisine sırası ile istenen verileri koyabiliriz.
     
@@ -130,6 +134,7 @@ tıpkı c dilinde olduğu gibi istenen sıradaki karaktere ulaşmak istersek eğ
          1.2 yapınca 2 tane noktadan sonra olan gelecek. 1 ise sayının kendisi ama değişirse o zaman başa gelecek olan boşluğu belirleriz.
 
 bir stringi çarpmak demek yan yana yapıştırmak demek..
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
