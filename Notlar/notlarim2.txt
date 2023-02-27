@@ -12,7 +12,7 @@ windows + r...powershell...
    cmd'de mkdir için uzantı belirtirsek eğer uuzantıya göre dosya oluşturur uzantıı belirtmezsek eğer o zaman klasör oluşturur.
    rmdir isim yapısı ile istenen klasör,dosya vs silinir. ama dosya yolu silinecek'in dosya yolunda olmalı. (uzantılı bir dosya silinicekse uzantısı yazılmalı.)
    cmd'ye code . yazarsak eğer vscode çalışır. eğer mesela python dosyalarının olduğu klasör'ün dosya yolunda iken code . yaparsak direkt oolarak o klasör içindekiler ile açılacak.
-   dir ile cmd ekranında bulunan dosya yolundaki tüm klasörler dosyalar vs görürüz...
+   dir ile cmd ekranında bulunan dosya yolundaki tüm klasörler dosyalar vs görürüz..
 
 python dosyalarının uzantısı .py javanın .java c'nin ise .c
-    
+
