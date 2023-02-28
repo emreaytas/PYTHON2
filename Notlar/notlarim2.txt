@@ -23,3 +23,10 @@ python dosyalarının uzantısı .py javanın .java c'nin ise .c
 \t	tab (yatay boşluk)
 \n	Satır başı
 
+sql server client server mimarisi üzerine kurulmuş bir sistemdir. işlem veririz karşılığında işlemi yapmasını beklersiniz.
+
+ local sunucular kendi kaynaklarını kullanırlar. microsoft acsess mesela kendi kaynaklarınızı kullanarak sorgulama yapar ama sql server öyle değildir client işlemleri yapabiliriz. 
+
+
+
+
