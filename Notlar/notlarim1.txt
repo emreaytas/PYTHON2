@@ -146,6 +146,9 @@ yazi.title() # bunu yaparsak eğer her kelimenin baş harfi büyük olur. kalıc
 yazi.capitalize() # sadece sıfırıncı indexi caps locklu olarak yapar. kalıcı değişim için ise yazi = yazi.capitalize() olmali.
 
 mesela kullanıcıdan bir veri aldık ve kullanıcı başına boşluk koydu hata verdirebilir(mesela parola ise) bunun için ise yazi = yazi.strip() #böylece hem baştaki hemde sondaki boşlukları atar. "  emre  " "emre" olur gibi.
+    sadece soldaki boşluklar için yazi = yazi.lstrip()
+    sadace sağdaki boşluklar için yazi = yazi = rstrip()
+    strip ile istenmeyen değerleride silebiliriz. mesela yazi = yazi.strip('w.moc') #  bunu girersek eğer w . m o c karakterlerinin hepsini siler.
 
 split ise bölme metotudur. eğer yazi = yazi.split yaparsak o zmana default olarak boşluğa göre böler ve bir listeye atar tüm karakter dizilerini. 
    ama mesela split ile bir bölme yaptık ve virgüle göre ayırma yaptık virgüller dahil olmayacak elde edilen karakter dizilerine.
@@ -155,11 +158,17 @@ eğer içinde karakter dizileri olan bir listenin elemanlarını birleştirip bi
 mesela cümle içerisinde bir cümle arıyoruz ve var mı yok mu bilmek istiyoruz. index = yazi.find('emre') # bize döneceği değer içeri koyduğumuz karakter veya karakter dizisinin ilk elemanının indexidir. eğer aranan karkater veya karakter dizisi yoksa -1 döner.
 
 isfound = yazi.startswith('h') # eğer yazi istenen karakter veya karkater dizisi ile başlıyorsa o zaman True döner eğer değilse False döner.
+    endswith ile ise bunun sondaki kısmı halini kontrol ederiz. 
 
-bir stringin içerisinde istenen karakter veya karkater dizisi var mı yok mu öğrenmek için... Degisken = yazi.isjoint() kullanırız. eer varsa 1 yoksa -1 döner.
+yazi = yazi.replace('gidecek','gelecek') # bu fonksiyon ile istenmeyenlerin yerine kendi istediklerimizi yerleştiririz. mesela yazi = yazi.replace('.',',') #noktalar virgül olur.
+    yazi = yazi.replace('.','..').replace('e','t').replace('m','yy') # böyle yaparsak ise birden fazla karakter veya karakter dizisi değişimi yapabiliriz. birden fazla replace'yi ard arda kullanabiliriz.
 
+yazi = yazi.center(50) dersek eğer 50 sağ 50 solda boşluk bırakır ve yazımızı ortalar.
+    yazi = yazi.center(50,'*') sağa 50 yıldız solda 50 yıldız koyar ve yazımızı ortalar.
+    
+
+    
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
 ##################################################################################################################################################################
