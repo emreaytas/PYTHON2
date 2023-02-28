@@ -135,7 +135,22 @@ tıpkı c dilinde olduğu gibi istenen sıradaki karaktere ulaşmak istersek eğ
 
 bir stringi çarpmak demek yan yana yapıştırmak demek..
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/////...String metotları...///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+mesela yazi = "hello there. my name is emre"
+yazi.upper() # yazilar caps locklu olarak yazilir. kalici bir değişim olması için ise yazi = yazi.upper() olmali.
+yazi.lower() # yazilar kalıcı olarak capslockun tersi olarak değişir. kalıcı bir değişim olması için ise yazi = yazi.lower()
+yazi.title() # bunu yaparsak eğer her kelimenin baş harfi büyük olur. kalıcı bir değişim olması için ise yazi = yazi.title() olmali.
+yazi.capitalize() # sadece sıfırıncı indexi caps locklu olarak yapar. kalıcı değişim için ise yazi = yazi.capitalize() olmali.
+
+mesela kullanıcıdan bir veri aldık ve kullanıcı başına boşluk koydu hata verdirebilir(mesela parola ise) bunun için ise yazi = yazi.strip() #böylece hem baştaki hemde sondaki boşlukları atar. "  emre  " "emre" olur gibi.
+
+split ise bölme metotudur. eğer yazi = yazi.split yaparsak o zmana default olarak boşluğa göre böler ve bir listeye atar tüm karakter dizilerini. 
+   ama mesela split ile bir bölme yaptık ve virgüle göre ayırma yaptık virgüller dahil olmayacak elde edilen karakter dizilerine.
+
+eğer içinde karakter dizileri olan bir listenin elemanlarını birleştirip bir tane string elde etmek istersek o zaman yazi(birleştirmesonucuoluşacakstr) = 'birleşirkenarayagelecekolan'.join(birleştirilecekliste) # eğer 5 eleman var 4 tane arayaglecekeleman kullanilir.
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
