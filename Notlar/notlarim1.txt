@@ -156,18 +156,49 @@ split ise bölme metotudur. eğer yazi = yazi.split yaparsak o zmana default ola
 eğer içinde karakter dizileri olan bir listenin elemanlarını birleştirip bir tane string elde etmek istersek o zaman yazi(birleştirmesonucuoluşacakstr) = 'birleşirkenarayagelecekolan'.join(birleştirilecekliste) # eğer 5 eleman var 4 tane arayaglecekeleman kullanilir.
 
 mesela cümle içerisinde bir cümle arıyoruz ve var mı yok mu bilmek istiyoruz. index = yazi.find('emre') # bize döneceği değer içeri koyduğumuz karakter veya karakter dizisinin ilk elemanının indexidir. eğer aranan karkater veya karakter dizisi yoksa -1 döner.
+    deger = yazi.find("aranan",baslangic,bitis) # başlanguç ve bitis indexleri ile o aralıkta istenen karakter veya karakter dizisi var mı yok mu görebiliriz. yoksa -1 döner.
+    rfind ise sağdan aramaya başlar.
+    int = yazi = yazi.rfind('aranan') # böylece en sağdaki arananın başlangıç indexini verir.
 
 isfound = yazi.startswith('h') # eğer yazi istenen karakter veya karkater dizisi ile başlıyorsa o zaman True döner eğer değilse False döner.
     endswith ile ise bunun sondaki kısmı halini kontrol ederiz. 
 
 yazi = yazi.replace('gidecek','gelecek') # bu fonksiyon ile istenmeyenlerin yerine kendi istediklerimizi yerleştiririz. mesela yazi = yazi.replace('.',',') #noktalar virgül olur.
     yazi = yazi.replace('.','..').replace('e','t').replace('m','yy') # böyle yaparsak ise birden fazla karakter veya karakter dizisi değişimi yapabiliriz. birden fazla replace'yi ard arda kullanabiliriz.
+    yazi = yazi.replace('.','-',5) # eğer böyle yaparsak sadece 5 tanesini değiştirir. en soldan itibaren. kaç tanesinin dseğişeceğini belirleyebiliriz.
 
 yazi = yazi.center(50) dersek eğer 50 sağ 50 solda boşluk bırakır ve yazımızı ortalar.
     yazi = yazi.center(50,'*') sağa 50 yıldız solda 50 yıldız koyar ve yazımızı ortalar.
-    
 
-    
+int adet = yazi.count('karakterveyakarakterdizisi') # böylece içerisinde kaç tane karakter dizisi var görebiliriz.
+
+isalpha() ile aritmetiklik sorgularız.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///...Pythonda Listeler.../////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+[] ile listeler tanımlanır. dinamiktir. eleman sayısı sürekli olarak değişebilir.
+   a = ["emre",5,12,"1111"]
+      print(a) # böyle dersek eğer elemanların hepsini yazdırır.
+
+list1 = ["emre","aytas","ford","tr"]
+list2 = ["rrr","adstas","dddd","tdddd"]
+liste3 = list1 + liste2 # bunu yaparsak eğer liste3 list1',in sağına liste2'nin koyulmuş hali olur. tüm değerleri kaplar eleman sıralaması ise önce solda toplanan sonra sağdaki elemanlar olur.
+
+intDeger = len(list1) ile kaç tane eleman var görebiliriz.
+print(len(liste1[0])) # hatta içindeki bir değerin uzunluğuna index'i ile erişebiliriz.
+
+print(list1[0][1]) # m değeri gelir. 0. indexteki elemanın 1. indexteki elemanı gelir.
+
+mesela 
+   user1 = ["emre",20]
+   user2 = ["ford",7]
+
+   user3 = user1 + user2 === ["emre",20,"ford",7]
+   user3 = [user1,user2] === [["emre",20],["ford",7]] # liste içerisine liste koyabiliriz...
+       print(user3[1][0][2]) # r değeri döner. 2. listenin birinci elemanının 3. elemanı.
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

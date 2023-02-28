@@ -16,3 +16,10 @@ windows + r...powershell...
 
 python dosyalarının uzantısı .py javanın .java c'nin ise .c
 
+\’	Tek tırnak
+\”	Çift tırnak
+\\	Ters eğik çizgi (backslash)
+\	Çok satırlı stringlerde yeni satır
+\t	tab (yatay boşluk)
+\n	Satır başı
+
