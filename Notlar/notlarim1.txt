@@ -152,6 +152,12 @@ split ise bölme metotudur. eğer yazi = yazi.split yaparsak o zmana default ola
 
 eğer içinde karakter dizileri olan bir listenin elemanlarını birleştirip bir tane string elde etmek istersek o zaman yazi(birleştirmesonucuoluşacakstr) = 'birleşirkenarayagelecekolan'.join(birleştirilecekliste) # eğer 5 eleman var 4 tane arayaglecekeleman kullanilir.
 
+mesela cümle içerisinde bir cümle arıyoruz ve var mı yok mu bilmek istiyoruz. index = yazi.find('emre') # bize döneceği değer içeri koyduğumuz karakter veya karakter dizisinin ilk elemanının indexidir. eğer aranan karkater veya karakter dizisi yoksa -1 döner.
+
+isfound = yazi.startswith('h') # eğer yazi istenen karakter veya karkater dizisi ile başlıyorsa o zaman True döner eğer değilse False döner.
+
+bir stringin içerisinde istenen karakter veya karkater dizisi var mı yok mu öğrenmek için... Degisken = yazi.isjoint() kullanırız. eer varsa 1 yoksa -1 döner.
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
