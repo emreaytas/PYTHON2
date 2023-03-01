@@ -1,3 +1,11 @@
-liste1 = ["emre",3,"ford","ttt",45,455]
-print(len(liste1))
-print(len(liste1[0]))
+liste = ["Bmw","Mercedes","Opel","Mazda"]
+yazi = "emreemree"
+result = 'm' in yazi
+result1 = "toyota" in liste
+print(str(result) + " " + str(result1))
+liste[-1] = "Renault"
+liste[-2] = "Toyota"
+print(liste)
+liste.append("ddd")
+
+
