@@ -199,6 +199,39 @@ mesela
    user3 = [user1,user2] === [["emre",20],["ford",7]] # liste içerisine liste koyabiliriz...
        print(user3[1][0][2]) # r değeri döner. 2. listenin birinci elemanının 3. elemanı.
 
+mesela bir liste var ve değeri değiştirirken direkt olarak liste[-1](son eleman) = "yenideğer"
+
+listenin veya string'lerin son elemanına ulaşabilmek için listeveyastr[-1] ile ulaşabiliriz -2 ile ise sondan bir öncekine ulaşabilirsin.
+     
+    liste = ["Bmw","Mercedes","Opel","Mazda"]
+    yazi = "emreemree"
+    result = 'm' in yazi
+    result1 = "toyota" in liste
+    print(str(result) + " " + str(result1)) #True ve False yazar in ile bir str veya list içerisinde bir değer var mı yok mu arayabiliriz...
+
+liste = ["Bmw","Mercedes","Opel","Mazda"]
+liste[-1] = "Renault"
+liste[-2] = "Toyota"
+print(liste)      # bu şekilde atama yaparsak eğer kalıcı bir değişim olur.
+
+bir listeye liste[-2:] = ["ford","bmc"] böylece son iki eleman değişir.
+liste.append(eleman) böylece en sona eleman ekleriz. append(eleman,index) yaparsak eğer istenen indexe eleman ekleriz.
+
+liste += ["ford","bmc"] # böylece son kısma yen iki eleman ekleriz.
+
+len(tuple,str,list vs) ile eleman uzunluklarını görürürüz.
+
+value = min(list,tuple vs) en küçük değeri buluruz. str olursa ascii'ye göre en küçük olanı alır.
+value = max(list,tuple vs) en büyük değeri getirir. return ile str olursa ascii'ye göre en büyüğünü getirir.
+
+kesikliste = liste[3:6] bunu yaparsak eğer 3.indexten 6.indexe kadar olan elamanları alır. 6.index dahil değil.
+
+
+
+
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
