@@ -215,7 +215,7 @@ liste[-2] = "Toyota"
 print(liste)      # bu şekilde atama yaparsak eğer kalıcı bir değişim olur.
 
 bir listeye liste[-2:] = ["ford","bmc"] böylece son iki eleman değişir.
-liste.append(eleman) böylece en sona eleman ekleriz. append(eleman,index) yaparsak eğer istenen indexe eleman ekleriz.
+liste.append(eleman) böylece en sona eleman ekleriz. 
 
 liste += ["ford","bmc"] # böylece son kısma yen iki eleman ekleriz.
 
@@ -225,11 +225,74 @@ value = min(list,tuple vs) en küçük değeri buluruz. str olursa ascii'ye gör
 value = max(list,tuple vs) en büyük değeri getirir. return ile str olursa ascii'ye göre en büyüğünü getirir.
 
 kesikliste = liste[3:6] bunu yaparsak eğer 3.indexten 6.indexe kadar olan elamanları alır. 6.index dahil değil.
+kesikliste2 = liste[:4] 0 1 2 3. indexlerdeki değerler ile kesik bir liste oluştur demek.
 
+liste.append() ile en sona eleman ekleriz.
 
+eğer istenen indexe eleman eklemek istersek o zaman liste.insert(index,isteneneleman)
+   en sona eleman eklemek istersek eğer liste.insert(-1,eleman) en sona eleman eklenir.
 
+liste.pop() ile en sondaki eleman çıkarılır. 
+liste.pop(index) ile istenen indexteki eleman çıkarılır.
+liste.sort() //bunu yaaprsak eğer listeyi küçükten büyüğe sıralar. kalıcı bir değişim sağlanır. liste.sort() ile küçükten büyüğe sıralar.
+liste.reverse() dersek eğer listeyi ters çeviririz en sondaki en başa gelir.   sort() ve reverse() kalıcı değişim oluşturur. return etmez.
 
+kactane = liste.count(aranandeger) bu bixze aranan elemandan kaç tane olduğunu gösterir. yoksa 0 return eder.
 
+liste.remove(deger) ile istenen değeri kalıcı olarak temizleriz. ama eğer değer yoksa içeride hata verir.
+liste.clear() yaparak ise bir listenin tüm elemanlarını temizleriz. 
+...............................................
+l = [1, 4, 6, 2, 6, 1]
+
+print("List before calling del:")
+print(l)
+
+del l[3]
+
+print("List after calling del:")
+print(l)
+...............................................
+
+index = name.index("Ali") // bir listedeli elemanın indexini bulmak için. liste.index(eleman) deriz ve indexi bize return eder.
+
+split ile bir stringi böldüğümüz zaman bize bir liste döner. liste = stra.split(',') böylece. vürgüle göre bölme olur ama virgül dahil olmaz.
+
+liste.insert(-1,eleman) ile en sona eleman ekleriz.
+
+...............................................
+booldeger = "Emre" in name
+booldeger1 = "Ali" in name
+    in ile bir stringde veya listede aranan eleman var mı yok mu görebiliriz.
+...............................................
+
+names.append(input("Deger giriniz: ")) # bu şekilde yaparsak eğer direk olarak input sayesinde return ile gelen değeri listeye ekleyebiliriz.
+
+type() fonksiyonu ile biz içine gönderdiklerimizin tipini görebiliriz.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////pythonda tupple////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+listeler [] ile tuple () ile belirlenir.
+
+tuple bir kere tanımlanıp elemanları değişmeyen bir liste gibidir. 
+
+tuple bir kere oluşur elemanları değişmez.
+
+tuple1 = ("mercedes","bmw","ford")
+tuple1[0] = "mclaren" #bunu yaparsak hata alırız. çünkü elemaları sabit kalacak.
+
+static bir liste gibidir.
+
+tuple1 = ("emre","aytas","ford")
+tuple2 = ("gustavo","fring","mclaren") + tuple1 # böylece iki tuple birleştirebiliriz. buna izin verir. sırası ile ilk ("gustavo","fring","mclaren") sonra tuple1 eklenir.
+ 
+sonradan eleman ekleme silme gibi metotlar yok.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///pythonda dictionary/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+key value ilişkisi vardır.
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
