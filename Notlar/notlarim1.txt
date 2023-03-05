@@ -292,10 +292,93 @@ sonradan eleman ekleme silme gibi metotlar yok.
 
 ///pythonda dictionary/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+{} ile tanımlanır . key ve valueler yani bu gruplar , ile ayrılır key:value,key:value gibi bir yapı vardır. 
+
 key value ilişkisi vardır.
+
+...............................................
+names = ["emre","arif","ford","asya"]
+surnames = ["aytas","aytas","focus","liya"]
+
+for i in names:
+    print(i + " " + surnames[names.index(i)])
+
+print(surnames[names.index("ford")]) 
+
+ama eğer dictionary mantığı olursa o zaman key isim value soyisim olacak. mesela dict1 = {"emre":"aytas","ford":"focus"} # bu mantık ile işlemesi lazım. bunun nedeni key ve value mantığı ile olur.
+     print(dict1["emre"]) #yaparsak eğer o zaman bize valueyi return eder.
+     print(dict1["ford"]) #yaparsak o zmaan dict1["ford"] bize "focus" return eder.
+     bir dictionary'e eleman eklemek istersek eğer o zaman dict1["bmw"] = "M5" # yaparsak eğer o zaman yeni bir eleman eklemiş oluruz bir key ekleriz ve key'e value ataması yaparız.
+
+
+...............................................
+   
+     
+     dictionary içide valueler farklı tiplerden keyler farklı veri tiplerinden olabilir.
+     mesela bir key'e bir dictionary atayabiliriz.
+
+users ={
+    
+    "emre":{
+       "isim":"emre",
+       "soyisim":"aytas",
+       "yas":20
+    }
+,
+    "ford":{
+       "isim":"ford",
+       "soyisim":"focus",
+       "yas":7
+    }
+
+}
+..................................................
+users ={
+    
+    "emre":{
+       "isim":"emre",
+       "soyisim":"aytas",
+       "yas":20
+    }
+,
+    "ford":{
+       "isim":"ford",
+       "soyisim":"focus",
+       "yas":7
+    }
+
+}
+
+print(users["emre"]["isim"])
+print(users["emre"]["yas"])
+
+# burada olan ise şudur users["emre"] ile emrenin value'si return edilir. value[key] ile ise value'nin value'si elde edilir.
+
+     users["emre"] = {       "isim":"emre",
+            "soyisim":"aytas",
+            "yas":31} #burada olan ise key'in value'sini güncelleriz. olmayan bir key tanımlarsak bu şekilde o zaman yeni bir key value grubu oluşur.
+
+eğer dictionary[key] yaparsak bu bize value'yi return eder.
+..............................................
+
+veya mesela 
+   users = {
+
+      "emre" = {
+
+         "isim":"emre",
+         "roller":["admin","user","bot"]
+      }
+
+   } # burda biz bir value'ye dictionary atadık. ve bu dictionary içindeki bir keye ise biz liste atadık.
+     # users["emre"]["roller"][0] burada biz "admine ulaşırız". users["emre"] emre'nin valuesi olan dictionaryi return eder. users["emre"]["roller"] ile ise returnle gelen dict'in roller'in value'si olan list return edilir. users["emre"]["roller"][0] burada en son gelen listenin istenen elamanını return ile getirebiliriz.
+
+bir dict içerisinde birden fazlaaynı key olabilir ama aynı olan keylerde hangi values çalışacak o zaman en son eklenen geçerli olacak.
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 ##################################################################################################################################################################
