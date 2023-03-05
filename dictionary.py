@@ -30,9 +30,3 @@ for i in range(ogrenciAdeti):
         
 for i in students:
     print(str(i) +": "+students[i]["ad"]+" "+students[i]["soyad"]+" "+students[i]["phone"])
-         
-        
-    
-    
-    
-    
