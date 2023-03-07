@@ -9,8 +9,49 @@ y = 10
      bu olursa x ile y'nin değerleri yer değiştirir. x 10 y 5 olur.
 
 x = x + 5 demek x'e 5 ekle ve x'e ata demektir. sağdaki işlem tamamlanır sola atanır.
+x -= 5 demek x'e x'in 5 eksiğini ata demek.
+x %= 5 demek x'e X2in 5'e bölümünden kalanı ata demek.
+x //= 3 demek x'in 3 tam bölümünden elde edilen sayıyı x'e ata demek.
+y **= z demek y = y ** z demektir.
+
+values = 1,2,3 demek aslında bir tuple üretmektir. type(values) bize tuple return eder. aslında values = (1,2,3) olur.
+   veya strler = "emre","ford",3 yaparsak strler'de tuple olur. 
+
+veya 
+degerler = 1,2,3,4 
+x,y,z,t = degerler olursa x = 1, y = 2, z = 3, t = 4 olur sırası ile atama olur. ancak böyle atama olacaksa o zaman mesela tuple içinde 4 tane değer varsa 4 tane değeride direkt olarak koymak lazım atama yapmayan değer olmamalı.
+        eğer 3 tane değere atama yapacaksak ve atanacak 6 tane değer varsa x,y,*z = degerler olursa x birinci elemanı alır y ikinci elemanı alır z ise kalanları bir liste halinde alır ve bir liste olur.
+        elde x,*y, z = degerler. o zaman x = 1, z = 4, y = [2,3] olacaktır.
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+///Karşılaştırma operatörleri/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+a >= b eğer a büyük eşit ise True yoksa False verir.
+b <= a eğer b küçük eşittir ise True yoksa False verir 7
+a > b eğer a büyüktür b ise True yoksa False verir.
+a < b eğer a küçüktür b ise True yoksa False verir.
+a == b ise o zaman a ile b eşit ise True yoksa False verir.
+a != b a ile b eşit değilse True değilse False verir.
+
+and(&&) ile ve bağlacı or(||) veya bağlacı. not(!) ile ise durumun tersini alırız. not ile True False olur False True olur.
+
+x = 7
+result = 5 < x < 10 olursa True verir. x 11 olsa False verir. 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+x = y = [1,2,3] önce y liste olur x ise y'nin referansını alır.
+z = [1,2,3] olsun.
+
+print(x == y) #True verir aynı referanslar ama print(x == z) #False alırız değerleri aynı olsa bile farklı referanslar olduğu için False alırız.
+
+peki farklı referansları olan yapıların içeriklerini nasıl karşılaştırırız. print(x is z) #True verir. referansa değil yapıya bakar.
+
+in ile bir şeyin bir şeyin içinde olup olmadığını kontrol ederiz uygun koşullarda varsa True yoksa False verecek.
+
+referanslarla çalışanların içeriklerini kıyaslamak için is kullanırız.
 
 ##################################################################################################################################################################
