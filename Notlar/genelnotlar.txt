@@ -34,3 +34,14 @@ bütün veritabanlarının dili sql'dir. mssql sadece biraz daha gelişmiş olan
 biz sql ile mssql server'a sorgular verirsek eğer mssql serverin kaynakları kullanılacak sorgulama ve işlem yaparken. sorgularımız bilgisayarımız ile server'a gider ve sonuçlanma olur. network üzerinden dinleme ve sorgulama olur.
 
 
+sayi = None
+while True:
+    try:
+        sayi = int(input("Sayiyi giriniz: "))
+        while (sayi < 0) or (sayi > 100):
+            sayi = int(input("Sayinizi dogru giriniz: "))
+        break    
+    except:
+        print("Hata var...")     
+
+        #istenen sayıyı iyi şekilde alma.

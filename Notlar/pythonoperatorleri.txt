@@ -46,12 +46,11 @@ result = 5 < x < 10 olursa True verir. x 11 olsa False verir.
 x = y = [1,2,3] önce y liste olur x ise y'nin referansını alır.
 z = [1,2,3] olsun.
 
-print(x == y) #True verir aynı referanslar ama print(x == z) #False alırız değerleri aynı olsa bile farklı referanslar olduğu için False alırız.
+print(x == y) #True verir print(x == z) #True verir bunun nedeni == operatöri ile içerik kıyaslaması yaparız. is ile ise referans karşılaştırması yaparız.
 
-peki farklı referansları olan yapıların içeriklerini nasıl karşılaştırırız. print(x is z) #True verir. referansa değil yapıya bakar.
+referanslar ile çalışanları kıyaslarken is ile kontrol ederiz farklı referansta ise elemanlar False verir aynı referansı taşıyorlarsalar eğer True verir. 
 
 in ile bir şeyin bir şeyin içinde olup olmadığını kontrol ederiz uygun koşullarda varsa True yoksa False verecek.
 
-referanslarla çalışanların içeriklerini kıyaslamak için is kullanırız.
 
 ##################################################################################################################################################################
