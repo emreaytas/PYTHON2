@@ -1,0 +1,179 @@
+###################################################################################################################################################################################################################################################################################################################################
+
+aslında list,set, dict, tuple vs birer class'tır ve onlara bağlı metotları vardır. classlar sayesinde bir nesne oluştururuz ve biz onlar ile istenen class metotunu kullanabiliriz. 
+   keza stringler vs'de classTır ve istenen mettorları yani string classının metotlarını str1.fonksiyon() yapısı ile kullanırız.
+   . ile fonksiyon nereye kime çalışacak belirleriz. veya bir şeye bağlı olmayacak ise direkt olarak fonksiyonadi(değişkenler) yapısı ile kullanırız.  
+
+bir fonksiyonu herhangi bir nesneye bağlı olarak gönderebiliriz. o zaman o nesneye çalışır ama nesneden bağımsız olarakta yollayabiliriz. nesneye bağlı olacaksa nesne.fonksiyonadi(parametreler)   eğer nesneden bağımsız ise fonksiyonadi(parametreler) yapısı ile çalışır.
+
+def fonksiyonadi(parametre1,parametre2,parametre3....): #parametrelere gelen değerler veya referanceler parametreler ile kullanılır. fonksiyon içerisinde.
+    yapılacak işlemler...
+    return değerveyareferans #return olmasada olur.
+
+................................................................
+
+name = 'emre'
+
+def changeName(n):
+    n[0] = 'E'
+
+name Emre olmadı çünük referance ile çalışmıyor...
+
+liste1 = [1,2,3,4,5]
+
+def changeList(lis):
+    lis[0] = 6
+
+list1 = [6,2,3,4,5] olur çünkü referanceler ile çalışır listeler
+
+bir listeyi hangi parametreyee atarasak atayalım hepsi ile değişim vs yapabiliriz çünkü hepsi aynı referanceyi taşır.
+
+................................................................
+
+bir fonksiyona default olarak değer gönderebiliriz mesela eğer fonksiyona parametre gelmezse o zaman onun yerine geçecekdefault değer belirlemek lazım.
+
+def toplama(a =  0, b = 0):
+    print(a + b)
+eğer toplama() olarak çağırırsak sıfır yazdırır toplama(5) diye çağırırsak o zmaan 5 yazdırır.
+
+fonksiyon içerisinde fonksiyon çalıştırabiliriz.
+
+def hello():
+    print("merhaba")
+
+def toplama(a = 0,b = 0):
+    hello()
+    print(a + b)  
+    #bu şekilde örnekteki gibi fonksiyon içerisinde fonksiyon tanımlayabiliriz.
+
+sum bir listenin içindeki tüm değerleri toplar ve return eder. list1 = [1,2,3,4,5] toplam = sum(list1) dersek tüm değerlerin toplamını elde ederiz tuple içerisindede çalışır.
+
+mesela bir fonksiyona kaç tane parametre göndereceğimiz belli değil ise default olarak parametre belirleyebiliriz. veya 
+    def fonksiyon(*params):
+        print(sum(params)) #böylece tüm değerleri toplarız. aslında tüm değerleri tuple içerisinde tutar *params
+        params[0],params[1],params[index] yapısı ile istenen parametrelere ulaşırız. 
+
+
+
+mesela birden fazla şekilde parametreler gelecekse aşağıdaki örnek gibi bir yapı kullanılabilir.
+    
+    def fonksiyon(*params):
+        if len(params) == 3:
+           işlemler
+        elif len(params) == 4:
+           işlemler
+        elif len(params) == 5:
+           işlemler         
+        else:
+           işlemler 
+
+
+bir fonksiyonun içine biz kütüphane gönderebiliriz.
+   def fonksiyon(**args):
+       for key,values in args.items():
+           print(key + " " + value)
+
+fonksiyon(name = "emre",surname = "aytas",age = "20") böylece satır satır bilgileri görürüz.           
+
+eğer tuple yollayacaksak o zaman *params eğer dictionary yollayacaksak o zmaan **args gibi bir yapı ile yollarız.
+
+
+
+bir fonksiyon hem tuple hem dict hem liste hem normal değer alabilir.
+     def fonksiyon(a,b,*c,**d):
+        print(a)
+        print(b)
+        print(c)
+        print(d)
+
+fonksiyon(10,20,30,40,50,key = "value",key1 = "value2") #sıraya göre bölme olur a ve b sırası ile 10 20 alır *c ise dict görene kadar olan değerleri alır.
+    10
+    20
+    (30,40,50)
+    {'key':'value','key1':'value1'}
+
+eğer fonksiyon içerisinde bir liste oluşturursak ve return edersek referancesini o zaman yok olmaz o liste return edildiği hali ile ana programda çalışır.
+
+.............kendisine gönderilen tüm elemanları bir liste içerisinde return eden fonksiyon yazın...
+        
+        def fonksiyon(*params):
+            return list(params)
+        liste1 = fonksiyon(1,2,444,3,4,444,5,463) gibi bir yapı ile karşılaşırız.
+
+
+
+//lambda ,map ,filter...//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+map metotu ile bir dizi üzerindeki her elemana ulaşıp her elemanı bir fonksiyon üzerinden geçirebiliriz. map bize referance döner o yüzden liste olaraqk kullanmak istersek o zaman list() içine almamız lazım.
+   result = list(map(fonksiyonismi,dizi))  # fonksiyon ismi parantez olmadan olacak. result her dizi elemanının sırası ile fonksiyondan geçmiş hali olur fonksiyon returnlu olmalı... en son list içerisine aldık liste olsun diye.
+
+......lambda ile bir fonksiyon olmadan adı vs tanımlamadan fonklsiyoın oluşturabiliriz.
+numbers = [1,2,3,4,5,6,7,78]
+result = list(map(lambda num:num ** 2,numbers)) # lambda num:num ** 2 demek num değişken olacak num ** 2 ise ne şekilde return edilecek demek.  soltaraf:sağtaraf sol taraf kullanılan değişken sağ taraf ne şekilde retrun edilecek.
+
+lamba ile fonkiyonda belirleyebiliriz....
+    square = lambda num: num ** 2
+
+square = lambda num : num ** 2 + 1
+print(square(4)) #17 verir.     
+
+mesela lambda ile çifte True değilse False döndüren fonksiyon...
+list1 = [1,2,3,4,5,6,7,8]
+liste2 = list(map(lambda num: num % 2 == 0,list1))
+list2 = [False, True, False, True, False, True, False, True] olur.
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+/////...fonkisyonların kapsamı ve global ile local değişkenler...///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+x = 'global x'
+
+def yazdir():
+    x = 'local x'
+    print(x)
+
+yazdir() # local x yazar
+print(x) # global x yazar
+
+.........aslında fonksiyonlar kendi alanlarını oluşturur içindeki bir değişken global değişken ile aynı adı taşısa bile fonksiyonun kendi değişkenidir. fonksiyon kendisine gönderilmezse eğer dışarıdaki değeri göremez. bunun nedeni kendi değiişkenlerine ve alanına sahip olması.
+         eğer bir fonksiyonda tanımlanmamış ve globalda olan bir değişken vs üzerinde işlem yaptırmaya kalkarsak hata alırız.
+
+......................................
+
+name = 'emre'
+
+def greeting():
+    name = 'ford'
+
+    def hello():
+        print("hello "+name)
+        
+    hello() 
+
+greeting() # hello ford olur nedeni bir üstündekini global olarak kabul eder yani greeting fonksiyonu içerisindekini alır. ama hellonun içinde yeni bir name = 'focus' olsa hello focus derdi.
+
+......................................
+
+x = 50
+def test(x):
+    print("x": str(x))
+
+    x = 100
+    print("x": str(x))
+
+test(x) x: 50 sonra x: 100 yazdırır 
+print(x) 50 yazdırır
+
+int değer value değer olduğu içinde değişim olmadı çünkü referance ile çalışmıyor. ama referance ile çalışan değişken olsa idi farklı olurdu.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+####################################################################################################################################################################################################################################################################################################################################

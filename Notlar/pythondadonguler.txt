@@ -1,5 +1,76 @@
 #####...Pythonda döngüler...#############################################################################################################################################################
 
+range(baslangic,bitis,artismiktari) #baslangic dahildir bitis dahil edilmez.
+for ile range,string,liste,tuple falan vss üzerinde dönebiliriz.
+
+liste1 = [(1,2),(3,4),(5,6)]
+
+for a,b in liste1: #a,b ile normalde tek bir veri ile tuple elde edecekken şimdi onlarında elemanlarını elde ettik. 
+    print(str(a)+" "+str(b))
+        #1 2
+        #3 4
+        #5 6
+
+d = {"emre":"aytas","ford":"focus","mercedes":"amg"}
+
+
+for key,value in d.items(): # d.items() ile key ve value ayrılır ve biz key,value diyerek iki parça olan yapıya sırası ile her döngüde atama yaparız.
+    print(key + " " + value)
+
+while kosul:
+    sonsuzdöngü #break veya kosulu False olana kadar devam eder.
+
+break bağlı olduğu döngüyü sonlandırır. continue ise döngüde bir adım atlama yaptırır continue'den sonra alt satırlara geçilmez döngü sıfırdan tarama yapmaya başlar...
+
+a = list(range(0,101,2)) #bir liste elde ederiz. range ile liste elde edebiliriz. list() içerisine almak lazım ama.
+
+for ile list set tuple. vss üzerinde dönebiliriz.
+
+bir string'in elemanlarının hem indexini hem op indexin değerini görmek istersek enumerate kullanmak lazım
+
+string1 = 'emre'
+
+for item in enumerate(string1):
+    print(item) # (0,'e')
+                # (1,'m')
+                # (2,'r')
+                # (3,'e') 
+
+for index,letter in enumerate(string1):
+    print(index,end = "")
+    print(" "+letter)
+
+    #index tuplenin ilk elemanını yani indexi alacak int bir değer letter ise str değeri alaacak her döngüde bir bir enumerate ile gelen tupleleri atlayacağız.
+
+birden fazla liste vs gibi yapı üzerinde dönmek isteyebiliriz.
+
+liste1 = [1,2,3]
+liste2 = ['a','b','c']
+
+for i,j in zip(liste1,liste2): #zip ile eleman sayıları aynı olan listelerin birbirlerinin karşılık gelen elemanları bir tuple içine koyulur.
+    print(str(i)+" "+str(j)) # 1 a
+                             # 2 b
+                             # 3 c  
+    # eğer tek k ile dönsek zip üzerinde (1,'a') (2,'b') (3,'c') gibi tupleler içeren yapı elde edeeriz. i tuplenin ilk elemanını j ise ikinci elamanını alır i ve j ile dönersek.
+
+zip ile birden fazla liste yapıları birleştirebiliriz her aynı indexteki elemanlar bir tupleye yerleştirilir ve tuplelerden oluşan bir liste elde edilir.
+
+istenen elamanlardan oluşan bir liste için liste1 = [x ** 2 for x in range(2,100,2)] #böylece for x üzerinde döneccek ve listeye x ** 2'ler atanacak.
+ 
+liste2 = [x * 3 for x in range(100) if x % 3 == 0] böylece koşulda ekledik for ile range üzerinde döneceğiz her eleman x olacak eğer x 3'e bölünürse o zaman listeye x * 3 olarak eklenecek.  ortada döngü sağda koşuk solda ise ne ne şekilde ekleneceği.
+
+mesela bir string'in elemalarından liste yapalım. liste1 = [letter for x in mystr] #böylece tüm karakterler tek bir listede toplanırlar.
+
+eklenecek elemanda değişiklik olması için liste2 = [x if x % 2 == 0 else 'TEK' for x in range] # böylece eğer eleman çift ise eklenecek else yani değilse 'TEK' eklenecek listeye.
+
+result = []
+for x in range(3):
+    for y in range(3):
+        result.append((x,y))
+
+......biz bunu tek bir döngü ile yapabiliriz. result = [(x,y) for x in range(3) for y in range(3)] böylece aynı yapıyı elde ederiz.
+
+from random import randint dersek randinti çağırırız bize rastgele int değer döner a = randint(3,12) dersek 3 dahil 12'de dahil... yani sınırlar dahildir.
 
 
 

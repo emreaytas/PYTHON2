@@ -1,0 +1,148 @@
+####################################################################################################################################################################################################################################################################################################################################
+
+normalde javada constrcutor içerisinde değişken tanımlanmaz oluşacak değişkenler class içerisinde tanımlanır ama pythonda init constructoru içerisinde değişken tanımlanabilir self.degisken = deger mantığı ile atama alabilir ve self sayesinde oluşacak nesneye dğeerler bağlanabilir.
+
+bir class ile birden fazla nesne üretebilirz her nesnenin class yapısına göre nesneye çalışacak fonksiyonları vs olur değişkenleri atama objeleri falan olur.
+
+nesnenin constrcutoru olursa eğer içine gönderdiğimiz değerler o zaman o nesnenin içerisinde kullanılabilir.
+
+nesne.nesneninfonksiyonu(değişkenlerivarsa) yapısı ile nesnenin fonksiyonlarını kullanabiliriz.
+
+genel olarak class isimleri büyük hafle başlar fonksiyonlar ise küçük harflerle başlar.
+
+nesne = class() mantığı ile class sayesinde bir nesne üretiriz aslında ve nesneler value type değil referance type ile çalışır.
+
+class name:
+    pass 
+    # class attributes. 
+    # methods
+    # object attributesi bunları constrcutor(yapıcı metot. def __init__(self,parametreler)) ile tanımlayacağız. def __init__(self,)'i biz constrcutor olarak kullanacağız. 
+
+class Person:
+    # burada da değişken vs tanımlayabiliriz. böylece init'e gerek kalmadan direkt olarak her nesne için kalıcı(constrcutor içinde değişmezse) tanımlamış oluruz. 
+    def __init__(self,name,surname,year): # __init__() metotu her nesne için ayrı ayrı çalışıtırılır. içerisinde tanımlanan self.name,self.surname gibi değişkenler init metotu içerisinde oluşur ve nesneye bağlı olur değerler.
+       self.name = name  
+       self.surname = surname
+       self.year = year
+
+initin içinde oluşan değişkenler object attributes olur ama genel class'a bağlı olanlar ise class attributes olur. class olan her nesne için aynı olacak init içerisinde değişim olmazsa object attributes ise her nesne için gelen değere göre.
+
+self yerine this vs gibi isimlerde koyabiliriz ama self.name olacağına this.name olur bu tanımlamalar.       
+
+p1 = Person("Emre","aytas",2022)
+print(p1.name) ile nesnede oluşan name bilgisine ulaşabiliriz.
+
+class Person:
+    def __init__(self,name,surname): # self aslında nesneyi temsil eder böylelikle diğer metotlarada göndererek biz selfe ulaşan yani nesne için çalışan metotlar elde ederiz.
+        self.name = name
+        self.surname = surname
+
+    def intro(self): #fonksiyonun içerisinde self olmasının sebebi nesneye ve özelliklerine ulaşabilmek için kullanılan bir sistem. 
+        print("Merhaba"+" "+self.name+" "+self.surname)
+ 
+# yani öneli nokta class içerisindeki metotların ilk değişkeni self olmalı böylece metotlar nesneye hizmet eder olacak.
+
+init metotu olmazsa olmaz. yoksa constructor oluşmaz. pass ile geç işlemi yapabiliriz mesela except bloğu boş olmaz ve işlem olsun istemezsek pass deriz.
+
+class math:
+    pi = 3.14
+    def __init__(self):
+        pass
+    
+    def cevrehesapla(self,yaricap = 1): # default olarak 1 olarak atarız yaricapi.
+        return 2 * self.pi * yaricap
+    
+    def alanHesapla(self,yaricap):
+        return self.pi * (yaricap ** 2)    
+                        
+////kalıtım (inheritance)////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+eğer bir sınıfın tüm özellliklerini kullanan ve üzerine daha fazla özellik metot almak isteyen bir sınıf olacaksa onu biz kalıtım ile oluşturabiliriz.
+
+class Person():
+    def __init__(self): #Person() yaptığımız bu __init__metotu çalışacak çünkü constrcutor oda bir fonksiyon.
+        print("Merhaba")
+        
+p1 = Person()       
+
+
+.................................................................
+
+class Person():
+    def __init__(self):
+        print("Person created...")
+
+class Student(Person): # kalıtım verecek olan kalıtım alacak olanın içine alınmalıdır.
+    pass
+
+.................................................................
+
+class Person():
+    def __init__(self):
+        print('Person Created.')
+
+class Student(Person): 
+    def __init__(self):
+        super().__init__() #böylece super().__init__() ile subclass yani Student subclass super() ile superclass'ın mettorlarını kullanır buna __init__'te dahildir. super olarak kullanırsak içerisine self yazmaya gerek yok super sayesinde globaldeki gibi olacak. ama kalıtımverensınıf.__init__() veya öbür metotları kullanırsak self ile kullanırız çünkü nesneyi tanımlamak lazım.
+        print("Student created.")
+
+.................................................................
+
+class Person():
+    def __init__(self,name,surname):
+        self.name = name
+        self.surname = surname
+
+class Student(Person): 
+    def __init__(self,name,surname,number): # Student'e gelecek değerler ve self ile oluşacak nesnenin class içersindeki adını belirleriz. fazladan gelcek olan ise Person __init__'ine gitmez kendisi için çalışır kendi içerisinde belirlenir.
+        Person.__init__(self,name,surname) # gelen değerlerden Person __init__'ine yani constrcutoruna gidecek olanları belirleriz. o __init__yapısı ile çalışır.
+        self.number = number 
+        print("Student created.")   
+        
+
+class içerisinde nesnenin metotlarına özelliklerine vs self.metot() self.değişken yapısı ile ulaşırız.
+
+////Special methods////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class Movie():
+    def __init__(self,title,director,duration):
+        self.title = title 
+        self.director = director
+        self.duration = duration
+        print("...movie created...")
+
+    def __str__(self): #bu metot sayesinde bu class ile oluşmuş olan nesneler str(nesne) ile çalışırsa o zaman bize return ile o nesneye ait bilgileri return edecek.
+        return f"{self.title} by {self.director}"
+
+m1 = Movie("emre","aytas",5)
+print(str(m1)) # bize emre by aytas yazdırır. yani sistemin metotları __metot__ yapıları nesne için çalışır... init'te ise constrcutor olarak nesne için çalışır.
+
+
+
+
+superclass kalıtım veren subclass kalıtım alandır.
+..........................................
+class Person():
+    def __init__(self,name,surname):
+        self.name = name
+        self.surname = surname
+    
+    def __str__(self):
+        return "ben emre"
+    def __len__(self):
+        return len(self.name)
+    def __del__(self):
+        self.name = None
+        self.surname = None
+        print("person deleted...")
+    
+p1 = Person("emre","aytas")
+print(str(p1)) # ben emre
+print(len(p1)) # 4    
+del(p1) # person deleted...      
+
+# bu yapı ile biz nesneler için normalde kütüphanelerde kullanılan metotları kendi yapılarımız için kullanacağız. her o class'tan 
+
+..........................................
+
+####################################################################################################################################################################################################################################################################################################################################
