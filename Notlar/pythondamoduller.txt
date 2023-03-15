@@ -1,6 +1,157 @@
 ####################################################################################################################################################################################################################################################################################################################################
 
+bazen programları parçalara bölmek gerekir. mesela ana main.py dosyası olsun ve modulA.py modulB.py modulC.py gibi moduller olabilir böylece hata ayıklama karmaşılık vs olmaz daha kolay olur.
+
+moduller = kendi hazırladığımız modulleri(math vs gibi standart kütüphaneler) ve hazır moduller(standart kütüphane modulleri ve üçüncü şahış modulleri(python geliştiricileri değilde başkalarının oluşturduğu kütüphane havuzları)) # 3. şahışların kütüphaneleri için pypi.org sayesinde istenen bir frameworkü bulabiliriz. daha önceden hazırlanmış kütüphaneleri kullanırız.
+
+pip install packagename mesela pip install django ile django frameworkünü yükleriz.(pypi.org ile ulaşabiliriz birilerinin yarattığı bir kütüphanedir.)
+
+import ile standart kütüphaneleri çağırabiliriz. mesela import kütüphane dersek direkt olarak o kütüphaneyi çağırırız ama from kütüphane import classveyametotvs ile sadece isteneni çağırabiliriz.
+
+eğer direkt olarak kütüphaneyi çağırırsak o zaman kütüphane.metotuclasıvs yapısı ile kullanırız ama from kütüphane import istenen yaparsak sadece isteneni kullanabiliriz.
+
+moduller kendi aralarında alışveriş yapabilir.
+
+dir ile bir modulun vs tğm içeriğini görürüz.
+..........................................
+from math import * yaparak modul ismi olmadan direk olarak kullanma sağlayabiliriz.
+..........................................
+from random import randint as zorti # as ile isim belirleme yapabiliriz.
+value = zorti(3,6)
+..........................................
+import math
+value = dir(math) 
+print(value) # böylece tüm metotlar vs hepsi karşımıza gelir.
+
+value1 = help(math)
+print(value1) # ile ne işe yaradıklarını görürüz.
+
+.......................................... 
+
+
+import math 
+
+value1 = math.sqrt(34) # içine girilen bir sayının karekökünü return eder.
+value2 = math.factorial(4) # içine girilen sayının faktöriyelini return eder.
+
+value1 = math.floor(4.6) # bir aşağıya yuvarlar eksili sayılarsa ise daha küçük sayıya -1.2 -2 olur mesela.
+value2 = math.floor(-1.2)
+value3 = math.ceil(3.3) # bir yukarı sayıya yubarlar. eksililerde ise sayıyı büyütür -1.8 -1 olur mesela.
+value4 = math.ceil(-1.8)
+print(value1) #4      
+print(value2) #-2      
+print(value3) # 4     
+print(value4) # -1     
+
+
+kütüphanelere takma ad verebiliriz.
+mesela 
+import math as islem
+value1 = islem.sqrt(49) # 7 değerini verir. math.sqrt() değilde islem.sqrt() olarak kullandık böylece.
+
+
+from math import * yaparsak eğer o zaman tüm değerler gelir. bu yapı ilede biz math.metot() yapmamıza gerek kalmaz direkt olarak istenen metotu kullanabiliriz.
+
+from math import sqrt,factorial,ceil yaparsak bu kütüphaneden sadece 3 tane metot çağırırız ve yine direk olarak isimleri ile kullanabiliriz.
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+eğer math ile ceil metotunu çağırır ve aynı isimde ceil metotu oluşturursak hangisini kullanır bu yapıda en son tanımlanan metot kullanılır.
+   mesela
+
+def ceil(sayi):
+    print("hay amk")
+
+from math import ceil
+
+print(ceil(6.4)) # 7 verir. bunun nedeni ise en son tanımlanması. aynı isimde varsa bu şekilde en son tanımlanan çalışır.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////...random modulu...////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import random 
+value = dir(random)
+print(value) # tüm metotları vs görürüz.
+value1 = help(random)
+print(value1) # tüm metotları vs bize nasıl işlemiş gösterir nasıl çalışır bize söyler.
+
+
+import random
+value = help(random.randint)
+print(value) # help ile istersek tek bir metotun vs nasıl çalıştığınıda görebiliriz.
+
+result = random.random() # 0.0 - 1.0 arasında bir sayı üretir.
+result1 = random.random * 100 # 0.0 - 100.0 arasında küsüratlı sayı üretir.
+
+result3 = random.randint(a,b) # a ve b dahil aralıktaki tam ssayı.
+
+bir listeden veya bir stingden rastgele değer elde etmek istersek o zaman
+    result = random.choice(listeveyastr) # yapısı ile içerisinden rastgele bir eleman yakalarız.
+
+
+bir listenin tüm elemanları birbirine karışsın istersek eğer o zaman 
+random.shuffle(liste) # return ile çalışmaz direkt olarak referance üzerinden çalışır.
+
+listeden rastgele istenen sayı kadar değer istersek 
+liste1 = random.sample(liste,3) # 3 tane rastgele değerli bir liste return eder.
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//kendi modulumuzu olusturalim.//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+............................................................
+mesela modul.py diye bir dosya açalım kendi klasörümüzde
+
+number = 10
+numbers = [1,2,3]
+person = {"name":"emre","surname":"aytas"}
+
+def func(x):
+    print(x)
+
+class Person():
+    def __init__(self,name,surname):
+        self.name = name
+        self.surname = surname
+
+main py doysamız üzerinde modulpy dahil etmek istersek eğer import modul yazmamız lazım ve ana mainimize import etmemiz lazım.       
+
+kendi modülümüzüde kontrol edebiliriz value = help(modul) diyerek. veya dir kullanarak.
+
+sayilar = modul.numbers yaparak moduldeki sayılara vs ulaşabiliriz.
+
+kendi modul.py dosyamızı ve içeriklerini oluşturduk. import modul as emre diyerek p1 = emre.Person("emre","aytas") # yaparak bir nesne oluşuturabiliriz.
+............................................................
+
+cls komutu ile biz panel temizleme yaparız.
+
+liste = list(range(10,100)) yaparsak eğer o zaman bir liste elde ederiz.
+
+............................................................
+kendi modullerimizi yazarken """yazi""" içinde yazdıklarımız modulun açıklaması olur. help(modul) ile görebiliriz.
+
+fonkiyon içerisinde de """yazi""" ile fonksiyon açıklaması oluşturabiliriz. help ile görebiliriz
+............................................................
+
+import sys
+sys.path ile bilgisayarımızdaki python klasörünün içeriğini görebiliriz.
+
+PS C:\Users\emrea\Documents\PYTHON> python
+Python 3.11.2 (tags/v3.11.2:878ead1, Feb  7 2023, 16:38:35) [MSC v.1934 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import sys
+>>> sys.path
+['', 'C:\\Users\\emrea\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\emrea\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\emrea\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\emrea\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\emrea\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages']
+
+import sys 
+sys.builtin_module_name # bunun ile tüm python modullerini görebiliriz.
+
+kendi yazdığımız bir modülü eğer pythın klasörünün içerisindeki lib içerisine koyarsak eğer yine import modul yaparak kullanabiliriz çünkü import math'te aynı mantıkla geliyor python içerisindeki lib klasöründen geliyor.
+
+kendimiz yazarız libe istediğimizad.py olarak koyarız ve istediğmiz zaman import modul diyerek kullanabiliriz tüm özelliklerini.
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
