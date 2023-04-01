@@ -1,6 +1,103 @@
 ####################################################################################################################################################################################################################################################################################################################################
 
+////datetime modulü.../////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import datetime ile import ederiz... datetime'ı direkt olarak kullanmak istersek eğer from datetime import datetime yaparız.
+
+result = dir(datetime) 
+print(result) # tüm metotları vs görebiliriz.
+
+datetime tarih(gün ay yıl) zaman(saat dakika saniye). date tarih. time ise zaman tutar.
+
+..........................................................
+from datetime import datetime
+now = datetime.now()
+print(now) # şu anın tarihi ve zaman bilgisi gelir.
+    bu bilgi içerisinden istediğimiz bölümleri alabiliriz.
+    now.year ile yıl(datetime.now().year) 
+    now.month ile ay(datetime.now().month)
+    now.day ile gün bilgisi datetime.now().day
+    now.hour ile saat(datetime.now().hour)
+    now.minute ile dakika datetime.now().minute
+    now.second ile saniye datetime.now().second
+..........................................................
+from datetime import datetime
+now = datetime.now()
+result = datetime.ctime(now)
+print(result) #Sat Apr  1 06:56:43 2023 ... mesela bu şekilde verir bize düzgün bir halde gelir yapılar.
+..........................................................
+from datetime import datetime
+now = datetime.now()
+result = datetime.strftime(now,'%Y-%B-%A %H:%M:%S') # veya now yerine datetime.now() koyabiliriz veya başka bir elde olan zaman dilimini kafamızdaki formata göre yazdırabiliriz.
+print(result) # yazdıracağımız değeri istediğimiz gibi belirleyebiliriz.
+.........................................................
+from datetime import datetime
+
+mesela elimizde belirli bir zaman var mesela t = '15 April 2019 hour 10:12:30'
+dt = datetime.strptime(t,'%d %B %Y hour %H:%M:%S') # burada olan şey elde olan veriyi kendi istediğimiz biçimde belirleriz. mesela hour bir yere atanmayacak ve öylece istediğimiz değerler istenen sonucu olacak. 
+print(dt) # vermiş olduğumuz string ifadeyi kendisi çözümledi.
+
+print(dt.year) # ile yıl bilgisine ulaşırız.
+print(dt.month) #ile ay bilgisine ulaşırız. 
+.........................................................
+
+from datetime import datetime
+birthday = datetime(1983,5,12) #ne kadar değer verirsek sırası ile onları alıri.
+birthday1 = datetime(1983,5,12,12,30,60) # bu sefer saat kısmıda dahil olur. bir değer daha girersek mikrosaniye devreye girer vs.
+
+result = datetime.timestamp(birthday) # ilgili değer saniye cinsinden gelir.
+result1 = datetime.fromtimestamp(result) # saniye değeri ile tarih ve zaman elde edilir.
+
+result2 = datetime.fromtimestamp(0)
+print(result2) #  1970-01-01 03:00:00 bu bilgisayarların milatı olarak kabul edilir mesela bir zaman girdik ve ne kadar zaman geçmiş baktık bu tarihten itibaren geçen zamana bakacak.
+
+result3 = birthday1 - birthday ile aradaki zamanı görebiliriz. (timedelta olarak gelir.)
+print(result3.days) # toplam aradaki gün bilgisi gelir.
+print(result3.seconds) # toplam saniye.
+
+.........................................................
+
+from datetime import datetime
+from datetime import timedelta
+
+simdi = datetime.now()
+result = simdi + timedelta(days = 100,seconds = 20) # 100 gün ve 20 saniye sonrasını elde edebiliriz. 
+print(result) # böylece ileri bir tarihi görebiliriz - ile işlem yaparsak geri tarihi görebiliriz.
+
+.........................................................
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////os modulü.../////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import os # ile import ederiz. os ile dosya işletim sistemi gibi olayların işlemlerini yaparız.
+    klasör oluşturma adını değiştirme vs yapabiliriz.
+    
+
+result = dir(os)
+print(result) # tüm mettoları classları vs görebiliriz.
+
+result1 = os.name #bununla işletim sisteminin adını bulabiliriz.
+result2 = os.getcwd() #bununla işlem yaptığımız python dosyasının hangi klasör'de olduğunu görürüz. klasörün dizini ile.
+
+os.mkdir("newdirectory") # bunu yaparsak eğer python dosyasının pathinde bir newdirectory isminde bir klasör oluşturur.
+    eğer os.chdir('C:\\') yaparsak eğer işletim sistemi path'i verdiğimiz yol olarak kabul eder. ama değişim yapmazsak eğer default olarak pyhon dosyasının bulunduğu yolu referans alır.
+    
+os.chdir('..') # bunu yaparsak eğer bir geri gideriz path'de cd .. demek gibi iki kere geri gitmek istersek eğer üst üste os.chdir('..') yapabiliriz veya os.chdir('../..') yapabiliriz.
+.........................................................
+os.makedirs("newdirectory/yeniklasör/yeniklasör1") yaparsak iç içe klasörler oluşturabiliriz. başlangıç noktası ise os'un path'i olur... yani newdirectory path üzerinde oluşur öbürleri iç içe girer.
+.........................................................
+result = os.listdir()
+print(result)  # bu durumda listdir() bize path üzerinde olanları getirecek.
+
+for dosya in os.listdir(): #bir liste döndüğü için iterasyon yapabiliriz.
+    if dosya.endswith(".py"):
+       print(dosya)
+
+    #böylece sadece python dosyalarını görebiliriz...
+.........................................................
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -1,8 +1,3 @@
-def func(a):
-    
-    def hello():
-        print(a)
-    
-    hello()
-    
-func(5)          
+from datetime import datetime
+result = datetime.fromtimestamp(0)
+print(result)
