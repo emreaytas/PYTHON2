@@ -1,8 +1,8 @@
-try:
-    a = 5
-    b = 6
-except:
-    print("dddd")
-
-print(a)
-print(b)        
+def func(a):
+    
+    def hello():
+        print(a)
+    
+    hello()
+    
+func(5)          

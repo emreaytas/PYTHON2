@@ -1,0 +1,67 @@
+####################################################################################################################################################################################################################################################################################################################################
+
+degerler = dir(list)
+print(degerler) # içerisinde __iter__ objesi var bu yüzden for ile vs dönebiliyoruz. iter'e sahip obje iterasyon yapabilir. for döngüsü for i in liste1: yapısında otomatik olarak iterator yapısını çağırır.
+............................................................................................................................................
+
+liste = [1,2,3,4,5]
+
+iterasyon = iter(liste) # next ile iter obejsinin üzerinde dönebiliriz. eğer aşarsa StopIteration hatası verir.
+
+print(next(iterasyon)) #1
+print(next(iterasyon)) #2
+print(next(iterasyon)) #3
+print(next(iterasyon)) #4
+print(next(iterasyon)) #5
+print(next(iterasyon)) # StopIteration 
+
+.........................................................
+
+liste = [1,2,3,4,5]
+iterasyon = iter(liste)
+
+while True:          # aslında iterasyon yaparken for ile list üzerinde bu işlem olur.
+
+    try:
+       print(next(iterasyon))
+    except StopIteration:
+       break       
+
+.........................................................
+
+class MyNumbers():
+
+    def __init__(self,start,stop):
+        self.start = start
+        self.stop = stop
+
+    def __iter__(self):
+        return self     
+
+    def __next__(self):
+        if self.start <= self.stop
+           x = self.start
+           self.start += 1  
+           return x
+        else:
+           raise StopIteration
+
+liste = MyNumbers(10,20)
+myiter = iter(liste)
+
+for i in myiter:
+    print(i+" "+end="")
+
+veya......
+
+liste = MyNumbers(10,20)
+myiter = iter(liste)
+
+while True:
+    try:
+       print(next(myiter))
+    except StopIteration:
+       break
+
+
+####################################################################################################################################################################################################################################################################################################################################

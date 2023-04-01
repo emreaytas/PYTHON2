@@ -1,0 +1,57 @@
+####################################################################################################################################################################################################################################################################################################################################
+bellekte yer işgal etmeyen iterator oluşturur. performans için kullanılır.
+
+
+def listetamamla():
+    liste = []
+    
+    for i in range(100)
+        liste.append(i ** 3)
+
+    return liste
+
+liste1 = listetamamla()
+......................................................................................
+
+def listetamamla():
+    
+    for i in range(100):
+        yield i ** 3
+        
+
+print(listetamamla()) # her yield'e geldiğinde değeri return edecek ama for bitene kadar tüm değerkeri dönecek.
+
+......................................................................................
+
+def listetamamla():
+    
+    for i in range(100):
+        yield i ** 3
+        
+iter = cube()
+
+print(next(iter))
+print(next(iter))
+print(next(iter))
+print(next(iter))
+print(next(iter))
+print(next(iter))
+print(next(iter))
+print(next(iter))
+....tek tek elemanları yazacak aşarsa StopIteration hatası verecek. generator iterator olarak kullanabilecek.
+
+veya şöyle olabilir.
+ 
+for i in cube(): 
+    print(i,end = " ") 
+
+.........................................................................................
+
+generator = (i ** 3 for i in range(100)) # biz [] böyle olsa hazır liste () böyle ise generator yani bellekte daha olmamış elemanları bellekte saklanmayan generator elde ederiz.
+
+for i in generator:
+    print(i,end = " ") 
+
+.........................................................................................
+
+####################################################################################################################################################################################################################################################################################################################################

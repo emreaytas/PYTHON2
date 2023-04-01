@@ -1,7 +1,145 @@
 ####################################################################################################################################################################################################################################################################################################################################
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//opening file & writes//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+kullanımı open(dosyaadi,dosyaerisimemodu):
+
+w -> write eğer o adda bir doysa yoksa oluşturur ve eğer varsa komple temizleme yapar. dosyayı py.'nin konumunda açar onun path'i üzerinde oluşturur eğer yoksa.
+a -> append ekleme imlecin olduğu yerden ekleme yapar.
+x -> create dosya oluşturma. eğer dosya varsa hata verir. yoksa oluşturur. amacı dosya oluşturmaktır.
+r -> read okuma dosya konnumda yoksa veya yoksa hata verir. 
+
+
+
+with open(dosyaadi,mod):
+    with open(dosyaadi,mod):
+    #iç içe birden fazla dosya ile işlem yapabiliriz.
+
+result = open("Notlar\genelnotlar.txt","r")
+print(result)#(<_io.TextIOWrapper name='Notlar\\genelnotlar.txt' mode='r' encoding='cp1254'>,)
+# open bize bir sonuç return etti. name kısmı dosaynın adı. encoding kısmı ise işlemtim sisteminin karakter dizisi seti. 
+# open ile yaptığımız işlemleri işlemi yaptımız .py dosyasının uzantısına göre yapmamız lazım. çünkü path orada bulunuyor.
+# result.close() ile biz dosyanın kapanamasını sağlarız. böylece gereksiz yere bellek harcanmaması sağlanmış olur.
+
+
+# mesela masaüstünde istersek bir dosya oluşturabiliriz.
+   # file = open("C:/Users/emrea/Desktop/FORD.txt,"w") # böylece masaüstünde bir .txt oluşturabiliriz. istersek uzantıya göre kafamıza göre oluşutabiliriz. file.close() yaparsak direkt olaral elimizde boş bir dosya olur.
+
+file = open("Notlar/genelnotlar","w") # eğer varsa bu dosya komple sıfırlanacak. ama yoksa o zaman oluşacak.
+file.write("yazi" veya str değişken) içine yollananı imlece göre yazdırır. yazdırdığı her şey karakter dizisi olarak yazılır. file aslında bir dosya pointeridir.
+file.close...
+
+eğer with open(dosyaadi,mod) as file(gelen referanceye as ile file adı veririz.): yapısı ile kullanırsak file.close() yapmaya gerek kalmaz çünkü otomatik kapatma yapar.
+        ........
+        ........
+
+eğer open içerisine open(dosyaadi,mod,encoding = "utf-8") # yaparsak genel karakter seti olan bir encoding kullanabirliz. işletim sistemi böylece türkçe karakterleride kabul edebilir hal alır.
+
+a modu ile write kullanabiliriz. imlecç(kursor) .write() komutunda aslında imlece göre ekleme yapar.
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////...Pythonda dosya okuma.../////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+try:
+    file = open("newfile.txt","r",encoding = "utf-8") # böylece dosya okuruz ama eğer yoksa hata bloğuna gider. encoding kısmı ekler ve utf-8 ibaresi eklersek eğer o zaman türkçe karakterlerde okur.
+
+except FileNotFoundException as e:
+    print(e+ " hatasi var.")  
+
+finally:
+print("Dosya kapandi.")
+    file.close() # hata versede vermesede biz dosyanın pointerini kapatırız.
+......................
+try:
+    a = 5
+    b = 6
+except:
+    print("dddd")
+
+print(a)
+print(b) 
+
+#pythonda init içersinde olduğu gibi try'dada oluşan aslında globala gider. javadaki gibi a ve b tanımlayıp sonra try except içerisinde atama yapmaya gerek yok. eğer hata vermezse globale gidecek.
+
+......................
+her yeni dosya okumada imlec o pointer için sıfırlanır.
+......................
+try:
+    file = open("newfile.txt","r",encoding = "utf-8") # böylece dosya okuruz ama eğer yoksa hata bloğuna gider. encoding kısmı ekler ve utf-8 ibaresi eklersek eğer o zaman türkçe karakterlerde okur.
+    for i in file:
+        print(i,end = "") # böylece imlec ile komplesi okunur.
+
+    # for döngüsü yerine yazi = file.read() ile tüm karakterleri tek bir parametrede ele alırız. her okumadan sonra imlec okuduğu yere kadar gider ve orada durur.
+    
+    # yazi2 = file.read(5) # imlec 5. karaktere kadar okur. 0 1 2 3 4 indexlerindeki asciiye göre olan değerleri alır. aslında 5 bytelik kısmını al demek çünkü her bir karakter 1 byte.
+
+except FileNotFoundException as e:
+    print(e+ " hatasi var.")  
+
+finally:
+print("Dosya kapandi.")
+    file.close() # hata versede vermesede biz dosyanın pointerini kapatırız.
+
+...................................
+
+try:
+    file = open("newfile.txt","r",encoding = "utf-8")
+    satir1 = file.readline()
+    satir2 = file.readline() böyle yaparak aslında tek tek satır satır okur readline. imleç ise her seferde okunacak yeni satırın en başında durur.  
+
+except FileNotFoundException as e:
+    print(e+ " hatasi var.")  
+
+finally:
+    print("Dosya kapandi.")
+    file.close() 
+
+...................................
+
+try:
+    file = open("newfile.txt","r",encoding = "utf-8")
+    satirListesi = file.readlines() # bir liste döner ve her satırı bir string halinde eleman olarak koyar. en baştan okuma yapmak için file'nin imlecini sıfırlamak lazım çünkü en sona kadar gidecek imleç.
+                                    # satirListesi[0] 1.satır , satirListesi[1] 2.satir ... her satırı bir listeye atar.
+except FileNotFoundException as e:
+    print(e+ " hatasi var.")  
+
+finally:
+    print("Dosya kapandi.")
+    file.close() 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+file = open("dosya.txt","r",encoding = "utf-8")
+
+cursorLocation = file.tell() bu bize imlecin bulunduğu indexi return eder. eğer en başta ise 0 return eder tek bir karakter okudu ise 1 return eder aslında döndüğü sayı okumaya hazır olduğu indexteki elamanın başı demek.
+                       #return ettiği değer o zamana kadar imlecin kaç byte ilerlediğinide gösterir.
+    file.seek(sayi) yaparsak eğer istenen index'in solunda durur imle. file.seek(0) yaparsak eğer o zaman pointer en başa döner.
+
+///Dosyada güncelleme yapma.//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+eğer bir dosyayı "w" ile açarsak komple her şeyi siler.
+r+ ile yaparsak içerisindekiler silinmez ve hem okuma hem yazma yaoabiliriz. ama file.seek(sayi) ile yazmaya başlayacağımız indexi belirlememiz lazım. yoksa sıfırdan yazabilir.
+a modunda ise imleç(cursor) en sona gider bu yüzden ekleme modu olarak geçer.
+
+mesela 
+with open("emre.txt","a",encoding = "utf-8") as file:
+    file.write("\nemre aytas") #böylece elde olanın bir alt satırına emre aytas yazarız. \n ile alt satıra indiririz ve emre aytas yazarız.
+
+
+with open("emre.txt","r+",encoding = "utf-8") as file:
+    content = file.read()
+    content = "Merhaba\n\n" + content
+    file.seek(0)
+    file.write(content)
+
+......................................................
+
+with open("emre.txt","r+",encoding = "utf-8") as file:
+    content = file.readlines()
+    content.insert(0,"Emre Aytas\n\n")
+    file.seek(0)
+    file.writelines(content) # writelines ile her liste elemanını tek tek ekleriz. her eleman eklendiğinde imlec en son eklenenin en sağına gider. ve tek tek listenin elemanlarını imlece göre ekler. seek ile cursor güncelleme önemli bir noktadır.
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

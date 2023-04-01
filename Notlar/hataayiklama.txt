@@ -1,8 +1,109 @@
 ####################################################################################################################################################################################################################################################################################################################################
+error(hata) ve error handling(hata yönetimi) ile hataları yakalarız. 
+
+hata türleri nelerdir...
+   olmayan bir değişkeni yazdırmaya çalıştık mesela NameError hatası alırız.
+   kullanıcıdan bir bilgi aldık ama sayıya çevirlemiyor. ValueError hatası alırız.
+   10/0 hatası mesela ZeroDivisionError
+   mesela print('emr'e) SyntaxError yazım yanlışı hatası alırız.
+         
+bize gelecek hataları tek bir yerde toplayabiliriz.
+
+try:
+    .....hata gelebilecek alan.
+except:
+    .....hata olursa olacak alan
+else:
+    .....eğer except bloklarından hiçbirisi çalışmazsa else bloğu çalışır.
+finally:
+    .....her zaman çalışır. except olsun olmasın try bittikten veya except bittikten sonra kesin olarak çalışır. dosya veritabanı falan kapatmak için kullanılır.       
+
+
+try:
+.....
+except ZeroDivisionError:
+......
+except ValueError:
+......
+
+eğer birden fazla except varsa ilk gelen hata bloğuna girer ve tek bir except bloğu çalışır.
+
+
+try:
+...........
+except(ValueError,ZeroDivisionError) as e: #böyle yaparsak eğer hataları tek bir except içerisinde belirtiriz. as e olarak ise e olarak kullanabileceğiz hatanın ismini demek olur eğer ValueError hatası gelirse print(e) bize ValueError hatası yazdırrı.
+...........
+
+try:
+......
+except:
+......
+else:
+.....# eğer hata yoksa burası çalışır eğer varsa except çalışır yani else aslında except'in değilidir.
+
+while True:
+    try:
+        a = int(input("sayi giriniz: "))
+        b = int(input("sayi giriniz: "))
+        print(a/b)
+    except(ValueError,ZeroDivisionError) as e: # eğer except Exception as ex: yaparsak o zaman gelen her hatayı ayıklayabiliriz.
+        print(e)
+    else:
+        break    
+
+///...hata nesnesi oluşturma.../////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+kendi işlemlerimiz için hata üretme mesela doğum günü cart curt gibi şeyler.
+
+    eğer hata oluşturacaksak raise Exception(mesaj) bu şekilde hata return edilmiş olur.
+
+def checkPassword(x):
+    import re # re.search kullanabilmek için bu kütüphane'yi import ettik.
+    
+
+    if len(str(x)) < 8:
+       raise Exception("Parola en az 8 karakterli olmalıdır.") 
+    
+    elif not re.search("[a-z]",psw):
+       raise Exception("Parola küçük harf içermelidir.")
+
+    elif not re.search("[0-9]",psw):
+       raise Exception("Parola rakam içermelidir.")
+
+    elif not re.search("[A-Z]",psw):
+       raise Exception("Parola Büyük harf içermelidir.")
+
+    elif not re.search("[_@$]",psw):
+       raise Exception("Parola numeric içermeilidir.")          
+    elif re.search("\s",psw):
+       raise Exception("Parola Bosluk içermemelidir.")
+    else:
+       print("Geçerli bir parola...") 
+    
+
+class içerisindeki init metoduna mesela bir isim gelsin ve eğer karakter sayısı 10'dan küçükse raise Exception("Böyle name olmaz amk") gibi bir şekilde hata fırlatabiliriz.
+   yani bir class'ta bize hata fırlatabilir.
+   eğer bir uygulamanın çalışmasını istiyorsak sorunsuz şekilde en kötü ihtimalle main(ana dosyaya) kadar hatanın yakalanması lazım hata maine düşerse o zaman programda sorun olur. 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+mesela türkçe karakter var mı yok mu kontrol edeceğimiz bir metot olsun
+
+def checkAA(x):
+    tkk = "şçüğöıİ"
+
+    for i in x:
+        if i in tkk:
+            raise Exception("Turkce karakter hatasi") 
+        else:
+            print("nop")
+
+
+raise Exception(message)'de return gibidir mesela bir fonksiyonda var ise o zaman o fonksiyon hata fırlatıp duracak.
+
+illaki raise Exception olacak diye bir şey yok raise ValueError("Negatif deger") gibi bir yapı kurabiliriz.
+
+ctrl + c + k yaparsak imlecin tuttuğu aralık komple olarak yorum satırı olur.
 
 ####################################################################################################################################################################################################################################################################################################################################
 

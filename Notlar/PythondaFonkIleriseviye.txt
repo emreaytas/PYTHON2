@@ -1,0 +1,249 @@
+####################################################################################################################################################################################################################################################################################################################################
+
+///pythonda iç içe fonksiyon kullanımı...//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+def greeting(name):
+    print("hello "+str(name))
+
+
+mesela greeting adında bir fonksiyon var
+
+sayhello = greeting
+
+sayhello("Emre") # hello emre verir.
+
+del sayhello # desek bile greeting fonksiyonu çalışmaya devam edecek. çünkü tanımlamadır. biz tanımlamayı sileriz.
+..................................................................................................................
+
+def outer(num1):
+    print("outer")
+    def innterincrement(num1): # bu fonksiyon sadece outer içerisinde çalışacak. ve outere gelen değişkeni kullanabilecek. kendi alanında kendi işlemlerini yapabilecek.
+        print("inner")
+        return num1 + 1
+    num2 = innterincrement(num1)
+    print(num1,num2) 
+
+outer(10)
+
+outer
+inner
+10 11 #bunlar yazılacak.
+
+..................................................................................................................
+
+def factorial(number):
+    
+    if not isinstance(num,int):
+        raise TypeError("Number must be an integer...")
+    
+    if not numner >= 0:
+        raise ValueError("Number must be zero or positive...")
+
+    def inner_factorial(number):
+        if number <= 1:
+            return 1
+        return number * inner_factorial(number - 1)
+    
+    return inner_factorial(number)
+
+print(factorial(5)) #  120 verir bize. inner kendi scopunda çalışır.
+
+..................................................................................................................
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///fonksiyondan fonksiyona dönüştürme...//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+..................................................................................................................
+
+def usalma(number):
+
+
+    def inner(power):
+        return number ** power
+
+    return inner
+
+two = usalma(2) #bize aslında inner(power) return edildi. two ise o fonksiyonun ismini aldı...
+print(two(3)) # 8 değerini verir.
+
+three = usalma(3) # bize inner(power) return edildi. two ise o fonksiyonun ismini aldı...
+print(three(3)) #27 değerini verir.
+
+..................................................................................................................
+
+def yetkisorgula(page):
+
+    def inner(role):
+        if role == "admin":
+            return f"{role} rolu {page} sayfasına ulasabilir."
+        else:
+            return f"{role} rolu {page} sayfasına ulasabilir."
+        
+        return inner
+
+user1 = yetkisorgula("product edit")
+print(user1("admin"))  # admin rolu product edit sayfasına ulasabilir.  
+
+
+..................................................................................................................
+
+fonskiyon içerisinde fonksiyon ismi return edersek aslında komple yapı ile fonksiyonu return etmiş oluruz mesela islem("toplama") ile def toplama(*args) fonksiyonu return edilmiş olur.
+
+def islem(islem_adi):
+
+    def toplam(*args):
+        toplam = 0
+        for i in args:
+            toplam += i
+        return toplam 
+
+    def carpma(*args):
+        carpim = 0
+        for i in args:
+            toplam += i
+        return toplam 
+    
+    if islem_adi == "toplama":
+        return toplam
+    else:
+        return carpma    
+
+toplama = islem("toplama")
+print(toplama(1,2,3,4,5,6,7,8,9)) # 45 Cevabinı alırız.
+
+carpma = islem("carpma")
+print(carpma(1,2,3,4,5,6,7,8,9)) # 362.880
+
+..................................................................................................................
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+///Fonksiyonları parametre olarak gönderme...//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+def toplama(a,b):
+    return a + b
+
+def carpma(a,b):
+    return a * b
+
+def cikarma(a,b):
+    return a - b
+
+def bolme(a,b):
+    return a / b    
+
+def islem(f1,f2,f3,f4,islemadi):
+    if islemadi == "toplama":
+       print(f1(2,3))
+    elif islemadi == "cikarma":
+       print(f3(6,5))
+    elif islemadi == "carpma":
+       print(f2(3,4))
+    else:
+       print(f4(9,3))         
+
+islem(toplama,carpma,cikarma,bolme,toplama) #5 değerini verir fonksiyonlarıda parametre olarak gönderebiliriz ismini göndermemiz komple fonksiyonu göndermek demektir.
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////Decorator fonksiyonlar.../////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+belli bir fonksiyona belli bir özellik eklemek için kullanılır.
+
+..................................................................................................................
+
+def my_decorator(func):
+    def wrapper(): # içteki fonksiyon dışta olanın kullanabileklerini kullanabilecek.****
+        print("fonksiyondan önce işlemler.")
+        func()
+        print("fonksiyondan sonraki islemler.") 
+    
+    return wrapper
+
+def sayhello():
+    print("hello")
+
+def saygreeting():
+    print("greeting")
+
+sayhello = my_decorator(sayhello)
+
+sayhello() 
+
+"""
+        print("fonksiyondan önce işlemler.")
+        print("hello")
+        print("fonksiyondan sonraki islemler.") 
+"""
+
+ama...........
+
+@my_decorator # burada sayhelloyu parametre olarak gönderiyor ve değişim sağlanıyor.
+def sayhello():
+    print("hello")
+
+sayhello()
+
+"""
+        print("fonksiyondan önce işlemler.")
+        print("hello")
+        print("fonksiyondan sonraki islemler.") 
+"""
+
+..................................................................................................................
+
+import math
+import time
+
+def usalma(a,b):
+    start = time.time()
+    print(math.pow(a,b))
+    finish  = time.time()
+    print("fonksiyon "+str(finish - start)+" saniye sürdü...")
+
+def faktoriyel(num):
+    start = time.time()
+    time.sleep(1)
+    print(math.factorial(num))
+    finish  = time.time()
+    print("fonksiyon "+str(finish - start)+" saniye sürdü...")
+
+usalma(3,4)
+
+factorial(5)
+
+bu fonksiyonlar kendi işleri haricinde zaman hesaplama yapıyor.........................
+
+import math
+import time
+
+
+def zamanhesapla(func):
+    
+    def inner(*args,**kwargs):
+        
+        start = time.time()
+        time.sleep(1)
+        func(*args,*kwargs)
+        finish = time.time()
+        print("fonksiyon "+str(finish - start)+" saniye sürdü...") 
+    
+    return inner
+
+@zamanhesapla
+def usalma(a,b):
+    print(math.pow(a,b))
+
+@zamanhesapla # burada şu oluyor fonksiyon zamanhesapla'ya gidiyor ve kendisine eklenen özellikler ile yeni bir hal alıyor.
+def faktoriyel(num):
+    print(math.factorial(num))
+
+
+..................................................................................................................
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+####################################################################################################################################################################################################################################################################################################################################
