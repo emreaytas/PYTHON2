@@ -1,3 +1,8 @@
-from datetime import datetime
-result = datetime.fromtimestamp(0)
-print(result)
+
+import datetime
+
+import os
+
+os.mkdir("honda.txt")
+os.rename("honda.txt","fordfocus.txt")
+os.rmdir("fordfocus.txt")

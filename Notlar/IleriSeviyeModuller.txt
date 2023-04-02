@@ -20,6 +20,20 @@ print(now) # şu anın tarihi ve zaman bilgisi gelir.
     now.hour ile saat(datetime.now().hour)
     now.minute ile dakika datetime.now().minute
     now.second ile saniye datetime.now().second
+
+...........................................................
+
+import datetime
+
+print(datetime.datetime.now().year)
+print(datetime.datetime.now().month)
+print(datetime.datetime.now().day)
+print(datetime.datetime.now().hour)
+print(datetime.datetime.now().minute)
+print(datetime.datetime.now().second)
+
+print(datetime.datetime.strftime(datetime.datetime.now(),'%Y-%B-%A %H:%M:%S')) #2023-April-Sunday 10:44:19
+
 ..........................................................
 from datetime import datetime
 now = datetime.now()
@@ -70,6 +84,8 @@ print(result) # böylece ileri bir tarihi görebiliriz - ile işlem yaparsak ger
 
 ////os modulü.../////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+dir(modul,class,vs) ile biz içine koyulanın metotlarını classlarını vs görebiliriz.
+
 import os # ile import ederiz. os ile dosya işletim sistemi gibi olayların işlemlerini yaparız.
     klasör oluşturma adını değiştirme vs yapabiliriz.
     
@@ -87,6 +103,8 @@ os.chdir('..') # bunu yaparsak eğer bir geri gideriz path'de cd .. demek gibi i
 .........................................................
 os.makedirs("newdirectory/yeniklasör/yeniklasör1") yaparsak iç içe klasörler oluşturabiliriz. başlangıç noktası ise os'un path'i olur... yani newdirectory path üzerinde oluşur öbürleri iç içe girer.
 .........................................................
+os.makedirs("C:\\newdirectory/yeniklasör/yeniklasör1") # böyle ise C dizini altında iç içe klasörler oluşturabiliriz.
+.........................................................
 result = os.listdir()
 print(result)  # bu durumda listdir() bize path üzerinde olanları getirecek.
 
@@ -97,13 +115,25 @@ for dosya in os.listdir(): #bir liste döndüğü için iterasyon yapabiliriz.
     #böylece sadece python dosyalarını görebiliriz...
 .........................................................
 
-result = os.stat("newdirectory"(dosyaadi))
+import os
+
+result = os.listdir("C:\\") # c dizini içerisindeki her şeyi bize getirecek. yani hangi dizini verirsek onun üzerinde bulununları bir liste halinde bize return eder.
+print(result) # bir liste elde edeceğiz.
+
+.........................................................
+result = os.stat("newdirectory"(dosyaadi)) # bulunan path üzerinde olmalıdır.
 print(result) #bize bu dosyanın özelliklerini gönderir. return eder yani.
 
 result1 = result.st_size / 1024 # byte cinsinden dğeer döner bu dosyanın değerini döner. 1024'e bölersek ise o zaman kaç mb olduğunu görürüz.
 
 result2 = result.st_ctime # .st_ctime(oluşturulma tarihi) , .st_mtime(değiştirilme tarihi) , .st_atime(son değiştirilme tarihi) 
 result2 = datetime.datetime.fromtimestamp(result2) # böylece ne zaman oluştuğunu görürüz.
+
+
+result = os.listdir()
+for i in result: # böylece bulunan path üzerindeki tüm dosyaların özelliklerine erişebiliriz.
+    print(os.stat(i))
+    print(".........................................") 
 
 .........................................................
 os.system("notepad.exe") # system ile istenen dosyaları vs çalıştırabiliriz.
@@ -114,11 +144,46 @@ os.rmdir("newdirectory") # eğer alt klasörü yoksa çalışır.
 .........................................................
 os.removedirs("newdirectory/yeniklasör") # çoklu klasör silme.
 .........................................................
+import os
 
-result = os.path.abspath("first.py")
-result = os.path.dirname(result)
+os.mkdir("honda.txt")
+os.rename("honda.txt","fordfocus.txt")
+os.rmdir("fordfocus.txt")
+
+# önce oluşturduk adını değiştirdik sonra ise sildik.
+
+
+PATH.........................................................
+import os
+
+result = os.path.abspath("first.py") #biz bir dosyanın konumu verdik. bize tam konumu return etti.
+result = os.path.dirname(result) # dirname ile ise tam konumu verilen dosyanın dizin ismini alırız. 
+
+result = os.path.dirname(os.path.abspath("first.py")) # bu şekilde ise dosya ismi ile önce tam yolunu buluyor ve o yol ile dizin'i buluyor.
+
+result = os.path.exists("first.py") # true verir eğer path üzerinde varsa bu dosya True verir yoksa False verir.
+
+result =  os.path.isdir("C:/emrea/Documents") # True verir çünkü bir klasör ama değilse klasör harici bir şeyse girilen adresteli dosya o zaman False verir.
+
+result = os.path.join("C:\\","deneme","deneme1","deneme2") # bu şekilde biz bir dosya yolu oluşturabiliriz parça parça. C:\deneme\deneme1\deneme2 şeklinde bir yol üretebiliriz.
+
+result = os.path.split("C:\\deneme") # bu şekilde yolu bölebiliriz bir liste return eder bize.
+
+result = os.path.splitext("first.py") # dosyanın ismi ile uzantısını ayırır. iki parça haline getirir. first ve .py olarak ayırır.
+
+.........................................................
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+///Pythonda regular expression modulü//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import re ile import edilir. genel olarak arama için kullanılır. regular expression olarak geçer. arama kriteri belirtiriz bir input alırız bu bir mail olabilir mi gibi sorgular yapabiliriz. 
+
+print(dir(re)) # ile tüm metotları classları vs görebiliriz.
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ####################################################################################################################################################################################################################################################################################################################################
