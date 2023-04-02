@@ -97,7 +97,26 @@ for dosya in os.listdir(): #bir liste döndüğü için iterasyon yapabiliriz.
     #böylece sadece python dosyalarını görebiliriz...
 .........................................................
 
+result = os.stat("newdirectory"(dosyaadi))
+print(result) #bize bu dosyanın özelliklerini gönderir. return eder yani.
 
+result1 = result.st_size / 1024 # byte cinsinden dğeer döner bu dosyanın değerini döner. 1024'e bölersek ise o zaman kaç mb olduğunu görürüz.
+
+result2 = result.st_ctime # .st_ctime(oluşturulma tarihi) , .st_mtime(değiştirilme tarihi) , .st_atime(son değiştirilme tarihi) 
+result2 = datetime.datetime.fromtimestamp(result2) # böylece ne zaman oluştuğunu görürüz.
+
+.........................................................
+os.system("notepad.exe") # system ile istenen dosyaları vs çalıştırabiliriz.
+.........................................................
+os.rename("newdirectory","yeniklasör") # newdirectory yeniklasör olur. rename ile isim değişikliği yapabiliriz.
+.........................................................
+os.rmdir("newdirectory") # eğer alt klasörü yoksa çalışır.
+.........................................................
+os.removedirs("newdirectory/yeniklasör") # çoklu klasör silme.
+.........................................................
+
+result = os.path.abspath("first.py")
+result = os.path.dirname(result)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
