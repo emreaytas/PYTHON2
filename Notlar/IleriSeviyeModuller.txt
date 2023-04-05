@@ -175,15 +175,150 @@ result = os.path.splitext("first.py") # dosyanın ismi ile uzantısını ayırı
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
+
 ///Pythonda regular expression modulü//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 import re ile import edilir. genel olarak arama için kullanılır. regular expression olarak geçer. arama kriteri belirtiriz bir input alırız bu bir mail olabilir mi gibi sorgular yapabiliriz. 
 
 print(dir(re)) # ile tüm metotları classları vs görebiliriz.
+.................................................................
+str = "Python Kursu: Python Programlama Rehberiniz | 40 saat"
 
+result = re.findall("Python",str) # bize bir liste halinde Python elemanlarını yani aranan elemanı döner.   
+print(len(result)) # listede kaç eleman varsa bize döner. lene ile kaç tane eleman olduğunu görebiliriz. 
+   result = len(result) yapabiliriz. böylece tek seferde bir değişkende görebiliriz kaç tane eleman var diye. çünkü pythonda bir veri birden fazla değişken tipini alabilir bir sorun olmaz.
+.................................................................
 
+import re
+str = "Python Kursu: Python Programlama Rehberiniz | 40 saat" 
 
+result = re.split(eleman,str) #elemana göre stryi böler ve bize bir liste halinde elemanları döner. klasik bir split aslında.
+
+.................................................................
+import re
+str = "Python Kursu: Python Programlama Rehberiniz | 40 saat"
+
+result = re.sub(" ","-",str) # böylece bütün boşlukları - yapacak ve yapılmış hali return edecek.
+    boşluk karakter \s ile de ifade edilebilir.
+
+result = re.search("Python",str) #  bize bir Match classı döner.  
+#result = result.span() ile hangi indexler arasında olduğunu döndürür. (0,6) gibi.
+#result = result.start() hangi indexten başlamış aranan karakter onu görebiliriz.
+#result = result.end() bitiş karakterinin indexini getirir.
+#result = result.group() bulduğu ifadeyi bize gönderir.
+#result = result.string hangi ifadeyi sorgulamak için gönderdik bize gösterir. "Python Kursu: Python Programlama Rehberiniz | 40 saat" bunu dönderir.  str kısmını yollar bize.
+
+.................................................................
+.................................................................
+
+[] - re modumülü ile işlme yapacağımız zaman köşeli parantezlere arasına eklenen karakterler aranır.
+
+[abc] mesela o zaman a b c aranır 
+[a-e] [abcde] a b c d e aranır mesela.
+[1-5] [12345] anlamına gelir.
+
+[^abc] abc dışındaki karakterler.
+[^1-9] [123456789] dışındaki karakterler ^ ile dışındaki anlamı katarız.
+
+str = "Python Kursu: Python Programlama Rehberiniz | 40 saat" 
+
+result = re.findall("[abc]",str) # böylece bulduğu tüm a b c karakterlerini döner eğer varsa...
+result1 = re.findall("[sat]",str) # s a t karakterlerinin hepsini arar ve var olanları bir listeye koyar.
+result2 = re.findall("[a-e]",str) a b c d e karakterlerini arar. ve olanları bir listeye koay spnra ise return eder.
+result3 = re.findall("[1-5]",str) 1 2 3 4 5 rakamlarının hepsini arar olanları bir liste içinde return eder. mesela str'de 3 tane 5 var o zaman listede de 3 tane 5 olacak.
+result = re.findall("^[abc]",str) a b c karakterleri haricinde karakterleri alır.
+.................................................................
+str = "Python Kursu: Python Programlama Rehberiniz | 40 saat" 
+
+re modulünde . tek karakteri temsil eder ..(gt gibi) iki karakterli bir cümle ...(gtr gibi) üç karakterli bir str 
+
+mesela .. olsun a no match olur ab 1 match abc 1 match abcd 2 match olur. noktalar ile karakter belirtmesi yaparız.
+.............
+import re
+
+str = "emreaytas"
+result = re.findall("..",str)
+print(result) #['em', 're', 'ay', 'ta'] burada olan şu kaç karakter girersek eğer ona göre yapabildiği kadar bölrek 2 2 karakterleri alıp atıyor.
+...............
+import re
+
+str = "emreaytas"
+result = re.findall("..",str)
+print(result) #['em', 're', 'ay', 'ta'] burada olan şu kaç karakter girersek eğer ona göre yapabildiği kadar bölrek 2 2 karakterleri alıp atıyor.
+result1 = re.findall("[^a]",str)
+print(result1) #['e', 'm', 'r', 'e', 'y', 't', 's'] a herfi harici tüm değerler geldi.
+result2 = re.findall("^a",str) # no match olur nedeni ise o karakter ile başlamamış. eğer sadece "^" koyarsak o zaman belirtilen str bir karkterle başlamış mı onu sorgularız.
+print(result2)
+result3 = re.findall("t$",str) # bunun anlamı belirtilen karakterle bitiyor mu bunu sorgularız. sadece karakter değil "att$" yaparsak son karakterleri att mi sorgularız.
+print(result3) 
+...............
+
+.................................................................
+.................................................................
+
+DEVAM EDİLECEK: BTK AKADEMİ RE MODÜLÜ KISMINDAN....
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///JSON MODÜLÜ//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import json ile çağırırız. json modülünü. sadece pythona özgü değil cihazlar arası ortak veri taşıma yönetimidir.
+json veri türü dcit veri türü gibidir. bir uygulamatya bu verileri tyaşoyabiliriz her yapı bunu algılayabiliriz ortak veri taşıma yapısıdır.
+
+person = {"name":"emre","languages": ["python","c#"]} 
+result = person["name"] #emre döner bize.
+result1 = person["languages"][0] python döner.
+....................................................
+biz jsonu aslında string halinde bir dict oalrak kullanacağız. "{"name":"emre","languages": ["python","c#"]}" gibi mesela. json bize string olan ama içeriği dict olacak.
+person = {"name":"emre","languages": ["python","c#"]} 
+
+json string to dict olarak kullanmamız lazım. bize dictler str içerisinde gelecekler.
+result = json.loads(person) yaparsak eğer bize str bir dict olarak gelecek.
+result1 = result["name"] yaparak emre'ye ulaşabiliriz.
+.......................................................
+mesela bir .json dosyası içerisinde {"name":"emre","languages": ["python","c#"]}  bilgisi var
+
+import json
+
+with open("person.json","r") as file:
+    data = json.load(f)
+    print(data) # {"name":"emre","languages": ["python","c#"]} verir
+    print(data["languages"][1]) # c# döner..
+  
+........................................................
+
+mesela elimizde bir dict bilgisi var ve biz bunu json'a yollamamız lazım örnek olarak.
+
+import json 
+person = {"name":"emre","languages": ["python","c#"]}
+
+result = json.dump(person)
+print(result) # "{}"name":"emre","languages": ["python","c#"]}" haline geldi bir str oldu... dict to json string...
+........................................................
+import json
+person = {"name":"emre","languages": ["python","c#"]}
+
+with open("person.json","w") as file:
+    json.dump(person,file) # böylece bir string olarak dict bilgisini json dosyasına yolladı.
+........................................................
+
+import json
+
+person_str = "{"name":"emre","languages": ["python","c#"]}"
+
+person_dict = json.loads(person_str) 
+result = json.dumps(person_dict,indent = 4,sort_keys = True) # böylece dumps ile yapılandırma yapabildik... sort keys ile keyleri alfabe vs'ye göre sıralarız. ve indent ile ise boşluk vs bırakabiliriz.
+print()
+........................................................
+load ve loads ile biz verileri alırız dump ile ise çevirebiliriz.
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+pass ile boş bölge olmadan atlama yaptırabiliriz.
+mesela bir fonksiyona nesne yollayacağız bunun hangi tipten olduğunu def register(self,user:User): User class'ı tipinden gelecek veri user olarak kullanılacak demektir.
+bazen tek tırnaklar içerisinde çift tırnak kullanmak gerekir. mesela tek '   "..." "..." "..." ' yapabiliriz burada en kapsayıcı ' ' olur tek tersi durumda ise " " kapsayıcı ana string olur.
+
 
 ####################################################################################################################################################################################################################################################################################################################################
