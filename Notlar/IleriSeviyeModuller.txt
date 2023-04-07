@@ -320,5 +320,32 @@ pass ile boş bölge olmadan atlama yaptırabiliriz.
 mesela bir fonksiyona nesne yollayacağız bunun hangi tipten olduğunu def register(self,user:User): User class'ı tipinden gelecek veri user olarak kullanılacak demektir.
 bazen tek tırnaklar içerisinde çift tırnak kullanmak gerekir. mesela tek '   "..." "..." "..." ' yapabiliriz burada en kapsayıcı ' ' olur tek tersi durumda ise " " kapsayıcı ana string olur.
 
+///request modulü//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+mesela json re datetime os mödülleri python ile gelen mödüllerdir. biz pip install requests dedik ve bu mödül bizim python lib kısmımıza bir dosya olarak geldi.
+import json
+print(json.__file__) __file__ ile bir modülün yerini dosya yolunu görebiliriz. genel olarak pyhon lib klasöründeler. kendimizde hazırlayıp modül ekleyebiliriz.
+
+ancak tüm modüller dll şeklinde pcde bulunur bunlar c dili ile yazılıp kütüphane haline getirilir.
+
+kendimizin yüklemesi gereken kütüphaneler gerekebilir. python için bulunan paketler fazlası ile vardır. 
+
+vscode terminaline pip --version yazarsak eğer bize elde olan pyhon'un versiyonunu verir. eğer paket yüklemek istersek eğer pypi.org'uı kullanmamız lazım.
+
+pip install paketadi(requests) gibi yaparsak eğer paketi bize dahil eder.
+pip list ile elde var olan mödülleri görebiliriz. mesela eklediğpimiz requests gözüktü.
+..........................................
+
+import requests diyerek çağırırız. bunun ile http requesti atabiliriz. 
+
+mesela https://jsonplaceholder.typicode.com/todos sayfası bize çok fazla değeri olan json string sunar.
+
+import requests
+result = requests.get("https://jsonplaceholder.typicode.com/todos") # bize bir sonuç dönecek ve biz bunu bir değişkene atadaık.
+result1 = result.text# bunu yaparsak eğer o zmaan bir text oalrak görürüz sonucu. bize bir string bilgi verdi.
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 ####################################################################################################################################################################################################################################################################################################################################
