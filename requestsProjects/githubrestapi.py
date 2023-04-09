@@ -42,7 +42,9 @@
 
 #api.gihtub.com/users/emreaytas(kullaniciadi)/followers ile takipçileri görürüz...
 
-
+# token bilgisi ile bir hesabın işlem yapma izninin olduğu belli olur böylece işlem yapabiliriz...
+    #  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  mesela örenk bir token...
+    
 """ 
 import requests
 import json
@@ -65,14 +67,34 @@ import time
 class Github():
     def __init__(self):
         self.api_url = "https://api.github.com"
+        self.token =  "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"
         
     def getUser(self,username):
         response = requests.get(self.api_url+"/users/"+username) # böylece biz kullanicinin bilgilerini api ile aldık text sonra loads ile bilgiler bir dict içerisnde olacak..
         return response.json() # bu şekilde gelen bilgiyi biz direkt olarak dict hale gelecek pythondaki .json() sayesinde...
     
+    def getRepos(self,username):
+        response = requests.get(self.api_url+"/users/"+username+"/repos")
+        """
+          self.api_url+"/users/"+username+"/repos
+             bu url içerisinde bir json str tutar ve repoların bilgileri birer birer dict içerisindedir. 
+             bir liste içerisinde dictler vardır bu dictler ise repository'lerdir...
+        """
+        return response.json() # direkt olarak pythonun kullanabileceği bir yapı elde ettik... 
+    
+    def createRepo(self,name):
+        response = requests.post(self.api_url+"/users/repos?access_token="+self.token,json={ # post requesti gönderdik ve bize bir bilgi yığını geri geldi... token sayesinde izni olan tokenin sahibi hesapta işlem yapabildik...
+            "name":name,
+            "description" : "This is your repository",
+            "homepage":"https://github.com",
+            "private": False,
+            "has_issues": True,
+            "has_projects":True,
+            "has_wiki": True
+        })
+        return response
         
-            
-
+github = Github()
 
 while True:
     secim = input("1-Find user\n2-Get Repository\n3-Create Repository\n4-Exit\n\n what's your selection: ")
@@ -80,11 +102,23 @@ while True:
         print("Exiting the system...")
         time.sleep(1)
     elif secim == "1":
-        pass
+        username = input("username: ")
+        result = github.getUser(username)
+        print(f"name: {result['name']} public repos: {result['public_repos']} followers: {result['followers']}")
+        
+        
+          
     elif secim == "2":
-        pass
+        username = input("username: ")
+        result = github.getRepos(username)
+        for i in result:
+            print(i["name"])
+        
     elif secim == "3":
-        pass
+        reponame = input("New repository name: ")
+        result = github.createRepo(reponame)
+        print(result)
+        
     else:
         print("\nWrong selection...\n")
             
