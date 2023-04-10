@@ -19,19 +19,40 @@ class theMovieDB():
         response = requests.get(self.api_url+"movie/popular?api_key="+self.api_key+"&language=en-US&page=1")
         response = response.json()
         return response
+    def getsearchresults(self,keyword):
+        response = requests.get(self.api_url+"search/keyword?api_key="+self.api_key+"query="+keyword+"&language=en-US&page=1")
+        return response.json()
     
 
 themovie = theMovieDB()
 
+# terminale cls yazarsak eğer komple temizler...
 
 while True:
-    secim = input("1-Popular movies\n2-Exit\n\n what's your selection: ")
-    if secim == "2":
+    secim = input("1-Popular movies\n2-Search movies3-Exit\n\n what's your selection: ")
+    
+    if secim == "3":
         print("Exiting the system...")
         time.sleep(1)
-    elif secim == "1":
-        
-        
     
+    elif secim == "1":
+        result = themovie.getPopulars()
+        for movie in result["results"]:
+            print(movie["title"]) # böylece isim kısmını alacağız...
+    
+    elif secim == "2":
+        keyword = input("keyword: ")
+        result = themovie.getsearchresults(keyword)
+        for movie in result["results"]:
+            print(movie["title"])
+            
     else:
         print("\nWrong selection...\n")
+        
+        
+# mesela bir site var ve içinden bilgileri çekmek isteriz... eğer bir get request atarsak bir siteye bize kaynağı yani incele kısmını getirir. her sitenin api'si olmaz bu yüzden biz kaynak bilgisinden işlem yapabiliriz...
+# sayfakaynağı ile işlem yapmak demek aslında web scraping yapmak demektir... 
+# 
+
+
+        

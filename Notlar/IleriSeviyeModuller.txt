@@ -320,13 +320,15 @@ pass ile boş bölge olmadan atlama yaptırabiliriz.
 mesela bir fonksiyona nesne yollayacağız bunun hangi tipten olduğunu def register(self,user:User): User class'ı tipinden gelecek veri user olarak kullanılacak demektir.
 bazen tek tırnaklar içerisinde çift tırnak kullanmak gerekir. mesela tek '   "..." "..." "..." ' yapabiliriz burada en kapsayıcı ' ' olur tek tersi durumda ise " " kapsayıcı ana string olur.
 
+pypi.org'dan istenen dosyaları bulabiliriz framework vss...
+
 ///request modulü//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-mesela json re datetime os mödülleri python ile gelen mödüllerdir. biz pip install requests dedik ve bu mödül bizim python lib kısmımıza bir dosya olarak geldi.
+mesela json re datetime os mödülleri python ile gelen mödüllerdir. biz pip install requests dedik ve bu mödül bizim python lib kısmımıza bir dosya olarak geldi. böylece import ederek kullanabiliriz.
 import json
 print(json.__file__) __file__ ile bir modülün yerini dosya yolunu görebiliriz. genel olarak pyhon lib klasöründeler. kendimizde hazırlayıp modül ekleyebiliriz.
 
-ancak tüm modüller dll şeklinde pcde bulunur bunlar c dili ile yazılıp kütüphane haline getirilir.
+ancak tüm modüller dll şeklinde pcde bulunur bunlar c dili ile yazılıp kütüphane haline getirilir. daha hızlı çalışması için. diğer modüllerden biraz farklıdır.
 
 kendimizin yüklemesi gereken kütüphaneler gerekebilir. python için bulunan paketler fazlası ile vardır. 
 
@@ -344,8 +346,24 @@ import requests
 result = requests.get("https://jsonplaceholder.typicode.com/todos") # bize bir sonuç dönecek ve biz bunu bir değişkene atadaık.
 result1 = result.text# bunu yaparsak eğer o zmaan bir text oalrak görürüz sonucu. bize bir string bilgi verdi.
 
+result2 = json.loads(result1) #çoklu olursa eğer loads yaparız. ve böylece stringten çıkarır ve dict olarak kullanmamızı sağlar. böylece loads ile yükledik bir liste içerisinde dictler olacak json stringten çıkardı ve değerleri dict haline getirdi.
+
+for i in result2:
+    if i["userId"] == 1:
+        print(i["tittle"])
+
+..........................................
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+///Beautifulsoup modülü...//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+her sitenin bir api'ı olacak diye bir şey yok bazen işlem yapmak istersek eğer direkt olarak sayfa kaynağı ile işlem yapmak gerekebilir. buna web scraping denir. Beautifulsoup kullanarak işlemler yapacağız...
+
+terminalde pip install beautifulsoup4 yaparak python lib kısmına beautifulsoup modülünü indiririz...
+pip list ile lib'de olan modülleri görebiliriz request ve beautifulsoup4 burada bekliyor...
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ####################################################################################################################################################################################################################################################################################################################################

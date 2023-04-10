@@ -1,5 +1,0 @@
-# soru ekleme sorma...
-
-
-
-           

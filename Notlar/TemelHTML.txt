@@ -1,0 +1,63 @@
+################################################################################################################################################################################################################################################################################################################################
+
+eğer api yoksa biz html üzerinden web scraping yapabiliriz beutifulsoup ile... html kaynağı üzerinden işlem yapabiliriz...
+html sayfalarının uzantıları .html'dir...
+<head>
+<title>MY NEW SİTE</title>  # sayfanın ana etiketi sekmelerde çıkan yazı...
+ </head> <body>
+ <h1>ANA BAŞLIK</h1> # sayfamızda ana başlık yazar...
+ </body> head ve body ana etiketlerdir...
+........................................................................................
+html arasında head ve body kısımları olur bunlar iki ana etiketlerdir...
+title demek hani sekmeleri taşırız üstüne YouTube falan yazar oradaki yazının belirlenmesini sağlar...
+........................................................................................
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY NEW SİTE</title>  # sekmenin adı olacak...
+</head>
+<body>
+    <h1 id="header">ANA BAŞLIK</h1> # mesela bir renk arka zemin değişimi falan yapacağız. o zaman id="header" dersek o zaman header'ler üzerinde işlem yapmak isteyebiliriz...
+    <div class="grup1"> # div ile gruplama yaparız burası önemli bir noktadır...
+            <h2>PROGRAMLAMA</h2>
+        <li>
+            Menu1
+        </li>
+        <li>
+            Menu2
+        </li>
+        <li>
+            Menu3
+        </li>
+    </div>
+
+    <div class="grup1">
+            <h2>Moduller</h2>
+        <li>
+            Menu1
+        </li>
+        <li>
+            Menu2
+        </li>
+        <li>
+            Menu3
+        </li>
+    </div>
+        <img src="peace-out.gif" alt="100"> # html ile aynı path üzerinde olan resmi ekledik. ve alt ile boyutunu belirleyebildik...
+
+</body>
+</html> # her şey <html> ile </html> arasında olur...
+
+........................................................................................
+
+
+
+
+
+####################################################################################################################################################################################################################################################################################################################################
