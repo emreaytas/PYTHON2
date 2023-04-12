@@ -1,0 +1,44 @@
+##################################################################################################################################################################
+
+
+///Selenium nedir ve nasıl kullanılır.../////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Selenium bir web otomasyon kütüphanesidir.
+Selenium ile bir web sitesini ziyaret ederek etkileşim yaptırabiliriz...
+bize Seleniumun hangi tarayıcı ile çalışacak bunu belirtebilmek için bir drivera ihtiyacımız var... bunu pypi.org'dan indirmemiz lazım... bizim driveri tarayıcının versiyonuna göre indirmemiz lazım... x86 win32 exe'yi indirdik tarayıcıya uygun olan versiyına göre...
+Selenium'un çalışacağı dosyanın path'inde aynı yolunda tarayıcı ile çalışacak exe dosyası aynı anda olmalıdır... biz bunu zip dosyasının içiden alıp işlem yapacağız .py dosyasının path'i üzerine koyduk...
+
+from selenium import webdriver
+
+driver = webdriver.Edge() # böylece Edge üzerinde işlem yapabiliriz...
+url = "https://www.github.com"
+driver.get(url) #böylece dirverın bağlı olduğu bu webdriver ile biz direkt olarak istenen url'yi istenen tarayıcıda açabiliriz...
+
+driver burada bir pointer gibi çalışır bu yüzden işlemler bittikten sonra driver.close() diyerek kapatabiliriz...
+driver.maximize_window() #bununla dirver'ın bağlı olduğ web taraycısı çalışınca tam ekran olabilir...
+
+print(driver.title) # bununla sayfanın title etiketini getirebiliriz...
+
+driver.close() ile açılan tarayıcıyı kapatabiliriz...
+
+driver.save_screenshot("resimadi.png"()) # elde olan o an çalışan sayfanın ekran görüntüsü alır... ve dosyamıza bu resmi ekler...
+              # .png uzantısı önemlidir...
+
+"""
+from selenium import webdriver
+import time
+driver = webdriver.Edge()
+url = "https://www.github.com"
+driver.get(url)
+time.sleep(10)
+driver.maximize_window()
+driver.save_screenshot("newScreen.png")
+print(driver.title) # bize sayfanın title kısmını getirir...
+time.sleep(10)
+driver.close()
+"""
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+##################################################################################################################################################################
