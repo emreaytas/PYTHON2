@@ -5,8 +5,11 @@ import time
 import json
 from selenium.webdriver.common.keys import Keys
 from datetime import datetime
+from random import randint
 
 # ms Edge üzeriden calisacak... Edge sürümü = 112.0.1722.34  ....... x86 dosyası inerek bu .py dosaysının pathi üzerine getirilmelidir...
+
+liste2 = []
 
 email = "" # kullanici adi girilecek veya e posta str olarak...
 password = "" # kullanci sifresi girilecek str olarak...
