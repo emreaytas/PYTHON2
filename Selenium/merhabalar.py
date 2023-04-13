@@ -13,11 +13,7 @@ from random import randint
 
 email = "" # kullanici adi girilecek veya e posta str olarak...
 password = "" # kullanci sifresi girilecek str olarak...
-gitmezamani = datetime(2023,5,15,0,0,0)
-zaman1 = datetime.now()
-fark = gitmezamani - zaman1
-tweet = f"AKP'nin gitmesine: {int(int(fark.days) / 30)} AY {(int(fark.days) % 30)} GUN {int(int(fark.seconds) / 3600)} SAAT { (int (int(fark.seconds) / 60) - ((int(int(fark.seconds) / 3600)) * 60))} DAKIKA {(int(fark.seconds) % 60)} SANIYE KALDI!!!"
-
+tweet = input("Tweetinizi giriniz: ")
 class Twitter():
     def __init__(self,email,password,tweet):
         self.devam = True
@@ -52,11 +48,8 @@ class Twitter():
         time.sleep(3)
         self.driver.find_element(By.XPATH,"//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div/div[3]/div[2]/div[1]/div/div/div/div/div[2]/div[3]/div/div/div[2]/div[4]/div/span/span").click()
         time.sleep(3)
-        
-        gitmezamani = datetime(2023,5,15,0,0,0)
-        zaman1 = datetime.now()
-        fark = gitmezamani - zaman1
-        newTweet = f"AKP'nin gitmesine: {int(int(fark.days) / 30)} AY {(int(fark.days) % 30)} GUN {int(int(fark.seconds) / 3600)} SAAT { (int (int(fark.seconds) / 60) - ((int(int(fark.seconds) / 3600)) * 60))} DAKIKA {(int(fark.seconds) % 60)} SANIYE KALDI!!!"
+      
+        newTweet = input("Yeni tweetinizi giriniz cikmak isterseniz q yaziniz ve giriniz: ")
         self.tweet = newTweet
         if self.tweet == "q":
             self.devam = False
@@ -67,7 +60,7 @@ class Twitter():
         """
         //*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div[2]/div[1]/div/div/div/div[2]/div[1]/div/div/div/div/div/div[2]/div/div/div/div/label/div[1]/div/div/div/div/div/div[2]/div/div/div/div
         """        
-        time.sleep(1)
+        time.sleep()
         
 twitter = Twitter(email,password,tweet)
        
@@ -83,6 +76,3 @@ while True:
         
         
 twitter.driver.close()
-
-
-
