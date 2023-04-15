@@ -10,6 +10,8 @@ driver.save_screenshot("newScreen.png") # ekran görüntüsü alıp sonra python
 url = "https://www.github.com/emreaytas"
 driver.get(url) # driver'a yeni çalışma urlsini gönderdik...
 print(driver.title) # başlık yazdırdık...
+if "emreaytas" in driver.title:
+    driver.save_screenshot("Ekranfotosu.png")
 driver.back() # geri gitmemizi sağladı..
 
 time.sleep(2)
@@ -19,4 +21,7 @@ driver.forward() # ileri gitmemizi sağladı...
 print(driver.title) # bize sayfanın title kısmını getirir...
 time.sleep(10)
 driver.close() # pointerlar gibi driver'ı kapatarız çalışmasını bitiririz...
+
+
+
 
