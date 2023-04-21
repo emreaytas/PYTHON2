@@ -1,47 +1,14 @@
 import pandas as pd
 import numpy as np
 
-s1 = pd.Series([3,0,2,1])
-s2 = pd.Series([0,3,7,2])
+# path önemli çünkü okuma işlemine PYTHONDAN başladı bu yüzden PANDAS klasörüne girmek gerekti...
+df = pd.read_csv("PANDAS/sample1.csv") # csv okumak için read_csv kullanırız...         
+df1 = pd.read_json("PANDAS/sample.json") # json okumak için ise read_json kullanırız... eğer ezcelden okuma yapacaksak o zaman pd.read_excel kullanırız ama ayrı bir kütüphane lazım pip install xlrd ile bunu indirmemiz lazım eğer excelden veri okumak istersek...
+# excelden veri okumak için ise read_excel kullanırız xlsx ise excel uzantısıdır...
 
-data = dict(apples = s1,oranges = s2) #s1 ve s2 ile dict oluşturudk ve isimlendirme yaprık apples = s1,oranges = s2 diyerek...
 
-df = pd.DataFrame(data) # böylece dict ile dataframe oluşturduk...
+
 print(df)
-"""
-    apples  oranges
-0       3        0
-1       0        3
-2       2        7
-3       1        2
-""" # böylece bir dataframe oldu ve indexlendi kolonların isimlerinide koyabildik...
-
-
-df1 = pd.DataFrame()
 print(df1)
-"""
-Empty DataFrame
-Columns: []
-Index: []
-"""
 
-df2 = pd.DataFrame([1,2,3,4])
-print(df2)
-"""
-   0 # her hangi bir kolon ismi olmadığı için default olarak 0 yazdırdı... aslında kolonun indexi olarak 0 verdi bir tane daha kolon olsa oda sıfır alacaktı...
-0  1
-1  2
-2  3
-3  4
-""" # bir liste ilede indexlenmiş yapı oluşturabildik...
 
-df3 = pd.DataFrame([["Ahmet",50],["Ali",60],["Veli",70],["Emre",80]])
-print(df3)
-"""
-       0   1
-0  Ahmet  50
-1    Ali  60
-2   Veli  70
-3   Emre  80
-    
-""" # her bir listeyi bir satır olarak kabul etti. ve kolonları ismi olmadığı için default olarak sıfırdan indexledi... her bir liste ile bir satrı oluşturdu ve onlarıda indexledi... 
