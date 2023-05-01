@@ -12,9 +12,9 @@ bize gelecek hataları tek bir yerde toplayabiliriz.
 try:
     .....hata gelebilecek alan.
 except:
-    .....hata olursa olacak alan
+    ......hata olursa olacak alan
 else:
-    .....eğer except bloklarından hiçbirisi çalışmazsa else bloğu çalışır.
+    ......eğer except bloklarından hiçbirisi çalışmazsa else bloğu çalışır.
 finally:
     .....her zaman çalışır. except olsun olmasın try bittikten veya except bittikten sonra kesin olarak çalışır. dosya veritabanı falan kapatmak için kullanılır.       
 
