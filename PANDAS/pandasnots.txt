@@ -1,8 +1,8 @@
 ####################################################################################################################################################################################################################################################################################################################################
 
 //Pandas nedir...///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-# pandasta heterojen bir yapı kurabiliriz ama nupmyede homojen olmalıdır...
-# pandasta heterojen bir yapı kurabiliriz ama nupmyede homojen olmalıdır...
+# pandasta heterojen bir yapı kurabiliriz ama nupmyede homojen olmalıdır... daha çok numpy matematiksel veriler ile uğraşırken kullanabileceğiz ve homojen olmalı veri tipleri...
+
 import pandas as pd
 import numpy as np
 #data
