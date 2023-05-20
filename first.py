@@ -1,17 +1,177 @@
-import sqlite3 as sql 
+import sqlite3 as sql
+import time
 
-conn = sql.connect("ders.db")
-cursor = conn.cursor()
+def create_table():
+    conn = sql.connect("ders.db")
+    cursor = conn.cursor()
+    cursor.execute("""create table if not exists users
+                   
+                   id int primary key,
+                   name text,
+                   lastname text,
+                   username text,
+                   password text
+                   
+                   """)
 
-cursor.execute("""select * from calisanlar where ad in('ahmet','emre','ford','bmw')""")
-listall = cursor.fetchall()
+    conn.commit()
+    conn.close()
 
-for calisan in listall:
-    print(calisan)
+def insert(name,lastname,username,password):
+    conn = sql.connect("ders.db")
+    cursor = conn.cursor()
     
+    addcommand = """insert into users values{}"""
+    data = (name,lastname,username,password)
+    cursor.execute(addcommand.format(data)) 
     
-conn.commit()
-conn.close()
+    conn.commit()
+    conn.close()
+
+def printall():
+    conn = sql.connect("ders.db")
+    cursor = conn.cursor()
+    
+    cursor.execute("select * from users")
+    listall = cursor.fetchall()
+    for a in listall:
+        print(a)
+    
+    conn.close() 
+    
+def updatepassword(username,newpassword):
+    conn = sql.connect("ders.db")
+    cursor = conn.cursor()
+    
+    updatecommand = """"update users set password = '{}' where username = '{}' """ # eğer gelecek değer str ise o zaman parantezler tırnak içerisine alınmalıdır.
+    cursor.execute(updatecommand.format(newpassword,username))
+          
+    conn.commit()
+    conn.close()
+
+def loginmenu(user):
+    print(f"""
+          {user[1]} {user[2]} {user[3]}
+          
+          1 - Bir kullanici ara
+          2 - tum kullanicilari yazdir
+          3 - hesabimi sil
+          4 - cikis yap 
+        
+          """)
+
+
+
+def deleteaccount(username): 
+    conn = sql.connect("ders.db")
+    cursor = conn.cursor()
+    
+    dltcommand = """delete from users where username = '{}' """ # sadece sayılar için tırnaksız olarak süslü parantez koyarız.
+    cursor.execute(dltcommand.format(username))
+     
+    conn.commit()
+    conn.close()
+
+def deletetable():
+    conn = sql.connect("ders.db")
+    cursor = conn.cursor()
+    
+    cursor.execute("""drop table users""") 
+     
+    conn.commit()
+    conn.close()
+
+
+def searchuser(username):
+    conn = sql.connect("ders.db")
+    cursor = conn.cursor()
+    
+    srcommand = """select * from users where username = '{}' """
+    cursor.execute(srcommand.format(username))
+    user = cursor.fetchone()
+    
+    #commite gerek yok...
+           
+    conn.close()
+    
+    return user
+
+create_table()
+
+def printmenu():
+    
+    print("""
+         1 - Giris yap
+         2 - Kaydol
+         3 - Kapat   
+         """)
+
+while True:
+    printmenu()
+    
+    secim = input("\nYapacaginiz islemi giriniz: ")
+    
+    if secim == "1":
+        username = input("Kullanci adi giriniz: ")
+        password = input("Sifrenizi giriniz: ")
+        search = searchuser(username)
+        if search == None: # eğer bu eleman yoksa None dönecek...
+            print("Böyle bir kullanici yok...")
+            continue
+        if password == search[4]:
+            print("giris basarili...")
+            while True:
+                loginmenu(search)
+                islem = input("Yapmak istediginiz islemi giriniz: ")
+                if islem == "1":
+                    u = input("Kullanici adini giriniz: ")
+                    birisi = searchuser(u)
+                    
+                    if birisi == None:
+                        print("Boyle bir kullanici yok")   
+                        continue
+                    
+                    print(f"{birisi[1]} {birisi[2]} {birisi[3]}")
+                    
+                elif islem == "2":
+                    printall()
+                
+                elif islem == "3":
+                    
+                    deleteaccount(username)
+                    time.sleep(1)
+                
+                elif islem == "4":
+                    print("Cikis yapiliyor.")
+                    time.sleep(1)
+                    break
+                else:
+                    print("Hatali islem...")
+                    time.sleep(1)
+            
+    elif secim == "2":
+        name = input("İsminizi giriniz: ")
+        lastname = input("Soyisminizi giriniz: ")
+        username = input("Kullanici adinizi giriniz: ")
+        user = searchuser(username)
+        if user != None:
+            print("Böyle bir kullanici zaten var...")
+            continue
+        password = input("Sifrenizi giriniz: ")
+        
+        insert(name,lastname,username,password)
+        print("\nKayit basarili...\n")         
+        
+        
+        
+    elif secim == "3":
+        break
+    else:
+        print("Hatali islem...")
+        time.sleep(1)
+
+print("İslemler bitti...")
+deletetable()
 
 
 """
@@ -51,9 +211,6 @@ add_command = f"insert into students values{format1}"
 cursor1.execute(add_command)
 
 bu yapi ile istenen verileri alabiliriz.
-
-
-
 
 ......................................................................................................................................................
 
@@ -209,3 +366,5 @@ cursor.execute("""select * from calisanlar where ad like 'm___e_' """) # ilk har
 
 '''
 
+# mesela select *,* from students dedik bize gelen her veri ('emre','aytas','20','emre','aytas','20') olarak gelir her bir veri içeriği ile bir tane tupple içerisinde gelir.
+# select * from sqlite_master where type = 'table' # tipi tablo olanları aldık...

@@ -1,7 +1,18 @@
 ####################################################################################################################################################################################################################################################################################################################################
 
+panel datadan gelmiştir. panel data herhangi bir durum hakkında zamana bağlı olarak elde edilen veriler. mesela yıllık karsa düşen yağış miktarı.
+bir makine öğrenmesi algortimasının başarısını sağlamak için ona olabildiğince fazla veri vermek lazım. mesela ne kadar fazla film izlersek netflix bizim nelerden hoşlandığımızı bilir. 
+
+pandas ile veri analizi ve veri manipülasyonu yapacağız. yani değişim vs yapabileceğiz. temizleme yapabileceğiz.
+
+pandas ve numpy gibi frameworkler c dili ile yazılmıştır. hızlı çalışması için. 
+
 //Pandas nedir...///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 # pandasta heterojen bir yapı kurabiliriz ama nupmyede homojen olmalıdır... daha çok numpy matematiksel veriler ile uğraşırken kullanabileceğiz ve homojen olmalı veri tipleri...
+
+
+# print(pd.__version__) # 2.0.0 bu yapı ile pandasın verisyonunu görürüz. pip install --user --upgrade pandas ile ise güncelleme yapabiliriz.
+
 
 import pandas as pd
 import numpy as np
