@@ -7,6 +7,7 @@
 
 # BİR APİ ANAHTARI OLUŞTURDUK 2c10770efcff92fbfccfc7cde579faad GİBİ...
 # MESELA BİR APİ ÖRENEĞİ https://api.themoviedb.org/3/movie/550?api_key=2c10770efcff92fbfccfc7cde579faad   ... BU ŞEKİLDE BİZ ANAHTARI KULLANABİLECEĞİZ...
+import time
 import json 
 import requests
 

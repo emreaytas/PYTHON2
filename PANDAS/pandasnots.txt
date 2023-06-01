@@ -1,7 +1,7 @@
 ####################################################################################################################################################################################################################################################################################################################################
 
 panel datadan gelmiştir. panel data herhangi bir durum hakkında zamana bağlı olarak elde edilen veriler. mesela yıllık karsa düşen yağış miktarı.
-bir makine öğrenmesi algortimasının başarısını sağlamak için ona olabildiğince fazla veri vermek lazım. mesela ne kadar fazla film izlersek netflix bizim nelerden hoşlandığımızı bilir. 
+bir makine öğrenmesi algortimasının başarısını sağlamak için ona olabildiğince fazla veri vermek lazım. mesela ne kadar fazla film izlersek netflix bizim nelerden hoşlandığımızı bilir. çünkü hatalı veriler olabilir tam olarak ortalamayı sağlamak için daha fazla veri vermek lazım... 
 
 pandas ile veri analizi ve veri manipülasyonu yapacağız. yani değişim vs yapabileceğiz. temizleme yapabileceğiz.
 
@@ -11,9 +11,11 @@ eğer excel üzerinden okuma yapmak istersek ayrı bir kütüphaneye ihtiyacım�
 
 pandasın çalışması için numpy'nin yüklü olması lazım.
 
+
 ///PANDAS SERİES 1/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 pandas aldığı verileri alır sutun ve satırlardan oluşan nesnelere çevirir. eğer tek boyutlu ise pandas serisi olur birden fazla sutuna sahip olursa ise pandas dataframe olur.
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

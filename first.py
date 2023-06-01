@@ -4,15 +4,7 @@ import time
 def create_table():
     conn = sql.connect("ders.db")
     cursor = conn.cursor()
-    cursor.execute("""create table if not exists users
-                   
-                   id int primary key,
-                   name text,
-                   lastname text,
-                   username text,
-                   password text
-                   
-                   """)
+    cursor.execute('create table if not exists users (id int primary key,name text,lastname text,username text,password text)')
 
     conn.commit()
     conn.close()
@@ -21,7 +13,7 @@ def insert(name,lastname,username,password):
     conn = sql.connect("ders.db")
     cursor = conn.cursor()
     
-    addcommand = """insert into users values{}"""
+    addcommand = """insert into users(name,lastname,username,password) values{}"""
     data = (name,lastname,username,password)
     cursor.execute(addcommand.format(data)) 
     
@@ -43,7 +35,7 @@ def updatepassword(username,newpassword):
     conn = sql.connect("ders.db")
     cursor = conn.cursor()
     
-    updatecommand = """"update users set password = '{}' where username = '{}' """ # eğer gelecek değer str ise o zaman parantezler tırnak içerisine alınmalıdır.
+    updatecommand = """"update users set password = '{}' where username = '{}' """ # eğer gelecek değer str ise o zaman parantezler tırnak içerisine alınmalıdır. ama int değer ise o zaman olmaz. gerek yok denebilir hatta.
     cursor.execute(updatecommand.format(newpassword,username))
           
     conn.commit()
@@ -107,6 +99,7 @@ def printmenu():
          """)
 
 while True:
+    
     printmenu()
     
     secim = input("\nYapacaginiz islemi giriniz: ")
@@ -368,3 +361,19 @@ cursor.execute("""select * from calisanlar where ad like 'm___e_' """) # ilk har
 
 # mesela select *,* from students dedik bize gelen her veri ('emre','aytas','20','emre','aytas','20') olarak gelir her bir veri içeriği ile bir tane tupple içerisinde gelir.
 # select * from sqlite_master where type = 'table' # tipi tablo olanları aldık...
+
+# cursor() ile bir imleç oluşturmamızın sebebi şudur = istediğimiz sorguları bağlantıya yani db'ye yollayabilmek için.
+
+'''
+create table if not exists users(id int primary key, name text,surname text) # gibi bir yapı ile kurarız.  
+'''
+# eğer bir değer primary key ise o zaman atama yapmaya illaki gerek yok otomatik olarak artan bir atama olacak örneğin id int primary key olursa her veri geldiğinde sıralı olarak dizilecek.
+# bir diğer husus ise mesela bir id var primary key otomatik olarak artmasını istiyoruz o zaman insert into users(name,surname,username,password) values('emre','aytas','emreaytas','12345') olarak ekleme yapmamız users() kısmında onu boş bırakmamız gerekir. 
+
+# conn.commit() ile verdiğimiz sorguları geçerli hale getiririz. işlem veritabanına gider.
+# conn.close() ile ise bu bağlantıyı kapatırız.
+
+# drop table tablename ile bir tablo sileriz.
+# drop table if exists tablename # yaparsak eğer bu eğer o tablo varsa sil demektir. if not exists olursa yoksa demek if exists demek ise eğer varsa demek. 
+
+# drop table if exists users ile eğer users tablosu varsa o tabloyu sileriz.
