@@ -365,7 +365,8 @@ cursor.execute("""select * from calisanlar where ad like 'm___e_' """) # ilk har
 # cursor() ile bir imleç oluşturmamızın sebebi şudur = istediğimiz sorguları bağlantıya yani db'ye yollayabilmek için.
 
 '''
-create table if not exists users(id int primary key, name text,surname text) # gibi bir yapı ile kurarız.  
+create table if not exists users(id int primary key, name text,surname text) # gibi bir yapı ile kurarız. users() yaparak tablonun yapsını () arasında belirleriz.  
+
 '''
 # eğer bir değer primary key ise o zaman atama yapmaya illaki gerek yok otomatik olarak artan bir atama olacak örneğin id int primary key olursa her veri geldiğinde sıralı olarak dizilecek.
 # bir diğer husus ise mesela bir id var primary key otomatik olarak artmasını istiyoruz o zaman insert into users(name,surname,username,password) values('emre','aytas','emreaytas','12345') olarak ekleme yapmamız users() kısmında onu boş bırakmamız gerekir. 
@@ -377,3 +378,16 @@ create table if not exists users(id int primary key, name text,surname text) # g
 # drop table if exists tablename # yaparsak eğer bu eğer o tablo varsa sil demektir. if not exists olursa yoksa demek if exists demek ise eğer varsa demek. 
 
 # drop table if exists users ile eğer users tablosu varsa o tabloyu sileriz.
+
+# cursor.executemany(addcommand,datas) # ile sırası ile birden fazla işlem yaptırabiliriz.
+
+# cursor = conn.cursor()    cursor.execute() ile ise komutları verebiliriz.
+
+# update tablename set name = "emre",lastname = "ford"... where koşul. yapısı ile güncelleme yapabiliriz..
+                        # set age = age + 1 dersek eğer elde olan değer üzerinden işlem yapabiliriz.
+
+# addcommandda str gelecekse '{}' ama int vs ise {} kullanırız.
+
+
+
+
