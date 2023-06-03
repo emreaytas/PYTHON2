@@ -388,6 +388,15 @@ create table if not exists users(id int primary key, name text,surname text) # g
 
 # addcommandda str gelecekse '{}' ama int vs ise {} kullanırız.
 
+# delete from tablename where kpşul yapısı ile silme yapacağız. or ve and kullanabiliriz. direkt olarak sağlanan koşuldaki satırı silecek.
 
+# sorgu verdikten sonra cursor.fetchall() ile tüm verileri bir array içersinde alırız. bunu return eder bu yüzden atama yapmamız lazım. fecthone() ile ise tek tek return ederiz değerleri ama array içerisinde döndürmez direkt olarak değeri dönderir.
+
+# fetchmany(sayi) ile istenen kadarını return ederiz bir array içerisinde 0 verirsek sayiya o zaman hepsini bir array içerisinde return eder. eğer verilen sayı eleman sayısından fazla ise sorun yok hepsini bir array içerisinde dönderir. 
+
+
+
+
+ 
 
 
