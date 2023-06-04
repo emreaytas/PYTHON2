@@ -400,3 +400,8 @@ create table if not exists users(id int primary key, name text,surname text) # g
  
 # where name in ('emre','ford','msutang','focus') olursa eğer namenin bu tupple içerisinde olanları kabul edecek.
 
+# from math import * dersek eğer math.sqrt yapmamıza gerek kalmaz modüldeki her şeyi direkt olarak kullanabiliriz.
+
+# sqlde bir şey ararız select * from where ile eğer veri olmazsa None olur...
+
+
