@@ -394,9 +394,9 @@ create table if not exists users(id int primary key, name text,surname text) # g
 
 # fetchmany(sayi) ile istenen kadarını return ederiz bir array içerisinde 0 verirsek sayiya o zaman hepsini bir array içerisinde return eder. eğer verilen sayı eleman sayısından fazla ise sorun yok hepsini bir array içerisinde dönderir. 
 
+# rowid ile biz satırların numaralarını alabiliriz. buda bir sutundur. 
 
-
-
+# executemany() ile değerler atamak istersek eğer .... addcommand = """insert into calisanlar(name,lastname,age)  values(?,?,?)""" yapmamız lazım ? işareti her seferinde yeni gelecek olan değerin yerine geçecek.
  
-
+# where name in ('emre','ford','msutang','focus') olursa eğer namenin bu tupple içerisinde olanları kabul edecek.
 
