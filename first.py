@@ -404,4 +404,27 @@ create table if not exists users(id int primary key, name text,surname text) # g
 
 # sqlde bir şey ararız select * from where ile eğer veri olmazsa None olur...
 
+# if exists eğer varsa demek if not exists ise eğer yoksa demek. eğer primary keye mesela int primary keye değer vermezsek otomatik olarak atran bir yapı kurar kendisine NULL olarak bırakmaz...
+
+# eğer select * from users where name = '{name}' olarak bir sorgu gönderir ve user1 = cursor.fetchone() yaparsak ve o değer yoksa o zaman user None olacak...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
