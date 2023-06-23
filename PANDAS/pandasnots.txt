@@ -1,5 +1,9 @@
 ####################################################################################################################################################################################################################################################################################################################################
 
+### pip install howdoi ile howdoi'yi yükleriz kullanımı ise howdoi write a function to add two numbers in python...böylece istenen bir fonksiyonu bize verecek...  
+
+
+
 panel datadan gelmiştir. panel data herhangi bir durum hakkında zamana bağlı olarak elde edilen veriler. mesela yıllık karsa düşen yağış miktarı.
 bir makine öğrenmesi algortimasının başarısını sağlamak için ona olabildiğince fazla veri vermek lazım. mesela ne kadar fazla film izlersek netflix bizim nelerden hoşlandığımızı bilir. çünkü hatalı veriler olabilir tam olarak ortalamayı sağlamak için daha fazla veri vermek lazım... 
 
@@ -15,6 +19,9 @@ pandasın çalışması için numpy'nin yüklü olması lazım.
 ///PANDAS SERİES 1/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 pandas aldığı verileri alır sutun ve satırlardan oluşan nesnelere çevirir. eğer tek boyutlu ise pandas serisi olur birden fazla sutuna sahip olursa ise pandas dataframe olur.
+
+print(pd.__version__) # 2.0.0 bu yapı ile pandasın verisyonunu görürüz. pip install --user --upgrade pandas ile ise güncelleme yapabiliriz.
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
