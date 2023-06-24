@@ -1,1 +1,151 @@
-"
+####################################################################################################################################################################################################################################################################################################################################
+
+en çok kullanılan bilimsel hesaplama kütüphanesidir. açık kaynak kodlu güçlü sayısal işlemler için kullanılan bir python kütüphanesidir.
+
+import numpy as np # core kodu c dilinde yazılmıştır. numpy çok dilli olarak modellenmiştir.
+
+x = np.array([1,2,3,4,5,6]) # bir array oluşturmak için ([]) yapısı ile koymak lazım direkt olarak verileri koymak hata olur. her birini farklı bir yapı olarak kabul eder o yüzden bir arrayin elemanlarını bir liste içerisinde göndermek ve o listenden bir array elde etmek lazım.
+
+# numpy'in temel veri elemanı çok boyutlu dizinlerdir. vektör ve matris ifadelerini daha kolay modellememizi sağlar. 
+
+nupmy klasik pythondan daha hızlıdır. bu yüzden kullanılır zaten. sayılarla işlem yapmak için kullanılır genel olarak.
+
+
+
+///Ders 1 - NDArray Oluşturmak - Upcasting//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+NDArray = numpy'nin temel veri yapısıdır. çok boyutlu dizin demektir NDArray 
+
+
+        import numpy as np
+        import time
+
+        baslangic = time.time()
+
+        A = np.arange(10000000) # 10000000 tane eleman oluşturduk. 0'dan 10000000'a kadar birer birer 
+
+        bitis = time.time()
+
+
+        baslangic1 = time.time()
+
+        L = range(10000000)
+        [i for i in L]
+
+        bitis1 = time.time()
+
+        print(bitis - baslangic) # 0.007336139678955078
+
+        print(bitis1 - baslangic1) # 0.8526325225830078
+
+        print((bitis1 - baslangic1) / (bitis - baslangic)) # 95.46080806942409 kat fark var arada buna dikkat etmek gerekir.    
+
+
+numpy vektörleşmeyi destekler... klasik python listesi ise vektörleşmeyi desteklemez. 
+
+python listesi kullanarak NDArray oluşturmak ->  X = np.array([1,2,3,4,5,6]) # bu metota listeyi gönderince istenen yapıyı elde ederiz. bir array elde ederiz.
+                                                   
+        import numpy as np
+
+        X = np.array([1,2,3,4,5])
+        print(type(X)) # <class 'numpy.ndarray'>
+
+...............
+
+
+            import numpy as np
+
+            X = np.array([1,2,3,4,5])
+
+            print(X.shape)  # (5,) // boyut olarak bize bilgi verdi shape (5,) demek tek boyutlu 5 elemanlı demektir. bir tuple içerisinde gönderir eksendeki elemanların sayısını gösterir. 
+            print(X.size)   # 5 // .size ile kaç adet eleman olduğunu görürüz. toplam eleman sayısını görürüz.
+            print(X.ndim)   # 1 // array'in boyutunu bize gösterir. 1 boyutludur bu array. 
+            print(X.nbytes) # 20 // veriler ne kadar byte kaplıyor görürüz.  .nbytes ile totalde kaplanan alanı görürüz. veriyi depolamak için gereken byte miktarını verir...
+            print(X.dtype)  # int32 // içerisindeki elemanların veri tipini gösterir.  
+
+
+................
+
+            import numpy as np
+
+            Y = np.array([[1,2,3],[4,5,6],[7,8,9]]) # listelerin listesi ile bir matris elde ederiz. np.array() metotuna yollarız ve bize bir matris döner bu yapı ile.
+
+            print(Y) 
+            """             [[1 2 3]
+                            [4 5 6]
+                            [7 8 9]]"""
+                            
+            print(type(Y))  # <class 'numpy.ndarray'>
+            print(Y.shape)  # (3, 3) // boyut bilgisini verdi 3e 3lük bir yapısı var demektir. önce kaç adet satır olduğu sonra satırlarda kaçar eleman olduğunu yazar eğer [[1,2,3],[4,5,6]] olsa idi (2,3) verirdi
+            print(Y.size)   # 9 // .size ile kaç adet eleman olduğunu görürüz. toplam eleman sayısını görürüz.
+            print(Y.ndim)   # 2 // array'in boyutunu bize gösterir. 2 boyutludur bu array. yani matris diyebiliriz.
+            print(Y.nbytes) # 36 // veriler ne kadar byte kaplıyor görürüz.  .nbytes ile totalde kaplanan alanı görürüz. veriyi depolamak için gereken byte miktarını verir...
+            print(Y.dtype)  # int32 // içerisindeki elemanların veri tipini gösterir.  
+
+.................
+
+            import numpy as np
+
+            Z = np.array([[[1,2],[3,4]],[[1,2],[3,4]]]) #buda üç boyutlu bir dizi oldu. içerisinde matrisler taşıyan dizi'ye 3 boyutlu dizi denir...
+
+            print(Z)
+            """
+            [[
+            [1 2]
+            [3 4]
+            
+            ]
+            [
+                
+            [1 2]
+            [3 4]
+            
+            ]]  
+                """
+
+            print(Z.shape) #(2, 2, 2)
+            print(Z.nbytes) # ne kadar byte kullandık bunu gösterir.
+            print(Z.ndim) #3 boyutlu olduğnu gösterir.
+
+................
+
+ndarray'de elemaların tamamı aynı tip olmalıdır. python listesinde heterojen olabilir ama numpy arraylerinde arrayler homojen olmalıdır.
+
+        import numpy as np
+
+        x = np.array([1,2,'3'])
+        print(x.dtype) # <U11    U11 karakterli unicode bir string demek. içerisinde string olduğu için hepsini stringe çevirdi...
+
+içerisine bir tane string girince tüm elemanları stringe çevirdi buna Upcasting denir. çünkü homojen bir yapı olmalıdır.
+    eğer int değerler içerisine float bir değer girerse o zaman yine Upcasting olur ve hepsi float olur. bunu .dtype ile görebiliriz. 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+/////Ders 2 - Veri Tipleri - Save(), Load()////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+her veri homojen olmalı eğer verileri içerisinde farklı bir veri tipi varsa numpy ona göre tüm arrayi ayarlar mesela 3 tane int bir tane float var tüm değerler float olur.
+
+        import numpy as np
+
+        x = np.array([1,2,3.0])
+        print(x.dtype) # float64 verdi...
+
+..................
+
+        import numpy as np
+
+        x = np.array([1,2,3.0,'4'])
+        print(x.dtype) #<U32 karakter setini verdi hepsini string galine çevirdi yani.
+
+..................
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+####################################################################################################################################################################################################################################################################################################################################
