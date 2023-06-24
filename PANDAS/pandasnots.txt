@@ -2,8 +2,6 @@
 
 ### pip install howdoi ile howdoi'yi yükleriz kullanımı ise howdoi write a function to add two numbers in python...böylece istenen bir fonksiyonu bize verecek...  
 
-
-
 panel datadan gelmiştir. panel data herhangi bir durum hakkında zamana bağlı olarak elde edilen veriler. mesela yıllık karsa düşen yağış miktarı.
 bir makine öğrenmesi algortimasının başarısını sağlamak için ona olabildiğince fazla veri vermek lazım. mesela ne kadar fazla film izlersek netflix bizim nelerden hoşlandığımızı bilir. çünkü hatalı veriler olabilir tam olarak ortalamayı sağlamak için daha fazla veri vermek lazım... 
 
@@ -14,6 +12,14 @@ pandas ve numpy gibi frameworkler c dili ile yazılmıştır. hızlı çalışma
 eğer excel üzerinden okuma yapmak istersek ayrı bir kütüphaneye ihtiyacımız olacak pip install xlrd diyerek bunu kütüphanemize eklememiz lazımdır... pip list ile gelmiş mi gelmemiş mi görebiliriz...
 
 pandasın çalışması için numpy'nin yüklü olması lazım.
+
+pandas ile veri analizi ve manipülasyonu yaparız. 
+
+panda serileri sayesinde veri analizi ve manipülasyonu yapabiliriz. numpy tek tür veriler ile çalışır ama pandas heterojen verilerle çalışabilir. numpy numeric olarak numaralandırır bilgisayar numaralandırması yani 0 1 2 ... diye ama pandas ise 1 2 3 4 normal sayma sayıları ile numaralandırma yapar....
+
+import pandas as pd ile yapısı ile kullanacağız...
+
+makine öğrenmesi, yapay zeka derin öğrenme için hız önemlidir bu yüzden pandas c ile yazılmıştır bilgisayar diline yakın olduğu için hızlıdır...
 
 
 ///PANDAS SERİES 1/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
