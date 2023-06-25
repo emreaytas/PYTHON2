@@ -139,10 +139,54 @@ her veri homojen olmalı eğer verileri içerisinde farklı bir veri tipi varsa 
         x = np.array([1,2,3.0,'4'])
         print(x.dtype) #<U32 karakter setini verdi hepsini string galine çevirdi yani.
 
-..................
+.................. dtype data type demektir. 
 
 
+biz istersek eğer array'in tipini kendimiz belirleyebiliriz. mesela x = np.array([1,2,3],dtype = np.int) # ikinci parametre olarak biz dtype yolladık ve hangi tipte olacağını belirttik böylece istenen veri tipinde değerler ile array oluşturduk.
 
+  python pythondosyasi.py ile istenen python dosyasını çalıştırabiliriz terminalde. 
+
+str > float > int olarak kabul edebiliriz tiple bu sıralama ile dönüşür. 
+
+        import numpy as np
+
+        x = np.array([1,2,3,4],dtype=np.int8) # int 8 dmeek 8 bit yani 1 byte int 32 4 byte dmeek ama mesela int128 olursa eğer 128 bit yani 16 byte demektir... 
+        print(x.dtype) # int8 olarak verir. istenen dtype ile verileri oluşturduk.
+
+........................
+
+        import numpy as np
+
+        x = np.array([1,2,3,4],dtype=np.float64) 
+        print(x.dtype) # float64 olarak verir tüm değerler float olarak kullanılır böylece.
+        
+........................
+
+
+        import numpy as np
+
+        x = np.array([1,2,3,4],dtype=np.float64) 
+        print(x.dtype) # float64 olarak verir tüm değerler float olarak kullanılır böylece.
+        
+........................
+
+        import numpy as np
+
+        x = np.array([1,2,3,4],dtype=np.complex_)   
+        print(x.dtype) # complex128 verir complex demek sanal ve reel kısmı olan sayı demek aslında.
+
+.......................
+
+alt + shift + a ile imleçte olan satırları yorum satırı yapabiliriz.
+.......................
+
+        import numpy as np
+
+        x = np.array([1.5,2.5,3.6,4.3],dtype=np.int32) # veriler int olarak tutulacak. yani noktadan sonrası gidecek upcasting değil downcasting olacak. float veriden int dönüşümü yaptırdık bunu dtype ile yaptık.  
+        print(x) #[1 2 3 4]
+        print(x.dtype) # int 3
+
+......................
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
