@@ -188,8 +188,86 @@ alt + shift + a ile imleçte olan satırları yorum satırı yapabiliriz.
 
 ......................
 
+        import numpy as np
+
+        x = np.array([1,2,3,4],dtype=np.float64) # data type'ı dtype = ile float olarak belirledik.
+
+        print(x)       # [1. 2. 3. 4.]
+        print(x.dtype) # float64
+
+        x = np.array(x,dtype=np.complex128) # verilerin tipini değiştirdik böylece. elde olan array ile veri tipi farklı bir array oluşturabildik. 
+
+        print(x)       # [1.+0.j 2.+0.j 3.+0.j 4.+0.j]
+        print(x.dtype) # complex128
+        import numpy as np
+   
+    ,,,,,
+
+    x = np.array([1,2,3,4],dtype=np.float64) # data type'ı dtype = ile float olarak belirledik.
+
+    x = x.astype(np.complex128) # veri tipini direkt olarak bu metot ile değiştirebiliriz.
+
+    print(x.dtype) # complex128
+
+........................
+
+        import numpy as np
+
+        x1 = np.array([1,2,3], dtype=np.int64)
+        x2 = np.array([1.4,2.6,3.6], dtype=np.float64)
+
+        print(x1 + x2)       # [2.4 4.6 6.6]    verileri topladı kapsayıcı olan float olduğu için float değerler ile oluştu bu array
+        print((x1+x2).dtype) # float64  kapsayıcı olan float olduğu için float oldu dtype...
+
+.........................
+
+
+    import numpy as np
+
+    x = np.sqrt([-1,9,4], dtype=np.float64) # arrayin elemanlarının kökünü alacak np.sqrt()
+
+    print(x) # [nan  3.  2.] neden nan var hata var = bunun sebebi -1 karmaşık sayıdır. kökü alınamaz ama dtype complex olsa idi hata olmazdı.
+
+.........................
+
+            import numpy as np
+
+            x = np.sqrt([-1,9,4,-14],dtype=np.complex128) # verileri complex yaptık böylece kökü alınınca sorun olmayacak.
+
+            print(x.real) # karmaşık sayıların reel kısmını gösterir sadece.
+            print(x.imag) # karmaşık sayıların sanal kısımlarını gösterir sadece.
+
+            print(x.real.dtype) # float64 
+            print(x.imag.dtype) # float64 karmaşık sayıların değerleri float olarak tutulurmuş demekki.
+
+.........................
+
+        import numpy as np
+
+        x = np.array([1,2,3,4,5],dtype=np.int64)
+        np.save("fordfocus",x) # np.save ile array kaydederiz. önce kaydedilecek yer sonra ise kaydedilecek değeri gireriz ve .npy uzantılı bir dosyaya değerleri kaydeder.
+
+        y = np.load("fordfocus.npy") # y = dosya içerisindeki ndarray olacak aslında. np.load() parametre alacak oda arrayin kaydedildiği .npy dosyası.
+
+        print(y) # [1 2 3 4 5]
+       
+        np.save("dosyaadi",kaydedilecekarray) ile kaydederiz ndarrayi bir .npy dosyasına      y = np.load(.npy dosyasınınadi ve uzantısı) ile ise kaydedilmiş arrayi geri çıkartırız.
+
+..............................
+
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+///////Ders 3 - Gömülü Fonksiyonlar I, ones, zeros, diag, eye...//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ####################################################################################################################################################################################################################################################################################################################################
