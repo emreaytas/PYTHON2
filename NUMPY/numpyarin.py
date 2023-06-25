@@ -1,6 +1,11 @@
 import numpy as np
 
-x = np.array([1,2,3,4,5,6,7])
-x.fill(100)
-
+x = np.identity(5)
 print(x)
+"""
+[[1. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0.]
+ [0. 0. 1. 0. 0.]
+ [0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 1.]]
+""" # 5 e 5 birim matris oluşturur...

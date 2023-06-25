@@ -351,6 +351,48 @@ ndarray.fill(sayi) metotu ile bir array'in tüm elemanlarını istenen sayı yap
 
 .................................
 
+import numpy as np 
+x = np.eye(4) # birim matris oluştururuz np.eye() ile diogonal olanlar 1 olmayanlar 0 olan matris oluştururuz.
+
+        import numpy as np
+
+        x = np.eye(4)
+        print(x)
+        """
+        [[1. 0. 0. 0.]
+        [0. 1. 0. 0.]
+        [0. 0. 1. 0.]
+        [0. 0. 0. 1.]]
+
+        """ # np.eye() ile birim matris oluştururuz.
+
+        y = np.eye(4,5) # 4 satır 5 sutunlu bir matris oluşturur. ve olabildiğince birim matris olmayaca çalışır. 
+
+.................................
+
+    import numpy as np
+
+    x = np.eye(6)
+    print(x)
+    print("")
+    y = np.eye(6,k = 1) # k = 1 olunca diegonali 1 birim yukarı aldı -2 olsa idi 2 birim aşağı inecekti.
+    print(y)
+
+.................................
+
+            import numpy as np
+
+            x = np.identity(5)
+            print(x)
+            """
+            [[1. 0. 0. 0. 0.]
+            [0. 1. 0. 0. 0.]
+            [0. 0. 1. 0. 0.]
+            [0. 0. 0. 1. 0.]
+            [0. 0. 0. 0. 1.]]
+            """ # 5 e 5 birim matris oluşturur...
+
+.................................
 
 
 
