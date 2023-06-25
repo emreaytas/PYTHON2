@@ -263,8 +263,102 @@ alt + shift + a ile imleçte olan satırları yorum satırı yapabiliriz.
 
 ///////Ders 3 - Gömülü Fonksiyonlar I, ones, zeros, diag, eye...//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+hazır fonksiyonlar ile içeriye bir liste koymadan ndarray oluşturacağız. mesela x = np.arange(100) ile 0'dan 99'a kadar 99 dahil 100 elemanlı bir array oluştururuz...
+
+    import numpy as np
+
+    X = np.zeros(5) # 5 adet 0'dan oluşan bir array elde ederiz. np.zeros() ile oluşan array'in veri tipi float64'tür .dtype bize float64 verir.. 
+    Y = np.ones(5) # 5 adet 1'den oluşan bir array elde ederiz. np.ones() ile oluşan array'in veri tipi float64'tür .dtype bize float64 verir.. 
+
+................................
+
+        import numpy as np
+
+        X = np.zeros((2,3,4),dtype= np.int64) # içerisine bir tuple yollarız zeros metotunun. # 2 adet matris üret 3 satırdan oluşsun her matris ve satırlarda 4 eleman olsun demek (matrissayisi,satirsayisi,sutunsayisi)
+
+        print(X)
+        """
+        [[[0 0 0 0]
+        [0 0 0 0]
+        [0 0 0 0]]
+
+        [[0 0 0 0]
+        [0 0 0 0]
+        [0 0 0 0]]]    
+            
+            """
+
+................................
+
+  nedens ones, zeros gibi metotlar kullanırız. numpy için önemli olan gelecek olan verilerdir. 
+
+np.full() # bunun ile istenen sabit sayının olduğu bir array oluşturabiliriz.
+
+        import numpy as np
+
+        x = np.full((2,3),10) # 2 satır 3 sutun olsun içerisinde 10 olsun tüm elemanlar 10 olsun demektir.  veri türü ise int32 oldu. nedeni ise 3. parametre olarak gönderilen değerin veri tipi kullanılır 10.0 verse idik o zaman dtype float olacaktı.
+
+        print(x)
+
+        """
+        [[10 10 10]
+        [10 10 10]]
+            
+            """
+
+.................................
+
+        import numpy as np
+
+        x = np.full((2,3),10.0) # (2,3) ile oluşacak arrayin yapısını belirttik. üçüncü parametre ile ise hangi değer ile donatılacak belirttik.
+        y = 10.0 * np.ones((2,3)) # 2 satır 3 sutundan oluşan bir matris olacak her eleman 10.0 ile çarpılacak.
+        z = 10.0 + np.zeros((2,3)) # 2 satır 3 sutundan oluşan bir matris ve her değer 10.0 ile toplanacak yani her değeer 10.0 olacak
+        print(y)
+        """
+        [[10. 10. 10.]
+        [10. 10. 10.]]    
+            """
+
+.................................
 
 
+mesela arrayismi += 10 demek örnek olarak x = np.array([1,2,3,4,5,6]) demek ve sonraki satır x += 10 demek her elemana 10 eklemek demektir.
+
+        import numpy as np
+
+        x = np.array([1,2,3,4,5])
+        x += 10
+        print(x) # [11 12 13 14 15]
+
+................................
+
+np.empty() #  bu fonksiyon ile hafızada ndarray oluştururuz hafızada yer ayırırız ama elemanların değerini vermeyiz keyfi değerler bulunur.
+
+    import numpy as np
+
+    x = np.empty((2,3)) # içerisine bir tuple yolladık ve yapısını belirledik.
+    print(x)
+    """
+    [[9.34577196e-307 9.34598246e-307 1.60218491e-306]
+    [1.69119873e-306 1.24611673e-306 1.05699581e-307]]
+    """ # görüldüğü gibi bellekte yer ayrıldı ancak değerler rastgele değerler...
+
+    x.fill(10) # bununla birlikte ndarray'in elemanlarının hepsini 10 yaptık... boş olan bir array'i böylece doldurmuş olduk.
+
+................................
+
+ndarray.fill(sayi) metotu ile bir array'in tüm elemanlarını istenen sayı yapabiliriz. 
+
+.................................
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
