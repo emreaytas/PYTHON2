@@ -424,15 +424,64 @@ y = np.arange(0,6,2) # 0dan başlar 5'e kadar oda dahil ikişer ikişer atlar ve
 
 ............................................. arange genellikle tamsayılar için kullanılır.
 
+        import numpy as np
 
+        x = np.linspace(0,15,10) # ilk argüman başlangıc noktası ikincisi bitiş noktası, 3. parametre ise kaça bölüneceği 10 olarak girdik 3. parametreyi 10 tane sayı elde edeceğiz. 
+        # linspace fonksiyonunda kapalı fonksiyon vardır yani 0 ve 15 dahil [0,15] olarak geçer başlangıç ve bitiş dahildir.
+        # tek boyutlu bir array getirir bize.
+        # eğer 3. parametre olarak kaç adet eleman üretileceğini belirtmezsek default olarak 50 kabul edilir.
+..............................................
+  
+  import numpy as np
+  x = np.linspace(0,15,100,endpoint=False) # eğer endpoint False dersek o zaman bitiş noktası dahil olmaz. böylece son kısım açık aralık olur [0,15) olur. 
 
+...............................................
+
+        import numpy as np
+
+        x = np.arange(20) # 20 elemalı tek boyutlu bir array 0'dan başlayacak. çünkü numpy sıfırdan numaraladırma yapar.
+        x = np.reshape(x,(4,5)) # 4 satır 5 sutun. Önce hangi arrayi değiştireceğimizi sonra tuple içerisinde satır sutunu verdik. 5'e 5 versek hata verirdi çünük eleman sayısı yetersiz.
+                          # np.reshape(x,(2,2,5)) # dese idik. 2 tane matris olacaktı ve her matris 2 satır 5 sutundan oluşacaktı.
+        print(x)
+        """
+        [[ 0  1  2  3  4]
+        [ 5  6  7  8  9]
+        [10 11 12 13 14]
+        [15 16 17 18 19]]
+        """
+
+...............................................
+
+        import numpy as np
+
+        x = np.arange(20).reshape(4,5) # 20 elemalı tek boyutlu bir array 0'dan başlayacak. çünkü numpy sıfırdan numaraladırma yapar.
+        print(x) # reshape() ise içerisine tuple ve parçalanacak array gönderilmeden de kullanabiliriz. bu yapıda. içerisinde sayıları göndeririz ve bölme işlemini uygularız.
+        """
+        [[ 0  1  2  3  4]
+        [ 5  6  7  8  9]
+        [10 11 12 13 14]
+        [15 16 17 18 19]]   
+        """
+...............................................
+
+        import numpy as np
+
+        x = np.random.random(10) # 10 tane sayı üretir. 0 ile 1 arasında 1 dahil değil.
+        print(x) #[0.57100026 0.72277628 0.42328953 0.37058981 0.44240555 0.66137003 0.28446727 0.84857043 0.29600169 0.17329597]
+
+...............................................
+
+        import numpy as np
+
+        x = np.random.random((2,3)) # 2 satır 3 sutundan oluşan bir matris elde ederiz sayılar ise 0 ile 1 arasında rastgele sayılar olur. 1' e eşit olmaz.
+        y = np.random.randint(4,50,size = (2,3))  # 4den başla 50 dahil değil aralıkta rastgele bir array oluştur. size  ile nasıl bir yapıda olacağını belirtiriz. size = 5 desek tek boyutlu bir array oluştururuz. ama mesela shape ile ilgili bir işlem yapacaksak ve tek boyutlu olmayacaksa genellikle () tuple içerisnde gönderilir.
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/////Ders 5 - NDArray Değiştirmek, Insert, Append, Stack, Delete////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
