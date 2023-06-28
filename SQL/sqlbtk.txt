@@ -1,26 +1,65 @@
 ####################################################################################################################################################################################################################################################################################################################################
 
 veritabanı verilerin depolandığı yazılımlardır. sql dili ile çalışır.
- normalde program içerisindeki değişken bilgisayarın ram'inde barınır uygulama sonlanırsa silinir gider. bunun için elde verilerin kalıcı olarak kalması için o zaman veritabanı kullanmak lazım.
- verileri dosya sistemde saklayabiliriz json sisteminde saklayabiliriz. vs vs. json xml xls dosyaları ile verileri sakalayabiliriz ama en iyisi veritbanında tutmaktır nedeni ise istenen ilişkiler kurabilir dil ile veritabanı ile iletişim kurabiliriz.
+ normalde program içerisindeki değişken bilgisayarın ram'inde barınır uygulama sonlanırsa silinir gider.belli süre ramda bulunur bitince silinir. bunun için elde verilerin kalıcı olarak kalması için o zaman veritabanı kullanmak lazım.
+ verileri dosya sistemde saklayabiliriz json sisteminde saklayabiliriz. vs vs. json xml xls dosyaları ile verileri sakalayabiliriz ama en iyisi veritbanında tutmaktır nedeni ise istenen ilişkiler kurabilir dil ile veritabanı ile iletişim kurabiliriz. örneğin 20 yaş üstü kişileri getir vs diyebiliriz.
 
-database iki yapı altında ele alınır = sql, nosql olarak ikiye ayırabiliriz.
+database iki yapı altında ele alınır = sql(mysql,sqlite3,msSql), nosql (MongoDB(veritabanı serveri) mesela içerisinde json bilgiler saklayabiliriz.) olarak ikiye ayırabiliriz.
+
+server ve serverless(sqlite3 mesela(internet üzerinden değil uygulama içerisinde bulunan serverless veritabanı)) olarak iki yapıya ayrılır veritabanları. yani bir server var ve bağlanmak ve onun üzerinden işlem yapmak gerekiyor.
+
+server olan veritabanı internet üzerinden çalışırsa adresi ve giriş bilgileri ile içerisindeki bilgilere ulaşabiliriz. 
+
+mesela masaüstü uygulama için internetsiz uygulama için sqlite3 mantıklı txt gibi ama bir veritabanı. web veya internet ile ağ ile işlem yapacaksak eğer o zaman server veritabanları gerekli.
+
+internet üzerinden açık bir database için server database olması lazım. çevrimiçi olarak etkileşim sağlayabiliriz.
+
+mesela hepsiburada tek bir serverdatabase kullanır ve farklı cihazlar farklı uygulamalar ile kendi bilgilerimize vs ulaşabiliriz tek veritabanı ile her yerden aynı bilgilere ulaşabiliriz hepsi aynı server üzerindeki databasede çünkü. ama sqlite3 gibi serverless database kullansa o zaman her uygulama için farklı bir tane veritabanı kullanacaktı.
+
+sql bir sorgulama dilidir. bu dil ile veritabanı ile uygulama arasında iletişim kurabiliriz.
+
+veirleri tablolar üzerinde tutmamız gerekecek tablonun kolunların hepsinin ismi cismi olacak.
+
+mesela elimizde ürünlerin ve alıcıların olduğu tablo var siparişler tablosunda biz ürünid ve alıcıid ile karmaşıklık olmadan siparişleri tutabiliriz. sadece ürün bilgileri kendi tablosunda sadece alıcı bilgileri kendi tablosunda olacak ve siparişler tek satırda ürün ve alıcı olarak tablo oluşturulacak.
+
+id kolonu primary key yani birincil anahtar olarak adlandırılır.
+
+tablolar arasında one to one (bire bir) one to many(bire çok) many to many(çoka çok) ilişkisi vardır. bu ilişkiler sayesinde gereksiz bilgi kalabalığı olmuyor.
+
+uygulamamız databaseye bir sorgu yollar ve işlem database üzerinde gerçekleşir sorgular ile sql ile veritabanını yönetiriz.
+
+................Tablo ilişkileri....................................................
+  
+   one to many = bire çok
+   one to one = bire bir
+   many to many = çoka çok
 
 
+ONE TO MANY....
+   mesela bir telefon var ismi fiyatı ve kategoriid'si var. bir kategori tablosu vardır örnek olarak telefon bilgisayar vs olacak şekilde. o zmaan kategoriid ile bu işi halledebiliriz. her bir telefonun sadece bir kategorisi olabilir bir ürünün birden fazla kategorisi olamaz. bir kategori birden fazla ürüne gidebilir ama her ürün tek bir kategoriye sahip olabilir one to many ilişkisi budur.
+   mesela arabalar tablosu var her arabanın bilgileri vs var ve kişiler var kişilerin arabası kolonu olur o kolona ise biz arabaid ile kimde hangi arabanın olduğunu görebiliriz. (her kişide sadece bir araba olduğunu varsayarsak olabilir.)
+      
+
+MANY TO MANY....
+
+   mesela kişiler ve arabalar var her arabanın bilgileri özellikleri motor hacmi vs var ve kişiler tablosu var.  bir kişinin birden fazla arabası olabilir arabaid kolonunda ve araba tablosundaki her araba birden fazla kişiye gidebilir buna many to many ilişkisi denir.
+
+
+ONE TO ONE....   
+   
+   mesela arabalar tablosu var ve her arabanın kendine ait özelliklerinin tutulduğu farklı bir tablo var. mesela araba tablosunda ford focus 1. id'de özellikler tablosunda ise 1. id'de özellikleri var kolon kolon motor hacim renk ağırlık vs. eşleşme ile sadece bir tane ilişki kurulabilir. birisi sadece birine gidebilir.
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+///Uygulama//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
