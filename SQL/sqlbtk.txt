@@ -37,20 +37,24 @@ uygulamamız databaseye bir sorgu yollar ve işlem database üzerinde gerçekle�
 
 ONE TO MANY....
    mesela bir telefon var ismi fiyatı ve kategoriid'si var. bir kategori tablosu vardır örnek olarak telefon bilgisayar vs olacak şekilde. o zmaan kategoriid ile bu işi halledebiliriz. her bir telefonun sadece bir kategorisi olabilir bir ürünün birden fazla kategorisi olamaz. bir kategori birden fazla ürüne gidebilir ama her ürün tek bir kategoriye sahip olabilir one to many ilişkisi budur.
-   mesela arabalar tablosu var her arabanın bilgileri vs var ve kişiler var kişilerin arabası kolonu olur o kolona ise biz arabaid ile kimde hangi arabanın olduğunu görebiliriz. (her kişide sadece bir araba olduğunu varsayarsak olabilir.)
-      
+   mesela arabalar tablosu var her arabanın bilgileri vs var ve kişiler var kişilerin arabası kolonu olur o kolona ise biz arabaid ile kimde hangi arabanın olduğunu görebiliriz. (her kişide sadece bir araba olduğunu varsayarsak olabilir. kişiler birden fazla araba alabilirse many to many olur herkesin tek arabassı olduğunu var sayıyoruz.)
+
+   böylece karmaşıklığın önüne geçebiliriz. ve bir değişim bize çok maliyetli olmaz   
 
 MANY TO MANY....
 
-   mesela kişiler ve arabalar var her arabanın bilgileri özellikleri motor hacmi vs var ve kişiler tablosu var.  bir kişinin birden fazla arabası olabilir arabaid kolonunda ve araba tablosundaki her araba birden fazla kişiye gidebilir buna many to many ilişkisi denir.
+   mesela kişiler ve arabalar var her arabanın bilgileri özellikleri motor hacmi vs var ve kişiler tablosu var kişilerin ismi yaşı işi gibi bilgileri var.  bir kişinin birden fazla arabası olabilir arabaid kolonunda ve araba tablosundaki her araba birden fazla kişiye gidebilir buna many to many ilişkisi denir.
 
 
 ONE TO ONE....   
    
    mesela arabalar tablosu var ve her arabanın kendine ait özelliklerinin tutulduğu farklı bir tablo var. mesela araba tablosunda ford focus 1. id'de özellikler tablosunda ise 1. id'de özellikleri var kolon kolon motor hacim renk ağırlık vs. eşleşme ile sadece bir tane ilişki kurulabilir. birisi sadece birine gidebilir.
-
+   arabalar tablosu ve özellikleri tablosu var diyelim. her araba tek bir satırla eşleşebilir özellikler tablosundan özellikler tablosundaki satır ise tek bir araba ile eşleşebilir. eşleşenler birbiri ile ilişkilidir.
+   
+   veya ürünler tablosu ve detay tablosu var 3 ürün varsa 3 detay olacak her birisi biri ile eşleşecek. neden kullanırız gereksiz ise mesela detaylar sadece ürünler üzerinden işlemler yapabilirsek o zaman kullanmak mantıklıdır.
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 
