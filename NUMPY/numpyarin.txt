@@ -480,9 +480,60 @@ y = np.arange(0,6,2) # 0dan başlar 5'e kadar oda dahil ikişer ikişer atlar ve
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////Ders 5 - NDArray Değiştirmek, Insert, Append, Stack, Delete////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   
 
+....................................................
+
+        import numpy as np
+
+        x = np.arange(5) # arraylar normal listeler gibi 0 index ile başlarlar.
+        print(x[0]) #  ilk elemanı görebiliriz. 
+        print(x[1]) # 2. elemana ulaşabiliriz. 
+        print(x[x.size - 1]) # en son elemana ulaşabiliriz. x.size ile kaç tane eleman varsa görürüz ve -1 deriz indexleme 0'dan başlar çünkü.
+        print(x[-1]) # en son elemana ulaşırız. negatif index olunca tersten -1 ile başlar -2 demek en sondaki 2. eleman demek. 5 elemanlı bir array ile -5 ile en baştaki elemana en sondan ulaşmış oluruz.
+        print(x[-2]) # en sondan ikinci elemanı getirecek.
+        print(x[2:]) # 2. indexteki elemandan en sona gitmek demektir. arrayi parçalarız.
+
+        x[2] = 200 # bunu diyerek direkt atama ve değişim yapabiliriz. 2. indexteki yani 3. eleman 200 olur.
+        x += 10 # bununla birlikte tüm elemanlar 10 artar.
+        x *= 2 # bununla birlikte tüm elemanlar 2 ile çarpılır
+
+....................................................
+
+        import numpy as np
+
+        x = np.arange(12).reshape(3,4) # 12 tane elaman oluşur ve 3 satır 4 sutun olarak oluşur.
+        print(x[0]) # 0 indexteki satır gelir yani birinci satır gelir.
+        print(x[0,0]) # 0 indexteki satırın 0 indexteki elemanı gelir yani 1. satırın 1. elemanı gelir.
+        print(x[2,3]) # 2 .indexteki satırın 3. indexteki elemanı gelir yani en sağ alttaki eleman gelir.
+        print(x[2]) # en sondaki satırı getirir. pointer mantığı ile ilerler.
+        print(x[1,2]) # 2. satırın 3. elemanını getirir.  
+        x[0,0] = 100 # ilk satırın ilk elemanı 100 olur atama yaparız.
+
+....................................................
+
+
+        import numpy as np
+
+        x = np.arange(6)
+        print(x) # [0 1 2 3 4 5]
+        y = np.delete(x, [0,1]) # x arrayinin 0. ve 1. indexteki elemanlarını silecek. eğer orjinali değiştirmek  istersek o zaman y yerine x derdik direkt olarak değişim yapardık.
+        print(y) # [2 3 4 5]
+
+....................................................
+
+axis = 0 olursa row yani satır
+axis = 1 olursa column yani sutun demektir. 
+
+....................................................
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 ####################################################################################################################################################################################################################################################################################################################################

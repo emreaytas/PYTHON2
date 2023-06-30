@@ -4,6 +4,7 @@ veritabanı verilerin depolandığı yazılımlardır. sql dili ile çalışır.
  normalde program içerisindeki değişken bilgisayarın ram'inde barınır uygulama sonlanırsa silinir gider.belli süre ramda bulunur bitince silinir. bunun için elde verilerin kalıcı olarak kalması için o zaman veritabanı kullanmak lazım.
  verileri dosya sistemde saklayabiliriz json sisteminde saklayabiliriz. vs vs. json xml xls dosyaları ile verileri sakalayabiliriz ama en iyisi veritbanında tutmaktır nedeni ise istenen ilişkiler kurabilir dil ile veritabanı ile iletişim kurabiliriz. örneğin 20 yaş üstü kişileri getir vs diyebiliriz.
 
+
 database iki yapı altında ele alınır = sql(mysql,sqlite3,msSql), nosql (MongoDB(veritabanı serveri) mesela içerisinde json bilgiler saklayabiliriz.) olarak ikiye ayırabiliriz.
 
 server ve serverless(sqlite3 mesela(internet üzerinden değil uygulama içerisinde bulunan serverless veritabanı)) olarak iki yapıya ayrılır veritabanları. yani bir server var ve bağlanmak ve onun üzerinden işlem yapmak gerekiyor.
@@ -14,6 +15,8 @@ mesela masaüstü uygulama için internetsiz uygulama için sqlite3 mantıklı t
 
 internet üzerinden açık bir database için server database olması lazım. çevrimiçi olarak etkileşim sağlayabiliriz.
 
+drop database if exists emre; eğer emre adlı bir db varsa silecek.
+ 
 mesela hepsiburada tek bir serverdatabase kullanır ve farklı cihazlar farklı uygulamalar ile kendi bilgilerimize vs ulaşabiliriz tek veritabanı ile her yerden aynı bilgilere ulaşabiliriz hepsi aynı server üzerindeki databasede çünkü. ama sqlite3 gibi serverless database kullansa o zaman her uygulama için farklı bir tane veritabanı kullanacaktı.
 
 sql bir sorgulama dilidir. bu dil ile veritabanı ile uygulama arasında iletişim kurabiliriz.
