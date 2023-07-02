@@ -15,6 +15,14 @@ print(t[z,:]) # satırlarda z yani 1. index ve 2. index sutunlarda ise hepsini a
  
 """
 
+u = t[z,:] 
+print(np.shares_memory(u,t)) # False verir. .copy() demekse bile. bir arrayi başka bir arrayin yardımı ile slicing ettiysem eğer o zaman bellekteki farklı bir yerde değerleri konumlandırır.
+
+
+u[0,0] = 1000
+print(t) # bir değişim olmadı .copy() ile içerik üretmediğimiz halde. bir ndarrayi başka bir ndarray ile slicing ettiysek eğer o zaman oluşan array bellekte ana arrayden farklı bir yer oluşur.
+
+# fancy indexing...
 
 
 
