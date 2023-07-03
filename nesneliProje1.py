@@ -1,6 +1,21 @@
 import json as jsn
 import time as tm
+import sqlite3 as sql
 
+def createTable():
+    conn = sql.connect("nesneliProje.db")
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+                   create table if not exists system(
+                       name TEXT,
+                       surname TEXT,
+                       
+                       
+                   )
+                   
+                   """)
+    
 class Person():
     def __init__(self):
         
@@ -31,9 +46,11 @@ person1 = Person()
 while True:
     pass
      
+     
+     
 print("Exiting...")        
-tm.sleep(1)
-    
+tm.sleep(1.45)
+print("Exited the system...")    
     
     
     

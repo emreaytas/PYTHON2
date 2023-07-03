@@ -814,9 +814,141 @@ axis = 1 olursa column yani sutun demektir.
 
 ....................................................
 
+        import numpy as np
+
+        # boolean indexing 
+
+        x = np.arange(10)
+        print(x) # [0 1 2 3 4 5 6 7 8 9]
+        print(x[(x % 2 == 0)]) # [0 2 4 6 8] bana x'in elemanlarından 2 ile bölümü sıfır olanları bir array içerisinde dönder demek.
+
+        z = x[(x % 2 == 0)]
+        z[0] = 100 # z üzerinde yapılan değişim ana arrayi etkilemez çünkü bellek alanları farklı 
+        # slicing ile yapılan işlemde bellek ortak kullanılır ama fancy ve booelan indexing'de bellek alanları farklı olur oluşan arraylerde.
+        print(np.shares_memory(x,z)) # False verir. boolean indexing ile oluşan alt küme ana arrayden bağımsızdır. farklı bellek adresinde oluşur. 
+
+        u = np.random.randint(0,10,size=10)
+        i = np.random.randint(0,10,size=10)
+        print(u > i) # [ True  True False  True False  True False  True False  True] her eleman üzerinde karşılaştırma oldu. ve koşulan uyanlar True uymayanlar ise False verdi.
+        print(type(u > i)) # <class 'numpy.ndarray'> class'ı ise ndArrayDir.
+        print((u > i).dtype) # bool boolean veri tipi ile oluşmuştur oluşan yeni array.
+ 
+        print(np.all(u > i)) # False eğer u'nun elemanlarının tamamı i'den büyük olsa idi yani koşulu sağlasa ve homojen bir array elde etseydi True olurdu.
+        print(np.any(u > i)) # True eğer bir tane bile homojenliği bozan eleman varsa True verir.
+
+
+....................................................
+
+        import numpy as np
+
+        x = np.linspace(1,21,11)
+        print(x)
+        mask = x % 3 == 0  
+        print(type(mask)) # <class 'numpy.ndarray'>
+        print(mask) # [False  True False False  True False False  True False False  True]   mask = x % 3 == 0 yaparsak eğer boolean bir array elde ederiz 3e bölümmden kalan 0 olanlar True olmayanlar False olur ve böyle bir array elde ederiz.
+        print(x[x % 3 == 0]) #[ 3.  9. 15. 21.]
+        print(x[mask]) # [ 3.  9. 15. 21.] x üzerinden tüm mask elemanlarını geçirir ve True olanlarla koşulu sağlayanlar ile bir array oluştururuz.
+        x[mask] = -3 # True olanları -3 olarak değiştirdi. maskeleme yaptı...
+        print(x) # [ 1. -3.  5.  7. -3. 11. 13. -3. 17. 19. -3.] # koşulu sağlayanlara -3 atandı.
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////Ders 8 - Grup İşlemleri, Sıralama/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        import numpy as np
+
+        # grup ve küme işlemleri... set operations. genellikle iki tane arrayi karşılaştırırken kullanırız.
+
+        x = np.array([2,5,3,6,9])
+        y = np.array([6,1,8,7,3])
+        z = x[x > y] # x'in içindeki ve sırası ile indexler karşılıklı olarak karşılaştırınca koşulu sağlayan elemanlardan oluşan bir array elde ederiz.
+        print(z) # [5 9]
+
+
+        print(np.intersect1d(x,y)) # [3 6] ortak elemanlardan oluşan yani kesişimden oluşan bir array getirir. iki arrayin kesişiminden array oluşturur.
+
+        t = np.intersect1d(x,y)
+        print(type(t)) # <class 'numpy.ndarray'>
+
+
+        print(np.setdiff1d(x,y)) # [2 5 9] x'de olan ancak y'de olmayan elemanları bize gösterecek... bir array geri dönecek.
+        print(np.setdiff1d(y,x)) # [1 7 8] y'de olan x'de olmayan elemanları bir array içerisinde return edecek.
+
+        print(np.union1d(x,y)) # [1 2 3 5 6 7 8 9] iki arrayin birleşiminden elde edilen elemanlardan oluşan bir array döndürür. neden 8 eleman var çünkü kesişim iki kere yazılmadı bir kere olacak.
+
+        print(np.in1d(x,y)) # [False False  True  True False] x'de olan bir elemanın y'de olup olmadığını bir array içerisinde True False biçiminde tutacak ve bunu döndürecek. eğer y,x yapsa idik y'de olup x'de olmayan elemanlar False olanlar True alacak ve bir array oluşacaktı.
+
+....................................................
+
+        import numpy as np
+
+
+        x = np.array([2,5,3,6,9,4,3,6,5,0])
+        print(np.unique(x)) # [0 2 3 4 5 6 9] tekrarlardan arındırılmış bir halde bize getirdi elemanları. set gibi düşünebiliriz.
+
+        # sorting... (sıralama).
+
+        y = np.random.randint(1,10,size = (10,)) # size = (10,) diyerek tek boyutlu 10 elemanlı bir array oluştur dedik.
+        print(y) # [2 5 3 5 5 4 1 7 5 8]
+        print(np.sort(y)) # [1 2 3 4 5 5 5 5 7 8] küçükten büyüğe sıralama yapar. sıralanmış arrayi return eder. y'de değişim olmaz ayrı bir array oluşturur.
+        print(y) # [2 5 3 5 5 4 1 7 5 8] görüldüğü gibi np.sort() yapısı ana arrayde bir değişim yapmadı. sıralanmış bir array return eder ama kalıcı bir değişim yapmaz.
+
+
+        u = np.random.randint(1,10,size = (10,))
+        print(u) # [4 2 2 9 6 6 2 9 7 3]
+        u.sort() # sıralama yaparız ve kalıcı olarak değişir u.  eğer i = u.sort() deseydikte u sıralanmış olacaktı çünkü direkt olarak bellekteki veriler üzerinden sıralama yapar.
+        print(u) # [2 2 2 3 4 6 6 7 9 9]
+
+....................................................
+
+        import numpy as np
+
+        x = np.random.randint(1,10,size=(5,5)) # size = (5,5) 5 satır 5 sutundan oluşsun dedik bir matris oluşturacak.
+        print(x)
+        """
+        [[4 4 1 1 5]
+        [9 1 4 8 7]
+        [2 6 9 8 9]
+        [7 2 4 3 6]
+        [3 1 4 5 2]]
+        """ 
+        print(np.sort(x,axis=0)) # axis = 0 olursa sutunları kendi arasında sıralar(aynı sutun farklı satırlardaki elemanları sıralar) ama eğer axis = 1 olursa o zaman satırları kendi arasında sıralar(aynı satırdaki ama farklı sutunlardaki elemanları sıralar.).
+        """
+        [[2 1 1 1 2]
+        [3 1 4 3 5]
+        [4 2 4 5 6]
+        [7 4 4 8 7]
+        [9 6 9 8 9]]
+        """
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///Ders 9 - Matematiksel İşlemler, element-wise vs array-wise//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+....................................................
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+....................................................
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+....................................................
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 ####################################################################################################################################################################################################################################################################################################################################
