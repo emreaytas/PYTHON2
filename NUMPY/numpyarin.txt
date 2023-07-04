@@ -1033,17 +1033,102 @@ axis = 1 olursa column yani sutun demektir.
 
 /////Ders 10 - İstatistik Fonksiyonları, Broadcasting////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        import numpy as np
 
+        x = np.random.randint(1,10,size = (8,))
+        print(f"{x}\n") # 
+        print(x.mean()) # ortalama değeri verir toplamın eleman sayısına bölümünü return eder
+        print(np.median(x)) # medyanı verir. küçükten büyüğe sıralanınca en ortada olan sayıdır eğer iki sayı olursa onların ortalaması olur.
+        print(x.std()) # standart sapmayı return eder.
 
 ....................................................
+
+        import numpy as np
+
+        x = np.random.randint(1,10,size = (4,3)) # 4 satır 3 sutunlu bir yapı elde ederiz.
+        print(x)
+        print(x.mean(axis=0)) # sutunların ortalamasını return eder axis = 1 olursa o zaman satırların ortalamasını return eder. 0 sutun 1 satir. bir array içerisinde verir.
+        print(np.median(x,axis=1)) # satırların medyanını bulur. bir array içerisinde return eder.
+        print(x.std(axis=0)) # standart sapmaları bir array içerisinde return eder.
+
+....................................................
+
+        import numpy as np
+
+        #numpy'de bir çok işlem element wise'dır elemanlar teker teker işlem görür. mesela x + y yaparsak iki array üzerinde o zaman her eleman tek tek aynı konumunda olanlarla toplanır.
+
+        x = np.random.randint(1,10,size = (3,2)) 
+        print(x)
+
+        y = np.random.randint(1,10,size = (3,2))
+        print(y)
+
+        print(x + y) # element wise işlemdir bu.
+        
+        # element wise işlemler birbiri ile broadcasting edilebilir arrayler üzerinde de çalışabilir.
+
+        # mesela 4 satır 3 sutun olan bir matris var ve elimizde 3 sutun 1 satır olan başka bir array var o zaman broadcasting yapabiliriz. eşleme olabilir üst üste gelenler yani konumları tutanlar birbiri ile işlem görebilir.
+
+        z = np.random.randint(1,10,size = (4,3))
+        print(z)
+        """
+        [[9 3 5]
+        [8 6 7]
+        [2 6 9]
+        [2 9 1]]
+        
+        """
+
+        t = np.random.randint(1,10,size = (3,))
+        print(t) # [8 5 1]
+
+        print(z + t)
+        """
+
+        [[17  8  6] # üst üste geldi ve toplama oldu... matrisin ilk satırı ile array toplandı.
+        [16 11  8]
+        [10 11 10]
+        [10 14  2]]
+        
+        """   
+
+....................................................
+
+
+        import numpy as np
+
+        x = np.random.randint(1,10,size = (3,)) 
+        print(x) # [2 7 3]
+
+        y = np.random.randint(1,10,size = (3,1))
+        print(y)
+        """
+        [[5]
+        [2]
+        [6]]
+        """
+
+        print(x + y)
+        """
+        [[ 7 12  8]
+        [ 4  9  5]
+        [ 8 13  9]]   
+        
+        """
+             # broadcasting ile oluştu bu matris. 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////Ders 11 - SON DERS - Uygulama Dersi/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 ....................................................
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
