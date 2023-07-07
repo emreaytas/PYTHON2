@@ -1,3 +1,6 @@
 import numpy as np
-print("Ben emre...")
+
+"""ffdnfgndfn
+"""
+print("Ben senin amk")
 
