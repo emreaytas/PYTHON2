@@ -1,6 +1,6 @@
 ####################################################################################################################################################################################################################################################################################################################################
 
-en çok kullanılan bilimsel hesaplama kütüphanesidir. açık kaynak kodlu güçlü sayısal işlemler için kullanılan bir python kütüphanesidir.
+en çok kullanılan bilimsel hesaplama kütüphanesidir. açık kaynak kodlu güçlü sayısal işlemler için kullanılan bir python kütüphanesidir. genellikle Matematiksel işlemler için kullanılır. çok yoğun ve hızlı hesaplamalar yapabilir.
 
 import numpy as np # core kodu c dilinde yazılmıştır. numpy çok dilli olarak modellenmiştir.
 
@@ -12,9 +12,10 @@ nupmy klasik pythondan daha hızlıdır. bu yüzden kullanılır zaten. sayılar
 
 
 ///Ders 1 - NDArray Oluşturmak - Upcasting//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+numpy = klasik pythondan daha hızlı çalışır çünkü core olarak c kullanılmıştır.
 
 NDArray = numpy'nin temel veri yapısıdır. çok boyutlu dizin demektir NDArray 
-
+    
 
         import numpy as np
         import time
@@ -37,8 +38,7 @@ NDArray = numpy'nin temel veri yapısıdır. çok boyutlu dizin demektir NDArray
 
         print(bitis1 - baslangic1) # 0.8526325225830078
 
-        print((bitis1 - baslangic1) / (bitis - baslangic)) # 95.46080806942409 kat fark var arada buna dikkat etmek gerekir.    
-
+        print((bitis1 - baslangic1) / (bitis - baslangic)) # 95.46080806942409 kat fark var arada buna dikkat etmek gerekir. her çalıştırmada değişebilir.   
 
 numpy vektörleşmeyi destekler... klasik python listesi ise vektörleşmeyi desteklemez. 
 
@@ -70,9 +70,12 @@ python listesi kullanarak NDArray oluşturmak ->  X = np.array([1,2,3,4,5,6]) # 
             Y = np.array([[1,2,3],[4,5,6],[7,8,9]]) # listelerin listesi ile bir matris elde ederiz. np.array() metotuna yollarız ve bize bir matris döner bu yapı ile.
 
             print(Y) 
-            """             [[1 2 3]
-                            [4 5 6]
-                            [7 8 9]]"""
+            """             
+            [[1 2 3]
+            [4 5 6]
+            [7 8 9]]
+            
+            """
                             
             print(type(Y))  # <class 'numpy.ndarray'>
             print(Y.shape)  # (3, 3) // boyut bilgisini verdi 3e 3lük bir yapısı var demektir. önce kaç adet satır olduğu sonra satırlarda kaçar eleman olduğunu yazar eğer [[1,2,3],[4,5,6]] olsa idi (2,3) verirdi
@@ -250,7 +253,7 @@ alt + shift + a ile imleçte olan satırları yorum satırı yapabiliriz.
 
         print(y) # [1 2 3 4 5]
        
-        np.save("dosyaadi",kaydedilecekarray) ile kaydederiz ndarrayi bir .npy dosyasına      y = np.load(.npy dosyasınınadi ve uzantısı) ile ise kaydedilmiş arrayi geri çıkartırız.
+        np.save("dosyaadi",kaydedilecekarray) ile kaydederiz ndarrayi bir .npy dosyasına      y = np.load(.npy dosyasınınadi ve uzantısı) ile ise kaydedilmiş arrayi geri çıkartırız. return ederiz yani.
 
 ..............................
 
