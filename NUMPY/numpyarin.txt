@@ -140,26 +140,28 @@ içerisine bir tane string girince tüm elemanları stringe çevirdi buna Upcast
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-/////Ders 2 - Veri Tipleri - Save(), Load()////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+/////Ders 2 - Veri Tipleri - Save(), Load() veri tipi değiştirme , kaydetme ve geri çekme .npy uzantısı ile////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 her veri homojen olmalı eğer verileri içerisinde farklı bir veri tipi varsa numpy ona göre tüm arrayi ayarlar mesela 3 tane int bir tane float var tüm değerler float olur.
 
         import numpy as np
 
         x = np.array([1,2,3.0])
-        print(x.dtype) # float64 verdi...
+        print(x.dtype) # float64 verdi... buna upcasting denir tüm verileri bir üst sınıfa çıkarır.
 
-..................
-
+..........................................................................................................................................................................................................
         import numpy as np
 
         x = np.array([1,2,3.0,'4'])
-        print(x.dtype) #<U32 karakter setini verdi hepsini string galine çevirdi yani.
+        print(x.dtype) #<U32 karakter setini verdi hepsini string galine çevirdi yani. yine bir upcasting söz konusu.
 
 .................. dtype data type demektir. 
 
 
-biz istersek eğer array'in tipini kendimiz belirleyebiliriz. mesela x = np.array([1,2,3],dtype = np.int) # ikinci parametre olarak biz dtype yolladık ve hangi tipte olacağını belirttik böylece istenen veri tipinde değerler ile array oluşturduk.
+biz istersek eğer array'in tipini kendimiz belirleyebiliriz. mesela x = np.array([1,2,3],dtype = np.int) # ikinci parametre olarak biz dtype yolladık ve hangi tipte olacağını belirttik böylece istenen veri tipinde değerler ile array oluşturduk. np.int dememizin sebebi numpy içerisindeki veri tipinden seçeceğiz veriyi.
 
   python pythondosyasi.py ile istenen python dosyasını çalıştırabiliriz terminalde. 
 
@@ -170,14 +172,14 @@ str > float > int olarak kabul edebiliriz tiple bu sıralama ile dönüşür.
         x = np.array([1,2,3,4],dtype=np.int8) # int 8 dmeek 8 bit yani 1 byte int 32 4 byte dmeek ama mesela int128 olursa eğer 128 bit yani 16 byte demektir... 
         print(x.dtype) # int8 olarak verir. istenen dtype ile verileri oluşturduk.
 
-........................
+..........................................................................................................................................................................................................
 
         import numpy as np
 
         x = np.array([1,2,3,4],dtype=np.float64) 
         print(x.dtype) # float64 olarak verir tüm değerler float olarak kullanılır böylece.
         
-........................
+..........................................................................................................................................................................................................
 
 
         import numpy as np
@@ -185,17 +187,18 @@ str > float > int olarak kabul edebiliriz tiple bu sıralama ile dönüşür.
         x = np.array([1,2,3,4],dtype=np.float64) 
         print(x.dtype) # float64 olarak verir tüm değerler float olarak kullanılır böylece.
         
-........................
-
+..........................................................................................................................................................................................................
+ 
         import numpy as np
 
         x = np.array([1,2,3,4],dtype=np.complex_)   
-        print(x.dtype) # complex128 verir complex demek sanal ve reel kısmı olan sayı demek aslında.
+        print(x.dtype) # complex128 verir complex demek sanal ve reel kısmı olan sayı demek aslında. i ve j 'si olan sayılar.
 
-.......................
+
+...........................................................................................................................................................................................................
 
 alt + shift + a ile imleçte olan satırları yorum satırı yapabiliriz.
-.......................
+...........................................................................................................................................................................................................
 
         import numpy as np
 
@@ -203,8 +206,7 @@ alt + shift + a ile imleçte olan satırları yorum satırı yapabiliriz.
         print(x) #[1 2 3 4]
         print(x.dtype) # int 3
 
-......................
-
+...........................................................................................................................................................................................................
         import numpy as np
 
         x = np.array([1,2,3,4],dtype=np.float64) # data type'ı dtype = ile float olarak belirledik.
@@ -222,11 +224,11 @@ alt + shift + a ile imleçte olan satırları yorum satırı yapabiliriz.
 
     x = np.array([1,2,3,4],dtype=np.float64) # data type'ı dtype = ile float olarak belirledik.
 
-    x = x.astype(np.complex128) # veri tipini direkt olarak bu metot ile değiştirebiliriz.
+    x = x.astype(np.complex128) # veri tipini direkt olarak bu metot ile değiştirebiliriz.   .astype(np.tür) yapısı ile istenen tipe çevirebiliriz arrayin veri tipini.
 
     print(x.dtype) # complex128
 
-........................
+................................................................................................................................................................................................
 
         import numpy as np
 
@@ -234,10 +236,9 @@ alt + shift + a ile imleçte olan satırları yorum satırı yapabiliriz.
         x2 = np.array([1.4,2.6,3.6], dtype=np.float64)
 
         print(x1 + x2)       # [2.4 4.6 6.6]    verileri topladı kapsayıcı olan float olduğu için float değerler ile oluştu bu array
-        print((x1+x2).dtype) # float64  kapsayıcı olan float olduğu için float oldu dtype...
+        print((x1+x2).dtype) # float64  kapsayıcı olan float olduğu için float oldu dtype... float daha kapsayıcı int'e göre bu yüzden iki arrayin toplamı float veri tipi ile oluştu.
 
-.........................
-
+................................................................................................................................................................................................
 
     import numpy as np
 
@@ -245,7 +246,7 @@ alt + shift + a ile imleçte olan satırları yorum satırı yapabiliriz.
 
     print(x) # [nan  3.  2.] neden nan var hata var = bunun sebebi -1 karmaşık sayıdır. kökü alınamaz ama dtype complex olsa idi hata olmazdı.
 
-.........................
+................................................................................................................................................................................................
 
             import numpy as np
 
@@ -257,12 +258,12 @@ alt + shift + a ile imleçte olan satırları yorum satırı yapabiliriz.
             print(x.real.dtype) # float64 
             print(x.imag.dtype) # float64 karmaşık sayıların değerleri float olarak tutulurmuş demekki.
 
-.........................
-
+................................................................................................................................................................................................
+        
         import numpy as np
 
         x = np.array([1,2,3,4,5],dtype=np.int64)
-        np.save("fordfocus",x) # np.save ile array kaydederiz. önce kaydedilecek yer sonra ise kaydedilecek değeri gireriz ve .npy uzantılı bir dosyaya değerleri kaydeder.
+        np.save("fordfocus",x) # np.save ile array kaydederiz. önce kaydedilecek yer sonra ise kaydedilecek değeri gireriz ve .npy uzantılı bir dosyaya değerleri kaydeder fordfocus.npy olarak
 
         y = np.load("fordfocus.npy") # y = dosya içerisindeki ndarray olacak aslında. np.load() parametre alacak oda arrayin kaydedildiği .npy dosyası.
 
@@ -270,12 +271,12 @@ alt + shift + a ile imleçte olan satırları yorum satırı yapabiliriz.
        
         np.save("dosyaadi",kaydedilecekarray) ile kaydederiz ndarrayi bir .npy dosyasına      y = np.load(.npy dosyasınınadi ve uzantısı) ile ise kaydedilmiş arrayi geri çıkartırız. return ederiz yani.
 
-..............................
+................................................................................................................................................................................................
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 ///////Ders 3 - Gömülü Fonksiyonlar I, ones, zeros, diag, eye...//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -287,7 +288,7 @@ hazır fonksiyonlar ile içeriye bir liste koymadan ndarray oluşturacağız. me
     X = np.zeros(5) # 5 adet 0'dan oluşan bir array elde ederiz. np.zeros() ile oluşan array'in veri tipi float64'tür .dtype bize float64 verir.. 
     Y = np.ones(5) # 5 adet 1'den oluşan bir array elde ederiz. np.ones() ile oluşan array'in veri tipi float64'tür .dtype bize float64 verir.. 
 
-................................
+................................................................................................................................................................................................
 
         import numpy as np
 
@@ -305,7 +306,7 @@ hazır fonksiyonlar ile içeriye bir liste koymadan ndarray oluşturacağız. me
             
             """
 
-................................
+................................................................................................................................................................................................
 
   nedens ones, zeros gibi metotlar kullanırız. numpy için önemli olan gelecek olan verilerdir. 
 
