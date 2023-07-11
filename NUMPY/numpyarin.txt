@@ -12,17 +12,17 @@ nupmy klasik pythondan daha hızlıdır. bu yüzden kullanılır zaten. sayılar
 
 
 ///Ders 1 - NDArray Oluşturmak - Upcasting//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-numpy = klasik pythondan daha hızlı çalışır çünkü core olarak c kullanılmıştır.
-
+numpy = klasik pythondan daha hızlı çalışır çünkü core olarak c kullanılmıştır. 
+   
 NDArray = numpy'nin temel veri yapısıdır. çok boyutlu dizin demektir NDArray 
     
-
         import numpy as np
         import time
 
         baslangic = time.time()
 
         A = np.arange(10000000) # 10000000 tane eleman oluşturduk. 0'dan 10000000'a kadar birer birer 
+        A ** 2 # tüm değerlerin karesini aldık.
 
         bitis = time.time()
 
@@ -30,7 +30,7 @@ NDArray = numpy'nin temel veri yapısıdır. çok boyutlu dizin demektir NDArray
         baslangic1 = time.time()
 
         L = range(10000000)
-        [i for i in L]
+        [i ** 2 for i in L] # i range üzerinde döndü ve her seferinde listeye i'nin karesi eklendi. 
 
         bitis1 = time.time()
 
@@ -40,7 +40,7 @@ NDArray = numpy'nin temel veri yapısıdır. çok boyutlu dizin demektir NDArray
 
         print((bitis1 - baslangic1) / (bitis - baslangic)) # 95.46080806942409 kat fark var arada buna dikkat etmek gerekir. her çalıştırmada değişebilir.   
 
-numpy vektörleşmeyi destekler... klasik python listesi ise vektörleşmeyi desteklemez. 
+numpy vektörleşmeyi destekler... klasik python listesi ise vektörleşmeyi desteklemez. neden hız farkı var çünkü numpy vektörleşmeyi destekler. listede ise bu vektörleşme yoktur.  
 
 python listesi kullanarak NDArray oluşturmak ->  X = np.array([1,2,3,4,5,6]) # bu metota listeyi gönderince istenen yapıyı elde ederiz. bir array elde ederiz.
                                                    
@@ -49,7 +49,7 @@ python listesi kullanarak NDArray oluşturmak ->  X = np.array([1,2,3,4,5,6]) # 
         X = np.array([1,2,3,4,5])
         print(type(X)) # <class 'numpy.ndarray'>
 
-...............
+..........................................................................................................................................................................................................
 
 
             import numpy as np
@@ -63,7 +63,7 @@ python listesi kullanarak NDArray oluşturmak ->  X = np.array([1,2,3,4,5,6]) # 
             print(X.dtype)  # int32 // içerisindeki elemanların veri tipini gösterir.  
 
 
-................
+..........................................................................................................................................................................................................
 
             import numpy as np
 
@@ -84,7 +84,14 @@ python listesi kullanarak NDArray oluşturmak ->  X = np.array([1,2,3,4,5,6]) # 
             print(Y.nbytes) # 36 // veriler ne kadar byte kaplıyor görürüz.  .nbytes ile totalde kaplanan alanı görürüz. veriyi depolamak için gereken byte miktarını verir...
             print(Y.dtype)  # int32 // içerisindeki elemanların veri tipini gösterir.  
 
-.................
+..........................................................................................................................................................................................................
+
+import numpy as np
+y = [1,2,3,4,5,6,7,8,9]
+x = np.array(y) # np.array([1,2,3,4,5,6,7,8,9]) de olur np.array(y) de olur ikiside bir array oluşturmak için gayet yeterli.
+print(x)
+ 
+..........................................................................................................................................................................................................
 
             import numpy as np
 
@@ -107,9 +114,18 @@ python listesi kullanarak NDArray oluşturmak ->  X = np.array([1,2,3,4,5,6]) # 
 
             print(Z.shape) #(2, 2, 2)
             print(Z.nbytes) # ne kadar byte kullandık bunu gösterir.
-            print(Z.ndim) #3 boyutlu olduğnu gösterir.
+            print(Z.ndim) #3 verir 3 boyutlu olduğnu gösterir. 
 
-................
+..........................................................................................................................................................................................................
+
+        import numpy as np
+
+        x = np.arange(12).reshape(3,4) # 3 stır 4 sutun
+        print(x)
+        x = x.reshape(12) # sonra ise tekrar bu matrisi tek boyutlu bir arraye çevirdik.
+        print(x)
+
+..........................................................................................................................................................................................................
 
 ndarray'de elemaların tamamı aynı tip olmalıdır. python listesinde heterojen olabilir ama numpy arraylerinde arrayler homojen olmalıdır.
 
@@ -122,7 +138,6 @@ içerisine bir tane string girince tüm elemanları stringe çevirdi buna Upcast
     eğer int değerler içerisine float bir değer girerse o zaman yine Upcasting olur ve hepsi float olur. bunu .dtype ile görebiliriz. 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
 /////Ders 2 - Veri Tipleri - Save(), Load()////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
