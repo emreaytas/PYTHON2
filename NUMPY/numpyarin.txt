@@ -451,11 +451,9 @@ x = np.eye(4) # birim matris oluştururuz np.eye() ile diogonal olanlar 1 olmaya
 
 
 
-
-
 ////Ders 4 - Gömülü Fonksiyonlar II, arange - linspace, reshape, random/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-x = np.arange(5) # 0'dan başlar 5 tane elemandan oluşan bir array oluşturur.. 5 dahil değil.
+x = np.arange(5) # 0'dan başlar 5 tane elemandan oluşan bir array oluşturur.. 5 dahil değil. 0 1 2 3 4 gibi.
 
 y = np.arange(0,6,2) # 0dan başlar 5'e kadar oda dahil ikişer ikişer atlar ve bir array oluşturur.
 
@@ -473,12 +471,13 @@ y = np.arange(0,6,2) # 0dan başlar 5'e kadar oda dahil ikişer ikişer atlar ve
         # linspace fonksiyonunda kapalı fonksiyon vardır yani 0 ve 15 dahil [0,15] olarak geçer başlangıç ve bitiş dahildir.
         # tek boyutlu bir array getirir bize.
         # eğer 3. parametre olarak kaç adet eleman üretileceğini belirtmezsek default olarak 50 kabul edilir.
-..............................................
+
+................................................................................................................................................................................................
   
   import numpy as np
   x = np.linspace(0,15,100,endpoint=False) # eğer endpoint False dersek o zaman bitiş noktası dahil olmaz. böylece son kısım açık aralık olur [0,15) olur. 
 
-...............................................
+................................................................................................................................................................................................
 
         import numpy as np
 
@@ -493,11 +492,16 @@ y = np.arange(0,6,2) # 0dan başlar 5'e kadar oda dahil ikişer ikişer atlar ve
         [15 16 17 18 19]]
         """
 
-...............................................
+................................................................................................................................................................................................
+import numpy as np
+
+x = np.arange(20)
+x = np.reshape(x,(4,5)) # önce hangi array shape olacak sonra ise tuple içerisinde hangi yapıda olacak ve bu elde edilen yaoıyı return eder.
+................................................................................................................................................................................................
 
         import numpy as np
 
-        x = np.arange(20).reshape(4,5) # 20 elemalı tek boyutlu bir array 0'dan başlayacak. çünkü numpy sıfırdan numaraladırma yapar.
+        x = np.arange(20).reshape(4,5) # 20 elemalı tek boyutlu bir array 0'dan başlayacak. çünkü numpy sıfırdan numaraladırma yapar. eğer sutun sayısı 5 ise ilk 5 ilk satır sonraki 5'li diğer satır şeklinde sıralı olarak böler.
         print(x) # reshape() ise içerisine tuple ve parçalanacak array gönderilmeden de kullanabiliriz. bu yapıda. içerisinde sayıları göndeririz ve bölme işlemini uygularız.
         """
         [[ 0  1  2  3  4]
@@ -505,7 +509,7 @@ y = np.arange(0,6,2) # 0dan başlar 5'e kadar oda dahil ikişer ikişer atlar ve
         [10 11 12 13 14]
         [15 16 17 18 19]]   
         """
-...............................................
+................................................................................................................................................................................................
 
         import numpy as np
 

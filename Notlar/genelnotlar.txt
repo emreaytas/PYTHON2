@@ -52,7 +52,11 @@ c dilinde long int kavramı vardır %ld ile atama yazdırma falan yapılır yük
 bir kodu pc'de çalıştırmak sorun yaratabilir. bağlantı gidebilir. şarj bitebilir güncelleme olabilir bu yüzden bulut sistemleri kullanırız. tercihen linux kurulu olarak gelir. bulut internet bağlantılı genellikle linux server üzerinde çalışan bir sistemdir bulut sistemi tüm işlemler uzaktan bağlantı ile consolda yapılıyor..
     pythonanywhere mesela ücretsiz planı olan bir web servisidir.
 
-single board mesela = raspery pi. bunu araştırmak gerek. server gibi kullanabiliriz. internete bağlı bir bilgisayar gibi kullanabiliriz.
+single board mesela = raspery pi. bunu araştırmak gerek. server gibi kullanabiliriz. internete bağlı bir bilgisayar gibi kullanabiliriz. server gibi kullanabiliriz.
+
+bir dosyayı rar yapmak için arşive ekle deriz ve rara çevirebiliriz şifrede verebiliriz.
+
+
 
 
 
