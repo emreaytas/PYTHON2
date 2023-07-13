@@ -308,13 +308,13 @@ hazır fonksiyonlar ile içeriye bir liste koymadan ndarray oluşturacağız. me
 
 ................................................................................................................................................................................................
 
-  nedens ones, zeros gibi metotlar kullanırız. numpy için önemli olan gelecek olan verilerdir. 
+  nedens ones, zeros gibi metotlar kullanırız. numpy için önemli olan gelecek olan verilerdir. yapay zeka, makine öğrenmesi veri bilimi alanlarının temelinde veri manipülasyonu yatar. 
 
 np.full() # bunun ile istenen sabit sayının olduğu bir array oluşturabiliriz.
 
         import numpy as np
 
-        x = np.full((2,3),10) # 2 satır 3 sutun olsun içerisinde 10 olsun tüm elemanlar 10 olsun demektir.  veri türü ise int32 oldu. nedeni ise 3. parametre olarak gönderilen değerin veri tipi kullanılır 10.0 verse idik o zaman dtype float olacaktı.
+        x = np.full((2,3),10) # 2 satır 3 sutun olsun içerisinde 10 olsun tüm elemanlar 10 olsun demektir.  veri türü ise int32 oldu. nedeni ise 3. parametre olarak gönderilen değerin veri tipi kullanılır 10.0 verse idik o zaman dtype float olacaktı. (2,3) olarak ise bir tuple içerisinde biz ndarrayin yapısını belirledik.
 
         print(x)
 
@@ -324,7 +324,7 @@ np.full() # bunun ile istenen sabit sayının olduğu bir array oluşturabiliriz
             
             """
 
-.................................
+................................................................................................................................................................................................
 
         import numpy as np
 
@@ -337,10 +337,10 @@ np.full() # bunun ile istenen sabit sayının olduğu bir array oluşturabiliriz
         [10. 10. 10.]]    
             """
 
-.................................
+................................................................................................................................................................................................
 
 
-mesela arrayismi += 10 demek örnek olarak x = np.array([1,2,3,4,5,6]) demek ve sonraki satır x += 10 demek her elemana 10 eklemek demektir.
+mesela arrayismi += 10 demek örnek olarak x = np.array([1,2,3,4,5,6]) demek ve sonraki satır x += 10 demek her elemana 10 eklemek demektir. kalıcı bir işlemdir   y = x + 10 demek x'in elemanlarını 10 fazlalaşmış hali demek ama x'de değişim olmaz x += 10 olursa eğer o zaman x kalıcı değişime uğrar.
 
         import numpy as np
 
@@ -348,13 +348,13 @@ mesela arrayismi += 10 demek örnek olarak x = np.array([1,2,3,4,5,6]) demek ve 
         x += 10
         print(x) # [11 12 13 14 15]
 
-................................
+................................................................................................................................................................................................
 
 np.empty() #  bu fonksiyon ile hafızada ndarray oluştururuz hafızada yer ayırırız ama elemanların değerini vermeyiz keyfi değerler bulunur.
 
     import numpy as np
 
-    x = np.empty((2,3)) # içerisine bir tuple yolladık ve yapısını belirledik.
+    x = np.empty((2,3)) # içerisine bir tuple yolladık ve yapısını belirledik. içerisinde bir tuple göndeririz ve bu tuple ile ndarrayin yapısını belirleriz.
     print(x)
     """
     [[9.34577196e-307 9.34598246e-307 1.60218491e-306]
@@ -363,11 +363,11 @@ np.empty() #  bu fonksiyon ile hafızada ndarray oluştururuz hafızada yer ayı
 
     x.fill(10) # bununla birlikte ndarray'in elemanlarının hepsini 10 yaptık... boş olan bir array'i böylece doldurmuş olduk.
 
-................................
+................................................................................................................................................................................................
 
 ndarray.fill(sayi) metotu ile bir array'in tüm elemanlarını istenen sayı yapabiliriz. 
 
-.................................
+................................................................................................................................................................................................
 
 import numpy as np 
 x = np.eye(4) # birim matris oluştururuz np.eye() ile diogonal olanlar 1 olmayanlar 0 olan matris oluştururuz.
@@ -386,8 +386,21 @@ x = np.eye(4) # birim matris oluştururuz np.eye() ile diogonal olanlar 1 olmaya
 
         y = np.eye(4,5) # 4 satır 5 sutunlu bir matris oluşturur. ve olabildiğince birim matris olmayaca çalışır. 
 
-.................................
+................................................................................................................................................................................................
 
+        import numpy as np
+
+        x = np.eye(4,5)
+        print(x)
+        """
+        [[1. 0. 0. 0. 0.]
+        [0. 1. 0. 0. 0.]
+        [0. 0. 1. 0. 0.]
+        [0. 0. 0. 1. 0.]]
+        
+        """  # eye ile olabildiğince diogonal matris oluşturur. eğer satır sutun eşit değilse.
+
+................................................................................................................................................................................................
     import numpy as np
 
     x = np.eye(6)
@@ -395,8 +408,16 @@ x = np.eye(4) # birim matris oluştururuz np.eye() ile diogonal olanlar 1 olmaya
     print("")
     y = np.eye(6,k = 1) # k = 1 olunca diegonali 1 birim yukarı aldı -2 olsa idi 2 birim aşağı inecekti.
     print(y)
-
-.................................
+    """
+    [[0. 1. 0. 0. 0. 0.]
+    [0. 0. 1. 0. 0. 0.]
+    [0. 0. 0. 1. 0. 0.]
+    [0. 0. 0. 0. 1. 0.]
+    [0. 0. 0. 0. 0. 1.]
+    [0. 0. 0. 0. 0. 0.]]
+    
+    """
+................................................................................................................................................................................................
 
             import numpy as np
 
@@ -410,11 +431,11 @@ x = np.eye(4) # birim matris oluştururuz np.eye() ile diogonal olanlar 1 olmaya
             [0. 0. 0. 0. 1.]]
             """ # 5 e 5 birim matris oluşturur...
 
-.................................
+................................................................................................................................................................................................
 
         import numpy as np
 
-        x = np.diag([4,7,11,3])
+        x = np.diag([4,7,11,3]) # içerisine bir array göndeririz.
         print(x)
         """
         [[ 4  0  0  0]
@@ -422,9 +443,13 @@ x = np.eye(4) # birim matris oluştururuz np.eye() ile diogonal olanlar 1 olmaya
         [ 0  0 11  0]
         [ 0  0  0  3]]
             
-            """ # np.diag(liste) # listenin elemanlarını diegonale yerleştirir ona göre bir matris oluşturur...
+            """ # np.diag(liste) # listenin elemanlarını diegonale yerleştirir ona göre bir matris oluşturur... o çizgi üzerinde yerleşir elemanlar.
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
 
 
