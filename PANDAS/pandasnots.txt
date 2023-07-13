@@ -4,8 +4,7 @@
 
 ### pip install jupyterlab  ... bu komut ile jupyter notebook indiririz.  jupyter-lab  bu komut ile ise jupyter notebook'u açarız.  
 
-
-pandasın altyapısı numpy üzerinedir. dataframe veri çerçevesi dmeektir.
+pandasın altyapısı numpy üzerinedir. dataframe veri çerçevesi dmeektir. python kütüphanesidir. veri analizi makine öğrenmesi veri bilimi derin öğrenme için kullanılır.
 
 import pandas as pd ile pandas'ı import ederiz
 
@@ -16,9 +15,32 @@ csv dosyası ise virgüllerle ayrılmış verilerden oluşur bazen noktalı virg
 pd.read_excel('pokeman.xlsx').head() yaparsak eğer en baştan alırız. 
 
 pokemon = pd.read_csv('pokemon.csv',delimiter = ';')    yaparsak eğer bu dosyaya bağlanırız.
-        ates = pokemon['Type1'] == 'Fire' # sadece ateş olan pokemonları getirir.
+        ates = pokemon['Type1'] == 'Fire' # sadece ateş olan pokemonları getirir. bu şekilde koşul yapabiliriz   hiz = pokemon['hiz'] > 120 ile hızı 120den büyük olanları bulabiliriz.
+        pokemon.colums ile ise tüm kolonları görebiliriz.
+        pokemon.index ile ise indexleri görebiliriz.
+        pokemon.dropna() Nan olanları vs düşürürüz. onlardan kurtuluruz.
+        pokemon["Ranking"].astype("float") # bunun ile biz o kolonun veri türünü float yapabiliriz.
+        
+eğer csv okumak istersek cars = pd.read_csv('cars.csv') ile okuruz.   eğer csv noktalı virgül ile ayrılmışsa o zaman delimiter = ';' yapmamız lazım. default olarak virgul kullanılır csv'de.
+          cars.head(5) yaparsak o zaman baştan 5 tane alır. return eder değerleri.
+          cars.tail(5) yaparsak o zaman sondan 5 tane alır. return eder değerleri.
+          AA = cars['type1'] == 'fire'  ile type1'i fire olan verileri getiririz. 
+          cars[AA] ile ise type1'i fire olanları getiririz.
+        
+          speed = cars['hiz'] > 120
+          cars[speed] ile hızı 120den yüksek olanları buluruz.  
+          cars['hiz'].unique() ile birbirinden farklı tüm tipleri getirir. birbirinden farklı hizları görürüz mesela iki tane 120 varsa birini kabul eder.
+          
+          cars['hiz'] = 120 yaparsak hepsi 120 olur. atama yapabiliriz.
+          
+          
+sampi.set_index('year') ile yılı index haline getiririz. 
+sampi.iloc(0) 0. index'i getirir ilk satır demek.
+sampi.loc[1959] # 1959'yılındaki şampiyonu getirir. birden fazla ararsak liste içerisinde yollarız  sampi.loc[[1960,1961,1962]] gibi.
 
-pandas'ta | veya yerine geçer  & bu ise v yerine.
+ 
+
+pandas'ta | veya yerine geçer & bu ise v yerine.
 
 panel datadan gelmiştir. panel data herhangi bir durum hakkında zamana bağlı olarak elde edilen veriler. mesela yıllık karsa düşen yağış miktarı.
 bir makine öğrenmesi algortimasının başarısını sağlamak için ona olabildiğince fazla veri vermek lazım. mesela ne kadar fazla film izlersek netflix bizim nelerden hoşlandığımızı bilir. çünkü hatalı veriler olabilir tam olarak ortalamayı sağlamak için daha fazla veri vermek lazım... 
