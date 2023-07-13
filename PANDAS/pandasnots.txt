@@ -2,6 +2,9 @@
 
 ### pip install howdoi ile howdoi'yi yükleriz kullanımı ise howdoi write a function to add two numbers in python...böylece istenen bir fonksiyonu bize verecek...  
 
+### pip install jupyterlab  ... bu komut ile jupyter notebook indiririz.  jupyter-lab  bu komut ile ise jupyter notebook'u açarız.  
+
+
 pandasın altyapısı numpy üzerinedir. dataframe veri çerçevesi dmeektir.
 
 import pandas as pd ile pandas'ı import ederiz
@@ -15,7 +18,7 @@ pd.read_excel('pokeman.xlsx').head() yaparsak eğer en baştan alırız.
 pokemon = pd.read_csv('pokemon.csv',delimiter = ';')    yaparsak eğer bu dosyaya bağlanırız.
         ates = pokemon['Type1'] == 'Fire' # sadece ateş olan pokemonları getirir.
 
-pandas'ta | veya yerine geçer
+pandas'ta | veya yerine geçer  & bu ise v yerine.
 
 panel datadan gelmiştir. panel data herhangi bir durum hakkında zamana bağlı olarak elde edilen veriler. mesela yıllık karsa düşen yağış miktarı.
 bir makine öğrenmesi algortimasının başarısını sağlamak için ona olabildiğince fazla veri vermek lazım. mesela ne kadar fazla film izlersek netflix bizim nelerden hoşlandığımızı bilir. çünkü hatalı veriler olabilir tam olarak ortalamayı sağlamak için daha fazla veri vermek lazım... 
