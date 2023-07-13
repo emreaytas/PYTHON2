@@ -2,6 +2,21 @@
 
 ### pip install howdoi ile howdoi'yi yükleriz kullanımı ise howdoi write a function to add two numbers in python...böylece istenen bir fonksiyonu bize verecek...  
 
+pandasın altyapısı numpy üzerinedir. dataframe veri çerçevesi dmeektir.
+
+import pandas as pd ile pandas'ı import ederiz
+
+pd.read_excel('pokeman.xlsx') ile excel dosyası okuyabiliriz. xlsx ise excel uzantısıdır
+
+csv dosyası ise virgüllerle ayrılmış verilerden oluşur bazen noktalı virgül. pd.read_csv('sampiyon.csv',delimiter = ';') # eğer noktalı virgül ile ayrılmışsa veriler delimiter = ';' yaparız.
+
+pd.read_excel('pokeman.xlsx').head() yaparsak eğer en baştan alırız. 
+
+pokemon = pd.read_csv('pokemon.csv',delimiter = ';')    yaparsak eğer bu dosyaya bağlanırız.
+        ates = pokemon['Type1'] == 'Fire' # sadece ateş olan pokemonları getirir.
+
+pandas'ta | veya yerine geçer
+
 panel datadan gelmiştir. panel data herhangi bir durum hakkında zamana bağlı olarak elde edilen veriler. mesela yıllık karsa düşen yağış miktarı.
 bir makine öğrenmesi algortimasının başarısını sağlamak için ona olabildiğince fazla veri vermek lazım. mesela ne kadar fazla film izlersek netflix bizim nelerden hoşlandığımızı bilir. çünkü hatalı veriler olabilir tam olarak ortalamayı sağlamak için daha fazla veri vermek lazım... 
 
