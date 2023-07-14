@@ -534,10 +534,6 @@ x = np.reshape(x,(4,5)) # önce hangi array shape olacak sonra ise tuple içeris
 
 
 
-
-
-
-
 /////Ders 5 - NDArray Değiştirmek, Insert, Append, Stack, Delete////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    
 
@@ -554,13 +550,22 @@ x = np.reshape(x,(4,5)) # önce hangi array shape olacak sonra ise tuple içeris
         print(x[2:]) # 2. indexteki elemandan en sona gitmek demektir. arrayi parçalarız.
 
         x[2] = 200 # bunu diyerek direkt atama ve değişim yapabiliriz. 2. indexteki yani 3. eleman 200 olur.
-        x += 10 # bununla birlikte tüm elemanlar 10 artar.
+        x += 10 # bununla birlikte tüm elemanlar 10 artar. eğer x'i kullanarak yani arrayi kullanarak işlem yaparsak o zaman tüm elemanlar etkilenir ama eğer biz belli aralıktakileri veya tek bir değeri belirtirsek sadece o kısım değişir.
         x *= 2 # bununla birlikte tüm elemanlar 2 ile çarpılır
 
 ....................................................
 
         import numpy as np
 
+        x = np.arange(20)
+        x[3:7] = 100
+        print(x) # [  0   1   2 100 100 100 100   7   8   9  10  11  12  13  14  15  16  17 18  19]
+        # belli bir aralıktaki değerlere atama yaptık.
+
+....................................................
+
+        import numpy as np
+ 
         x = np.arange(12).reshape(3,4) # 12 tane elaman oluşur ve 3 satır 4 sutun olarak oluşur.
         print(x[0]) # 0 indexteki satır gelir yani birinci satır gelir.
         print(x[0,0]) # 0 indexteki satırın 0 indexteki elemanı gelir yani 1. satırın 1. elemanı gelir.
@@ -679,6 +684,28 @@ axis = 1 olursa column yani sutun demektir.
 
         """
         
+....................................................
+
+        import numpy as np
+
+        x = np.arange(20)
+        x = np.insert(x,5,[100,100,100]) # np.insert() bir array return eder. ilk parametre işlem görecek ndarray. ikinci parametre ise index hangi index veya hangi indexten başlayacak ekleme birden fazla eleman varsa. 3. parametre ise hangi eleman veya elemanlar birden fazla eleman eklenecekse o zaman 
+        print(x) # [  0   1   2   3   4 100 100 100   5   6   7   8   9  10  11  12  13  14 15  16  17  18  19]  5.indexten itibaren yerleştirdi elemanları.
+
+....................................................
+  
+        import numpy as np
+
+        x = np.arange(9).reshape(3,3)
+        x = np.insert(x,1,[100,100,100],axis=0) # axis 0 olduğu için satıra ekleme olacak. ilk olarak işlem görecek olanı gireriz sonra index sonra ne eklenecek sonra axis ve np.insert() bize işlemden çıkmış arrayin referansını return eder. atama olduğu için referans kalır bellekten silinmez.
+        print(x)
+        """
+        [[  0   1   2]
+        [100 100 100]
+        [  3   4   5]
+        [  6   7   8]]
+        
+        """
 
 ....................................................
 
