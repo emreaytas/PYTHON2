@@ -697,7 +697,7 @@ axis = 1 olursa column yani sutun demektir.
         import numpy as np
 
         x = np.arange(9).reshape(3,3)
-        x = np.insert(x,1,[100,100,100],axis=0) # axis 0 olduğu için satıra ekleme olacak. ilk olarak işlem görecek olanı gireriz sonra index sonra ne eklenecek sonra axis ve np.insert() bize işlemden çıkmış arrayin referansını return eder. atama olduğu için referans kalır bellekten silinmez.
+        x = np.insert(x,1,[100,100,100],axis=0) # axis 0 olduğu için satıra ekleme olacak. ilk olarak işlem görecek olanı gireriz sonra index sonra ne eklenecek sonra axis ve np.insert() bize işlemden çıkmış arrayin referansını return eder. atama olduğu için referans kalır bellekten silinmez. eklenen eleman sayısı ise sutun sayısı ile aynı olmalı. axis = 1 olsa idi o zaman satır sayısı kadar eleman eklememiz gerekirdi.
         print(x)
         """
         [[  0   1   2]
@@ -731,7 +731,8 @@ axis = 1 olursa column yani sutun demektir.
         print(z)
 
         """
-        [[0 1 2]
+        [
+        [0 1 2]
         [0 1 2]
         [3 4 5]
         [6 7 8]]
@@ -769,7 +770,7 @@ axis = 1 olursa column yani sutun demektir.
         print(x[:6]) # 6. indexe kadar gidecek 6 dahil değil. başlangıç noktasından itibaren. arrayden bir array oluşturur. 
 
         print(x[::-1]) # en sondan en başa teker teker gel demek.
-        print(x[-1::-2]) # en sondan en başa ikişer ikişer gel demek
+        print(x[-1::-2]) # en sondan en başa ikişer ikişer gel demek -1 olsa idi tek tek gel demek olurdu.
 
         print(x[-4:-2]) # en sondan 4. elemandan en sondan 2. elemana ama en sondan 2. eleman dahil değil.
 
@@ -848,7 +849,7 @@ axis = 1 olursa column yani sutun demektir.
         [333 100   5]
         [  6   7   8]]
 
-        """ # u'nun bir parçası olan i üzerinde işlem yapmamıza rağmen u'da değişim oldu bunun nedeni referanslar ile bellek adresleri ile işlem yapmak aslında bellek adresinin bir kısmını alıp array olarak atıyoruz. bu yüzden parçada olan değişim ana arraydede etki eder çünkü o bellek alanı üzerinde değişim oldu.
+        """ # u'nun bir parçası olan i üzerinde işlem yapmamıza rağmen u'da değişim oldu bunun nedeni referanslar ile bellek adresleri ile işlem yapmak. aslında bellek adresinin bir kısmını alıp array olarak atıyoruz. bu yüzden parçada olan değişim ana arraydede etki eder çünkü o bellek alanı üzerinde değişim oldu. pointer mantığı. 
 
         print(np.shares_memory(u,i)) # aynı bellek adresinde mi çalışıyorlar True verir... hafızadaki yerleri aynı ortak elemanların bu yüzden yapılan bir değişim diğerinede etki ediyor.
 
@@ -874,11 +875,6 @@ axis = 1 olursa column yani sutun demektir.
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
 
 
 
