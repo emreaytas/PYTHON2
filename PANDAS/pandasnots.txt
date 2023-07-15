@@ -22,7 +22,7 @@ pokemon = pd.read_csv('pokemon.csv',delimiter = ';')    yaparsak eğer bu dosyay
         pokemon["Ranking"].astype("float") # bunun ile biz o kolonun veri türünü float yapabiliriz.
         
 eğer csv okumak istersek cars = pd.read_csv('cars.csv') ile okuruz.   eğer csv noktalı virgül ile ayrılmışsa o zaman delimiter = ';' yapmamız lazım. default olarak virgul kullanılır csv'de.
-          cars.head(5) yaparsak o zaman baştan 5 tane alır. return eder değerleri.
+          cars.head(5) yaparsak o zaman baştan 5 tane alır. return eder değerleri.   .head() ile de ilk 5i gelir default olarak.
           cars.tail(5) yaparsak o zaman sondan 5 tane alır. return eder değerleri.
           AA = cars['type1'] == 'fire'  ile type1'i fire olan verileri getiririz. 
           cars[AA] ile ise type1'i fire olanları getiririz.
@@ -32,7 +32,7 @@ eğer csv okumak istersek cars = pd.read_csv('cars.csv') ile okuruz.   eğer csv
           cars['hiz'].unique() ile birbirinden farklı tüm tipleri getirir. birbirinden farklı hizları görürüz mesela iki tane 120 varsa birini kabul eder.
           
           cars['hiz'] = 120 yaparsak hepsi 120 olur. atama yapabiliriz.
-          
+
           
 sampi.set_index('year') ile yılı index haline getiririz. 
 sampi.iloc(0) 0. index'i getirir ilk satır demek.
@@ -61,6 +61,9 @@ import pandas as pd ile yapısı ile kullanacağız...
 
 makine öğrenmesi, yapay zeka derin öğrenme için hız önemlidir bu yüzden pandas c ile yazılmıştır bilgisayar diline yakın olduğu için hızlıdır...
 
+seriler tek boyutlu dataframe ise çift boyutludur(satır sutun) matris mantığı.
+
+pandas serilerinde de indexleme vardır. isteğe göre bunu ayarlayabiliriz.
 
 ///PANDAS SERİES 1/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -3,6 +3,15 @@
 eğer satırların başındaki boşlukları veya istersek toplu bir değişim o zaman ctrl + h diyoruz sonra alt + r yapıyoruz find ve replace giriyoruz. sonra ise ctrl + alt + enter ile ise bunu uyguluyoruz...
 *********************************************************************************************************************************************************************************************************
 
+python --version ile versiyon görürüz cmd'ye yazarak.
+pip freeze ile ise tüm paketleri ve versiyonlarını görürüz. pythonun paketi içerisindeki kütüphaneleri görürüz pip list ve pip freeze ile.
+
+pip install Django ile yükleme yaparız. eğer istediğimz versiyon varsa o zaman pip install Django==3.2.9 gibi sürüm belirterek yükleriz.
+
+terminale Django-admin yazarsak web geliştirmek için kullanacağımız scriptler gözükür.
+
+eğer bir kütüphane yüklü iken daha eski versiyonunu install edersek güncel olanı siler ve yerine eski halini yükler. tek bir versiyon bulunur python lib klasöründe.
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
