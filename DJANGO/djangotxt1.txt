@@ -8,12 +8,40 @@ pip freeze ile ise tüm paketleri ve versiyonlarını görürüz. pythonun paket
 
 pip install Django ile yükleme yaparız. eğer istediğimz versiyon varsa o zaman pip install Django==3.2.9 gibi sürüm belirterek yükleriz.
 
-terminale Django-admin yazarsak web geliştirmek için kullanacağımız scriptler gözükür.
+terminale   Django-admin    yazarsak web geliştirmek için kullanacağımız scriptler gözükür.
 
 eğer bir kütüphane yüklü iken daha eski versiyonunu install edersek güncel olanı siler ve yerine eski halini yükler. tek bir versiyon bulunur python lib klasöründe.
 
+////Django projesi oluşturmak./////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+altyapıyı bir klasör içerisine kurmamız lazım çünkü elde proje kiti olmalı. bir web frameworküdür. 
+
+python -m django --version ile versiyonu görebiliriz.
+
+....................................
+import django as dj
+print(dj.get_version()) #3.2.9 bu şekilde de versiyonu görebiliriz.
+....................................
+
+terminale ls yazarsak dizinde dosyaları görebiliriz.
+
+terminale django-admin startproject blogapp(isim) yapısı ile bir proje başlatabiliriz... böylece bir klasör oluşturur bize ve gerekli toollar ile oluşur.
+
+terminalde önce manage.py path'ine geleceğiz komutları verebilmek için sonra ise python manage.py runserver komutu vereceğiz     cd ile pathler üzerinde ilerleyebiliriz. cd .. ile geri geliriz bulunduğumuz path üzerinde.
+
+path uygun olunca(manage.py'nin bulunduğu pathe gelmemiz lazım ona komut verebilmek için) biz python manage.py runserver ile çıkan siteye ulaşabiliriz bu bir şablondur bunu kendimiz ayarlayabiliriz.
+         bir port verir bize onu yazarak şablon siteye ulaşabiliriz.
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///Python Venv, virtual environment sanal django.//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+pyhton için sanal geliştirme ortamı kuracağız. global paketlere bir çok proje için birden fazla paketi aynı yere koymak sorun yaratabilir.   
+
+python -m venv tutorial env(isim)  böylece klasörümüze env ve db.sqlite3 gibi yapılar gelir.
+
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
