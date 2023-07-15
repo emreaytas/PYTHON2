@@ -1,0 +1,1 @@
+### pip install jupyterlab  ... bu komut ile jupyter notebook indiririz.  jupyter-lab  bu komut ile ise jupyter notebook'u açarız.  

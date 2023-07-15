@@ -56,6 +56,7 @@ single board mesela = raspery pi. bunu araştırmak gerek. server gibi kullanabi
 
 bir dosyayı rar yapmak için arşive ekle deriz ve rara çevirebiliriz şifrede verebiliriz.
 
+eğer satırların başındaki boşlukları veya istersek toplu bir değişim o zaman ctrl + h diyoruz sonra alt + r yapıyoruz find ve replace giriyoruz. sonra ise ctrl + alt + enter ile ise bunu uyguluyoruz...
 
 
 
