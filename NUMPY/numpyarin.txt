@@ -883,8 +883,6 @@ axis = 1 olursa column yani sutun demektir.
 
 
 
-
-
 ////Ders 7 - Fancy, Boolean Indexing/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         import numpy as np
@@ -892,12 +890,12 @@ axis = 1 olursa column yani sutun demektir.
         x = np.linspace(1,21,11)
         print(x) # [ 1.  3.  5.  7.  9. 11. 13. 15. 17. 19. 21.]
         y = np.array([2,4,7])
-        print(x[y]) # [ 5.  9. 15.] bu ne demek = x'in içindeki y değerlerindeki indexlerden oluşan değerlerden bir array elde et ve getir demek. yani bir array halinde gitti y buraada her değeri bir işlem gördü ve bir array döndürdük. 
-
+        print(x[y]) # [ 5.  9. 15.] bu ne demek = x'in içindeki y değerlerindeki indexlerden oluşan değerlerden bir array elde et ve getir demek. yani bir array halinde gitti y buraada her değeri bir işlem gördü ve bir array döndürdük.    y bir sayı içeren array ve sayılar index olarak kabul edildi.
+ 
         t = np.arange(25).reshape(5,5)
         print(t)
         z = np.array([1,2])
-        print(t[z,:]) # satırlarda z yani 1. index ve 2. index sutunlarda ise hepsini alacağız. z'nin tüm değerleri işlem görecek.
+        print(t[z,:]) # satırlarda z yani 1. index ve 2. index sutunlarda ise hepsini alacağız. z'nin tüm değerleri işlem görecek ve indexleme için kullanılacak.
         """
         [[ 5  6  7  8  9]
         [10 11 12 13 14]]
@@ -909,9 +907,18 @@ axis = 1 olursa column yani sutun demektir.
 
 
         u[0,0] = 1000
-        print(t) # bir değişim olmadı .copy() ile içerik üretmediğimiz halde. bir ndarrayi başka bir ndarray ile slicing ettiysek eğer o zaman oluşan array bellekte ana arrayden farklı bir yer oluşur.
+        print(t) # bir değişim olmadı .copy() ile içerik üretmediğimiz halde. bir ndarrayi başka bir ndarray ile slicing ettiysek eğer o zaman oluşan array bellekte ana arrayden farklı bir yerde oluşur.
 
-        # fancy indexing... bir arrayi eğer başka bir array ile elde ediyorsak buna denir. bir arrayin alt kümesine başka bir array sayesinde ulaşırız ve oluşan array orjinal arrayden bağımsız bellek ortaklıkları yok.
+        # fancy indexing... bir arrayi eğer başka bir array ile elde ediyorsak buna denir. bir arrayin alt kümesine başka bir array sayesinde ulaşırız ve oluşan array orjinal arrayden bağımsız olur bellek ortaklıkları olmaz.   .copy() ile oluşmuş gibi olur.
+
+....................................................
+
+        import numpy as np
+
+        x = np.arange(20)
+        z = x % 2 == 0
+        print(z) # [ True False  True False  True False  True False  True False  True False True False  True False  True False  True False]
+        print(x[z]) # [ 0  2  4  6  8 10 12 14 16 18] biz eğer x[(x % 2 == 0)] yaparsak aslında x[] içerisine bir array gelir x % 2 == 0 ile .True ve False den oluşan bir array ve arrayin her elemanı tek tek işlem görür True ile eşleşenler yeni arraye gelir. False ile eşleşenler ise es geçilir.    x % 2 == 0 yapısı bize True ve Falselerden oluşan bir array return eder.
 
 ....................................................
 
@@ -953,6 +960,14 @@ axis = 1 olursa column yani sutun demektir.
         print(x) # [ 1. -3.  5.  7. -3. 11. 13. -3. 17. 19. -3.] # koşulu sağlayanlara -3 atandı.
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
 
 ////Ders 8 - Grup İşlemleri, Sıralama/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
