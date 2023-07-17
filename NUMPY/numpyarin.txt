@@ -934,6 +934,8 @@ axis = 1 olursa column yani sutun demektir.
         z[0] = 100 # z üzerinde yapılan değişim ana arrayi etkilemez çünkü bellek alanları farklı 
         # slicing ile yapılan işlemde bellek ortak kullanılır ama fancy ve booelan indexing'de bellek alanları farklı olur oluşan arraylerde.
         print(np.shares_memory(x,z)) # False verir. boolean indexing ile oluşan alt küme ana arrayden bağımsızdır. farklı bellek adresinde oluşur. 
+           
+        # boolean indexing bir array'e içerisi True ve False ile dolu array yollarız ve True ile eşlesen alınır False olan es geçilir booelan indexing ile elde edilen array ile ana arrrayin bellekteki referansları farklıdır. 
 
         u = np.random.randint(0,10,size=10)
         i = np.random.randint(0,10,size=10)
@@ -956,17 +958,13 @@ axis = 1 olursa column yani sutun demektir.
         print(mask) # [False  True False False  True False False  True False False  True]   mask = x % 3 == 0 yaparsak eğer boolean bir array elde ederiz 3e bölümmden kalan 0 olanlar True olmayanlar False olur ve böyle bir array elde ederiz.
         print(x[x % 3 == 0]) #[ 3.  9. 15. 21.]
         print(x[mask]) # [ 3.  9. 15. 21.] x üzerinden tüm mask elemanlarını geçirir ve True olanlarla koşulu sağlayanlar ile bir array oluştururuz.
-        x[mask] = -3 # True olanları -3 olarak değiştirdi. maskeleme yaptı...
+        x[mask] = -3 # True olanları -3 olarak değiştirdi. maskeleme yaptı...   ana array zaten x olduğu için yapılan değişiklik x'e etki eder.
         print(x) # [ 1. -3.  5.  7. -3. 11. 13. -3. 17. 19. -3.] # koşulu sağlayanlara -3 atandı.
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
-
-
-
+size = (9,) demek tek boyutlu 9 elemanlı demektir.
 
 
 ////Ders 8 - Grup İşlemleri, Sıralama/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -979,16 +977,16 @@ axis = 1 olursa column yani sutun demektir.
         y = np.array([6,1,8,7,3])
         z = x[x > y] # x'in içindeki ve sırası ile indexler karşılıklı olarak karşılaştırınca koşulu sağlayan elemanlardan oluşan bir array elde ederiz.
         print(z) # [5 9]
-
+        t = x > y # olursa tek tek tüm elemanları index sırasına göre kontrol eder ve bir array döner bu işlem x'in elemanı büyükse o zaman True değilse False vererek bir array oluşturur.
 
         print(np.intersect1d(x,y)) # [3 6] ortak elemanlardan oluşan yani kesişimden oluşan bir array getirir. iki arrayin kesişiminden array oluşturur.
 
         t = np.intersect1d(x,y)
-        print(type(t)) # <class 'numpy.ndarray'>
+        print(type(t)) # <class 'numpy.ndarray'>  bir ndarray döner yanii.
 
 
-        print(np.setdiff1d(x,y)) # [2 5 9] x'de olan ancak y'de olmayan elemanları bize gösterecek... bir array geri dönecek.
-        print(np.setdiff1d(y,x)) # [1 7 8] y'de olan x'de olmayan elemanları bir array içerisinde return edecek.
+        print(np.setdiff1d(x,y)) # [2 5 9] x'de olan ancak y'de olmayan elemanları bize gösterecek... bir array geri dönecek. x'den kesişimi çıkaracak.
+        print(np.setdiff1d(y,x)) # [1 7 8] y'de olan x'de olmayan elemanları bir array içerisinde return edecek. y'den kesişimi çıkaracal
 
         print(np.union1d(x,y)) # [1 2 3 5 6 7 8 9] iki arrayin birleşiminden elde edilen elemanlardan oluşan bir array döndürür. neden 8 eleman var çünkü kesişim iki kere yazılmadı bir kere olacak.
 
