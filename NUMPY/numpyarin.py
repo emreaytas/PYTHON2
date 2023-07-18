@@ -1,6 +1,7 @@
 import numpy as np
 
-x = np.arange(20)
-z = x % 2 == 0
-print(z) # [ True False  True False  True False  True False  True False  True False True False  True False  True False  True False]
-print(x[z]) # [ 0  2  4  6  8 10 12 14 16 18] biz eğer x[(x % 2 == 0)] yaparsak aslında x[] içerisine bir array gelir x % 2 == 0 ile .True ve False den oluşan bir array ve arrayin her elemanı tek tek işlem görür True ile eşleşenler yeni arraye gelir. False ile eşleşenler ise es geçilir.    x % 2 == 0 yapısı bize True ve Falselerden oluşan bir array return eder.
+x = np.random.randint(1,20,size=(10,))
+print(x) # [ 3  5 14 14 14 13  1 12 11  9]
+y = np.sort(x) #  np.sort(x) bize bir ndarray return eder içerisinde verilen arrayın sıralanomış halini return ederr ancak verilen arrayi kalıcı olarak sıralmaz x.sort() olsa idi x'de kalıcı olarak sıralanırdı ama np.sort() sadece verileri alır değişim yapmaz. bir ndarray return eder. 
+print(x) # [ 3  5 14 14 14 13  1 12 11  9]
+print(y) # [ 1  3  5  9 11 12 13 14 14 14]
