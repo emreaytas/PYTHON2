@@ -967,6 +967,7 @@ axis = 1 olursa column yani sutun demektir.
 size = (9,) demek tek boyutlu 9 elemanlı demektir.
 
 
+
 ////Ders 8 - Grup İşlemleri, Sıralama/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         import numpy as np
@@ -975,7 +976,7 @@ size = (9,) demek tek boyutlu 9 elemanlı demektir.
 
         x = np.array([2,5,3,6,9])
         y = np.array([6,1,8,7,3])
-        z = x[x > y] # x'in içindeki ve sırası ile indexler karşılıklı olarak karşılaştırınca koşulu sağlayan elemanlardan oluşan bir array elde ederiz.
+        z = x[x > y] # x'in içindeki ve sırası ile indexler karşılıklı olarak karşılaştırınca koşulu sağlayan elemanlardan oluşan bir array elde ederiz.  aynı indexte x'in elemanı büyükse z arrayine dahil olur.
         print(z) # [5 9]
         t = x > y # olursa tek tek tüm elemanları index sırasına göre kontrol eder ve bir array döner bu işlem x'in elemanı büyükse o zaman True değilse False vererek bir array oluşturur.
 
@@ -991,9 +992,18 @@ size = (9,) demek tek boyutlu 9 elemanlı demektir.
         print(np.union1d(x,y)) # [1 2 3 5 6 7 8 9] iki arrayin birleşiminden elde edilen elemanlardan oluşan bir array döndürür. neden 8 eleman var çünkü kesişim iki kere yazılmadı bir kere olacak.
 
         print(np.in1d(x,y)) # [False False  True  True False] x'de olan bir elemanın y'de olup olmadığını bir array içerisinde True False biçiminde tutacak ve bunu döndürecek. eğer y,x yapsa idik y'de olup x'de olmayan elemanlar False olanlar True alacak ve bir array oluşacaktı.
-
+        
 ....................................................
 
+        import numpy as np
+
+        x = np.random.randint(1,20,size=(10,))
+        print(x) # [ 3  5 14 14 14 13  1 12 11  9]
+        y = np.sort(x) #  np.sort(x) bize bir ndarray return eder içerisinde verilen arrayın sıralanomış halini return ederr ancak verilen arrayi kalıcı olarak sıralmaz x.sort() olsa idi x'de kalıcı olarak sıralanırdı ama np.sort() sadece verileri alır değişim yapmaz. bir ndarray return eder. 
+        print(x) # [ 3  5 14 14 14 13  1 12 11  9]
+        print(y) # [ 1  3  5  9 11 12 13 14 14 14]
+
+....................................................
         import numpy as np
 
 
@@ -1034,7 +1044,8 @@ size = (9,) demek tek boyutlu 9 elemanlı demektir.
         [7 4 4 8 7]
         [9 6 9 8 9]]
         """
-
+        
+        #np.sort() kalıcı olarak değiştirmez matrisi bu yüzden sıralanmış halini atamamız lazım yoksa sıralanmış hali kaybolur.
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1056,16 +1067,16 @@ size = (9,) demek tek boyutlu 9 elemanlı demektir.
         x = np.random.randint(1,10,size = (5,))
         print(x) # [3 2 9 9 8]
         y = np.random.randint(1,10,size = (5,))
-        print(y) # [2 1 9 7 2]
-        print(x+y) # [ 5  3 18 16 10] tüm elemanların aynı indexli olanları toplanır ve bir array elde edilir.
+        print(y) # [2 1 9 7 2] 
+        print(x+y) # [ 5  3 18 16 10] tüm elemanların aynı indexli olanları toplanır ve bir array elde edilir.  x ve y'de bir değişim olmaz sadece işlemde kullanılır  z = x + y olsa idi o zamn z elde edilen array olurdu.
         print(np.add(x,y)) # [ 5  3 18 16 10] direkt olarak numpy ilede toplama yapabiliriz bir array return eder aynı indexli olanlar toplanır.
         print(type(x+y)) # <class 'numpy.ndarray'>  operatör kullanıncada bir array elde edilir.
         print(x-y) # x'in elemanlarından index sıralaması ile y'nin elemanları çıkar ve yeni bir array elde edilir.
         print(np.subtract(x,y)) # sırası ile x'den y cıkar indexi aynı olanlar çıkar ve yeni bir array döner.
         print(x * y) # index sırası ile tüm elemanlar çarpılacak
         print(x / y) # index sırası ile x'in elemanları y'nin elemanlarına bölünecek.
-        print(np.multiply(x,y)) #index sırası ile tüm elemanlar çarpılacak ve bir array return edecek
-        print(np.divide(x,y)) # index sırası ile x'in elemanları y'nin elemanlarına bölünecek. ve bir array dönecek.
+        print(np.multiply(x,y)) # index sırası ile tüm elemanlar çarpılacak ve bir array return edecek
+        print(np.divide(x,y)) # index sırası ile x'in elemanları y'nin elemanlarına bölünecek. ve bir array dönecek.  np.divide(y,x) olsa idi bir array dönerdi ve y'nin elemanları index sırası ile x'in elemanlarına bölünürdü.
 
 
 ....................................................
@@ -1123,7 +1134,7 @@ size = (9,) demek tek boyutlu 9 elemanlı demektir.
         x = np.random.randint(1,10,size = (5,))
 
         print(np.power(x,3)) # tüm elemanların tek tek küpü alınır..
-        print(np.exp(x)) # tüm elemanlar doğal logaritmaya alınır tek tek bir array return edilir.
+        print(np.exp(x)) # tüm elemanlar doğal logaritmaya alınır tek tek ve bir array return edilir.
         
 ....................................................
 
@@ -1136,8 +1147,8 @@ size = (9,) demek tek boyutlu 9 elemanlı demektir.
         y = np.random.randint(1,10,size=(3,3))
         print(np.sum(y)) # tüm elemanları toplar ve return eder.
 
-        print(np.sum(y,axis=0)) # sutunların toplamını döner.
-        print(np.sum(y,axis=1)) # satırların toplamını döner
+        print(np.sum(y,axis=0)) # sutunların toplamını döner. bir array içerisinde      
+        print(np.sum(y,axis=1)) # satırların toplamını döner. bir array içerisinde
 
         print(y.min()) # en küçük değeri return eder.
         print(y.max()) # en büyük değeri return eder.
