@@ -1,8 +1,10 @@
 ####################################################################################################################################################################################################################################################################################################################################
 
 veritabanı verilerin depolandığı yazılımlardır. sql dili ile çalışır.
- normalde program içerisindeki değişken bilgisayarın ram'inde barınır uygulama sonlanırsa silinir gider.belli süre ramda bulunur bitince silinir. bunun için elde verilerin kalıcı olarak kalması için o zaman veritabanı kullanmak lazım. uygulama tekrar çalışınca veriler gitmesinn diye bunu saklamak lazım. 
+ normalde program içerisindeki değişken(listeler vs tüm alan kaplayan veriler) bilgisayarın ram'inde barınır uygulama sonlanırsa silinir gider.belli süre ramda bulunur bitince silinir. bunun için elde verilerin kalıcı olarak kalması için o zaman veritabanı kullanmak lazım. uygulama tekrar çalışınca veriler gitmesinn diye bunu saklamak lazım. 
  verileri dosya sistemde saklayabiliriz json sisteminde saklayabiliriz. vs vs. json xml xls dosyaları ile verileri sakalayabiliriz ama en iyisi veritbanında tutmaktır nedeni ise istenen ilişkiler kurabilir dil ile veritabanı ile iletişim kurabiliriz. örneğin 20 yaş üstü kişileri getir vs diyebiliriz.
+
+verileri hafızada memory(ram)  filesystem(txt) .json .xml .xls gibi uzantılı dosyalarda  sql ile(mysql mssql sqlite) gibi ve nosql(mongodb) gibi yapılarda tutabiliriz. 
 
 database iki yapı altında ele alınır = sql(mysql,sqlite3,msSql), nosql (MongoDB(veritabanı serveri) mesela içerisinde json bilgiler saklayabiliriz.) olarak ikiye ayırabiliriz.
 
@@ -16,7 +18,7 @@ internet üzerinden açık bir database için server database olması lazım. ç
 
 drop database if exists emre; eğer emre adlı bir db varsa silecek.
  
-mesela hepsiburada tek bir serverdatabase kullanır ve farklı cihazlar farklı uygulamalar ile kendi bilgilerimize vs ulaşabiliriz tek veritabanı ile her yerden aynı bilgilere ulaşabiliriz hepsi aynı server üzerindeki databasede çünkü. ama sqlite3 gibi serverless database kullansa o zaman her uygulama için farklı bir tane veritabanı kullanacaktı.
+mesela hepsiburada tek bir serverdatabase kullanır ve farklı cihazlar farklı uygulamalar ile kendi bilgilerimize vs ulaşabiliriz tek veritabanı ile her yerden aynı bilgilere ulaşabiliriz hepsi aynı server üzerindeki databasede çünkü. ama sqlite3 gibi serverless database kullansa o zaman her uygulama için farklı bir tane veritabanı kullanacaktı. ve veri geldikçe uygulamanın kapladığı alan artacaktı...
 
 sql bir sorgulama dilidir. bu dil ile veritabanı ile uygulama arasında iletişim kurabiliriz.
 
@@ -45,7 +47,7 @@ ONE TO MANY....
 
 MANY TO MANY....
 
-   mesela kişiler ve arabalar var her arabanın bilgileri özellikleri motor hacmi vs var ve kişiler tablosu var kişilerin ismi yaşı işi gibi bilgileri var.  bir kişinin birden fazla arabası olabilir arabaid kolonunda ve araba tablosundaki her araba birden fazla kişiye gidebilir buna many to many ilişkisi denir.
+   mesela kişiler ve arabalar var her arabanın bilgileri özellikleri motor hacmi vs var ve kişiler tablosu var kişilerin ismi yaşı işi gibi bilgileri var.  bir kişinin birden fazla arabası olabilir arabaid kolonunda ve araba tablosundaki her araba birden fazla kişiye gidebilir(mesela 2016 focus birden fazla kişide olabilir.) buna many to many ilişkisi denir.
 
 
 ONE TO ONE....   
@@ -58,16 +60,52 @@ ONE TO ONE....
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+///Veritabanına tablo ekleme.//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  bir database kurar use ile onu kullanırız sonra ise create table isim(   veriler  ); yapısı ile işlemleri yaparız.
 
-///Uygulama//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
+  unique olursa eğer diğer veriler onunla aynı olamaz mesela id kolonu.  not null ile ise boş değer girilemesin komutu veririz.   
+  auto increment ile ise otomatik arttırım sağlarız. id kolonu için biçilmiş kaftan.
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////veritabanı bağlantısı./////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+python ile bağlantı kurabilmek için mysql connector kullanmamız lazım.  pip install mysql-connector   ile bunu indiririz.   mysql veritabanıdır. ne ile yazarsak ona göre bir connector kullanmamız lazım. mesela java ise java connector lazım  
 
+..................................
+
+   import mysql.connector    ile import ederiz bağlantıyı.
+
+   mydb = mysql.connector.connect(
+      host = "localhost" # host olarak bunu seçtik... var olan host.  eğer server üzerinden olmasını istersek o zaman hizmet satın almamız lazım oonlarda bize bir adres verecek 192.23.45.56 gibi.
+      user = "root" # kullanıcı bilgisi
+      password = "12345" # parola bilgisi.
+      database = "EMRE" 
+   )
+
+   print(mydb) # ne olduğu bilgisini görebiliriz.
+ 
+   mycursor = mydb.cursor()  # bu yapı ile cursor oluştururuz.
+   mycursor.execute("""
+   create database if not exists EMRE
+   """)  # execute ile emir veririz.
+   
+   mycursor.execute("""
+   show databases
+   """)
+   
+   for x in mycursor: # tüm bilgiler bir tuple içerisinde mycursor'a gelir.  imleç mantığı ile bunları okuruz.
+      print(x)  
+   
+   mycursor.execute("""
+   create table if not exists customers(name varchar(255),adress varchar(255))
+   """) # seçili database'de bir tablo oluşturduk.
+  
+
+................................... 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
