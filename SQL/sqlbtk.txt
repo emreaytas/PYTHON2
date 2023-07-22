@@ -1,5 +1,7 @@
 ####################################################################################################################################################################################################################################################################################################################################
 
+mysql parola = 12345
+
 veritabanı verilerin depolandığı yazılımlardır. sql dili ile çalışır.
  normalde program içerisindeki değişken(listeler vs tüm alan kaplayan veriler) bilgisayarın ram'inde barınır uygulama sonlanırsa silinir gider.belli süre ramda bulunur bitince silinir. bunun için elde verilerin kalıcı olarak kalması için o zaman veritabanı kullanmak lazım. uygulama tekrar çalışınca veriler gitmesinn diye bunu saklamak lazım. 
  verileri dosya sistemde saklayabiliriz json sisteminde saklayabiliriz. vs vs. json xml xls dosyaları ile verileri sakalayabiliriz ama en iyisi veritbanında tutmaktır nedeni ise istenen ilişkiler kurabilir dil ile veritabanı ile iletişim kurabiliriz. örneğin 20 yaş üstü kişileri getir vs diyebiliriz.
@@ -75,12 +77,12 @@ python ile bağlantı kurabilmek için mysql connector kullanmamız lazım.  pip
 
 ..................................
 
-   import mysql.connector    ile import ederiz bağlantıyı.
+   import mysql.connector    ile import ederiz bağlantıyı.  bunu pip install mysql-connector ile kurduk bu bir paket. lib klasörüne yerleşecek bu pakette..
 
-   mydb = mysql.connector.connect(
-      host = "localhost" # host olarak bunu seçtik... var olan host.  eğer server üzerinden olmasını istersek o zaman hizmet satın almamız lazım oonlarda bize bir adres verecek 192.23.45.56 gibi.
-      user = "root" # kullanıcı bilgisi
-      password = "12345" # parola bilgisi.
+   mydb = mysql.connector.connect(    # bunun çalışabilmesi için güncel olması lazım mysql'in ve connector'ün.
+      host = "localhost", # host olarak bunu seçtik... var olan host.  eğer server üzerinden olmasını istersek o zaman hizmet satın almamız lazım oonlarda bize bir adres verecek 192.23.45.56 gibi.
+      user = "root", # kullanıcı bilgisi
+      password = "12345", # parola bilgisi.
       database = "EMRE" 
    )
 
@@ -89,11 +91,11 @@ python ile bağlantı kurabilmek için mysql connector kullanmamız lazım.  pip
    mycursor = mydb.cursor()  # bu yapı ile cursor oluştururuz.
    mycursor.execute("""
    create database if not exists EMRE
-   """)  # execute ile emir veririz.
+   """)  # execute ile emir veririz. sorgularımızı göndeririz.
    
-   mycursor.execute("""
+   mycursor.execute("""  
    show databases
-   """)
+   """) # bilgiler imlece yani cursora yüklenecek.
    
    for x in mycursor: # tüm bilgiler bir tuple içerisinde mycursor'a gelir.  imleç mantığı ile bunları okuruz.
       print(x)  
@@ -103,10 +105,122 @@ python ile bağlantı kurabilmek için mysql connector kullanmamız lazım.  pip
    """) # seçili database'de bir tablo oluşturduk.
   
 
-................................... 
+......................................................................................................... 
+
+      import pymysql  # mysql.connector yerine bunu kullandık pip install pymysql ile indirebilir ve import ederiz lib klasörüne yerleşir neredeyse her paket gibi.
+
+
+      mydb = pymysql.connect(
+         host = "localhost",
+         user = "root", 
+         password = "12345",   
+      )
+
+      mycursor = mydb.cursor()
+      mycursor.execute("""
+      create database if not exists schooldb               
+                     """)
+
+      mycursor.execute("""
+                     use schooldb 
+                     """)
+
+      mycursor.execute("""show databases""")
+
+      for x in mycursor:
+         print(x) # tüm databaseleri görebiliriz.
+
+.........................................................................................................
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///veri ekleme.//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import pymysql  # mysql.connector yerine bunu kullandık pip install pymysql ile indirebilir ve import ederiz lib klasörüne yerleşir neredeyse her paket gibi.
+
+def insertProduct(name,price,imageUrl,description):  # name price vs dışarıdan input ile alıp sonra fonksiyona gönderebiliriz böylece dinamik bir yapı kazanır sistem.
+    connection = pymysql.connect(
+        host = "localhost",
+        password = "12345",
+        user= "root"        
+    )
+    cursor = connection.cursor()
+    
+    sql = "insert into Products(name,price,imageUrl,description) values(%s,%s,%s,%s)" # Produts(id,name) vs olarak sıralamazsak kendimiz belirtmezsek değerler sırası ile default olan sıra ile yüklenir tablonun sutun sırasına göre. mesela eğer id hariç sutunları girersek ve id kolonunu auto increment edersek o zaman otomatik olarak veirlerden bağımsız id artar.
+    values = (name,price,imageUrl,description) 
+    cursor.execute(sql,values) # (%s,%s,%s,%s) olarak vermemizin sebebi her seferinde farklı veri gelebilir bundan dolayı bu %s yapısı gelecek olan verinin yerini tutacak.  sqlite'deki (?,?,?,?)  ne geleceği belii değik ama 4 tane veri gelecek sırası ile yerleştirmek için kullanırız.
+    try:  
+        connection.commit() # aslında sorgular commit ile veritabanına gider.
+        print(f"{cursor.rowcount} tane kayit eklendi.") # cursor ile bazı bilgilere erişebiliriz burada kaç tane kayıt eklenmiş bunu görebileceğiz.
+        print(f"Son eklenen kaydin id: {cursor.lastrowid}") # cursor ile son satırın rowid'sine ulaşabiliriz.
+    except pymysql.Error as err: # eğer sorguda bağlantıda vs sorun varsa bize Error hatası verecek.
+        print("Hata: ",err)
+    finally:    
+        connection.close() # hata olsun olmasın bu blok çalışacak ve bağlantı kesilecek .close() ile.
+        print("Bağlantı kesildi. Hata olsun veya olmasın.")
+        
+
+................................
+
+birden fazla veri eklemek istersek eğer o zaman cursor.executemany(sql,values) # ama values içerisinde tuple veriler olan bir liste olacak tuple'lerin içerisinde ise 
+
+
+
+......neden çoklu ekleme yaparız çünkü sürekli bağlantı aç kapa aç kapa yapmamak için tek bir iletişimle tüm verileri girebilmek için ramda saklar sonra db'ye yollarız kısaca.............................................................................................
+
+
+   import pymysql  # mysql.connector yerine bunu kullandık pip install pymysql ile indirebilir ve import ederiz lib klasörüne yerleşir neredeyse her paket gibi.
+
+   def insertProducts(list1):  
+      connection = pymysql.connect(
+         host = "localhost",
+         password = "12345",
+         user= "root"
+         database = "node_app"        
+      )
+
+      cursor = connection.cursor()
+      
+      sql = "insert into Products(name,price,imageUrl,description) values(%s,%s,%s,%s)" # Produts(id,name) vs olarak sıralamazsak kendimiz belirtmezsek değerler sırası ile default olan sıra ile yüklenir tablonun sutun sırasına göre. mesela eğer id hariç sutunları girersek ve id kolonunu auto increment edersek o zaman otomatik olarak veirlerden bağımsız id artar.
+      values = list1
+      cursor.executemany(sql,values) # birden fazla veri olduğu için executemany kullandık. her veri bir tuple halinde olmalı.  böylece list içerisindeki tüm tupleler tek tek işlenecek.
+      try:  
+         connection.commit() # aslında sorgular commit ile veritabanına gider.
+      except pymysql.Error as err: # eğer sorguda bağlantıda vs sorun varsa bize Error hatası verecek.
+         print("Hata: ",err)
+      finally:    
+         connection.close() # hata olsun olmasın bu blok çalışacak ve bağlantı kesilecek .close() ile.
+         print("Bağlantı kesildi. Hata olsun veya olmasın.")
+
+   list1 = []
+   while True:
+      name = input("ismi giriniz: ")
+      surname = int(input("Degeri giriniz: "))
+      url = input("url giriniz: ")
+      desc = input("Description giriniz: ")
+      
+      list1.append((name,surname,url,desc)) # değerler bir tuple içerisine koyulacak ve tupleler liste içerisine yerleşecek.
+      cikis = input("Cikmak icin h'ye basiniz: ")
+      if cikis == 'h':
+         print("bilgiler veritabanina ekleniyor.")
+         insertProducts(list1)   
+         break
+      
+..................................................................................................
+
+eğer sql'e datetime bilgisi gireceksek o zaman  import datetime diyecek ve datetime.datetime(2002,10,19) gibi bilgileri gireceğiz. çünkü o veri tipi ile özdeşmeli...    ("Emre","Aytas","220202098",datetime.datetime(2002,10,19)) yapısı ile gireriz.  sqldede datetime olarak ayarlarız sutun türünü çünkü.
+
+mysql workbench ile bir tablonun oluşturma sorgusunu alıp program içerisinde kullanabiliriz.
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
+
+
+
 ####################################################################################################################################################################################################################################################################################################################################
+
+
+
