@@ -42,8 +42,10 @@ def viewStudents():
     cursor.execute("""
                    select * from students
                    """)
+    veriler = cursor.fetchall()
     
-    for x in cursor:
+
+    for x in veriler:
         print(f"{x[0]}-{x[1]} {x[2]} {x[4].year}/{x[4].month}/{x[4].day}  ")
     
     try:
@@ -87,7 +89,7 @@ def deleteData(number):
     )
     cursor = connection.cursor()
     
-    cursor.execute(f"""delete from students where number = {number}""")
+    cursor.execute(f"""delete from students where number = {number} """)  
     
      
     try:

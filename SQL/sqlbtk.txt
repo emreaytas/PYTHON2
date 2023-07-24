@@ -218,7 +218,83 @@ mysql workbench ile bir tablonun oluşturma sorgusunu alıp program içerisinde 
 
 
 
+/////sorgulama////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+select *(her kolon demek) ama istersek istenen kolonları belirtebiliriz. from table    where(koşul belirtiriz) number > 10000 mesela numarası 10000 den büyük olanları getirir.  where koşulunda or ve and kullanılabilir.
+
+mycursor.execute("select * from students") yaparsak veriler mycursora gelir imleç mantığı ile.  where ile koşula bağlayabiliriz. 
+
+veriler = mycursor.fetchall()   ile tüm verileri veriler değişkenine atarız.   .fetchone() dersek bir tane alır. sonra bir tane daha .fetchone() dersek ikinci veriyi alır imleç mantığı işlemektedir.
+     .fetchmany() ise içine girilen sayı kadar getirir.   eğer 30 veri var ve 100 girersek 30 taneside getirir hata vermez.   0 verirsek tüm verileri getirir.    .fetch... olanları cursor ile kullanırız çünkü veriler cursora gelir.
+
+eğer veriler boş ise veya boş mu değil mi kontrol etmek istersek o zaman 
+     if veriler == ():   # eğer bize veri gelmedi ise sorgu ile o zaman () olacak veriler.
+        ....
+ 
+
+delete komutunda uygun koşulda direkt olarak satır silinir. tüm row gider yani.
+
+
+.............................................................................................
+
+
+select * from students where name = "emre"  dersek tum sutunlar gelir koşulu sağlayan satır için ama isim sutunu emre olanlar gelir.   .fetch...()  ile hallederiz gelen verileri.
+select * from students where name = "emre" or surname = "ford"  # burada ise ya ismi emre olan ya da soyadi ford olanlardan veri gelecek.   and ile ve komutu verebiliriz    böylece hem ismi emre hemde soyadı ford olması gerekirdi koşul bu olurdu.
+select * from students where name like '%mercedes%'   dersek like ile içersinde mercedes olanı sorgularız.       'mercedes%'   olursa başı mercedes olanları ararız   %mercedes dersek mercedes ile bitenleri ararız.
+
+.fetchall()   ile bir liste içerisinde veriler gelir   veriler bir tuple içerisinde gelir. 
+.fetchone()  olursa sorguda ilk gelen elemanı getirir.   bir tuple gelir.  her sutun tuple içerisindedir isteğe göre bu sutunlar ayarlanabilir.  bir kere daha .fetchone() dersek o zaman bir sonraki veriyi verir bize imleç mantığı.
+
+%s ile ne geleceği belli değilse kullınırız.    eğer sqlite ise ? kullanırız.  
+
+....sıralama (order by).........................................................................................
+
+select * from students order by number   # numaraya göre sıralama yapar.    order by name dersek isme göre sıralama yapar yani alfabetik sıralamaya göre.
+
+
+tersten sıralama için ise DESC yaparsak o zaman büyükten küçüğe sıralama olur
+select * from students order by name DESC   bunu yaparsak alfabetik sıraya göre en büyükten yani a'dan değil z'den sıralamaya başlar sayısal verileri ise en büyükten en küçüğe doğru sıralar.
+
+select * from students order by name, price  # bunu dersek önce isme göre sıralama yapar isimleri aynı olanları ise price'a göre sıralar... 
+
+select * from students where gender = 'K' order by name,surname    # genderi K olanları name ve surnameye göre sıralar küçükten büyüğe doğru.
+
+...aggregate fonksiyonları...........................................................................................
+
+select count(*) from students  # bunu dersek eğer kaç tane sutun vardır bize gösterir.
+
+select count(*) from students where price > 1000   # bize kaç tane fiaytı 1000'den fazla olan var bunu getirir.
+select avg(price) from students  # bizde tüm fiyatların ortalamasını getirir.
+select sum(price) from students # bize tüm fiyatların toplamını getirir  tüm satırlardaki price'leri toplar.
+select min(price) from students # bize en küçük fiyatı getirir max(price) dersek en büyük değeri getirir.
+
+select name from Products where price = (select max(price) from Products)  # önce en büyük değeri içeren satırı getirir. sonra oradan ismi çeker en dıştaki sorgu.
+
+.............................................................................................
+
+.fetch...()   fonksiyonlarını  try except içerisinde kullanmak mantıklıdır. bunun sebebi verileri alırken hata olabilir. 
+
+mesela 2003 doğumluları alacağız. datetime içerisinden o zaman   select * from students where year(birthdate) = 2003 yaparız.    year metotunu kullanırız ay için month()  gün için day() ...
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+//güncelleme///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+cursor.execute("update students set name = "Emre" where name = 'emre' ") # set ile değişince olacak olan belirlenir where ile ise neye göre güncelleme alacağı.  where koşulu eklemezsek eğer True olarak kabul eder ve hepsi değişir.
+
+update tabloismi set değişeceksutunlarvegelecekdeğer where koşul     eğer koşul eklemezsek o zaman hepsi değişir.
+update sorgusunu commit etmemiz lazım işlemin gerçekleşebilmesi için   connection.commit() şeklinde olmalı cursor üzerinden değiş bağlantı üzerinden sağlarız commiti.
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////delete/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+delete from students where ...       böylece uyan koşullarda satır komple silinir.
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ####################################################################################################################################################################################################################################################################################################################################
 
