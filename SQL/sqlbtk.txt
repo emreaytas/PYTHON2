@@ -286,17 +286,55 @@ cursor.execute("update students set name = "Emre" where name = 'emre' ") # set i
 
 update tabloismi set değişeceksutunlarvegelecekdeğer where koşul     eğer koşul eklemezsek o zaman hepsi değişir.
 update sorgusunu commit etmemiz lazım işlemin gerçekleşebilmesi için   connection.commit() şeklinde olmalı cursor üzerinden değiş bağlantı üzerinden sağlarız commiti.
+birden fazla sutunu güncellemek istersek virgül ile sıralarız.   set name = "ford",surname = 'focus',age = 8 gibi olur.   
+
+sql = "update students set name = %s,surname = %s where id = %s"
+values = (name,surname,id)    # eğer values tek bir değer olacaksa mesela bir tek id olacak o zaman values = (id,) olmalı.
+cursor.execute(sql,values)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+sql injection olmaması için sql sorgusunu tek parça halinde yazmak iyidir    sql = "update students set name = 'ford' where name = "+name    yapmak mantıksızdır.   en iyisi sql = "update students set name = 'ford' where name = %s"    execute kısmında ise sql,name ile güncelleme yaparız.
 
 ////delete/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 delete from students where ...       böylece uyan koşullarda satır komple silinir.
+delete from students dersek eğer bir koşul olmadan tüm veriler silinir buna dikkat etmek gerekir.
 
+commit gibi işlemleri try except içerisinde yapmak ve finally olarak connect.close() yapmak mantıklıdır.   neden commit try içerisinde nedeni şu commit ile sql'e sorgu yollayacağız. hata orada çıkabilir.
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////Birden fazla tablo ile çalışma./////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+mesela bir telefonlar tablomuz var hangi kategoride olduğunu eklemek istiyoruz ya başka kategoriler tablosu yapacak ve sonra telefonlar tablosuna kategoriid sutunu ekleyeceğiz ya da direkt olarak başka tablo olmadan telefonlar tablosunda kategori sutunu ekleyeceğiz.
+    referanslar ile bağlantı sağlayabiliriz.   mesela telefonlar tablosundaki kategoriid kolonuna referans ile bağlantı yaptık ve kategori tablosunda bağlandı. o zaman örnek olarak kategoriid 1 ise telefon olacak gibi.
+    yani kategoriid ile kategori tablosundaki satırların id'leri birbiri ile bağlanmalı.  böylece örnek olarak 2 dersek kategoriid'ye o zaman id'si 2 olan veri yani bilgisayar olduğu belli olacak.
+
+........foreign key.................................................................................................................................................................................
+bir kategori tablosu sutunları id ve kategoriadı olacak   id = primary key, unique, auto increment, not null ve kategori adı ise not null olacak.
+bir ürünler tablosu olacak ve ek olarak kategoriid sutunu ekleyeceğiz veri tipi ise kategori tablosundaki id kolununun veri tipi ile aynı olmalıdır.  ve eğer kategoriid'ye not null dersek o zaman illaki her ürün bir kategoriye ait olmalıdır deriz.
+nasıl referans yapabiliriz = alter table ürünler add constraint fk_categories_produtcts foreign key(kategoriid) references kategori(id)   # yani kategoriid ile kategori tablosunun id sutunları birbiri ile ilişkilendirildi.
+
+.........................................................................................................................................................................................
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////İlişkili tablolardan veri çekme.../////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+inner join ile kesişimi alırız. ikisinde de sağlanan koşulu yakalarız. birbiri ile ilişkisi varsa tablonun o zaman farklı işlemler olacak.
+
+select * from urunler inner join kategori on kategori.id = urunler.kategoriid   # iki tablo arasında inner join olacak ve hangi koşulda olacak bunu belirleriz.   bu durumda bir tuple içerisine iki tane satır gelir ve birleşir hem urun hemde kategori gelir.
+ 
+select * from urunler inner join kategori on kategori.id = urunler.kategoriid where urunler.name = 'samsung'  böylece ismi samsung olanlar kategorisi ile gelir...
+
+as ile isimlendirme yapabiliriz.
+select p.name,p.price,c.name from urunler as p inner join kategori as c on p.kategoriid = c.id where p.name = 'samsung'    böylece tablo isimlendirmesi yapabiliriz as ile.
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 ####################################################################################################################################################################################################################################################################################################################################
 
-
+pip install pymssql   ile mssql bağlantısı için gerekli connectoru yükleriz.
 
