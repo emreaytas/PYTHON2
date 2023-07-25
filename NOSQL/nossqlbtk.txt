@@ -1,23 +1,117 @@
-
 ####################################################################################################################################################################################################################################################################################################################################
 
+mssql'de bir server tabanlı veritabanıdır.
+
 normalde sql'de bir veritabanın sql sorgulama dili vardır databaseler ve tablolar ve onların ilişkileri vardır. 
-nosql için bir server hizmeti olarak Mongodb örnek olarak gösterilebilir. 
+nosql için bir server hizmeti olarak Mongodb örnek olarak gösterilebilir. server olarak mongoDb arayüz olarak ise mongo atlas kullanacağız.
 sqlite bilgileri daha sistematik olarak tutar ve sql dilini kullanabiliriz.
 nosql'de tablolar, sutunlar, satırlar yok. bunlar yerine json datayı  herhangi bir bağlılığa bağlı kalmadan saklarız.   mongoDb server tabanlı bir databasedir.
 
 sql'deki tablo nosqlde collections'lara denk gelecek  ... her bir kayıt her satır yani row   nosqlde  documents'e denk gelecek.    her columns  nosqlde  fields'e denk gelecek.
+json yapısı dict'lere benzer bir json string mantığı var.
+nosql'de kullanacağınız veri kadar tanımlama yaparsınız mesela sqlde boş bir sutun olacaksa null deriz ama nosqlde böyle değil bir şey yapmaya gerek yok    {name:'telefon'}   gönderip sonra {name:'telefon',marka:'ford'} diyebiliriz bir yere null vs demeye gerek yok ihtiyaç dahilinde işlem yaparız.
 
+................................
+                               .
+mysql   ----  mongoDb          .
+                               .
+database      database         . 
+tables        collections      .
+rows          documents(json)  .  # collection içindeki her kayıta document diyeceğiz.
+columns       fields           . 
+                               .
+................................
+
+mongoDb'nin lib klasörünü path'e ekliyoruz. burası önemki tıpkı diller gibi.
+
+
+/////nosql relationships(ilişkileri)///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+collections içeriside documents olacak.
+nosql bigdata için mantıklıdır külfeti çok azdır sql'e göre.  mongoDb sorguları daha hızlı çalışır.  nosql daha performanslıdır.
+
+
+
+{
+    "name":"ahmet",
+    "age": 25,
+    "adress":{
+       "city":"Kocaeli",
+       "country":"TR"
+
+    },
+    "roles":[
+      
+      "admin","customer"
+
+    ]
+
+
+}  # bir dict içerisinde key ve value ilişkisi vardır bir value dict olabilirr liste olabilir.   
+
+nosql yapıları hızlıdır bigdata için mantıklıdır.
+
+........................................................................................................
+
+Orders:  # product ve usersten oluştu mesela.  user ve product fieldi oluşturduk.
+    {id:1,user:{id:1, email:"ahmet@gmail.com"},product:{id:2,price:3000}}
+    {id:2,user:{id:2, email:"ali@gmail.com"},product:{id:1,price:2000}}
+    {id:3,user:{id:2, email:"ali@gmail.com"},products:[{id:1,price:2000},{id:2,price:3000}]}
+users:
+   {id:1, email:"ahmet@gmail.com"} 
+   {id:2, email:"ali@gmail.com"}
+products:
+   {id:1,price:2000}
+   {id:2,price:3000}
+
+........................................................................................................
+
+
+embedded documents:
+{
+    "name":"ahmet",
+    "age": 25,
+    "adress":{
+       "city":"Kocaeli",
+       "country":"TR"
+
+    },
+
+}        
+
+references :
+
+{
+name:'ahmet',
+Orders: [{....},{...}]
+}
+
+veya,
+
+{
+name:'ahmet',
+Orders: ['id1','id2']
+}
+
+veya,
+
+{
+_id:'id1',
+productid:1
+}
+
+
+........................................................................................................
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////MongoDB kurulumu.../////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
+öncelikle bir server kurmak lazım mysql gibi ve bu serverı kullanmak için bir arayüz gerekli mysql workbench gibi.
+önce yerel pcye bir server kuracağız sonra mongoDb atlas ile servera erişeceğiz.   atlas ile aslında yerele server kurmaadan uzaktaki bir servera bağlanarak uygulama geliştirebiliriz.
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 ####################################################################################################################################################################################################################################################################################################################################
