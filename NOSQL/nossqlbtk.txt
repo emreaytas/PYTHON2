@@ -56,7 +56,7 @@ nosql yapıları hızlıdır bigdata için mantıklıdır.
 Orders:  # product ve usersten oluştu mesela.  user ve product fieldi oluşturduk.
     {id:1,user:{id:1, email:"ahmet@gmail.com"},product:{id:2,price:3000}}
     {id:2,user:{id:2, email:"ali@gmail.com"},product:{id:1,price:2000}}
-    {id:3,user:{id:2, email:"ali@gmail.com"},products:[{id:1,price:2000},{id:2,price:3000}]}
+    {id:3,user:{id:2, email:"ali@gmail.com"},products:[{id:1,price:2000},{id:2,price:3000}]}   # mesela birden fazla ürün aldı ve biz başka bir field oluşturup liste içerisinde ürünleri verdik.
 users:
    {id:1, email:"ahmet@gmail.com"} 
    {id:2, email:"ali@gmail.com"}
@@ -66,6 +66,7 @@ products:
 
 ........................................................................................................
 
+hem tüm bilgilerin içerisindeki sistemi kurabiliriz hemde documentsler arasında references sistemi kurabiliriz.
 
 embedded documents:
 {
@@ -79,7 +80,7 @@ embedded documents:
 
 }        
 
-references :
+references :      birbiri ile ilişkilendirme yapabiliriz nosqldede.
 
 {
 name:'ahmet',
@@ -100,7 +101,6 @@ _id:'id1',
 productid:1
 }
 
-
 ........................................................................................................
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,9 +110,119 @@ productid:1
 öncelikle bir server kurmak lazım mysql gibi ve bu serverı kullanmak için bir arayüz gerekli mysql workbench gibi.
 önce yerel pcye bir server kuracağız sonra mongoDb atlas ile servera erişeceğiz.   atlas ile aslında yerele server kurmaadan uzaktaki bir servera bağlanarak uygulama geliştirebiliriz.
 
+mongodb compass bir arayüzdür.
+
+C:/  dizini içerisine   data klasörü data klasörünün içerisine ise db klasörü kurmamız lazım mongoDb için    C:/data/db   şeklinde...   
+program files içerisinden mongoDb bulunacak ve bin klasörü path'e verilecek burası önemli.
+
+mongoDB atlas ile bir serverdaki nosql databaseye bağlanabiliriz. 
+import pymongo ile çalışır. 
+
+uzak sunucudaki bir mongodb databasesine bağlanmak için uzaktaki bir mongoDB serverina bağlanabilmek için pip install pymongo[srv] dememiz lazım... uzaktaki sunucu ile bağlantı kurabilmek için gerekli bir paket...
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//MongoDB database bağlantısı...///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ister yerel localhost'a bağlanabiliriz veya mongodb atlas ile bir sunucudaki servera bağlanabiliriz.   cloud.mongodb.com'dan işlemleri yapabiliriz. bir string verir bize bu yolla bağlantı sağlayabiliriz. internet üzerindeki database'e bağlanabiliriz.
+yerelden servera ulaşıp üzerinde işlemler yapabiliriz.
+
+pip install pymongo ile bağlantı sağlama paketini yükleriz.  databaseler herhangi bir dil için üretilmemiştir ara yazılım gerekir. 
+
+...............................................................................
+
+import pymongo
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017") # yerel sunucumuza bağlanmak istiyoruz.   copy connection string ile işlem yaparız aslında direkt olarak.
+# eğer uzak sunucuya vs bağlanmak istersek connection stringini alır ve pymongo.Mongoclient("") içerisinee yazarız.  böylece bağlantı kurabiliriz.
+# uzak sunucudaki bir mongodb databasesine bağlanmak için uzaktaki bir mongoDB serverina bağlanabilmek için pip install pymongo[srv] dememiz lazım... uzaktaki sunucu ile bağlantı kurabilmek için gerekli bir paket...
+
+mydb = myclient["node_app"] # eğer varsa kullanır yoksa oluşturur ancak databseyi oluşturması için içerisnde bir collection olmalı. bu yüzden compass üzerinden oluşturur ve bağlanabiliriz.
+print(myclient.list_database_names()) # elde olan databaselerin isimlerini görebiliriz
+    # ['admin', 'config', 'local']  şu an node_app yok çünkü collection olmadan bir database oluşmaz mongodb'de.
+    
+...............................................................................
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////creating collections and instert documents/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+collections oluşturma ve document ekleme...
+
+...............................................................................
+
+    import pymongo
+
+    myclient = pymongo.MongoClient("mongodb://localhost:27017") # yerel sunucumuza bağlanmak istiyoruz.   copy connection string ile işlem yaparız aslında direkt olarak.
+
+    mydb = myclient["node_app"] # client ile databaseye
+    mycollection = mydb["collection1"] # database ile collectiona bağlanırız.
+
+    product = {'name':'samsung','price':2000}
+    result = mycollection.insert_one(product)  # tek bir kayıt için instert_one  birden fazla kayıt için insert_many() kullanılır
+    print(result) # <pymongo.results.InsertOneResult object at 0x0000018812EAB3A0>
+    print(type(result)) # <class 'pymongo.results.InsertOneResult'>   bir class return etmiş ekleme metotu.  
+
+    # nosql'de id kolonu eklememiz gerekmez. otomatik olarak bir id oluşturur her kaydı birbirinden ayırır.
+
+    productlist = [  # bir name price bilgisi belirtmedik. sqldeki gibi tablo oluştur ekle olayı yok.   name kısmını istersek isim olarakta değiştirebiliriz sorun olmaz. bir şemaya gerek yok bir collection oluşturup verileri yükleyebiliriz.
+        
+    {'name':'samsung','price':2000},    
+    {'name':'samsung','price':3000},
+    {'name':'samsung','price':4000},
+    {'name':'samsung','price':5000},    
+    {'name':'samsung','price':6000},
+    {'name':'samsung','price':7000},      
+    {"_id":1,'name':'ford','price':4000}, # '_id' ile normalde mongo'nun vereceği id'yi ezer ve kendi belirttiğimiz id'yi kullanırız ama aynı id veremeyiz başka bir document'e yoksa hata alırız.   
+    {'name':'samsung','price':3000,"description":'iyi'} # sqldeki gibi kolon mantığı olmadığı için istediğimiz bir field'i ekleyebiliriz.   bir sorun olmaz.   
+    ]
+
+    result1 = mycollection.insert_many(productlist) # çoklu ekleme için insert_many() kullanırız. 
+    print(result1.inserted_ids) # yüklenen değerlerin id'lerine ulaşırız.
+
+
+...............................................................................
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+////find: mongodb ile kayıt seçme/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+tekli kayıt mı seceçeğiz yoksa çoklu mu bunu belirlemek önemli  .find_one() ile tek  .find()  birden fazla arama için kullanılır.
+
+...............................................................................
+
+    import pymongo
+
+    myclient = pymongo.MongoClient("mongodb://localhost:27017") # yerel sunucumuza bağlanmak istiyoruz.   copy connection string ile işlem yaparız aslında direkt olarak.
+
+    mydb = myclient["node_app"] # client ile databaseye
+    mycollection = mydb["collection1"] # database ile collectiona bağlanırız.
+    result1 = mycollection.find_one() # ilk veriyi bize getirir.
+    print(result1) # ilk kaydı bize getirdi.
+    result2 = mycollection.find() # bir filtre sorgusu yollamazsak tüüm verileri getirir. select * from gibi.
+    print(result2) # tüm verileri getirdi. filtreleme yapmazsak. 
+
+
+    for i in result2: # tüm kayıtları getirir böylece.
+        print(i)
+    for i in mycollection.find({},{"_id":0,'name':1,"price":1}): # 0 olan fieldsler getirilmez 1 olanlar getirilir. True False mantığı aslında.  "_id" field'si gelmeyecek böylece.   ilk {} tüm kayıtları ara demek ikinci {} içindekiler ile ise kolon seçimi yaparız. 
+        print(i)
+    
+...............................................................................
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////Query: MongoDb ile kayıt filtreleme./////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ####################################################################################################################################################################################################################################################################################################################################
 
