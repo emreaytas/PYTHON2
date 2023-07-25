@@ -210,15 +210,120 @@ tekli kayıt mı seceçeğiz yoksa çoklu mu bunu belirlemek önemli  .find_one(
 
     for i in result2: # tüm kayıtları getirir böylece.
         print(i)
+
     for i in mycollection.find({},{"_id":0,'name':1,"price":1}): # 0 olan fieldsler getirilmez 1 olanlar getirilir. True False mantığı aslında.  "_id" field'si gelmeyecek böylece.   ilk {} tüm kayıtları ara demek ikinci {} içindekiler ile ise kolon seçimi yaparız. 
         print(i)
-    
+
+
 ...............................................................................
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////Query: MongoDb ile kayıt filtreleme./////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import pymongo
+from bson.objectid import ObjectId
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017") # yerel sunucumuza bağlanmak istiyoruz.   copy connection string ile işlem yaparız aslında direkt olarak.
+
+mydb = myclient["node_app"] # client ile databaseye
+mycollection = mydb["collection1"] # database ile collectiona bağlanırız.
+
+filter = {"name":"samsung"} # filteri dışardan yazıp yollayabiliriz.
+
+result = mycollection.find(filter,{"_id":0}) # parametre olarak query bilgisi alır sonra field seçimi olur.    filter verdik "name" : "samsung olanlar gelecek."  ve id kolonu gelmeyecek 0 verdiğimiz için ona.    .find_one()   ile yapsaydık tek bir kayıt getirirdi ilk kaydı getirirdi.
+result1 = mycollection.find_one({"_id":ObjectId("64bfe6f9386508e861af2ff2")})  # eğer bir document'i idsi ile almak istersek o zamna from bson.objectid import ObjectId   yapısını çağırmamız lazım yoksa  sorguda id'ye göre alım yapamayız.  _id'yi bir string içerisinde yollamamız lazım.
+
+result3 = mycollection.find({
+    "name":{
+        "$in" : ["samsung","ford"]  # ismi samsung ve ford olanlar gelecek   $in ile ismi liste içerisinde olanlar gelir.
+        
+    }
+}
+) 
+
+result4 = mycollection.find({
+    "price":{
+        "$qt" : 2000 # qt olunca 2000'den büyük olanlaar gelecek  $eq olursa eşit olanlar gelecek.   $qte olursa büyük eşit olacak.   $lt olursa 2000'den küçük olanlar gelir     $lte  olursa eğer küçük eşit olur. 
+        
+    }
+}
+) 
+
+
+#  '$or' :   [{"price":{"$lt": 2000}},{"name":"ford"}]  demek   veya demek  böyle bir kullanımı var.
+
+
+result5 = mycollection.find({
+    "name":{
+       
+       "$regex" : "^s"  # s ile başlayanlar gelir böylece.       
+    }
+}
+) 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Mongodb ile sıralama sort///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import pymongo
+from bson.objectid import ObjectId
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017") # yerel sunucumuza bağlanmak istiyoruz.   copy connection string ile işlem yaparız aslında direkt olarak.
+
+mydb = myclient["node_app"]
+mycollection = mydb["collection1"] 
+
+result = mycollection.find({},{}).sort('name') #hangi kolona göre sıralama yaparız. alfabetik sıralama yapar. artan olarak   .sort('name',-1) yaparsak o zaman azalan şekilde sıralar
+print(result) # <pymongo.cursor.Cursor object at 0x00000287C4055F50>     verileri görebilmek için iterasyon lazım.
+for i in result: # verileri görebiliriz.
+    print(i)
+    
+result1 = mycollection.find({},{}).sort([('name',1) , ('price',-1) ])  # önce isme göre sonra ise fiyata göre sıralama yaparız.    
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////update: Mongodb ile güncelleme.////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+import pymongo
+from bson.objectid import ObjectId
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017") # yerel sunucumuza bağlanmak istiyoruz.   copy connection string ile işlem yaparız aslında direkt olarak.
+
+mydb = myclient["node_app"]
+mycollection = mydb["collection1"] 
+
+# update_one() sadece bir güncelleme yapar eline geçen ilk veriyi günceller.   ve update_many() metotları vardır  one ile tek bir kayıtı   many ile birden fazla güncelleme yapabiliriz.
+
+mycollection.update_one({"name":"samsung"},{ '$set':{'name':'iphone','price':5500} }) # iki parametre alır. ilki query bilgisi dışarda da oluşturabiliriz.  ikincisi ise ne olacak bunu belirleriz.   '$set' ile neler güncellenecek belirleriz.
+query = {"name":"samsung"}
+newvalues = {"$set":{"name":"mercedes","price":34343}}
+# dışarıdan verebiliriz güncelleme ve sorguyu.
+result = mycollection.update_many(query,newvalues) #buda ilk olarak query sonra ise ne olacak güncellenen veri bunu belirleriz.
+print(result.modified_count) # kaç adet güncelleme oldu bunu görebiliriz.
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///delete: mongodb ile kayıt silme//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import pymongo
+from bson.objectid import ObjectId
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017") # yerel sunucumuza bağlanmak istiyoruz.   copy connection string ile işlem yaparız aslında direkt olarak.
+
+mydb = myclient["node_app"]
+mycollection = mydb["collection1"] 
+
+# delete_one() tek bir kayıt siler ilk gelen kayıtı. silmede direkt olarak satır silme gibi document silinir.  delete_many() ile ise çoklu veri silinir.
+# içerisine bir koşul vericez ve silme işlemi yapacak.
+
+mycollection.delete_one({"name":"ford"}) # ismi ford olan silinecek. ilk gelen document silinecek tek bir silme yapacak.
+result = mycollection.delete_many({"name":"ford","price":5000}) # tüm ismi ford olan ve price 5000 olanlar silinecek
+# direkt olarak mycollection.deletemany(...) yapabiliriz ama bir obje dönecek ve o obje ile kaç tanesi silindi vs görebileceğiz. 
+print(result.deleted_count) # kaç kayıt silindi gösterir.
 
 
 
