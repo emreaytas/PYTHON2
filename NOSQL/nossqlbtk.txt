@@ -11,6 +11,8 @@ sql'deki tablo nosqlde collections'lara denk gelecek  ... her bir kayıt her sat
 json yapısı dict'lere benzer bir json string mantığı var.
 nosql'de kullanacağınız veri kadar tanımlama yaparsınız mesela sqlde boş bir sutun olacaksa null deriz ama nosqlde böyle değil bir şey yapmaya gerek yok    {name:'telefon'}   gönderip sonra {name:'telefon',marka:'ford'} diyebiliriz bir yere null vs demeye gerek yok ihtiyaç dahilinde işlem yaparız.
 
+mongoDB nosql sorgulama dili ile çalışır.  veriler json formatında tutulur.   nosql'de okuma yazma ilişkisel veritabanlarına göre daha hızlıdır bu yüzden big data alanında çok fazla kullanılır.
+
 ................................
                                .
 mysql   ----  mongoDb          .
@@ -331,4 +333,30 @@ print(result.deleted_count) # kaç kayıt silindi gösterir.
 
 ####################################################################################################################################################################################################################################################################################################################################
 
+mongodb atlas.....
+    mongoDB'yi bulutta çalıştırmak istersek kullanırız.  500 mb alan verir beleş. istersek mongodb'yi localde de çalıştırabiliriz.
+    bir cluster oluşturduk.  
 
+mongodb+srv://emreaytas:<password>@cluster0.mq5dsce.mongodb.net/?retryWrites=true&w=majority
+   mesela böyle bir string gelcek <password> kısmına biz kendi passwordumuz yazacağız bağlantı olabilmesi için.
+
+   cluster içinde collections kısmında bir db ve collection oluştururuz. 
+
+.................................................................
+
+url = "mongodb+srv://emreaytas:"+"34ffm72"+"@cluster0.mq5dsce.mongodb.net/?retryWrites=true&w=majority"
+
+from pymongo.mongo_client import MongoClient
+myclient = MongoClient(url)
+try:
+    myclient.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+    print(e)
+
+
+mydb = myclient["node_app"] # önceden var olan bir db olmalı.
+mycollection = mydb["collection1"] # önceden var edilmiş bir collection olmalı.
+
+
+..............................................................
