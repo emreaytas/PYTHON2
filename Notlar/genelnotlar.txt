@@ -58,6 +58,7 @@ bir dosyayı rar yapmak için arşive ekle deriz ve rara çevirebiliriz şifrede
 
 eğer satırların başındaki boşlukları veya istersek toplu bir değişim o zaman ctrl + h diyoruz sonra alt + r yapıyoruz find ve replace giriyoruz. sonra ise ctrl + alt + enter ile ise bunu uyguluyoruz...
 
-
+eğer kendi modülümüzü oluşturmak istersek bir .py uzantılı dosya içerisine gerekli şeyleri ekleyip(fonksiyon,değişken vs)   bu mödülü lib klasörüne eklemeliyiz  sonra import diyerek çağırabiliriz.  import modul print(help(modul))  diyerek gerekli bilgilere ulaşabiliriz.     import modul    modul.func()  diyerek içerisindeki fonksiyon değişken vs'leri kullanabiliriz.     bu mödülü  pythonun lib klasörüne eklemeliyiz böylece istenen mödülü import diyerek çağırabiliriz... python her ayrı projeden bu mödüle ulaşabilir  illaki aynı path üzerinde olmasına gerek kalmaz. python kurulumu ile gelen mödüllerde lid'de bulunur.
+bazı modüller c dili ile yazılır ve dll dosyasına eklenmiş olarak bulunur.  
 
 

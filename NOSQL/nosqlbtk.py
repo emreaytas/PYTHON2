@@ -13,6 +13,6 @@ except Exception as e:
 mydb = myclient["node_app"] # önceden var olan bir db olmalı.
 mycollection = mydb["collection1"] # önceden var edilmiş bir collection olmalı.
 
-for i in myclient.list_databases():
-    print(i)
-    
+data = {"name":"emre","surname":"aytas"}
+x = mycollection.insert_one(data)
+print(x)
