@@ -24,6 +24,7 @@ columns       fields           .
                                .
 ................................
 
+
 mongoDb'nin lib klasörünü path'e ekliyoruz. burası önemki tıpkı diller gibi.
 
 
@@ -181,7 +182,7 @@ collections oluşturma ve document ekleme...
     {'name':'samsung','price':3000,"description":'iyi'} # sqldeki gibi kolon mantığı olmadığı için istediğimiz bir field'i ekleyebiliriz.   bir sorun olmaz.   
     ]
 
-    result1 = mycollection.insert_many(productlist) # çoklu ekleme için insert_many() kullanırız. 
+    result1 = mycollection.insert_many(productlist) # çoklu ekleme için insert_many() kullanırız.   aslında ekleme işlemi mycollection.insert_many()  ile olur ama return edeceği değer ile sorgulama yapabiliriz yoksa tek başına satıra mycollection.insert_many()  yazsakta olurdu.
     print(result1.inserted_ids) # yüklenen değerlerin id'lerine ulaşırız.
 
 
