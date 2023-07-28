@@ -344,4 +344,5 @@ pip install pymssql   ile mssql bağlantısı için gerekli connectoru yükleriz
 
 drop table if exists dersek eğer o zaman o tablo varsa onu yok et demek.
 
+primary key olunca değerlerin kombinasyonları aynı olamaz mesela   id1 id2 id3 var  3ünün kombinasyonları bir kez var olabilir ama 3üde unique olursa o zaman hepsi birbirinden sürekli farklı olmak zorunda.
 
