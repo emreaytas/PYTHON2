@@ -346,3 +346,10 @@ drop table if exists dersek eğer o zaman o tablo varsa onu yok et demek.
 
 primary key olunca değerlerin kombinasyonları aynı olamaz mesela   id1 id2 id3 var  3ünün kombinasyonları bir kez var olabilir ama 3üde unique olursa o zaman hepsi birbirinden sürekli farklı olmak zorunda.
 
+sqlite3 aslında gömülü bir veritabanı türü sql dili ile çalışır ama serverless'tir.   mesela bir mobil oyun yaptık oyun sadece çevrimdışı olacaksa ve verileri sadece kullanıcı kullanacaksa o zaman serverless bri veritabanı yeterlidir.   veya bir masaüstü uygulama olacak sadece veriler uygulamanın olduğu pcde tutulacak o zmn serverless db kullanmak mantıklıdır. 
+     yani eğer datalara birden fazla uygulama, kullanıcı ulaşmayacaksa sadece açıp kapama ile verileri kaybolmasın istiyorsak o zaman sqlite3 kullanbiliriz...
+
+
+
+
+

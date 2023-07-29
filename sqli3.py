@@ -1,8 +1,10 @@
-import sqlite3 as sql
+import sqlite3
 import time
-
+  # her db .db uzantısı ile olmalı meseka connect("ders.db")  dedik o bu databaseyi programın path'inde arar yoksa oluşturur.
+  
+  
 def create_table():
-    conn = sql.connect("ders.db")
+    conn = sqlite3.connect("ders.db")
     cursor = conn.cursor()
     cursor.execute('create table if not exists users (id int primary key,name text,lastname text,username text,password text)')
 
@@ -10,7 +12,7 @@ def create_table():
     conn.close()
 
 def insert(name,lastname,username,password):
-    conn = sql.connect("ders.db")
+    conn = sqlite3.connect("ders.db")
     cursor = conn.cursor()
     
     addcommand = """insert into users(name,lastname,username,password) values{}"""
@@ -21,7 +23,7 @@ def insert(name,lastname,username,password):
     conn.close()
 
 def printall():
-    conn = sql.connect("ders.db")
+    conn = sqlite3.connect("ders.db")
     cursor = conn.cursor()
     
     cursor.execute("select * from users")
@@ -32,7 +34,7 @@ def printall():
     conn.close() 
     
 def updatepassword(username,newpassword):
-    conn = sql.connect("ders.db")
+    conn = sqlite3.connect("ders.db")
     cursor = conn.cursor()
     
     updatecommand = """"update users set password = '{}' where username = '{}' """ # eğer gelecek değer str ise o zaman parantezler tırnak içerisine alınmalıdır. ama int değer ise o zaman olmaz. gerek yok denebilir hatta.
@@ -55,7 +57,7 @@ def loginmenu(user):
 
 
 def deleteaccount(username): 
-    conn = sql.connect("ders.db")
+    conn = sqlite3.connect("ders.db")
     cursor = conn.cursor()
     
     dltcommand = """delete from users where username = '{}' """ # sadece sayılar için tırnaksız olarak süslü parantez koyarız.
@@ -65,7 +67,7 @@ def deleteaccount(username):
     conn.close()
 
 def deletetable():
-    conn = sql.connect("ders.db")
+    conn = sqlite3.connect("ders.db")
     cursor = conn.cursor()
     
     cursor.execute("""drop table users""") 
@@ -75,7 +77,7 @@ def deletetable():
 
 
 def searchuser(username):
-    conn = sql.connect("ders.db")
+    conn = sqlite3.connect("ders.db")
     cursor = conn.cursor()
     
     srcommand = """select * from users where username = '{}' """
@@ -164,7 +166,6 @@ while True:
         time.sleep(1)
 
 print("İslemler bitti...")
-deletetable()
 
 
 """

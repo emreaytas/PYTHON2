@@ -39,8 +39,7 @@ sampi.iloc(0) 0. index'i getirir ilk satır demek.
 sampi.loc[1959] # 1959'yılındaki şampiyonu getirir. birden fazla ararsak liste içerisinde yollarız  sampi.loc[[1960,1961,1962]] gibi.
 
  
-
-pandas'ta | veya yerine geçer & bu ise v yerine.
+pandas'ta | veya yerine geçer & bu ise ve yerine.
 
 panel datadan gelmiştir. panel data herhangi bir durum hakkında zamana bağlı olarak elde edilen veriler. mesela yıllık karsa düşen yağış miktarı.
 bir makine öğrenmesi algortimasının başarısını sağlamak için ona olabildiğince fazla veri vermek lazım. mesela ne kadar fazla film izlersek netflix bizim nelerden hoşlandığımızı bilir. çünkü hatalı veriler olabilir tam olarak ortalamayı sağlamak için daha fazla veri vermek lazım... 
@@ -51,11 +50,11 @@ pandas ve numpy gibi frameworkler c dili ile yazılmıştır. hızlı çalışma
 
 eğer excel üzerinden okuma yapmak istersek ayrı bir kütüphaneye ihtiyacımız olacak pip install xlrd diyerek bunu kütüphanemize eklememiz lazımdır... pip list ile gelmiş mi gelmemiş mi görebiliriz...
 
-pandasın çalışması için numpy'nin yüklü olması lazım.
+pandasın çalışması için numpy'nin yüklü olması lazım.  *****
 
 pandas ile veri analizi ve manipülasyonu yaparız. 
 
-panda serileri sayesinde veri analizi ve manipülasyonu yapabiliriz. numpy tek tür veriler ile çalışır ama pandas heterojen verilerle çalışabilir. numpy numeric olarak numaralandırır bilgisayar numaralandırması yani 0 1 2 ... diye ama pandas ise 1 2 3 4 normal sayma sayıları ile numaralandırma yapar....
+panda serileri sayesinde veri analizi ve manipülasyonu(değişiklikleri) yapabiliriz. numpy tek tür veriler ile çalışır ama pandas heterojen verilerle çalışabilir. numpy numeric olarak numaralandırır bilgisayar numaralandırması yani 0 1 2 ... pandas ile istenen numaralandırma yapılabilir... 
 
 import pandas as pd ile yapısı ile kullanacağız...
 
@@ -65,11 +64,19 @@ seriler tek boyutlu dataframe ise çift boyutludur(satır sutun) matris mantığ
 
 pandas serilerinde de indexleme vardır. isteğe göre bunu ayarlayabiliriz.
 
+terminale pip show pandas dersek eğer pandas hakkındaki bilgileri görebiliriz. 
+
 ///PANDAS SERİES 1/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 pandas aldığı verileri alır sutun ve satırlardan oluşan nesnelere çevirir. eğer tek boyutlu ise pandas serisi olur birden fazla sutuna sahip olursa ise pandas dataframe olur.
 
 print(pd.__version__) # 2.0.0 bu yapı ile pandasın verisyonunu görürüz. pip install --user --upgrade pandas ile ise güncelleme yapabiliriz.
+
+pandasın iki temek veri yapısı var series ve dataframe.
+
+............................................................................................................................................................................................................................................................
+
+
 
 
 

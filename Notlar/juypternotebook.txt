@@ -1,3 +1,9 @@
-### pip install jupyterlab  ... bu komut ile jupyter notebook indiririz.  jupyter-lab  bu komut ile ise jupyter notebook'u açarız.  
+### pip install jupyterlab  ... bu komut ile jupyter notebook indiririz.  jupyter-lab  bu komut ile ise jupyter notebook'u açarız.  localhost açılır web tarayıcı ile açılır.  
+
+.ipynb uzantılı dosyalar kullanılır. jupyter notebook dosyalarının uzantıları pynb  python notebook'tur.
 
 pandas nupmy üzerine kurulu bir kütüphanedir.
+
+shift + enter ile çalıştırma yapabiliriz.
+
+cell kısmında run all diyerek bütün hücreleri sıfırdan çalıştırabiliriz.
