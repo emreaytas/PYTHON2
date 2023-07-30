@@ -361,3 +361,23 @@ mycollection = mydb["collection1"] # önceden var edilmiş bir collection olmal�
 
 
 ..............................................................
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

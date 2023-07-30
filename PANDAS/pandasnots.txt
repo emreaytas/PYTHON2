@@ -76,10 +76,480 @@ pandasın iki temek veri yapısı var series ve dataframe.
 
 ............................................................................................................................................................................................................................................................
 
+        import pandas as pd
+        import numpy as np
+
+        # dataframe ve series nasıl çalışır = aldığı verileri(sql,csv,list,dict,excel) pandas bu verileri alır ve bu verileri sutun ve satırlardan oluşan verileri çevirir.  tek boyutlu olursa eğer pandas series'tir birden fazla boyutlu olursa aslında çift boyutlu olursa dataframe olurlar.
+        # pandas yapıları pythonun yapılarından daha hızlıdır. daha seridir. kendine özgü panda series ve pandas dataframe ile vs daha hızlı çalışır.
+
+        student = ['Arin',20,'ce']
+        print(student) 
+        print(type(student)) #<class 'list'>
+
+        ps_student = pd.Series(student) #içerisine gönderilen yapıyı panda serisi olarak return edece.
+
+        print(ps_student)
+        """
+        0    Arin
+        1      20
+        2      ce
+        dtype: object
+
+        """ # tek boyutludur seriler. series yapısının verdiği tablodur. bir index yapısıdır.
+        # panda seris farklı veri tiplerini alabilir.hem string hem int verileri aynı anda aldı eğer numpy olsa idi hepsini en üst olan veriye çevirirdi homojen bir yapı elde ederdi.
+        print(type(ps_student)) # <class 'pandas.core.series.Series'> 
+
+        dict1 = {"name":"emre","surname":"aytas","age":20}
+        pd_dict1 = pd.Series(dict1) # dict'i bir panda series'e çevirdik bunu nasıl yaptı. key'leri ilk sutuna valueleri ikinci sutuna koyarak key value yapısını bozmadı. key'leri panda series'te indexleme için kullandı. 
+        print(pd_dict1)  
+        """
+        name        emre
+        surname    aytas
+        age           20
+        dtype: object
+
+        """
+        print(type(pd_dict1)) # <class 'pandas.core.series.Series'>    panda series yapısı dictler ilede çalışır.  tek boyutludur. keyler indexleme için kullandıldı. 
+
+        student1 = pd.Series(["arin",23,"ce"]) #verileri bir liste içerisinde veririz. hepsini toplu göndermek lazım.
+        # dtype:object olarak verir. nedeni şu hepsini string'e çevirdi ve dtype'ı object haline getirdi.  
+
+        numbers = pd.Series([1,2,3,4,5,6,7,8])
+        print(numbers) #  dtype: int64 verir. bunun nedeni şu tamamı int64 sayılardan oluştuğu için ama heterojen olduğu zaman hepsini üst sınıfa çıkarıp object der dtype'a
 
 
+        booleans = pd.Series([True,False,True])
+        print(booleans) # dtype: bool olarak verir.  
+
+
+
+        student2 = pd.Series(data=["Arin",23,"CE"],index=["name","age","department"]) # serilere dict'te gönderebiliriz. ve hangsiinin indexleme hangisinin value olacağını belirtebiliriz.    data ve index ile hem index kolonunu hemde verileri kendimiz belirlemiş olduk.
+        print(student2)
+        """
+        name          Arin
+        age             23
+        department      CE
+        dtype: object
+
+        """ 
+
+        print(student2.values) #sadece valueleri görebiliriz.               ['Arin' 23 'CE']
+        print(student2.index) # indexleme elemanlarını görebiliriz.         Index(['name', 'age', 'department'], dtype='object')
+        print(student2.shape) # şekil bilgisi alabiliriz.                   (3,)  # (3,4) olsa mesela 3 satır 4 sutun...  tek boyut olunca (elemansayisi,) şeklinde oluyor.
+        print(student2.ndim) # boyut bilgisi alabiliriz.                    1
+        print(student2.size) # bellekte kaplanan alanı görebiliriz.         3 
+        print(student2.dtype) # veri tipini görebiliriz.                    object
+        print(student2.name) # ismi verecek. None verir
+        student2.name = "messi" # series'e isim verdik.
+        print(student2.name) # ismi verecek.                                messi   atama yaparak ismi messi olarak belirledik.
+
+        X = "name" in student2 # eğer student içinde name index'i varsa True verir yoksa False verir.
+        Y = "job" in student2 # index elemanlarının içinde job var mı yok mu bakar varsa True yoksa False verir.
+        Z = "Ahmet" in student2.values # value'lerin içinde Ahmet var mı yok mu kontrol eder bool bir değer return eder.
+        T = "Arin" in student2.values # True verir.
+
+        numbers = pd.Series([4,2.5,2])
+        print(numbers)
+        """
+        0    4.0
+        1    2.5
+        2    2.0
+        dtype: float64   # üst sınıf olarak float olduğu için hepsini float'a çevirdi. 
+
+        """ 
+        print(numbers.sum()) # toplamı verir üst class float olduğu için float olur dğeer ve hepsi matematiksel işleme uygun olduğu için sorun olmaz. 
+        print(numbers.mean()) #ortalamayı verir tüm değerler matematiksel olduğu için soorun olmaz.
+        print(numbers.product()) # çarpımım verir.  değeri üst değer olarak verir int ve float var bu yüzden değerler float olur.
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+///Pandas series 2/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////Pandas series 2////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        import pandas as pd
+        import numpy as np
+
+        # series içerinde dtype = ile veri tipi belirtebiliriz.
+        student = pd.Series(data=["Arin","Software",23,"CE"],index=["name","surname","age","department"]) # index elemanlarını ayrı olarak yazmazsak eğer o zaman 0 1 2 3 şeklinde default olarak ilerler.
+        student2 = pd.Series(["Arin","Software",23,"CE"],["name","surname","age","department"]) # default olarak ilki veri ikincisini index olarak algılar...
+        print(student)
+        print(student["name"]) # indexler ile valuelere ulaşabiliriz. ulaşmak istediğimiz verinin indexi ile ulaşabiliriz.
+        print(student[["name","surname"]]) # eğer birden fazla index ile valuelere ulaşmak istersek o zaman liste içerisine liste şeklinde göndereceğiz.  bize series şeklinde döner.
+        print(type(student[["name","surname"]])) # <class 'pandas.core.series.Series'> bir seri dönderdi.
+        print(student[1]) # birinci indexteki valueyi verir.   0 verse idik ilk value'yi veriridi..
+        print(student[[0,2]])
+        """
+        name    Arin
+        age       23
+        dtype: object
+
+        """ # bir seri dönderdi bize ve istenen indexlerdeki elemanları aldık.
+
+        print(student[0:2]) # numpy özellikleri ile aynı 0.index dahil 2. index dahil değil o aralıkta olan valueleri getir demek bir seri halinde gelecek. indexleri ile gelecekler.  tek bir eleman olsa idi student[0] o zaman sadece value gelirdi.
+        print(student[0]) # Arin seri halinde gelmedi.
+        print(type(student[0])) # <class 'str'> valuenin class'ı
+        print(student[-1]) # en sondaki value'yi getirir.
+        # aslında student[...] yapısı bize value veya series return ediyor.
+        print(student[:]) # tüm index ve valueleri al demek. [:]  yapısı hepsini al demek hepsini kapsa demek.
+        print(student[-2:]) # son iki elemanı alırız böylece.
+
+        print(student["name":"department"]) # name'den başla departmente kadar git demek.  tek farkı numeric ile olan fark son indexi dahil eğer departmentte dahil yani.
+
+        # loc -> location metotu indexleme kolonlarını keyleri kullanırız. ...  iloc -> index location metotu. numeric index sıralarını kullanırız.
+        print(student.loc["name"]) # Arin
+        print(student.loc[["name","age"]])   # student.loc[...]  bu yapıda bir değer veya series return eder.
+        """
+        name    Arin
+        age       23
+        dtype: object
+
+        """
+
+        # neden loc ve iloc kullanırız.  kesin olarak numeric index veya kesin olarak keyindex kullandığımızı biliriz. 
+
+        print(student.iloc[1]) # ikinci indexteki value'yi getirir.
+        # print(student.iloc["name"]) non integer hatası verir  iloc int değerler ile çalışır.
+
+
+
+
+        # pandas serilerinin değerleri değişebilir. pandas serileri oluştuktan sonra değiştirilebilir yapılardır.  mutable bir yapıdır. yani değiştirilebilir.
+
+        student["name"] = "ford" # bir değişim atama yapabiliriz pandas serilerinin üzerinde.
+        print(student["name"])
+        student.loc["name"] = "mercedes"
+        student.iloc[2] = 21
+        print(student)
+        """
+        name          mercedes
+        surname       Software
+        age                 21
+        department          CE
+        dtype: object
+
+        """ # loc ve iloc ilede yapılarda değişim yapabiliriz. 
+
+        student3 = student.drop("name") # .drop(...) orjinal veride değişiklik olmaz. student aynıdır ama bu metot bir seri return eder o seride ise drop edilmiş halde return edilir. 
+        print(student)
+        """
+        name          mercedes
+        surname       Software
+        age                 21
+        department          CE
+        dtype: object
+
+        """ # .drop orjinal seride bir değişim yapmaz. bir seri return eder droplanmış halini return eder. inplace = True olmazsa olursa direkt olarak siler verilen keyi ve valuesini.
+
+        print(student3)
+        """
+        surname       Software
+        age                 21
+        department          CE
+        dtype: object
+
+        """ # .drop komutu orjinal serinin değişmiş halini return eder. ikinci parametre olarak inplace = True dersek o zaman veriyi direkt olarak siler.
+        # neden .drop orjinal veride değişiklik yapmaz bunun nedeni drop edersek veriyi bozabiliriz.
+
+
+
+
+        # illaki bir seriden veri silmek istersek o zaman .drop(...,inplace = True) # olduğu yerde sil komutudur.
+        student.drop("name",inplace=True) # direkt olarak olduğu yerde siler orjinal veride değişiklik olur böylece.
+        print(student)
+        """
+        surname       Software
+        age                 21
+        department          CE
+        dtype: object
+
+        """
+
+        print(len(student)) # 3 studentin uzunluğunu görebiliriz. kaç tane değer var görürüz kaç value var görürüz.
+        print(list(student)) # ['Software', 21, 'CE'] bir listeyi seri yapabilirsek seriyide liste yapabiliriz. sadece valueleri getirir bir liste içerisinde
+        print(dict(student)) # {'surname': 'Software', 'age': 21, 'department': 'CE'} bir seriyi dict haline getirebiliriz. 
+        student.drop("age",inplace=True)
+        # eğer tüm veriler homojen ise o zaman .sorted() metotunu kullabiliriz. hepsi string veya sayı ise.
+        print(max(student)) # age'yi drop ettik inplace = True diyerek böylece en yüksek stringi görebiliriz.
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///Pandas series 3/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        import pandas as pd
+
+        # ReviewContent.csv adında bir csv dosyası yükledik ve pandas.py uzantılı dosyamızın yani çalışacak olan .py uzantılı dosyamızın path'ine ekledik.
+        # csv demek virgül veya noktalı virgül ile ayrılmış verilerin tutulduğu dosya demektir aslında.
+
+        # dosya okuma...
+        # pd.read_csv("ReviewContent.csv") #csv dosyası okuyacağımız için read_csv() metotunu kullanırız. içerisine path'te bulunan dosyanın adını ve uzantısını ekleriz.
+        print(pd.read_csv("ReviewContent.csv",encoding="utf-8")) # verileri tablo şeklinde gösterir.  encoding ile karakter seti belirleyebiliriz. engine = "python" engine belirleme yapabiliriz. 
+        """
+        Review ID  ... Room Availability
+        0      4055629  ...               338
+        1     25329416  ...                10
+        2     21705849  ...               268
+        3     41133812  ...               274
+        4      7465026  ...               281
+        ..         ...  ...               ...
+        995   44498863  ...               329
+        996   30544438  ...               309
+        997   46642535  ...                10
+        998   21403195  ...               357
+        999   38944752  ...               329
+
+        [1000 rows x 11 columns]    
+        """ 
+
+        review_content = pd.read_csv("ReviewContent.csv",encoding="utf-8") # gelen yapıyı return eder ve atama yaparız.
+        print(type(review_content)) # <class 'pandas.core.frame.DataFrame'>  bir DataFrame olarak gösterdi DataFrameler çok boyutludur.
+
+        review_content1 = pd.read_csv("ReviewContent.csv",usecols=["Review ID"],encoding="utf-8").squeeze() # .squeeze() olarak kullanırız. ama hala DataFrame bunun önüne geçmek için bir seri oalrak çalışmak için çalışacağımız sutunu seçeriz. usecols =[] ile kullanacağımız kolon seçimi yapmamız lazım...
+        print(type(review_content1)) # <class 'pandas.core.series.Series'>    eğer .squeeze(False) dese idik o zaman DataFramee olurdu bu sistem.  default olarak True allır ve True alırsa o zaman series'e çevirir yapıyı.
+        print(review_content1)
+        """
+        0       4055629
+        1      25329416
+        2      21705849
+        3      41133812
+        4       7465026
+                ...
+        995    44498863
+        996    30544438
+        997    46642535
+        998    21403195
+        999    38944752
+        Name: Review ID, Length: 1000, dtype: int64
+        """ # bir seri oldu. ve dtype tüm veriler aynı ve int olduğu için int64 oldu.. indexleme ise 0'dan başladı 999a kadar.
+
+        review_content2 = pd.read_csv('ReviewContent.csv',usecols=["Review ID","Room Availability"],encoding="utf-8").squeeze()
+        print(type(review_content2)) # <class 'pandas.core.frame.DataFrame'>   birden fazla kolon olunca o zaman dataframe olarak kaldı. bu normaldir. Series haline gelebilmesi için tek bir sutun olması lazım.
+
+        print(review_content1.head(13)) #eğer default olarak bırakırsak ilk 5 veriyi getirir.  ama içerisine 10 verirsek ilk 10u getirir 13 dersek 13 tanesini getirir en başından.
+        print(review_content1.tail()) # eğer default olarak bırakırsak en sonra 5 veriyi getirir. ama istenen sayıya göre ayarlanabilir.    okuma en baştan sona olur ama en sondaki değerler alınır yani   .tail() dersek 995 996 997 998 999 indexlerini sırası ile getirir.  999 998 997 996 995 değil...
+        """
+        995    44498863
+        996    30544438
+        997    46642535
+        998    21403195
+        999    38944752
+        Name: Review ID, dtype: int64
+
+        """ 
+
+        print(review_content1.head(10)) 
+        print()
+
+        # eğer verileri indexe göre değil verilere göre sıralamak istersek o zaman .sorted() metotunu kullanacağız. # kalıcı bir değişim sağlama bir Series return eder oda sıralanmış haldir.  sort_values(inplace = True) olursa değişim kalıcı olur.
+        print(review_content1.sort_values()) # sort_values() bir series return eder. eğer kalıcı değişim olsun istersek o zaman review_content1 = review_content1.sort_values()   veya    review_content1.sort_values(inplace = True) olması lazım o zaman ana Series'te kalıcı değişim olur. 
+        print(review_content1) # değişim yok ana content1'de kalıcı değişim olmadı.
+        rc = review_content1.copy() # neden copy kullandık bunun nedeni farklı bir yerde birbirinden bağımsız olsun diye seriesler.
+        rc.sort_values(inplace = True,ascending = False) #hem kalıcı değişim olacak hemde ascending = False olacağı için büyükten küçüğe bir sıralama olacak.
+
+        # indexe göre de sıralayabiliriz. 
+
+        rb = review_content1.copy() 
+        rb.sort_index(ascending =  False,inplace = True) # kalıcı ve büyükten küçüğe bir sıralama oldu.
+        print(rb) # 999 998 .... 1 0 olarak ilerledi indexler.
+        print(rb.head(10)) # 999 998 997 ... ilk 10 eleman gelir elimize.
+
+        print(rb[4]) # 44498863 
+        print(rb.get(4)) # .get() ilede verileri alabiliriz. içerisine index numarası gireriz.
+
+        #  rb[] ile rb.get()  arasında ne fark var...  rb[1004] dersek hata alırız. ama rb.get(1004) dersek None alırız aralarındaki fark budur.
+        print(rb.get(1004,default = "eleman yok")) # burada ise önce index sonra eleman yoksa None veri gelecekse neyi return edeceğini default ile belirtiriz.
+        print(type(rb[4])) # <class 'numpy.int64'>  tek değer series değil. numpy'e ait int değer.   pandas numpy üzerinne kuruludur. bunun kanıtıdır.
+        print(type(rb.get(4))) # <class 'numpy.int64'>   tek değer ile numpy class'ı olduğunu gördük. pandas numpy üzerine kuruludur. 
+        print(rb.get([0,4])) # 0. ve 4. indexteki elemanları görebileceğiz.  
+        print(type(rb.get([0,4]))) # <class 'pandas.core.series.Series'>   bir seri olduğunu görürüz.
+        
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///DataFrame oluşturmak./////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        import pandas as pd 
+
+        # boyut demek aslında şudur. = tek boyutlu demek tek ifade ile bir veriyi tanımlayabiliriz ama dataframe olunca iki ifade ile yer belirtebiliriz. 
+
+        students = [ # bir liste ve içerisinde dict veriler var. dictlerden oluşan bir liste. 
+        {
+                "name":"arin",
+                "age":21,
+                "gender":"F"
+        },
+                {
+                "name":"Fatih",
+                "age":22,
+                "gender":"M"
+        },
+                {
+                "name":"elis",
+                "age":24,
+                "gender":"F"
+        }
+        
+        ]
+
+        print(type(students)) # <class 'list'>
+
+        df_students = pd.DataFrame(students)
+        print(df_students)
+        """
+        name  age gender
+        0   arin   21      F
+        1  Fatih   22      M
+        2   elis   24      F
+
+        """   # indexleme var.  sutunlar ve değerleri var listenin elemanlarını kullanarak bir dataframe oluşturdu.  dict'teki keyleri sutun indexi olarak kullandı valueleri ise değerler olarak kullanır. konum belirtmek için hem satır indexi hemde sutun indexi kullanmamız lazım bunu nedeni bu bir DataFrame'dir.
+        print()
+        print(type(df_students)) # <class 'pandas.core.frame.DataFrame'>    bir DataFrame ...
+
+
+
+
+
+
+        # veriyi iki boyutlu olarak ifade edebilirsek DataFrame olarak kullanabiliriz.
+
+        teachers = {
+        "names":[
+                "ahmet",
+                "cansu",
+                "hakan"
+        ],
+        "ages":[
+                41,36,40
+                
+        ],
+        "genders":[
+                "M","F","M"
+        ]
+        
+        }
+
+        print(type(teachers)) # <class 'dict'>
+
+        df_teachers = pd.DataFrame(teachers) # bir dict içerisndeki veriler ile dataframe oluşturdk...
+        print(df_teachers)
+        """
+        names  ages genders
+        0  ahmet    41       M
+        1  cansu    36       F
+        2  hakan    40       M
+
+        """
+        print(type(teachers)) # <class 'pandas.core.frame.DataFrame'>    bir DataFrame ...
+
+
+
+
+
+        list_of_list = [
+        ["ahmet","mehmet","ayşe"],
+        [44,39,51]
+        
+        ]
+        print(list_of_list) # [['ahmet', 'mehmet', 'ayşe'], [44, 39, 51]]
+        print(type(list_of_list)) # <class 'list'>
+
+        df_listoflist = pd.DataFrame(list_of_list)
+        print(df_listoflist)
+        """
+        0       1     2
+        0  ahmet  mehmet  ayşe
+        1     44      39    51
+
+        """ # bir sutun bilgisi olmadığı için sutun ve satiri 0'dan indexledi.  listenin içindeki her bir listeyi bir satır olarak aldı her her veri bir sutuna denk geldi. 2 liste var 2 satir var listelerin içinde 3 eleman var 3 sutun var...
+        print(type(df_listoflist)) # # <class 'pandas.core.frame.DataFrame'>    bir DataFrame ...
+
+        # eğer bir yapı ile çift katlı yapı kurabilirsek DataFrame yapabiliriz.
+
+
+
+        names = ["ahmet","mahmut","fatih"]
+        print(type(names)) # <class 'list'>
+
+        df_names = pd.DataFrame(names)
+        print(df_names)
+        """
+                0
+        0   ahmet
+        1  mahmut
+        2   fatih
+
+        """ # liste tek boyutlu olsa bile biz bir DataFrame kurabiliriz... sonuçta satır ve sutun yapısı var  default olarka sutuna 0.index verildi ve her eleman bir satıra atandı..
+        print(type(df_names)) # <class 'pandas.core.frame.DataFrame'>
+        print(df_names.ndim) # 2 verdi yani 2 boyutlu o zmaan bir DataFrame yapısı...
+
+
+
+
+
+
+
+        students1 = {"name":"hale","age":24}
+        print(type(students1)) # <class 'dict'> 
+
+        #   df_stt = pd.DataFrame(students1)    # hata verir bunun nedeni klasik dict ile biz direkt olarak dataframe kuramayız bir index belirlememiz lazım
+        # hata vermesinin sebebi indexlemeyi dict'in keyleri ile yapamayız bunun yüzünden indexleme yapmamız lazım.
+
+        students2 = {"Hale":pd.Series(data=[25,"F","CE"],index=["age","gender","department"]),
+                "Ahmet":pd.Series(data=[32,"M","EE"],index=["age","gender","department"])}
+
+        # series ile biz indexleme kurduk data ve index belirterek.
+        print(type(students2)) # <class 'dict'>
+
+        df_stt1 = pd.DataFrame(students2)
+        print(df_stt1)
+        """
+                Hale Ahmet
+        age          25    32
+        gender        F     M
+        department   CE    EE
+
+        """ # keyleri sutun olarka kullandık bu yapı ile. indexler ise satırlar oldular indexlendiler her birinin indexe gelen değeri ise satıra yerleşti valueler indexler ile eşlenerek satırlara yerleştiler.
+        print(type(df_stt1)) # <class 'pandas.core.frame.DataFrame'>    bir DataFrame ...
+
+
+
+
+        # indexlemede değişim yaparsak.....
+
+
+        students3 = {"Hale":pd.Series(data=[25,"F","CE",172],index=["age","gender","department","height"]),
+                "Ahmet":pd.Series(data=[32,"M","EE",100],index=["age","gender","department","weight"])}
+
+        # series ile biz indexleme kurduk data ve index belirterek.
+        print(type(students3)) # <class 'dict'>
+
+        df_stt2 = pd.DataFrame(students3)
+        print(df_stt2)
+        """
+                Hale Ahmet
+        age          25    32
+        department   CE    EE
+        gender        F     M
+        height      172   NaN
+        weight      NaN   100
+
+        """ # indexlemenin hepsini yaptı ancak sutunlardan birinde eksik değer varsa NaN dedi indexlemeyi ihmal etmedi.  olabildiğince indexleme yaptı eğer sutunlardan birisinde eksik veri varsa NaN dedi. NaN demek veri yok demek pandas'ta.
+        print(type(df_stt2)) # <class 'pandas.core.frame.DataFrame'>    bir DataFrame ...
+
+# pandasın en güçlü yapısı budur olmayan verilerle çalışabilmek.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////DataFrame yapısını değiştirmek.../////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 ####################################################################################################################################################################################################################################################################################################################################
