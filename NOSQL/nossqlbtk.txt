@@ -362,9 +362,15 @@ mycollection = mydb["collection1"] # önceden var edilmiş bir collection olmal�
 
 ..............................................................
 
+ilişkisel veritabanlarında tablo ve sutunlar halinde tutulurken nosqlde veriler json formatında tutulur.   nosqlde okuma yazma sql'e göre daha hızlıdır bu yüzden bigdata gibi alanlarda çok fazla kullanılır.
 
-
-
+...MongoDB nedir...............................
+    open source(açık kaynak k.)               .
+    nosql kullanır                            .
+    dokumanlar json formatında tutulur        .
+    sqlde tablo = nosql collection            .
+    sqlde satır = nosql document              .
+...............................................
 
 
 
