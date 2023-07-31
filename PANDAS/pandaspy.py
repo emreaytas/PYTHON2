@@ -1,170 +1,266 @@
-import pandas as pd 
+import pandas as pd
 
-# boyut demek aslında şudur. = tek boyutlu demek tek ifade ile bir veriyi tanımlayabiliriz ama dataframe olunca iki ifade ile yer belirtebiliriz. 
+# pandas NaN veriler ile çok iyi şekilde sorunsuz çalışabilir.
 
-students = [ # bir liste ve içerisinde dict veriler var. dictlerden oluşan bir liste. 
-    {
-        "name":"arin",
-        "age":21,
-        "gender":"F"
-    },
-        {
-        "name":"Fatih",
-        "age":22,
-        "gender":"M"
-    },
-        {
-        "name":"elis",
-        "age":24,
-        "gender":"F"
-    }
-    
-]
-
-print(type(students)) # <class 'list'>
+students = {"Hale":pd.Series(data=[25,"Cetin","CE",161],index=["age","surname","department","height"]),
+                        "Ahmet":pd.Series(data=[32,"M","EE",100],index=["age","gender","department","weight"]),"Fatma":pd.Series(data=[32,"Gulsen","EE",175],index=["age","surname","department","height"])
+        }
 
 df_students = pd.DataFrame(students)
 print(df_students)
 """
-    name  age gender
-0   arin   21      F
-1  Fatih   22      M
-2   elis   24      F
+             Hale Ahmet   Fatma
+age            25    32      32
+department     CE    EE      EE
+gender        NaN     M     NaN
+height        161   NaN     175
+surname     Cetin   NaN  Gulsen
+weight        NaN   100     NaN
 
-"""   # indexleme var.  sutunlar ve değerleri var listenin elemanlarını kullanarak bir dataframe oluşturdu.  dict'teki keyleri sutun indexi olarak kullandı valueleri ise değerler olarak kullanır. konum belirtmek için hem satır indexi hemde sutun indexi kullanmamız lazım bunu nedeni bu bir DataFrame'dir.
-print()
-print(type(df_students)) # <class 'pandas.core.frame.DataFrame'>    bir DataFrame ...
-
-
-
+""" # var olan tüm satırları indexlemek için kullanır ve olmayan veriler için ise NaN der.  mesela Fatma sutunun weight bilgisi yok bu yüzden NaN verdi hata vermedi.
 
 
 
-# veriyi iki boyutlu olarak ifade edebilirsek DataFrame olarak kullanabiliriz.
-
-teachers = {
-    "names":[
-        "ahmet",
-        "cansu",
-        "hakan"
-    ],
-    "ages":[
-        41,36,40
-        
-    ],
-    "genders":[
-        "M","F","M"
-    ]
-    
-}
-
-print(type(teachers)) # <class 'dict'>
-
-df_teachers = pd.DataFrame(teachers) # bir dict içerisndeki veriler ile dataframe oluşturdk...
-print(df_teachers)
+# isnull()
+x = df_students.isnull()
+print(x)
 """
-   names  ages genders
-0  ahmet    41       M
-1  cansu    36       F
-2  hakan    40       M
+             Hale  Ahmet  Fatma
+age         False  False  False
+department  False  False  False
+gender       True  False   True
+height      False   True  False
+surname     False   True  False
+weight       True  False   True
+
+""" # verinin var olup olmamasına göre True False verir tüm değerlere veri yoksa True varsa False NaN olanlara True verdi.
+print(type(x)) # <class 'pandas.core.frame.DataFrame'>  bu bir DataFrame çünkü ndim = 2 ...
+
+
+
+y = df_students.isnull().sum() # her sutunda kaç tane True var yani boşdeğer var göreceğiz.
+print(y)
+"""
+Hale     2
+Ahmet    2
+Fatma    2
+dtype: int64
+
+""" # her sutunda kaç adet True var yani her suttunda kaç adet satır boşdeğer bunu görebiliriz.  
+print(type(y)) # <class 'pandas.core.series.Series'>  bu bir seridir ndim = 1   çünkü sutun boyutu yok tek boyutlu. bir seridir.
+
+
+
+
+z = df_students.isnull().sum().sum() # ikinci .sum() ile komple DataFramede kaç tane boş veri var bunu görebiliriz. Series'in elemanlarını topladı ve numpy.int veri haline geldi.
+print(z)  # 6
+print(type(z)) # <class 'numpy.int64'>
+
+
+
+
+
+
+
+
+# notnull()
+
+t = df_students.notnull() # isnull'ın tersidir. değer varsa True yoksa False verir..
+print(t)
+"""
+             Hale  Ahmet  Fatma
+age          True   True   True
+department   True   True   True
+gender      False   True  False
+height       True  False   True
+surname      True  False   True
+weight      False   True  False
+"""
+
+f = df_students.notnull().sum() # her sutunda kaç adet dolu değer var görebiliriz.
+print(f)
+"""
+Hale     4
+Ahmet    4
+Fatma    4
+dtype: int64
 
 """
-print(type(teachers)) # <class 'pandas.core.frame.DataFrame'>    bir DataFrame ...
+print(type(f)) # <class 'pandas.core.series.Series'>  bu bir seridir. sutun bilgisi yoktur. tek boyutludur.
+
+
+g = df_students.notnull().sum().sum() # komple DataFramede kaç tane dolu veri var görebiliriz.
+print(g) # 12  
+print(type(g)) # <class 'numpy.int64'>
 
 
 
 
 
-list_of_list = [
-    ["ahmet","mehmet","ayşe"],
-    [44,39,51]
-    
-]
-print(list_of_list) # [['ahmet', 'mehmet', 'ayşe'], [44, 39, 51]]
-print(type(list_of_list)) # <class 'list'>
+# .count()
 
-df_listoflist = pd.DataFrame(list_of_list)
-print(df_listoflist)
+h = df_students.count() # .count() = .notnull().sum()
+print(h)
 """
-       0       1     2
-0  ahmet  mehmet  ayşe
-1     44      39    51
+Hale     4
+Ahmet    4
+Fatma    4
+dtype: int64
+""" 
 
-""" # bir sutun bilgisi olmadığı için sutun ve satiri 0'dan indexledi.  listenin içindeki her bir listeyi bir satır olarak aldı her her veri bir sutuna denk geldi. 2 liste var 2 satir var listelerin içinde 3 eleman var 3 sutun var...
-print(type(df_listoflist)) # # <class 'pandas.core.frame.DataFrame'>    bir DataFrame ...
-
-# eğer bir yapı ile çift katlı yapı kurabilirsek DataFrame yapabiliriz.
-
+j = df_students.count().sum()
+print(j) # 12
+print(type(j)) # <class 'numpy.int64'>
 
 
-names = ["ahmet","mahmut","fatih"]
-print(type(names)) # <class 'list'>
 
-df_names = pd.DataFrame(names)
-print(df_names)
+
+
+# dropna()  
+
+x = df_students.dropna() # içerisinde NaN veri olan satırları kaldırır.
+print(x)
 """
-        0
-0   ahmet
-1  mahmut
-2   fatih
+           Hale Ahmet Fatma
+age          25    32    32
+department   CE    EE    EE
 
-""" # liste tek boyutlu olsa bile biz bir DataFrame kurabiliriz... sonuçta satır ve sutun yapısı var  default olarka sutuna 0.index verildi ve her eleman bir satıra atandı..
-print(type(df_names)) # <class 'pandas.core.frame.DataFrame'>
-print(df_names.ndim) # 2 verdi yani 2 boyutlu o zmaan bir DataFrame yapısı...
+""" # herhangi bir satırda NaN veri varsa o satırı kaldırır. sadece NaN verisi olmayan verileri kalır 
+print(type(x)) # <class 'pandas.core.frame.DataFrame'>
 
+df_students1 = df_students2 = df_students
 
-
-
-
-
-
-students1 = {"name":"hale","age":24}
-print(type(students1)) # <class 'dict'> 
-
-#   df_stt = pd.DataFrame(students1)    # hata verir bunun nedeni klasik dict ile biz direkt olarak dataframe kuramayız bir index belirlememiz lazım
-# hata vermesinin sebebi indexlemeyi dict'in keyleri ile yapamayız bunun yüzünden indexleme yapmamız lazım.
-
-students2 = {"Hale":pd.Series(data=[25,"F","CE"],index=["age","gender","department"]),
-             "Ahmet":pd.Series(data=[32,"M","EE"],index=["age","gender","department"])}
-
-# series ile biz indexleme kurduk data ve index belirterek.
-print(type(students2)) # <class 'dict'>
-
-df_stt1 = pd.DataFrame(students2)
-print(df_stt1)
+df_students.dropna()  # .dropna() anaDataFramede bir değişim yapmaz ama işlem görmüş DataFrame'yi return eder. ancak içerisinde inplace = True dersek o zaman kalıcı bir değişim sağlar kalıcı olarak eksik verisi olan satırlar yok olur.
+print(df_students)
 """
-           Hale Ahmet
-age          25    32
-gender        F     M
-department   CE    EE
-
-""" # keyleri sutun olarka kullandık bu yapı ile. indexler ise satırlar oldular indexlendiler her birinin indexe gelen değeri ise satıra yerleşti valueler indexler ile eşlenerek satırlara yerleştiler.
-print(type(df_stt1)) # <class 'pandas.core.frame.DataFrame'>    bir DataFrame ...
-
-
-
-
-# indexlemede değişim yaparsak.....
+             Hale Ahmet   Fatma
+age            25    32      32
+department     CE    EE      EE
+gender        NaN     M     NaN
+height        161   NaN     175
+surname     Cetin   NaN  Gulsen
+weight        NaN   100     NaN
+""" # .dropna() anaDataFramede bir değişim yapmaz ama işlem görmüş DataFrame'yi return eder.
 
 
-students3 = {"Hale":pd.Series(data=[25,"F","CE",172],index=["age","gender","department","height"]),
-             "Ahmet":pd.Series(data=[32,"M","EE",100],index=["age","gender","department","weight"])}
-
-# series ile biz indexleme kurduk data ve index belirterek.
-print(type(students3)) # <class 'dict'>
-
-df_stt2 = pd.DataFrame(students3)
-print(df_stt2)
+x = df_students1.dropna(how="all")  # bunun mantığı şudur. eğer bir satırda tüm veriler NaN ise o satırı sil demek eğer  bir satırda bir tane bile veri varsa ona dokunmaz...
+print(x)
 """
-           Hale Ahmet
-age          25    32
-department   CE    EE
-gender        F     M
-height      172   NaN
-weight      NaN   100
+age            25    32      32
+department     CE    EE      EE
+gender        NaN     M     NaN
+height        161   NaN     175
+surname     Cetin   NaN  Gulsen
+weight        NaN   100     NaN
 
-""" # indexlemenin hepsini yaptı ancak sutunlardan birinde eksik değer varsa NaN dedi indexlemeyi ihmal etmedi.  olabildiğince indexleme yaptı eğer sutunlardan birisinde eksik veri varsa NaN dedi.
-print(type(df_stt2)) # <class 'pandas.core.frame.DataFrame'>    bir DataFrame ...
+""" # 
+print(type(x)) # <class 'pandas.core.frame.DataFrame'> bu bir DataFrame çünkü iki boyutlu...
+
+
+df_students1["Ahmet"]["weight"] = None # bu yapı ile atama yapabiliriz. önce sutun sonra satır bilgisi ile direkt olarak kalıcı atama yapabiliriz
+u = df_students1.dropna(how="all")  # bunun mantığı şudur. eğer bir satırda tüm veriler NaN ise o satırı sil demek eğer  bir satırda bir tane bile veri varsa ona dokunmaz...
+print(u)
+"""
+             Hale Ahmet   Fatma
+age            25    32      32
+department     CE    EE      EE
+gender        NaN     M     NaN
+height        161   NaN     175
+surname     Cetin   NaN  Gulsen
+
+""" # tüm verileri NaN olan satıları sildi mesela weight satırını sildi çünkü weight'te ahmete None verdik böylece satır kayboldu.
+
+
+
+
+g = df_students2.dropna(thresh=2) # thresh = 1 olursa 2 Tane Nan veriye izin verir. Ama eğer thresh = 2 olursa o zaman iki tane NaN olanları siler. thresh = 2 olursa max bir tane NaN'a izin verir. eşit ve daha fazla olanlar elenir.
+print(g)
+"""
+age            25    32      32
+department     CE    EE      EE
+height        161   NaN     175
+surname     Cetin   NaN  Gulsen 
+""" # bir bir DataFrame   
+
+l = df_students2.dropna(axis=0) # NaN olan satırlar gitti...
+print(l)
+"""
+           Hale Ahmet Fatma
+age          25    32    32
+department   CE    EE    EE
+"""
+
+m = df_students2.dropna(axis=1) # içerisinde NaN olan sutunları silecek komple.. how = "all" dersek o zaman tüm satırları NaN olan sutunu silecek.
+print(m)
+"""
+Empty DataFrame
+Columns: [] 
+Index: [age, department, gender, height, surname, weight]
+""" # boş bir DataFrame oldu... çünkü veri kalmadı bunun nedeni her sutunda NaN veri var...
+
+
+
+
+
+
+
+
+
+
+students = {"Hale":pd.Series(data=[25,"Cetin","CE",161],index=["age","surname","department","height"]),
+                        "Ahmet":pd.Series(data=[32,"M","EE",100],index=["age","gender","department","weight"]),"Fatma":pd.Series(data=[32,"Gulsen","EE",175],index=["age","surname","department","height"])
+        }
+
+df_students3 = pd.DataFrame(students)
+
+df_students3.dropna(inplace=True) # DataFrame kalıcı olarak değişir...
+df_students4 = pd.DataFrame(students)
+
+
+x = df_students4.fillna(method="ffill")  
+print(x)
+"""
+             Hale Ahmet   Fatma
+age            25    32      32
+department     CE    EE      EE
+gender         CE     M      EE
+height        161     M     175
+surname     Cetin     M  Gulsen
+weight      Cetin   100  Gulsen
+""" # NaN verileri o NaN'dan önce gelen verileri verdi...  mesela gender'i NaN olan birisi gender olarak department'in değerini alır...
+
+y = df_students4.fillna(method="ffill",axis=1) # default olarak axis = 0. NaN veri bir önceki satırdan alınırdı ama eğer axis = 1 olursa NaN veri bir önceki sutun ile tamamlanır...
+print(y)
+"""
+             Hale  Ahmet   Fatma
+age            25     32      32
+department     CE     EE      EE
+gender        NaN      M       M
+height        161    161     175
+surname     Cetin  Cetin  Gulsen
+weight        NaN    100     100
+
+""" # bazı veriler NaN olarak kaldı bunun nedeni kendinden önce bir veri olmaması... kendisinden önce verisi olan bir sutun yoksa NaN olarak kalır...
+
+z = df_students4.fillna(method="backfill",axis=1) # kendisinden sonrakine bakarak doldurur backfill...
+print(z) # acis = 1 olduğu için alışveriş sutunlar arasında olacak yani değişim aynı satır düzleminde olacak sağdan sola şekilde. axis = 0 olsa idi ki zaten default olara 0 o zaman verileri NaN verileri Altındaki satırlardan alarak dolduracak.
+"""
+
+             Hale   Ahmet   Fatma
+age            25      32      32
+department     CE      EE      EE
+gender          M       M     NaN
+height        161     175     175
+surname     Cetin  Gulsen  Gulsen
+weight        100     100     NaN
+
+"""
+
+ 
+
+
+
+
 
 
 

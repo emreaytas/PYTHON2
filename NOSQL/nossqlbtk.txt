@@ -1,5 +1,8 @@
 ####################################################################################################################################################################################################################################################################################################################################
 
+w3schools kullanmak çok mantıklı nosql için...
+
+
 mssql'de bir server tabanlı veritabanıdır.
 
 normalde sql'de bir veritabanın sql sorgulama dili vardır databaseler ve tablolar ve onların ilişkileri vardır. 
@@ -334,6 +337,19 @@ print(result.deleted_count) # kaç kayıt silindi gösterir.
 
 ####################################################################################################################################################################################################################################################################################################################################
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 mongodb atlas.....
     mongoDB'yi bulutta çalıştırmak istersek kullanırız.  500 mb alan verir beleş. istersek mongodb'yi localde de çalıştırabiliriz.
     bir cluster oluşturduk.  
@@ -372,18 +388,44 @@ ilişkisel veritabanlarında tablo ve sutunlar halinde tutulurken nosqlde verile
     sqlde satır = nosql document              .
 ...............................................
 
+mongo db'de kendimiz belirtmezsek eğer her girilen veri için unique bir id girilir. böylece içerik aynı olsa bile her veri birbirinden farklıdır. kendimiz bir id belirlersek eğer o zaman collection içinde hiçbir id aynı olmamalıdır. yoksa hata verir.
+ ekleme işlemini collection üzerinden yaparız. 
+
+............................................................................................................................................................................
+    data3 = {"_id":123231,"name":"lada","surname":"niva"} # eğer "_id": ... ile id belirlersek bu unique olmalı ama kendimiz belirledik otomatik olarak atanmadı.
+    mycollection.insert_one(data3) # tek bir data eklemek için kullanılır.
+............................................................................................................................................................................     
+
+    veriler = mycollection.find()  # verileri görebilmek için iterasyon yaptık.
+    veri = mycollection.find_one() # ilk satırdaki veriyi alır. direkt olarak print ile yazdırabiliriz.
+    print(veri)
+    for i in veriler:
+        print(i)
+        
+............................................................................................................................................................................
+
+    mydb = myclient["node_app"] # önceden var olan bir db olmalı.
+    mycollection = mydb["collection1"] # önceden var edilmiş bir collection olmalı.
+    datas = [{"name":"ford","surname":"focus"},{"name":"bmw","surname":"m"},{"name":"toyota","surname":"corolla"},{"name":"honda","surname":"civic"}]
+    data1 = {"name":"mercedes","surname":"amg"}
+    mycollection.insert_one(data1) # tek bir data ekleriz insert işlemleri bir değer döner. bununla ekleme verilerine ulaşabiliriz.
+    mycollection.insert_many(datas) # birden fazla veri eklemek istersek o zamana kullanılacak bir yapıdır hepsini ekler.
+
+............................................................................................................................................................................
+
+.find({},{}) ile {} query'dir.. ikinci ise hangi sutunları görmek istediğimzdir  {"name":"emre"},{"_id":0} id olmadan ismi emre olanları getir demek.
+
+ikinci {}
+ eğer {"_id":0,"name":1}  # dersek sadece name gelir .... {"_id":0,"name":1,"age":0} yaparsak hata alırız.  id dışında bir sutuna bir verince sadece bir verilen sutunlar gelir.  eğer id'ye sıfır verirsek o zaman başka sutuna sıfır veremeyiz. yoksa hata alırız.  "_id":0 olunca sadece görmek istediklerimize 1 vermemiz lazım... sadece "_id":0 dersek o zaman id hariç hepsi gelir.
+
+............................................................................................................................................................................
+
+sorguyu dışarda yazıp içeri verebiliriz  query = {"name":"emre"}  .find(query,{"_id":0}) yapabiliriz..
+
+query = {"name":{"emre","ford"}}
 
 
-
-
-
-
-
-
-
-
-
-
-
+............................................................................................................................................................................
+ 
 
 
