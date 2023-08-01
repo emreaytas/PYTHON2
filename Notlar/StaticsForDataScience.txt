@@ -1,11 +1,80 @@
 ####################################################################################################################################################################################################################################################################################################################################
 
+işlenmemiş verileri anlamlandıran kişiler veri bilimcidir. matematik istatistik ve pc bilimleri kullanarak verileri anlamlandıran kişilerdir. istatistik veri bilimi için olmazsa olmazdır.
+istatistik nedir? = veri toplama, tanımlama ve yorumlama bilimidir.
+veri bilimi = belirli bir iş için anlamlı öngörüler elde etmek için veriyi inceleyen ve analiz eden bir bilimdir.
+  veriler işlenmemişken bir işe yaramazlar bu yüzden veri bilimi önemli bir meslektir.
+  
+/////Temel istatistik kavramları///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+tüm popülasyona ulaşabilirsek istatistik bilimine gerek kalmaz. çünkü istatistiğin var oluş amacı tüm popülasyona yakın sonucu elde etmek.
+ 
+popülasyon(evren,yığın,ana kütle) = istatistiğin amacı popülasyona bir cevap verebilmektir tahmin edebilmetir.
+     aynı veya ortak özelliğe sahip birimlerin oluşturduğu topluluktur.
+     bir popülasyon sonlu veya sonsuz olabilir. 
+     popülasyon boyutu N ile gösterilir.
+     popülasyonla çalışmamız çoğunlukla zordur... mesela ankarada yaşayan öğrenciler dersek tüm herkese ulaşmak zor iştir. tüm popülasyonu temsil edecek bir örnek popülasyon belirlemek daha mantıklıdır....
+
+örneklem = popülasyondan seçilen ve popülasyonu en iyi temsil ettiği varsayılan az sayıda birimi içeren topluluğa örneklem denir...  mesela ankaradaki öğrenciler dediğimizde hepsine ulaşmak aşırı zordur. bu yüzden örneklem oluştururuz.
+     hem örneklem ile çalışmak popülasyona göre daha kolaydır.
+     bazı örnekleme yöntemleri = basit tesadüfi örnekleme, tabakalı örnekleme, kademeli örnekleme,sistematik örnekleme...
+     gözlem(örneklem) birimi = örneğin 2021 yılında gazi üni istatistik kazanmış öğrenciler...
+     parametre = popülasyondan hesaplanmış tüm değelere parametre denir
+     örneklem hesaplanan herhangi bir değer ise istatistik olarak adlandırılır.
+     mesela ankaradaki bir milyondan fazla öğrencinin tamamı ile yapılmış araştırmanın sonuçları parametredir   her bir öğrenci grubunun temsili ile yapılmış çalışmaların sonucu ise istatistik olarak adlandırılır.
+
+değişken ve değişken türleri
+      değişken = popülasyon veya örneklemdeki ölçülebilecek veya sayılabilecek özelliğin sayı ya da miktarını temsil eden sembollere denir. mesela yaş bir değişkendir öğrenciler arasında farklılıklar olabilir.
+      
+      değişken türleri = yapılarına göre(nicel ve nitel değişken), değerine göre(sürekli değişken,süreksiz değişen) , neden sonuç ilişkisine göre(bağımlı değişken,bağımsız değişken) 
+      yapılarına göre(nicel ve nitel) = değişkenin özelliği sayı veya miktar olarak hesaplanabilirse(boy,yaş,kilo) nicel,   nitel ise = sosyo-ekonomik durum.
+      değerlerine göre değişkenler =  sürekli değişkenler(boy:172,puan:87,17)    süreksiz değişken(cinsiyet,solunum sayısı)   
+      neden-sonuç ilişkisine göre değişkenler = bağımsız değişken(araştırmacının bağımlı değişken üzerindeki etksini test etmek istediği değişken bağımsız değişkendir)        bağımlı değişken(bağımsız değişken/değişkenlerin etkisiyle değişime uğrayan değişkendir)
+          mesela deneyim yılı,çalışan yaşı,eğitim durumu   ile maaş modeli çıkartmak... maaş modeli bağımlı değişken.
+
+ölçek ve ölçek türleri
+      ölçek = ölçme işlemi yapılırken ölçümün yapılması için kullanılan araç olarak tanımlanır.
+      ölçülebilen özelliklerin bazıları sayılarla bazıları ise sıfatlarla belirtilebilir.
+      ölçme türleri = sınıflama(nominal) ölçme düzeyi, sıralama(ordinal) ölçme d., aralık(interval) ölçme d., oran(ratio) ölçme düzeyi, likert ölçme düzeyi.
+
+      sınıflama(nominal) ölçme düzeyi: ayırt edebilmek için istenilen birimlere isim veya semboller atanır
+           evli-bekar
+           kadın-erkek
+           beyaz güller- kırmızı güller
+
+      sıralama(ordinal) ölçme düzeyi: birimlerin önem sırası ve büyüklük küçüklük durumu hakkında bilgi verir
+           eğitim durumu: ilkokul-ortaokul-lise-lisans-lisansüstü ...           
+       
+      eşit aralıklı(interval) ölçme düzeyi: veriler bir birim ve belirlenen bir başlangıç noktasına(izafi sıfır) göre gruplandırılırlar
+           termometrelerin başlangıç noktası sıfır. ancak buradaki 0 hava sıcaklığının yokluğunu göstermez.
+
+      oranlama(ratio) ölçme düzeyi: belirtilen başlangıç noktası gerçek bir sıfırdır.
+           bir aracın sürati 0 ise o araba duruyordur. eksi değeri olamaz mesela. en düşük sürat 0dır
+
+      likert ölçüm düzeyi: sosyal bilimler alanında kullanılan ölçek tipidir.
+           bu ölçek tipinde birey benimsediği ifadeleri işaretlemek yerine belirtilen ifadeye ne derece katılıp katılmadığını belirtir.
+           mesela katılıyorum, katılmıyorum, biraz katılıyorum, tamamen katılıyorum gibi...
+
+     Hap bilgiler:
+         en az bilgi veren ölçüm düzeyi sınıflama ölçüm düzeyidir.
+         en hassas ölçüm düzeyi oranlama ölçüm düzeyidir.
+         eşit aralıklı ölçme düzeyinde veriler birbirleri ile karşılaştırılamazlar. ancak oranlama ölçme düzeyinde veriler oransal olarka birbirleri ile karşılaştırılabilirler.       
+         eşit aralıklı ve oranlama ölçme düzeyinde toplanan verilerle aritmetik ortalama, standart sapma, varyans, korelasyon mod ve medyan gibi istatistiksel analizler yapılabilir.
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////betimsel analiz yöntemleri...////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+merkezi eğilim ölçüsü: kitlenin tüm elemanlarını yansıtacak şekilde kısa bilgiler oluşturmaya yarar. kitlenin tüm değerlerini yansıtacak küçük bilgiler verir. analitik ve analitik olmayan ortalamalardır.
+analitik ortalamalar: aritmetik ortalama, geometrik ortalama, ağırlıklı ortalama
+analitik olmayan ortalamalar: mod, medyan,kartiller
+
+Analitik ortalamalar: 
+     örneklemdeki tüm veri değerlerini dikkate alan eğilim ölçüleridir.
+     
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 ####################################################################################################################################################################################################################################################################################################################################

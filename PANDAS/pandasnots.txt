@@ -1063,9 +1063,182 @@ weight        100     100     NaN
 
 ////CSV Dosya Analizi////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        import pandas as pd
 
+        # ReviewContent.csv adında bir dosya indirmemiz gerekir onuda indirdik.
+        # genel olarak işlenecek verileri dışarıdan alırız. csv,excel vs...
+
+        review = pd.read_csv("ReviewContent.csv") # uzantıları unutmamak lazım.
+        print(review)
+        """
+        Review ID  ... Room Availability
+        0      4055629  ...               338
+        1     25329416  ...                10
+        2     21705849  ...               268
+        3     41133812  ...               274
+        4      7465026  ...               281
+        ..         ...  ...               ...
+        995   44498863  ...               329
+        996   30544438  ...               309
+        997   46642535  ...                10
+        998   21403195  ...               357
+        999   38944752  ...               329
+
+        [1000 rows x 11 columns]
+
+        """ # bu şekilde gösterir. tümünü göstermeye kalkarsak. hepsini göremeyiz. bir kısmını gösterir bize sadece. normalde matplotlip vs ile verileri görselleştiririz.
+
+        review1 = review.copy() # birden fazla oluşturduk...
+        review2 = review1.copy()
+        print(type(review)) # <class 'pandas.core.frame.DataFrame'>     bir DataFrame...s
+        print(review.info()) # bilgileri verir DataFrame hakkında. .info() fonksiyonu.
+        """
+        <class 'pandas.core.frame.DataFrame'>
+        RangeIndex: 1000 entries, 0 to 999
+        Data columns (total 11 columns):
+        #   Column             Non-Null Count  Dtype
+        ---  ------             --------------  -----
+        0   Review ID          1000 non-null   int64
+        1   Review Date        1000 non-null   object        
+        2   Review Content     999 non-null    object   # bir tane boş veri var. bunu doldurursak tabloda komple hiç NaN veri olmaz.     
+        3   Listing Title      1000 non-null   object        
+        4   Neighbourhood      1000 non-null   object        
+        5   City               1000 non-null   object        
+        6   State              1000 non-null   object        
+        7   Country            1000 non-null   object        
+        8   Room Type          1000 non-null   object        
+        9   Room Price         1000 non-null   int64
+        10  Room Availability  1000 non-null   int64
+        dtypes: int64(3), object(8)
+        memory usage: 86.1+ KB
+        None
+        """ # bilgileri aldık df.info() ile bilgileri return etti print ile yazdırdık.
+        
+        print(review.head()) # ilk 5 değer default olarak ama sayı girersek istenen kadar verir bize.
+        print(review.tail()) # son 5 değer default olarak. girdiğimiz değere göre yukarıdan aşağıya istenen eleman sayısı kadar sondaki elemanları getirir.
+        print("............")
+        print(review.dtypes) # veri türlerini göster deriz kullanılan verilerin türlerini.
+        """
+        Review ID             int64
+        Review Date          object
+        Review Content       object
+        Listing Title        object
+        Neighbourhood        object
+        City                 object
+        State                object
+        Country              object
+        Room Type            object
+        Room Price            int64
+        Room Availability     int64
+        dtype: object
+        """ # tüm kolonlardaki verilerin yapısını görebiliriz. tek tek.
+        print(review.ndim) # 2 boyut bilgisini alırız. bu bir dataframe bu yüzden 2.
+        print(review.columns)
+        """
+        Index(['Review ID', 'Review Date', 'Review Content', 'Listing Title',
+        'Neighbourhood', 'City', 'State', 'Country', 'Room Type', 'Room Price',
+        'Room Availability'],
+        dtype='object')
+        """ # columns özelliği sadece DataFrame'de var. Series'lerde yok.
+        # columns gibi özellikler nesneni özellikleridir method değildir. method olsa idi () ile olması lazımdı.
+
+        # pandas.pydata.org  ile pandasın nasıl kullanılacağını görebiliriz. dökümantasyon okumak lazım her zaman.
+
+        print(review.memory_usage()) # böylece ne kadar hafıza kullanılır görebiliriz.
+        """
+        Index                 132
+        Review ID            8000
+        Review Date          8000
+        Review Content       8000
+        Listing Title        8000
+        Neighbourhood        8000
+        City                 8000
+        State                8000
+        Country              8000
+        Room Type            8000
+        Room Price           8000
+        Room Availability    8000
+        dtype: int64
+        """ # bu bir seridir. Series olarak geldi sadece satır indexlemesi var sutun indexlemesi yok tek boyutludur. 
+
+        toplam = review["Room Price"].sum() # tüm Room Price bilgilerine ulaştık ve sum dedik.
+        print(toplam)
+
+        # print(review.sum()) # her bir satırı toplar. bir seri elde ederiz. DataFrame olduğu için.  seride sum() kullanırsak tek bir değer elde ederiz ama DataFramede toplama kullanırsak o zaman Series elde ederiz.
+
+        print(review["Room Availability"])
+        """
+        0      338
+        1       10
+        2      268
+        3      274
+        4      281
+        ...
+        995    329
+        996    309
+        997     10
+        998    357
+        999    329
+        Name: Room Availability, Length: 1000, dtype: int64 
+
+        """
+        print(type(review["Room Availability"])) # <class 'pandas.core.series.Series'> DataFrameden tek bir parça aldık bu bu yüzden bir seridir. 
+
+        print(review["Room Availability"].add(10)) # her satıra 10 eklemesi yaptı... değişim kalıcı değil. olsun istersek bu yapıyı başka bir değişkene atamak lazım RTR = review["Room Availability"].add(10)   gibi...
+        # eğer review["Room Availability"] + 10 dese idikte aynısı olurdu pandas numpy üzerine kurulu olduğu için buna izin verirdi.
+
+        # sum toplama +, sub çıkarma - , div bölme /, mul çarpma *.   methodlarını veya işaretlerini kullanıncada çalışır bir sorun olmaz.
+        print(review["City"]) # bir Seri döner ve şehirleri görebiliriz.
+
+
+        # value_counts()  ile biz bir sutunda bir veri kaç kere kullanılmış kaç tane satırda var görebiliriz.
+        print(review["City"].value_counts("New York City")) # 135 ... City sutunundaki New York City  kaç tane satırda kullanılmış bunu görebiliriz...
+        print(review["Room Price"].value_counts()) # default olarak bırakınca her değerden kaç tane var bize gösterir.
+        """
+        Room Price
+        80     32
+        120    31
+        75     27
+        95     27
+        55     26
+        ..
+        360     1
+        775     1
+        500     1
+        265     1
+        191     1
+        Name: count, Length: 180, dtype: int64
+        """
+
+        print(review["Room Price"].sort_values(ascending=False)) # değerleri sırala demek aynı sutunda satırlar sıralanacak. ascending = False olursa azalarak bir sıralama gerçekleşir en yüksekten en düşüğe sıralar.
+        # .head(1) ile ise en baştaki en çok para olan odayı görebiliriz.
+
+        print(review["City"].sort_values()) # verileri alfabetik sıralamata göre sıralar.  ascending = False dersek ters Alfabetik sıralama yapar.
+        print(type(review["City"].sort_values())) # <class 'pandas.core.series.Series'>   DataFrame'den tek bir sutunu çıkarttık bu bir seri oldu... eğer bu seriyi kullanmak istersek bunu bir değişkene atamamız lazım    TYTY = review["City"].sort_values()  şeklinde....
+
+        print(review.sort_values("Room Price")) # Room Price sütununa göre sıralama yapar böylece.
+        """
+        Review ID Review Date                                     Review Content  ...        Room Type Room Price Room Availability
+        740   37117583  2012-04-20  Alex is a very considerate airbnb host. He mad...  ...      Shared room         16               326
+        718   47355526  2012-08-05  Manuel was very sweet and helpful! Very nice a...  ...     Private room         16               112
+        306   44838729  2012-06-03  It was easy to find and the room was clean. Ve...  ...     Private room         19               336
+        452   11937812  2012-05-28  I just had a wonderfull time in there: good co...  ...     Private room         19               333
+        795   37947941  2012-11-02  We only got to stay 12 hours, but this is exac...  ...     Private room         22                25
+        ..         ...         ...                                                ...  ...              ...        ...               ...
+        555    8381199  2014-10-25  This was my first Airbnb experience.  We were ...  ...  Entire home/apt        650               327
+        613   41553198  2014-12-10  Brian and his team were great! We had a group ...  ...  Entire home/apt        725               316
+        518   29952932  2013-06-15      Very beautiful apartment in a great location.  ...  Entire home/apt        775               316
+        489   25836446  2012-03-05  The reservation was canceled 79 days before ar...  ...  Entire home/apt        800               359
+        799    5239947  2013-01-15  The only issue that we had was that the elevat...  ...  Entire home/apt       1500               365
+
+        [1000 rows x 11 columns]
+
+        """  # en küçük Room Priceye göre DataFrame'nin satırlarını sıraladı. eğer ascending = False olsa idi o zaman Room Price sutununa göre  büyükten küçüğe sıralardı...
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ####################################################################################################################################################################################################################################################################################################################################
