@@ -1464,6 +1464,148 @@ print(review)
 
 ////Text ile çalışmak.////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+import pandas as pd
+
+review = pd.read_csv("ReviewContent.csv")
+
+print(review)
+"""
+     Review ID Review Date                                     Review Content  ...        Room Type Room Price Room Availability
+0      4055629  2012-10-06  Very nice accommodation in an aesthetically pl...  ...  Entire home/apt        100               338
+1     25329416  2013-11-03  Me and my friends had such a nice time at Dott...  ...     Private room         80                10
+2     21705849  2014-11-27  I stayed for 4night.She gave us a lot of snuck...  ...     Private room         57               268
+3     41133812  2012-05-08  The apartment was situated on the first floor ...  ...  Entire home/apt         38               274
+4      7465026  2013-08-16  Even though it was only for one night, we had ...  ...  Entire home/apt         62               281
+..         ...         ...                                                ...  ...              ...        ...               ...
+995   44498863  2012-08-30  I loved staying here during my time in Paris. ...  ...     Private room         35               329
+996   30544438  2013-02-28  Highly recommend this as a place to stay if yo...  ...  Entire home/apt        191               309
+997   46642535  2014-08-30  John was a great host.  I came in on a red eye...  ...  Entire home/apt         95                10
+998   21403195  2014-12-26  Very good experiance had a comfortable stay. V...  ...     Private room         75               357
+999   38944752  2013-10-15  Thank you for the wonderful stay!   It was a c...  ...     Private room        110               329
+
+[1000 rows x 11 columns]
+"""
+# bir csv dosyasını excel ile açabiliriz.
+print(review["Country"]) # bu bir Seridir tek bit sutundan elde ettiğimiz parça tek boyutlu bu yüzden sutun indexlemesi yok.   
+
+# upper() tüm harfleri büyük harf yapar, lower() tüm harfleri küçültür. title() ilk harfleri büyük hale getirir.  len() uzunluk ölçer.  python methodları karışmasın diye başlarına str koyarız.
+print(review["Country"].str.upper()) # .str.upper() olarak kullanırız. pandasın str methodları pythonın str fonksiyonlarından farklı olsun diye  başına .str koyarak işlem yaparız.
+print(review["Country"].str.lower()) 
+print(review["Country"].str.title())
+# değişiklikler kalıcı olmaz kalıcı olsun diye atama yapmak lazım  mesela review["Country"] = review["Country"].str.lower() böylece ana DataFrame'de tüm Country verileri küçük harfli olur. kalıcı değişimi böyle sağlayabiliriz.
+# ard arda kullanabiliriz   review["Country"].str.title().str.lower()   # 
+print(review["Country"].str.len()) # tüm satırlardaki stringlerin uzunluğunu tek tek görebiliriz.
+"""
+0      14
+1      15
+2      13
+3       5
+4       6
+       ..
+995     6
+996    13
+997    13
+998    13
+999    13
+Name: Country, Length: 1000, dtype: int64
+""" # dtype:int64 oldu bunun nedeni belli çünkü uzunluğu int değer ile belirtebiliyor.
+print(type(review["Country"].str.len())) # <class 'pandas.core.series.Series'>  bu bir tek boyutlu seridir sutun indexlemesi yoktur satır indexlemesi vardır.
+
+
+# replace()   ana python kullanımı.
+str1 = "arin yazilim".replace("a","e") # önce değişecek sonra yeni gelecek değer.
+# .replace() pandas kullanımı
+print(review["Country"].str.replace("A","E")) # tüm A harflerş E olacak Country sutunundaki... kalıcı olsun istersek o zaman review["Country"] = review["Country"].str.replace("A","E")   yaparız böylece bir Seri'ye bir değişmiş bir Seri atarız DataFrameler veri Setlerinin birleeşmesi ile iki boyut kazanır ve öyşe oluşurlar.
+
+
+
+print(review["City"].str.upper().str.contains("YORK")) # City Sutununda YORK içereren satırları arayacağız.  Bir Series oluştururuz ve True False'dan oluşan verileri vardır satırın içinde eğer YORK varsa True verir yoksa False verir.
+# maskelemede yapabiliriz.
+mask = review["City"].str.upper().str.contains("YORK")
+print(review[mask]) # içerisindeki YORK geçen City Satırlarından oluşan bir DataFrame oluşur. filtreleme yapabiliriz. str.containts() ile.
+"""
+     Review ID Review Date                                     Review Content  ...        Room Type Room Price Room Availability
+2     21705849  2014-11-27  I stayed for 4night.She gave us a lot of snuck...  ...     Private room         57               268
+14    12792771  2013-08-22  Usman is a great host, the apartment is as des...  ...  Entire home/apt        600               334
+18     9329281  2013-12-03  This is not our first time to NYC, but this is...  ...  Entire home/apt        260               291
+25    22419996  2014-11-17  Apartment was clean and as described. Bed was ...  ...  Entire home/apt        199               313
+34    42823968  2013-04-25  We stayed at Tim’s and Ellen’s beautiful apart...  ...  Entire home/apt        195               249
+..         ...         ...                                                ...  ...              ...        ...               ...
+956    7940278  2014-10-17  Scott's apartment is such a havon in the bustl...  ...  Entire home/apt        250               312
+974   37762569  2013-12-30  Susanne provides a comfortable room in a spaci...  ...     Private room        100               278
+983    2018617  2013-12-22  Ysaira and Jose are the sweetest people. They ...  ...     Private room         40               302
+998   21403195  2014-12-26  Very good experiance had a comfortable stay. V...  ...     Private room         75               357
+999   38944752  2013-10-15  Thank you for the wonderful stay!   It was a c...  ...     Private room        110               329
+
+[135 rows x 11 columns]
+"""
+ 
+# bir string'in bir string'in başında veya sonunda olup olmamasını arayan methodlar
+#   .startswith() , endswith()
+
+print(review["City"].str.upper().str.startswith("LOS")) # LOS ile başlayan verileri buluruz. City Sutunundaki True ve FalseDen oluşan bir Seri döner VE sağlıyorsa True Yoksa False verir satır satır.
+print(review["City"].str.upper().str.endswith("LOS")) # LOS ile biten şehirleri görebiliriz. bool değerlerden oluşan bir Seri return eder bu sistem.
+
+# .str.strip()    
+print(review["City"].str.strip()) # kelimenin başında veya sonundda boşluk veya boşluklar varsa bundan kurtuluruz. kalıcı değişim olsun istersek o zaman atama yapmamız lazım.
+# "  arin yazilim    ".strip()   pythonda "arin yazilim" olur...
+# lstrip() soldaki boşluğu götürür en baştaki boşlukları yani sağ tarafa bakmaz.   rstrip() ise sağdaki boşlukları götürür sola bakmaz. 
+
+
+# .str.split()  methodu...
+liste1 = "benim adim arin".split(" ") # boşluğa göre böler boşluk hesaba katılmaz ele geçen veriler bir listeye atanır. 
+print(liste1) # ['benim', 'adim', 'arin']
+liste1 = " ".join(liste1) # verileri birleştirirken aralarına " " koyarak birleştirir.  "veri".join(liste)  yaparsak içerideki veriyi araya koyarak birleştirir .join()  fonksiyonu. 
+print(review["City"].str.split(" "))
+"""
+0               [London]
+1            [Amsterdam]
+2      [New, York, City]
+3               [Madrid]
+4               [Athens]
+             ...
+995              [Paris]
+996       [Los, Angeles]
+997             [Boston]
+998    [New, York, City]
+999    [New, York, City]
+Name: City, Length: 1000, dtype: object
+""" # her bir listeyi python listesine çevirerek bize getirir. 
+
+print(review["City"].str.split(" ").str.get(0)) # her listedeki ilk elemanı getirerek bir seri oluşturur.
+"""
+0         London
+1      Amsterdam
+2            New
+3         Madrid
+4         Athens
+         ...
+995        Paris
+996          Los
+997       Boston
+998          New
+999          New
+Name: City, Length: 1000, dtype: object
+""" 
+
+print(review["City"].str.split(" ",expand=True))
+"""
+             0        1     2
+0       London     None  None
+1    Amsterdam     None  None
+2          New     York  City
+3       Madrid     None  None
+4       Athens     None  None
+..         ...      ...   ...
+995      Paris     None  None
+996        Los  Angeles  None
+997     Boston     None  None
+998        New     York  City
+999        New     York  City
+
+[1000 rows x 3 columns]
+
+""" # expand = True ile DataFrame olarak döner sistem.
 
 
 
