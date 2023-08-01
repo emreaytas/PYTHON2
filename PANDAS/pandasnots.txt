@@ -1237,8 +1237,237 @@ weight        100     100     NaN
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///Veri Filtrelemek/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import pandas as pd
+
+pd.set_option("display.max_columns",None) # maximum sutunları göster deriz..
+review = pd.read_csv("ReviewContent.csv") # uzantısı ile gireriz.
+
+print(review)
+"""
+     Review ID Review Date                                     Review Content
+
+0      4055629  2012-10-06  Very nice accommodation in an aesthetically pl...  \
+1     25329416  2013-11-03  Me and my friends had such a nice time at Dott...
+
+2     21705849  2014-11-27  I stayed for 4night.She gave us a lot of snuck...
+
+3     41133812  2012-05-08  The apartment was situated on the first floor ...
+
+4      7465026  2013-08-16  Even though it was only for one night, we had ...
+
+..         ...         ...                                                ...
+
+995   44498863  2012-08-30  I loved staying here during my time in Paris. ...
+
+996   30544438  2013-02-28  Highly recommend this as a place to stay if yo...
+
+997   46642535  2014-08-30  John was a great host.  I came in on a red eye...
+
+998   21403195  2014-12-26  Very good experiance had a comfortable stay. V...
+
+999   38944752  2013-10-15  Thank you for the wonderful stay!   It was a c...
+
+
+                           Listing Title            Neighbourhood
+0    Nottinghill Portobello  Artist Flat   Kensington and Chelsea  \
+1     Quiet Pink Studio in the PIJP area  De Pijp - Rivierenbuurt
+2    PRIVATE Room in Spacious, Quiet Apt                   Harlem
+3         Bonito estudio en pleno centro              Universidad
+4          Acropolis Apartment brand new                 ΑΚΡΟΠΟΛΗ
+..                                   ...                      ...
+995              A typical parisian flat        Buttes-Montmartre
+996     The Venice Roost on Abbot Kinney                   Venice
+997      Top Floor Renovated 1 BR / 1BA              West Roxbury
+998  NR LGA/JFK & City Studio W/Bathroom          Jackson Heights
+999            15 Minutes from Manhattan                 Woodside
+
+              City                State          Country        Room Type    
+0           London              England   United Kingdom  Entire home/apt  \ 
+1        Amsterdam        North Holland  The Netherlands     Private room    
+2    New York City             New York    United States     Private room    
+3           Madrid  Comunidad de Madrid            Spain  Entire home/apt    
+4           Athens               Attica           Greece  Entire home/apt    
+..             ...                  ...              ...              ...    
+995          Paris        Île-de-France           France     Private room    
+996    Los Angeles           California    United States  Entire home/apt    
+997         Boston        Massachusetts    United States  Entire home/apt    
+998  New York City             New York    United States     Private room    
+999  New York City             New York    United States     Private room    
+
+     Room Price  Room Availability
+0           100                338
+1            80                 10
+2            57                268
+3            38                274
+4            62                281
+..          ...                ...
+995          35                329
+996         191                309
+997          95                 10
+998          75                357
+999         110                329
+
+[1000 rows x 11 columns]s
+"""
+
+.........................................................................................................
+
+
+        import pandas as pd
+
+        review = pd.read_csv("ReviewContent.csv") # uzantısı ile gireriz.
+
+        print(review["City"]) # tek bir sutunu alacağımız için bir seri dönecek.
+
+        print(review["City"] == "London") # City kolonunda London olanlara True verir olmayana False verir... 
+
+        """
+        0       True
+        1      False
+        2      False
+        3      False
+        4      False
+        ...
+        995    False
+        996    False
+        997    False
+        998    False
+        999    False
+        Name: City, Length: 1000, dtype: bool
+        """ # dtype = bool oldu    bool verilerden oluşan bir Seriestir bu...
+
+        print(review[review["City"] == "London"]) # burada London olanlar True olacağı için tüm satırlardan City == London olanlar gelecek. numpy mantığı.  içeri Seri gönderdik bool verilerden oluşan ve Seride aynı sutunda True olanlar geldi.
+        """
+        Review ID Review Date  ... Room Price Room Availability
+        0      4055629  2012-10-06  ...        100               338
+        7     10787310  2013-06-02  ...         60               351
+        10    24326991  2014-10-19  ...        140               151
+        20    38360407  2013-12-31  ...         85               344
+        27    37847700  2014-02-02  ...        129               279
+        ..         ...         ...  ...        ...               ...
+        943   30716660  2013-04-21  ...        350               345
+        963   37527770  2012-08-16  ...         27               362
+        966   11444280  2013-04-01  ...         49               128
+        967   31488970  2014-10-18  ...         39               365
+        971   21709517  2013-07-03  ...        165               301
+
+        [104 rows x 11 columns]
+        """ # City'si London olan veriler geldi.
+
+
+        mask = review["Room Type"] == "Private room" # tek eşit olursa veri değişimi olur. == olursa eğer o zaman eşit olana True olmayana False verecek bir Seri oluşturur. bu bir maskelemedir.
+        print(review[mask]) # bu seriyi DataFrame'ye göndererek biz aynı sutunda True olan verileri getirebiliriz. buna filtreleme denir.
+        """
+        Review ID Review Date                                     Review Content                        Listing Title  ...          Country     Room Type Room Price Room Availability
+        1     25329416  2013-11-03  Me and my friends had such a nice time at Dott...   Quiet Pink Studio in the PIJP area  ...  The Netherlands  Private room         80                10     
+        2     21705849  2014-11-27  I stayed for 4night.She gave us a lot of snuck...  PRIVATE Room in Spacious, Quiet Apt  ...    United States  Private room         57               268     
+        5     11372151  2014-11-19  We spent four days at Shane's place. The locat...   Great Light-filled Alberta Arts Rm  ...    United States  Private room         55               121     
+        7     10787310  2013-06-02  Carolines room is perfectly located to discove...        Private room - Central London  ...   United Kingdom  Private room         60               351     
+        8     37085487  2014-06-27  We had a great stay in Tyler's apartment. The ...                  Privacy + Free Beer  ...    United States  Private room         79               330     
+        ..         ...         ...                                                ...                                  ...  ...              ...           ...        ...               ...     
+        985   29498170  2013-12-17  The neighborhood was pretty central and my fri...           Great Room at the Gran Via  ...            Spain  Private room         30               338     
+        989   48665633  2012-11-19  Very nice place in a nice neighborhood. Not fa...            North Austin garden haven  ...    United States  Private room         65               364     
+        995   44498863  2012-08-30  I loved staying here during my time in Paris. ...              A typical parisian flat  ...           France  Private room         35               329     
+        998   21403195  2014-12-26  Very good experiance had a comfortable stay. V...  NR LGA/JFK & City Studio W/Bathroom  ...    United States  Private room         75               357     
+        999   38944752  2013-10-15  Thank you for the wonderful stay!   It was a c...            15 Minutes from Manhattan  ...    United States  Private room        110               329     
+
+        [340 rows x 11 columns]
+        """ # bu bir DataFrame çünkü iki boyutludur.
+
+
+        mask = review["Room Type"] != "Private room" #private room ise False alacak serideki satır öyle değilse True olacak.
+        print(review[mask]) # böylece Private room olanlar gelmeyecek.
+
+
+        mask1 = review["Room Price"] > 60 # bir seri oluşacak ve değeri 60dan yüksek olanlar True alacak.
+        mask2 = review["Room Price"] < 100 # 100den küçük olanlar True alacak ve bir seri oluşacak
+        # & = ve   | = veya demek.  c dilinden gelme c'de &&(ve)  ||(veya) demek... ama & | olur pandas'ta
+        print(review[mask1 & mask2]) # ikisininde aynı anda True olduğu satırları getirir. 60dan büyük 100den küçük olanları alacağız.
+        """
+        Review ID Review Date                                     Review Content                        Listing Title  ...          Country        Room Type Room Price Room Availability
+        1     25329416  2013-11-03  Me and my friends had such a nice time at Dott...   Quiet Pink Studio in the PIJP area  ...  The Netherlands     Private room         80                10  
+        4      7465026  2013-08-16  Even though it was only for one night, we had ...        Acropolis Apartment brand new  ...           Greece  Entire home/apt         62               281  
+        8     37085487  2014-06-27  We had a great stay in Tyler's apartment. The ...                  Privacy + Free Beer  ...    United States     Private room         79               330  
+        17     7568387  2013-02-01  Kristina and Ekaterine were lovley hosts. They...  Hollywood Furnished Private Bedroom  ...    United States     Private room         99               244  
+        20    38360407  2013-12-31  Nice contact. Very friendly and supportive. Th...  Curved wall Studio ST4 with Kitchen  ...   United Kingdom  Entire home/apt         85               344  
+        ..         ...         ...                                                ...                                  ...  ...              ...              ...        ...               ...  
+        992   13423090  2014-12-25  Ca' di paolo is a cozy apartment in a great lo...                         ca' di paolo  ...            Italy  Entire home/apt         99               303  
+        993   27392171  2012-03-07  What a great place to stay! In the heart of Ma...    Charming Studio - Heart of Marais  ...           France  Entire home/apt         95               284  
+        994   28605533  2014-09-24  We had a wonderful stay at this apartment. Alt...                       sunny and cosy  ...          Germany  Entire home/apt         62                 6  
+        997   46642535  2014-08-30  John was a great host.  I came in on a red eye...      Top Floor Renovated 1 BR / 1BA   ...    United States  Entire home/apt         95                10  
+        998   21403195  2014-12-26  Very good experiance had a comfortable stay. V...  NR LGA/JFK & City Studio W/Bathroom  ...    United States     Private room         75               357  
+
+        [293 rows x 11 columns]
+        """ # print(review[(review["Room Price"] > 60) & (review["Room Price"] < 100)]) # yapabilirdik buda olursa iki serinin aynı anda True olduğu satırları getirerek bir DataFrame return ederdi.
+
+        mask1 = review["Room Price"] > 200
+        mask2 = review["Room Availability"] > 300
+        print(review[mask1 | mask2]) # serilerin aynı indexli satıları en az bir True'li olurssa o veriyi getirerek bir DataFrame oluştururuz. aynı satırda Room Price ve Room Availability True olursa en az birisi o zaman o satır tüm stuunları ile gelir.
+
+
+
+        # isin method  ...  
+
+        mask = (review["City"] == "London") | (review["City"] == "Madrid") | (review["City"] == "Amsterdam") | (review["City"] == "Paris")
+        print(review[mask]) # Madrid, London, Amsterdam,Paris 'dan birisi olan veriler gelir.
+        # mesela bir tane daha şehir eklemek istedik o zaman ne yaparız  review["City"].isin(["London","Amsterdam","Paris","Madrid"]) yapabiliriz.
+        print(review[review["City"].isin(["Madrid"])]) # tek veri olsa bile liste içerisinde yollarız. 
+        print(review[review["City"].isin(["London","Amsterdam","Paris","Madrid"])])  # isin içerisindeki verileri bakar ve == olanları getirir her birinden bir seri oluşturur ve bunlar veya bağlacı ile bağlanır aslında.
+
+
+        # between() belirli değerler arasındaki veriler için kullanılır. mesela Room Price için.
+
+        mask = review["Room Price"].between(80,100) #önce düşük olan sonra büyük olan girilir. bir aralık belirlebir. # tarihler arasında da belirlenebilir.
+        print(review[mask]) # Room Price 80 ile 100 arasında ise. 
+
+        mask1 = review["Review Date"].between("2013-01-01","2014-01-01") # tarihleride bu şekilde aralığa alabiliriz.
+        print(review[mask1]) # tarihi belli aralıkta alan bir DataFrame return etti.
+
+
+        
+        # duplicated()   TEKRAR BAK.
+        review2 = review.copy() # farklı bir bellek alanında birbirinden bağımsız olacaklar böylece. .copy() sayesinde.
+        review.sort_values("City",inplace=True) # kalıcı olarak değiştirdi ve City'e göre sıraladı.
+        print(review["City"].duplicated()) # ilk defa görünce False verir bir veriye Diğerlerine True verir. birden fazla aynı değerden var mı yok mu bunu kontrol eder. mesela ilk defa Amsterdam gördü False verir diğerlerine True verir.
+
+        mask = ~review["City"].duplicated() # bunun başına ~ koyarak biz bunu review[mask] yaparak False olan verileri alacağız yani ilk defa görülen şehirlerin verilerinden bir DataFrame oluşacak.
+        print(review[mask])
+        mask1 = review["City"].duplicated() == False # böyle yaparsak bu seride False olanlar True olacak True olanlar False olacak bunu reviewe göndererek ilk defa beliren şehirlerin verilerini alabiliriz.
+        print(review[mask1])
+        #  mask1 = review["City"].duplicated() == False      bu ve   ~review["City"].duplicated()    bu aynı şeyy...   ~ ile bir Serinin Truelerini False Falselerini True yapabiliriz.
+
+
+        # drop_duplicates() 
+        print(len(review2)) # 1000 satır var. kaç tane satır var. görebiliriz. len() ile.
+        print(len(review2.drop_duplicates())) # aynı olan verileri sil demek. Tüm bir satırın ddiğer tüm bir satırla aynı olması gerekir yani her satırın kombinasyonu birbirinden farklı.
+        print(len(review2.drop_duplicates(subset=["City"]))) # her şehirden bir tane getir demek.  her şehrin ayrı olduğu bir DataFrame olacak. 27 olacak. 27'nin içindeki şehirler ise 
+
+
+        
+        # unique  ve nunique methods
+        print(review2["City"].unique()) # o seride kullanılan verileri tek tek getirir.  hepsi bir tane olacak şekilde.
+        print(type(review2["City"].unique())) # bu bir <class 'numpy.ndarray'>   bunun sebebi Series'ten elde ettiğimiz bir array olması. neden numpy bunun nedeni ise pandas numpy üzerine kurulu bir modül.
+        """
+        ['London' 'Amsterdam' 'New York City' 'Madrid' 'Athens' 'Portland'
+        'Melbourne' 'New Orleans' 'Venice' 'Paris' 'Chicago' 'Los Angeles'
+        'San Francisco' 'Washington' 'Berlin' 'Barcelona' 'Toronto' 'Vienna'
+        'Nashville' 'Sydney' 'Antwerp' 'Boston' 'Oakland' 'Brussels' 'Austin'
+        'Montreal' 'Seattle']
+        """  # 27 tane değer olacak.
+
+        print(review2["City"].nunique()) # 27 bize kaç tane unique değer var bunu görürüz. her değerin sayısı bir olursa kaç adet satır olur bunu görürüz.
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////Text ile çalışmak.////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 ####################################################################################################################################################################################################################################################################################################################################
