@@ -243,7 +243,7 @@ result1 = mycollection.find_one({"_id":ObjectId("64bfe6f9386508e861af2ff2")})  #
 
 result3 = mycollection.find({
     "name":{
-        "$in" : ["samsung","ford"]  # ismi samsung ve ford olanlar gelecek   $in ile ismi liste içerisinde olanlar gelir.
+        "$in" : ["samsung","ford"]  # ismi samsung ve ford olanlar gelecek   $in ile ismi liste içerisinde olanlar gelir. birden fazla olduğu için listeye koyduk verileri
         
     }
 }
@@ -346,8 +346,238 @@ print(result.deleted_count) # kaç kayıt silindi gösterir.
 
 
 
+MongoDB is a document database. It stores data in a type of JSON format called BSON.
+A record in MongoDB is a document, which is a data structure composed of key value pairs similar to the structure of JSON objects.
+SQL databases are considered relational databases. They store related data in separate tables. When data is needed, it is queried from multiple tables to join the data back together.
+MongoDB is a document database which is often referred to as a non-relational database. This does not mean that relational data cannot be stored in document databases. It means that relational data is stored differently. A better way to refer to it is as a non-tabular database.
+MongoDB stores data in flexible documents. Instead of having multiple tables you can simply keep all of your related data together. This makes reading your data very fast.
+You can still have multiple groups of data too. In MongoDB, instead of tables these are called collections.
+.......................................................................................................................................................................................................................................................................................
+Local vs Cloud Database...
+    MongoDB can be installed locally, which will allow you to host your own MongoDB server on your hardware. This requires you to manage your server, upgrades, and any other maintenance.
+
+    You can download and use the MongoDB open source Community Server on your hardware for free.
+
+    However, for this course we are going to use MongoDB Atlas, a cloud database platform. This is much easier than hosting your own local database.
+
+    To be able to experiment with the code examples, you will need access to a MongoDB database.
+
+    Sign up for a free MongoDB Atlas account to get started.
+.......................................................................................................................................................................................................................................................................................
+Creating a Cluster...
+    After you have created your account, set up a free "Shared Cluster" then choose your preferred cloud provider and region.
+
+    By default, MongoDB Atlas is completely locked down and has no external access.
+
+    You will need to set up a user and add your IP address to the list of allowed IP addresses.
+
+    Under "Database Access", create a new user and keep track of the username and password.
+
+    Next, under "Network Access", add your current IP address to allow access from your computer.
+.......................................................................................................................................................................................................................................................................................
+
+mesela elimizde bir database var ve bir collection oluşturucaz.   mydb = myclient["node_app"]    mydb.createcollection("collection2") şeklinde bir collection kurulabilir.
+    object = {"name":"emre","surname":"aytas"}
+    db.createCollection("posts")
+    db.posts.insertOne(object)
+# bu şekilde de olur. eğer zaten posts collection'u yoksa oluşturacak.
+.......................................................................................................................................................................................................................................................................................
+
+db.posts.insertMany([  
+  {
+    title: "Post Title 2",
+    body: "Body of post.",
+    category: "Event",
+    likes: 2,
+    tags: ["news", "events"],
+    date: Date()
+  },
+  {
+    title: "Post Title 3",
+    body: "Body of post.",
+    category: "Technology",
+    likes: 3,
+    tags: ["news", "events"],
+    date: Date()
+  },
+  {
+    title: "Post Title 4",
+    body: "Body of post.",
+    category: "Event",
+    likes: 4,
+    tags: ["news", "events"],
+    date: Date()
+  }
+]) 
+# çoklu göndermeyi biz bir liste içerisinde yollarız.
+.......................................................................................................................................................................................................................................................................................
+
+db.posts.insertOne({
+  title: "Post Title 1",
+  body: "Body of post.",
+  category: "News",
+  likes: 1,
+  tags: ["news", "events"],
+  date: Date()
+})
+# tekli olarakta yollayabiliriz. direkt dict olarak yollama yapabiliriz.
+.......................................................................................................................................................................................................................................................................................
+To query, or filter, data we can include a query in our find() or findOne() methods.
+.......................................................................................................................................................................................................................................................................................
+This example will only display the title and date fields in the results.
+
+db.posts.find({}, {title: 1, date: 1})
+.......................................................................................................................................................................................................................................................................................
+db.posts.find( {category: "News"} ) # tüm fieldler gelir ve sadece category'si News olanlar gelir.
+.......................................................................................................................................................................................................................................................................................
+  
+  If you would like to insert the document if it is not found, you can use the upsert option.
+  Update the document, but if not found insert it:
+
+db.posts.updateOne( 
+  { title: "Post Title 5" }, 
+  {
+    $set: 
+      {
+        title: "Post Title 5",
+        body: "Body of post.",
+        category: "Event",
+        likes: 5,
+        tags: ["news", "events"],
+        date: Date()
+      }
+  }, 
+  { upsert: true }  # eğer yoksa ekle komutu verebiliriz
+)
+.......................................................................................................................................................................................................................................................................................
+db.posts.deleteOne({ title: "Post Title 5" })  # ilk gelen veriyi siler.
+db.posts.deleteMany({ category: "Technology" }) # kategorisi Technology olan her document'i siler.
+.......................................................................................................................................................................................................................................................................................
+MongoDB Query Operators
+There are many query operators that can be used to compare and reference document fields.
+
+Comparison
+The following operators can be used in queries to compare values:
+
+$eq: Values are equal
+$ne: Values are not equal
+$gt: Value is greater than another value
+$gte: Value is greater than or equal to another value
+$lt: Value is less than another value
+$lte: Value is less than or equal to another value
+$in: Value is matched within an array
+Logical
+The following operators can logically compare multiple queries.
+
+$and: Returns documents where both queries match
+$or: Returns documents where either query matches
+$nor: Returns documents where both queries fail to match
+$not: Returns documents where the query does not match
+Evaluation
+The following operators assist in evaluating documents.
+
+$regex: Allows the use of regular expressions when evaluating field values
+$text: Performs a text search
+$where: Uses a JavaScript expression to match documents
+.......................................................................................................................................................................................................................................................................................
+MongoDB Update Operators
+There are many update operators that can be used during document updates.
+
+Fields
+The following operators can be used to update fields:
+
+$currentDate: Sets the field value to the current date
+$inc: Increments the field value
+$rename: Renames the field
+$set: Sets the value of a field
+$unset: Removes the field from the document
+Array
+The following operators assist with updating arrays.
+
+$addToSet: Adds distinct elements to an array
+$pop: Removes the first or last element of an array
+$pull: Removes all elements from an array that match the query
+$push: Adds an element to an array
+.......................................................................................................................................................................................................................................................................................
+Important: In MongoDB, a database is not created until it gets content!
+MongoDB waits until you have created a collection (table), with at least one document (record) before it actually creates the database (and collection).
+print(myclient.list_database_names()) # veritabanlarının isimlerini kontrol edebiliriz.
+Remember: In MongoDB, a database is not created until it gets content, so if this is your first time creating a database, you should complete the next two chapters (create collection and create document) before you check if the database exists!
+.......................................................................................................................................................................................................................................................................................
+You get an error if you specify both 0 and 1 values in the same object (except if one of the fields is the _id field):
+
+import pymongo
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["mydatabase"]
+mycol = mydb["customers"]
+
+for x in mycol.find({},{ "name": 1, "address": 0 }):
+  print(x)
+.......................................................................................................................................................................................................................................................................................
+The drop() method returns true if the collection was dropped successfully, and false if the collection does not exist.
+.......................................................................................................................................................................................................................................................................................
+import pymongo
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["mydatabase"]
+mycol = mydb["customers"]
+
+myquery = { "address": "Valley 345" }
+newvalues = { "$set": { "address": "Canyon 123" } }
+
+mycol.update_one(myquery, newvalues)
+.......................................................................................................................................................................................................................................................................................
+import pymongo
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["mydatabase"]
+mycol = mydb["customers"]
+
+myquery = { "address": { "$regex": "^S" } }
+newvalues = { "$set": { "name": "Minnie" } }
+
+x = mycol.update_many(myquery, newvalues)
+
+print(x.modified_count, "documents updated.")
+.......................................................................................................................................................................................................................................................................................
+import pymongo
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["mydatabase"]
+mycol = mydb["customers"]
+
+myquery = { "address": "Park Lane 38" }
+
+mydoc = mycol.find(myquery)
+
+for x in mydoc:
+  print(x)
+.......................................................................................................................................................................................................................................................................................
 
 
+
+
+
+
+
+
+
+
+
+
+
+...............................
+# Example Document
+{
+	title: "Post Title 1",
+	body: "Body of post.",
+	category: "News",
+	likes: 1,
+	tags: ["news", "events"],
+	date: Date()
+}
+...............................
 
 
 mongodb atlas.....
@@ -432,7 +662,7 @@ myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["mydatabase"]
 mycol = mydb["customers"]
 
-mydoc = mycol.find().sort("name")
+mydoc = mycol.find().sort("name")   # isme göre sıralama yapar. alfabetik sıralama eğer sayısal değer olsa küçükten büyüğe sıralama yapardı..
 
 for x in mydoc:
   print(x)

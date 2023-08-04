@@ -663,7 +663,7 @@ pandasın iki temek veri yapısı var series ve dataframe.
 
         print(df_students6.loc[["age","gender"]]) # birden fazla satır ile işlem yaparsak bir liste içerisinde göndeririz.
         """
-        Hale Ahmet Fatma
+                Hale Ahmet Fatma
         age      25    32    32
         gender    F     M     M
 
@@ -1613,3 +1613,184 @@ print(review["City"].str.split(" ",expand=True))
 
 
 ####################################################################################################################################################################################################################################################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+####################################################################################################################################################################################################################################################################################################################################
+
+import sqlite3
+import pandas as pd
+connection = sqlite3.connect("ders.db")
+df = pd.read_sql_query("select * from students",connection)
+
+print(df)      # bu yapı ile sql sorgusu ve bağlantı kullanarak biz DataFrame oluşturabiliriz.
+
+............................................................................................................................................................................................................................................................................................................
+pandas Series'ler içerisinde heterojen veriler taşıyabiliriz. eğer veriler heterojen olursa dtype:object olur buradan heterojen yapı olduğunu anlayabiliriz.
+eğer pandas'a serilerine ikii tane liste verirsek ilkini data ikincisini ise index olarak kabul edecek.     
+mesela:
+        ds = pd.Series([10,20,30,40],["a","b","c","d"])
+        print(ds)
+        """
+        a  10
+        b  20
+        c  30
+        d  40
+        dtype: int64
+        """
+        print(ds['e']) # bunu dersek NaN allırız hata vermez ama değerde yok...   
+        print(ds[["a","b"]]) # birden fazla veri ararsak eğer o zaman liste içerisinde göndeririz.
+        print(ds.sum()) # tüm verilerin toplamını görebiliriz. ds.dtype ile yapının veri tipini görebiliriz.   ds.shape ile yapısını.   ds.ndim ile boyutunu. 
+
+# iki seri toplanırsa eğer o zaman aynı indexte olanlar toplanırlar numpy mantığı.
+
+            ds = pd.Series([10,20,30,40],["a","b","c","d"])
+            print(ds[ds % 2 == 0]) # böylece tüm çift olan verileri ve indexlerini görebiliriz...
+            result = ds % 2 == 0    o zaman True ve False'den oluşan bir Series oluşur. indexleri ile birlikte bunu tekrar ds[]  içerisine gönderirsek hep olduğu gibi True olan gelir indexi ile False olan ise işleme dahil edilmez.
+            yani Series içerisine Series göndererek biz filtreleme yapabiliriz.  
+
+
+............................................................................................................................................................................................................................................................................................................
+
+import pandas as pd
+
+opel2018 = pd.Series(data=[20,30,40,10],index=["astra","corsa","mokka","insignia"])
+opel2019 = pd.Series(data=[40,30,20,10],index=["astra","corsa","grandland","insignia"])
+print(opel2018 + opel2019)
+"""
+astra        60.0
+corsa        60.0
+grandland     NaN  
+insignia     20.0
+mokka         NaN
+dtype: float64
+""" # iki Series arasında toplama yaparsak eğer indexleri aynı olan veriler toplanır eğer indexleri farklı ise tabloya katılır ancak verisi hesaplanmaz NaN alır.
+# yani sadece aynı indexlemesi olan satırlar toplanır eş indexi olmayan veriler işleme dahil edilmez ve NaN alır.
+# hata vermek yerine NaN verir.
+
+............................................................................................................................................................................................................................................................................................................
+
+DataFrame aslında serilerin yan yana dizilmiş hali gibi gözükebilir.
+
+............................................................................................................................................................................................................................................................................................................
+
+import pandas as pd
+
+s1 = pd.Series([1,2,3,4,5],index=["a","b","c","d","e"])
+s2 = pd.Series([6,7,8,9,10],index=["a","b","c","d","e"])
+data = dict(aplles = s1,oranges = s2)
+df = pd.DataFrame(data)
+print(df)
+"""
+a       1        6
+b       2        7
+c       3        8
+d       4        9
+e       5       10
+"""
+# serileri toplayarak böyle bir dataframe oluşturabiliriz.
+............................................................................................................................................................................................................................................................................................................
+import pandas as pd
+
+df = pd.DataFrame([1,2,3,4,5])
+print(df)
+"""
+   0
+0  1
+1  2
+2  3
+3  4
+4  5
+"""
+............................................................................................................................................................................................................................................................................................................
+
+import pandas as pd
+
+df = pd.DataFrame([[1,2,3,4,5],[3,4,6,7,8],[5,6,7,8,9],[7,8,9,10,11],[9,10,11,12,13]],columns=["a","b","c","d","e"],index=["A","B","C","D","E"],dtype=float) # verileri verip satır indexlemesi ve kolon indexlemeesi yapabiliriz.
+print(df)
+"""
+     a     b     c     d     e
+A  1.0   2.0   3.0   4.0   5.0
+B  3.0   4.0   6.0   7.0   8.0
+C  5.0   6.0   7.0   8.0   9.0
+D  7.0   8.0   9.0  10.0  11.0
+E  9.0  10.0  11.0  12.0  13.0
+"""
+
+............................................................................................................................................................................................................................................................................................................
+
+import pandas as pd
+
+dict1 = {"name":["emre","arif","susam","ford"],"surname":["aytas","susam","simit","focus"]}
+
+df = pd.DataFrame(dict1,index=["A","B","C","D"])
+
+print(df)
+"""
+    name surname
+A   emre   aytas
+B   arif   susam
+C  susam   simit
+D   ford   focus
+"""
+# dict keyleri sutun indexlemesinde kullanıldı verileri sırası ile index sırası ile eşleşti ve satır satır veri oldu.  satır indexlemesi ise pandas içerisinde index =[]  ile yapıldı.
+
+............................................................................................................................................................................................................................................................................................................
+pandas ile birden fazla türde veri uzantısını okuyabiliriz.   .read_csv()   .read_excel()  .read_sql_query(query,connection)  .read_json() gibi...    xlsx uzantılı ise excel'dir.
+............................................................................................................................................................................................................................................................................................................
+
+import pandas as pd
+from numpy.random import randn
+df = pd.DataFrame(randn(3,3),index=["A","B","C"],columns=["col1","col2","col3"])
+print(df)
+"""
+       col1      col2      col3
+A  0.876487  0.291382 -0.860966
+B  0.880688 -0.308720 -1.216277
+C  1.038345  0.771560  0.560245
+"""
+df["col4"] = pd.Series(randn(3),index=["A","B","C"]) # bir col belirttik ve bir seri atadık. bu liste vsde olabilirdi. indexlemesi dataframenin indexlemesi ile aynı olmalıdır.
+print(df)
+"""
+       col1      col2      col3      col4
+A  0.876487  0.291382 -0.860966 -0.260276
+B  0.880688 -0.308720 -1.216277 -0.303827
+C  1.038345  0.771560  0.560245  0.116903
+"""
+
+df["col5"] = df["col4"] + df["col3"] # böylede yapabiliriz sonuçta bize gelen yeni bir seri seriler kendi aralarında toplanabilir.
+df.drop("col5",axis=1,inplace=True) # axis = 1 y koordinati  axis = 0 x koordinatı. inplace True ile ise kalıcı olmasını sağlarız.
+
+............................................................................................................................................................................................................................................................................................................
+
+
+............................................................................................................................................................................................................................................................................................................
+
+
+
+
+............................................................................................................................................................................................................................................................................................................
