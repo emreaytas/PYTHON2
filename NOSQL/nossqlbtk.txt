@@ -392,7 +392,7 @@ mongo db'de kendimiz belirtmezsek eğer her girilen veri için unique bir id gir
  ekleme işlemini collection üzerinden yaparız. 
 
 ............................................................................................................................................................................
-    data3 = {"_id":123231,"name":"lada","surname":"niva"} # eğer "_id": ... ile id belirlersek bu unique olmalı ama kendimiz belirledik otomatik olarak atanmadı.
+    data3 = {"_id":123231,"name":"lada","surname":"niva"} # eğer "_id": ... ile id belirlersek bu unique olmalı ama kendimiz belirledik otomatik olarak atanmadı. her id unique olur collection içerisinde.
     mycollection.insert_one(data3) # tek bir data eklemek için kullanılır.
 ............................................................................................................................................................................     
 
@@ -413,7 +413,7 @@ mongo db'de kendimiz belirtmezsek eğer her girilen veri için unique bir id gir
 
 ............................................................................................................................................................................
 
-.find({},{}) ile {} query'dir.. ikinci ise hangi sutunları görmek istediğimzdir  {"name":"emre"},{"_id":0} id olmadan ismi emre olanları getir demek.
+.find({},{}) ile {} query'dir.. ikinci ise hangi sutunları görmek istediğimzdir  {"name":"emre"},{"_id":0} id olmadan ismi emre olanları getir demek. id dışında bir sutuna sıfır vermeye gerek yok mesela {"_id":0,"age":1} dedik o zaman sadece yaş geleck.
 
 ikinci {}
  eğer {"_id":0,"name":1}  # dersek sadece name gelir .... {"_id":0,"name":1,"age":0} yaparsak hata alırız.  id dışında bir sutuna bir verince sadece bir verilen sutunlar gelir.  eğer id'ye sıfır verirsek o zaman başka sutuna sıfır veremeyiz. yoksa hata alırız.  "_id":0 olunca sadece görmek istediklerimize 1 vermemiz lazım... sadece "_id":0 dersek o zaman id hariç hepsi gelir.
@@ -424,8 +424,147 @@ sorguyu dışarda yazıp içeri verebiliriz  query = {"name":"emre"}  .find(quer
 
 query = {"name":{"emre","ford"}}
 
-
 ............................................................................................................................................................................
  
+import pymongo
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["mydatabase"]
+mycol = mydb["customers"]
+
+mydoc = mycol.find().sort("name")
+
+for x in mydoc:
+  print(x)
+
+............................................................................................................................................................................
+
+import pymongo
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["mydatabase"]
+mycol = mydb["customers"]
+
+mydoc = mycol.find().sort("name", -1) # tersten sıralama yapabiliriz böylece. isme göre sıralar verir.
+
+for x in mydoc:
+  print(x)
+
+............................................................................................................................................................................
+import pymongo
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["mydatabase"]
+mycol = mydb["customers"]
+
+mycol.drop()  # .drop() ile bir kolonu düşürebiliriz.
+............................................................................................................................................................................
+.find({"$and":[{"name":["ahmet","mert"]},{"age":25}]},{"_id":0})   and kullanımı   or için ise $or yaparız. 
+    birden fazla veri olursa o zaman "name":["ahmet","mert"] gibi bir şekilde yaparız.
+............................................................................................................................................................................
+Change the address from "Valley 345" to "Canyon 123":
+
+import pymongo
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["mydatabase"]
+mycol = mydb["customers"]
+
+myquery = { "address": "Valley 345" }
+newvalues = { "$set": { "address": "Canyon 123" } }
+
+mycol.update_one(myquery, newvalues)
+
+#print "customers" after the update:
+for x in mycol.find():
+  print(x)
+............................................................................................................................................................................
+
+Update all documents where the address starts with the letter "S":
+
+import pymongo
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["mydatabase"]
+mycol = mydb["customers"]
+
+myquery = { "address": { "$regex": "^S" } }
+newvalues = { "$set": { "name": "Minnie" } }
+
+x = mycol.update_many(myquery, newvalues)
+
+print(x.modified_count, "documents updated.")
+
+............................................................................................................................................................................
+import pymongo
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["mydatabase"]
+mycol = mydb["customers"]
+
+myquery = { "address": "Mountain 21" }
+
+mycol.delete_one(myquery)
+............................................................................................................................................................................
+
+Delete all documents were the address starts with the letter S:
+
+import pymongo
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["mydatabase"]
+mycol = mydb["customers"]
+
+myquery = { "address": {"$regex": "^S"} }
+
+x = mycol.delete_many(myquery)
+
+print(x.deleted_count, " documents deleted.")
+
+............................................................................................................................................................................
+
+Delete all documents in the "customers" collection:
+
+import pymongo
+
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["mydatabase"]
+mycol = mydb["customers"]
+
+x = mycol.delete_many({})
+
+print(x.deleted_count, " documents deleted.")
+
+............................................................................................................................................................................
+
+find(....).limit(40) dersek o zaman limit bize ilk 40 veriyi getirir. limit ile kaç adet veri gelecek bunu ayarlayabiliriz.
+
+............................................................................................................................................................................
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
