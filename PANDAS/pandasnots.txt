@@ -976,7 +976,7 @@ surname     Cetin   NaN  Gulsen
 
 
 
-g = df_students2.dropna(thresh=2) # thresh = 1 olursa 2 Tane Nan veriye izin verir. Ama eğer thresh = 2 olursa o zaman iki tane NaN olanları siler. thresh = 2 olursa max bir tane NaN'a izin verir. eşit ve daha fazla olanlar elenir.
+g = df_students2.dropna(thresh=2) # eğer thresh = 2 ise iki tane nan olmayan veri varsa silme der hepsi nan bir tane normal veri varsa sil veya hepsi nansa sil der.   yani thresh ile müsade ederiz eğer en az iki tane normal veri varsa silme dedik. burada
 print(g)
 """
 age            25    32      32
@@ -1718,6 +1718,7 @@ import pandas as pd
 
 df = pd.DataFrame([1,2,3,4,5])
 print(df)
+print(df.info) # .info ile bilgileri alabiliriz.
 """
    0
 0  1
@@ -1787,10 +1788,318 @@ df.drop("col5",axis=1,inplace=True) # axis = 1 y koordinati  axis = 0 x koordina
 
 ............................................................................................................................................................................................................................................................................................................
 
+import pandas as pd
+import numpy as np
+
+data = np.random.randint(10,100,75).reshape(15,5)
+df = pd.DataFrame(data=data,columns=["col1","col2","col3","col4","col5"])
+print(df)
+print(df.columns) # kolonları bir liste içerisinde görebiliriz.
+print(df.index) # satır indexleri bir liste içerisinde görebiliriz.
+print(df["col1"].head()) # col1'in ilk 5 verisini alır. bu bir seri olur tek boyutlu olduğu için.
+
+print(df[["col1","col2"]].tail()) # bir dataframe oluşur col1 ve col2 serisinden oluşan onların son 5 verisini alırız burada.
+print(df[["col1","col2"]][5:15]) # 5. ve 15. index col1 ve col2 dahil. 5 15 arası elde 10 tane satır olur. bu şekilde satır seçimi yapabiliriz.
+
+result = df > 50  # 50 büyük olan için True olmayan için False
+print(df[result]) # 50den büyük olanları gösterir ve küçük olanlara NaN verir onlar False olduğu için. numpy mantığı.
+result1 = df["col1"] > 50 # bir seri elde ederiz tek boyutlu True ve False den oluşan 50den büyük olan True.
+print(df[result1]) # col1 üzerinden True olan satırlar gelecek False olanlar ise gelmeyecek.
+
+............................................................................................................................................................................................................................................................................................................
+AŞĞIDAKİLER KONTROL EDİLECEK...
+............................................................................................................................................................................................................................................................................................................
+import pandas as pd
+import numpy as np
+
+# gruplama işlemini biz belli değerlere göre yaparız. mesela departmana göre gruplama yaparsak eğer o zaman departmanı aynı olanlar aynı bölümde olur.
+
+personeller = {
+    "calisan":["ahmet","can","hasan","cenk","ali","riza","mustafa"],
+    "departman":["ik","bi","mu","ik","bi","mu","bi"],
+    "yas":[30,25,45,50,23,34,42],
+    "semt":["kadikoy","tuzla","maltepe","tuzla","maltepe","tuzla","kadikoy"],
+    "maas":[5000,3000,4000,3500,2750,6500,4500]
+
+}
+
+df = pd.DataFrame(personeller)
+print(df["maas"].sum()) # tüm maaşların toplamı. 29250
+result = df.groupby("departman").groups
+print(result) # departmanda gruplanan verileri görebiliriz.   {'bi': [1, 4, 6], 'ik': [0, 3], 'mu': [2, 5]}   bir dict içerisinde her elemanın indexi ile gelir. indexler key value biçimindedir. keyler gruplanan veriler. valuler ise liste içersiinde indexler. 
+result1 = df.groupby(["departman","semt"]).groups
+print(result1)  # {('bi', 'kadikoy'): [6], ('bi', 'maltepe'): [4], ('bi', 'tuzla'): [1], ('ik', 'kadikoy'): [0], ('ik', 'tuzla'): [3], ('mu', 'maltepe'): [2], ('mu', 'tuzla'): [5]}
+
+semtler = df.groupby("semt")
+for name,group in semtler:
+    print(name)
+    print(group)
+"""
+kadikoy
+   calisan departman  yas     semt  maas
+0    ahmet        ik   30  kadikoy  5000
+6  mustafa        bi   42  kadikoy  4500
+maltepe
+  calisan departman  yas     semt  maas
+2   hasan        mu   45  maltepe  4000
+4     ali        bi   23  maltepe  2750
+tuzla
+  calisan departman  yas   semt  maas
+1     can        bi   25  tuzla  3000
+3    cenk        ik   50  tuzla  3500
+5    riza        mu   34  tuzla  6500
+"""    
+     
+# tek bir grup alma
+result2 = df.groupby("semt").get_group("kadikoy") # sadece kadikoyu alırız.
+print(result2)
+"""
+  calisan departman  yas     semt  maas
+0   ahmet        ik   30  kadikoy  5000
+4     ali        bi   23  kadikoy  2750
+"""
+
+result3 = df.groupby("departman").sum()
+print(result3)
+"""
+departman
+bi         canalimustafa   90  tuzlakadikoymaltepe  10250
+ik             ahmetcenk   80         kadikoytuzla   8500
+mu             hasanriza   79         maltepetuzla  10500
+"""
+
+result4 = df.groupby("departman")["maas"].mean() # departmanların maaşlarının ortalamalarını alırız.
+print(result4)
+"""
+departman
+bi    3416.666667
+ik    4250.000000
+mu    5250.000000
+Name: maas, dtype: float64
+"""
+
+result5 = df.groupby("departman").get_group("ik") # departmanlar  gruplanacak ve ondan sadece get_group ile ik olanları alacağız.
+print(result5)
+"""
+  calisan departman  yas     semt  maas
+0   ahmet        ik   30  kadikoy  5000
+3    cenk        ik   50    tuzla  3500
+"""
+
+result6 = df.groupby("semt")["calisan"].count() # bize semtlere göre calisanların sayısını getirir. 
+print(result6)
+"""
+semt
+kadikoy    2
+maltepe    2
+tuzla      3
+Name: calisan, dtype: int64
+"""
+
+result7 = df.groupby("departman")["maas"].max()["mu"]   # departmana göre böler maasa göre mu olanın en yüksek maaşını getirir. maxlar arasından mu olanların arasından en yükseği getirir.
+print(result7) # 6500
+
+result8 = df.groupby("departman")["maas"].agg([np.sum,np.mean]) # birden fazla np işlemi olduğu için liste içerisinde gönderdik yoksa tek göndeririz.
+print(result8)
+"""
+             sum         mean
+departman
+bi         10250  3416.666667
+ik          8500  4250.000000
+mu         10500  5250.000000
+""" 
+
+
+
+............................................................................................................................................................................................................................................................................................................
+
+df = df.reindex(["a","b","c","d"])  # bunu yaparsak yeni satır indexlemeleri a b c d olur...
+df = df.drop(["col1","col2"],axis = 1) # birden fazla değer drop edeceksek liste içerisinde veririz. tekse gerek yok.
+
+df = df.notnull().sum() # değeri olan alanların sayısını görebiliriz. kolon kolon.
+df = df["col1"].isnull().sum() # col1 de kaç tane null değer var görebiliriz.
+
+............................................................................................................................................................................................................................................................................................................
+
+newcol = [np.nan,30,np.nan,51,np.nan,30,np.nan,10] # np.nan ile NaN veri verebiliriz. bunun için numpy'i import etmiş olmamız lazım.
+df["col4"] = newcol # kolon eklemesini böyle yapabiliriz.
+............................................................................................................................................................................................................................................................................................................
+
+print(df[df["col1"].isnull()]) # col1'de NaN olanlar gelir. satır satır hepsi gelir. ama col1'i nan olan satır gelmez.
+print(df[df["col1"].notnull()]["col1"]) # col1 gelir sadece ve NaN olmayan veriler gelir.
+    # axis = 1 sutun    axis = 0 ise satıra denk gelir.
+............................................................................................................................................................................................................................................................................................................
+df.dropna(subset = ["col1","col2"],inplace = True,how = "all") # birden fazla kolona bakabiliriz burada how all olduğu için col1 ve col2 nin aynı anda NaN olduğu satır silinir. inplace True olduğu için değişim kalıcı. eğer how = "any" olsaidi o zaman  aynı satırda col1 veya col2den biriis bile nan olsa o satır silinirdi.
+............................................................................................................................................................................................................................................................................................................
+df.dropna(thresh = 2) # en az 2 tane normal veri varsa silme demek.  6 veri var 4ü nan kisi normal o zaman silme ama 5 nan 1 normal o zaman siler.
+............................................................................................................................................................................................................................................................................................................
+df = df.fillna(value = "no input")   # nan olanların yerine no input yazacak.
+df = df.fillna(value = 1) # nan olanlara 1 değerini verir.
+............................................................................................................................................................................................................................................................................................................
+result = df.sum().sum() # DataFrame'deki toplam sayıyı verir.
+print(df.size) # kaç eleman var görebiliriz.
+print(df.isnull().sum().sum()) # toplam kaç tane nan veri var görebiliriz. eğer tek sum() olsa idi o zaman bir seri halinde her kolonda kaç tane nan veri var görebilirdik.
+............................................................................................................................................................................................................................................................................................................
+def ortalama(df):
+    toplam = df.sum().sum()
+    adet = df.size - df.isnull.sum().sum()
+    return toplam / adet
+
+df.fillna(value = ortalama(df),inplace = True)     # nan verilere ortalama değer vermiş olduk böylece.
+............................................................................................................................................................................................................................................................................................................
+
+df["indexler"] = df["name"].str.find("a") # isimlerin içinde a var ise o zaman indexler sutunundaki veriler ona göre True False alacak.
+df = df[df.Name.str.contains("jordan")] # df["Name"] olarak df.Name kullandık.
+#replace'ler arda arda dizilebilir.   a = a.replace(" ","-").replace("a","A").replace("b","B")  yapabiliriz.
+df = df.Team.str.replace(" ","-").replace("a","A")   # Team kolonu değişir. ve df Team kolonu olur değişmiş hali olur.
+............................................................................................................................................................................................................................................................................................................
+
+YUKARIDAKİLER KONTROL EDİLECEK... string ve groupby bu videolara bir daha bak.
+
+............................................................................................................................................................................................................................................................................................................
+import pandas as pd
+import numpy as np
+
+customers = {
+    "customerid":[1,2,3,4]
+    ,"firstname":["ahmet","ali","hasan","canan"],
+    "lastname":["yilmaz","korkmaz","celik","toprak"]
+}
+
+orders = {
+    "orderid":[10,11,12,13],
+    "customerid":[1,2,5,7],
+    "orderdate":["2010-07-04","2010-08-04","2010-07-07","2012-07-04"]    
+    
+}
+
+
+df_customers = pd.DataFrame(customers,columns=["customerid","firstname","lastname"])
+print(df_customers)
+"""
+   customerid firstname lastname
+0           1     ahmet   yilmaz
+1           2       ali  korkmaz
+2           3     hasan    celik
+3           4     canan   toprak
+"""        
+
+df_orders = pd.DataFrame(orders,columns=["orderid","customerid","orderdate"])
+print(df_orders)
+"""
+   orderid  customerid   orderdate
+0       10           1  2010-07-04
+1       11           2  2010-08-04
+2       12           5  2010-07-07
+3       13           7  2012-07-04
+"""
+
+result = pd.merge(df_customers,df_orders,how="inner") # iki tablo birleşecek. how inner ile inner join olduğunu belirttik.
+print(result)
+"""
+   customerid firstname lastname  orderid   orderdate
+0           1     ahmet   yilmaz       10  2010-07-04
+1           2       ali  korkmaz       11  2010-08-04
+""" # customerid'si eşlesenleri birleştirmiş. aynı olan kolon üzerinden inner join gerçekleştirdi. aynı olan değerlerde customerid için veriler birleştirildi.
+
+result = pd.merge(df_customers,df_orders,how="left") # left join yaptık. bütün müşteri bilgileri gelir. siparişin karşılığı yoksada getirir. sipariş için Nan verir.
+print(result)
+"""
+   customerid firstname lastname  orderid   orderdate
+0           1     ahmet   yilmaz     10.0  2010-07-04
+1           2       ali  korkmaz     11.0  2010-08-04
+2           3     hasan    celik      NaN         NaN
+3           4     canan   toprak      NaN         NaN
+""" # işlemler customerid üzerinden olacak çünkü aynı kolonları taşıyor iki df'de bunlar üzerinden join işlemleri oluyor.
+
+result = pd.merge(df_customers,df_orders,how="right") # right join yaptık tüm siparişler gelecek eşleşenler birleşecek o siparişi veren müşteri yok ise oraya NaN verilecek.
+print(result)
+"""
+   customerid firstname lastname  orderid   orderdate
+0           1     ahmet   yilmaz       10  2010-07-04
+1           2       ali  korkmaz       11  2010-08-04
+2           5       NaN      NaN       12  2010-07-07
+3           7       NaN      NaN       13  2012-07-04
+""" # işlemler customerid üzerinden olacak çünkü aynı kolonları taşıyor iki df'de bunlar üzerinden join işlemleri oluyor.
+
+result = pd.merge(df_customers,df_orders,how="outer") # full join yaptık. eşleşenler birleşecek. eğer bir siparişin karşılığı yoksa o zaman müşteri kısmı NaN alacak. eğer bir müşterinin sipariş karşılığı yoksa sipariş kısmı NaN olacak.
+print(result)
+"""
+   customerid firstname lastname  orderid   orderdate
+0           1     ahmet   yilmaz     10.0  2010-07-04
+1           2       ali  korkmaz     11.0  2010-08-04
+2           3     hasan    celik      NaN         NaN
+3           4     canan   toprak      NaN         NaN
+4           5       NaN      NaN     12.0  2010-07-07
+5           7       NaN      NaN     13.0  2012-07-04
+""" # işlemler customerid üzerinden olacak çünkü aynı kolonları taşıyor iki df'de bunlar üzerinden join işlemleri oluyor.
+
+
+
+
+
+
+customersA = {
+    "customerid":[1,2,3,4]
+    ,"firstname":["ahmet","ali","hasan","canan"],
+    "lastname":["yilmaz","korkmaz","celik","toprak"]
+}
+
+customersB = {
+    "customerid":[4,5,6,7]
+    ,"firstname":["yagmur","cinar","cengiz","can"],
+    "lastname":["bilge","turan","yılmaz","turan"]
+}
+
+
+df_customersA = pd.DataFrame(customersA,columns=["customerid","firstname","lastname"])
+print(df_customersA)
+"""
+   customerid firstname lastname
+0           1     ahmet   yilmaz
+1           2       ali  korkmaz
+2           3     hasan    celik
+3           4     canan   toprak
+"""
+df_customersB = pd.DataFrame(customersB,columns=["customerid","firstname","lastname"])
+print(df_customersB)
+"""
+   customerid firstname lastname
+0           4    yagmur    bilge
+1           5     cinar    turan
+2           6    cengiz   yılmaz
+3           7       can    turan
+"""
+
+result1 = pd.concat([df_customersA,df_customersB]) # birleştirme işlemi yapabiliriz. sırası ile önce A sonra B olacak şekilde iki df birleşti alt alta. bir liste içerisinde verdik birleşecek df'leri.  eğer [df_customersB,df_customersA] yapsa idik önce B'nin değerleri sonra ise A'nın değerleri eklenirdik.
+print(result1)
+"""
+   customerid firstname lastname
+0           1     ahmet   yilmaz
+1           2       ali  korkmaz
+2           3     hasan    celik
+3           4     canan   toprak
+0           4    yagmur    bilge
+1           5     cinar    turan
+2           6    cengiz   yılmaz
+3           7       can    turan
+""" # aynı kolonlara göre işlem yaptı.   birleştirme verilme sırasına göre yapıldı. alt alta sutuna göre veriler yerleşti.  satır indexlemesi ise her df kendi satır indexlerini getirdi. bir değişim yok.
+
+result2 = pd.concat([df_customersA,df_customersB],axis=1) # birleştirme işlemi yapabiliriz. sırası ile önce A sonra B olacak şekilde iki df birleşti alt alta. bir liste içerisinde verdik birleşecek df'leri.  eğer [df_customersB,df_customersA] yapsa idik önce B'nin değerleri sonra ise A'nın değerleri eklenirdik.
+print(result2)
+"""
+   customerid firstname lastname  customerid firstname lastname
+0           1     ahmet   yilmaz           4    yagmur    bilge
+1           2       ali  korkmaz           5     cinar    turan
+2           3     hasan    celik           6    cengiz   yılmaz
+3           4     canan   toprak           7       can    turan
+""" # axis = 1 olunca ise sutunlar yan yana koyuldu. 
+
+............................................................................................................................................................................................................................................................................................................
 
 ............................................................................................................................................................................................................................................................................................................
 
 
 
 
-............................................................................................................................................................................................................................................................................................................
+####################################################################################################################################################################################################################################################################################################################################
