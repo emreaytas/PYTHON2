@@ -1807,7 +1807,8 @@ result1 = df["col1"] > 50 # bir seri elde ederiz tek boyutlu True ve False den o
 print(df[result1]) # col1 üzerinden True olan satırlar gelecek False olanlar ise gelmeyecek.
 
 ............................................................................................................................................................................................................................................................................................................
-AŞĞIDAKİLER KONTROL EDİLECEK...
+
+
 ............................................................................................................................................................................................................................................................................................................
 import pandas as pd
 import numpy as np
@@ -1929,7 +1930,7 @@ print(df[df["col1"].isnull()]) # col1'de NaN olanlar gelir. satır satır hepsi 
 print(df[df["col1"].notnull()]["col1"]) # col1 gelir sadece ve NaN olmayan veriler gelir.
     # axis = 1 sutun    axis = 0 ise satıra denk gelir.
 ............................................................................................................................................................................................................................................................................................................
-df.dropna(subset = ["col1","col2"],inplace = True,how = "all") # birden fazla kolona bakabiliriz burada how all olduğu için col1 ve col2 nin aynı anda NaN olduğu satır silinir. inplace True olduğu için değişim kalıcı. eğer how = "any" olsaidi o zaman  aynı satırda col1 veya col2den biriis bile nan olsa o satır silinirdi.
+df.dropna(subset = ["col1","col2"],inplace = True,how = "all") # birden fazla kolona bakabiliriz burada how all olduğu için col1 ve col2 nin aynı anda NaN olduğu satır silinir. inplace True olduğu için değişim kalıcı. eğer how = "any" olsaidi o zaman  aynı satırda col1 veya col2den biriis bile nan olsa o satır silinirdi. subset ile dropna'nın tarama yapacağı kolonları seçebiliriz.
 ............................................................................................................................................................................................................................................................................................................
 df.dropna(thresh = 2) # en az 2 tane normal veri varsa silme demek.  6 veri var 4ü nan kisi normal o zaman silme ama 5 nan 1 normal o zaman siler.
 ............................................................................................................................................................................................................................................................................................................
@@ -1954,7 +1955,7 @@ df = df[df.Name.str.contains("jordan")] # df["Name"] olarak df.Name kullandık.
 df = df.Team.str.replace(" ","-").replace("a","A")   # Team kolonu değişir. ve df Team kolonu olur değişmiş hali olur.
 ............................................................................................................................................................................................................................................................................................................
 
-YUKARIDAKİLER KONTROL EDİLECEK... string ve groupby bu videolara bir daha bak.
+
 
 ............................................................................................................................................................................................................................................................................................................
 import pandas as pd
@@ -2096,10 +2097,218 @@ print(result2)
 """ # axis = 1 olunca ise sutunlar yan yana koyuldu. 
 
 ............................................................................................................................................................................................................................................................................................................
+import pandas as pd
+import numpy as np
+
+data = {
+    "col1":[1,2,3,4,5],
+    "col2":[10,20,13,20,25],
+    "col3":["abc","bca","ade","cba","dea"]
+    
+    
+}
+
+df = pd.DataFrame(data)
+print(df)
+"""
+   col1  col2 col3
+0     1    10  abc
+1     2    20  bca
+2     3    13  ade
+3     4    20  cba
+4     5    25  dea
+"""
+
+result = df["col1"].unique() # her verinin adeti 1 olunca elde edilen liste.
+print(result) 
+"""
+[1 2 3 4 5]
+"""
+
+result1 = df["col1"].nunique() 
+print(result1) # 5 kaç tane unique sayı var görebiliriz.
+
+
+print(df["col2"].value_counts()) # her eleman kaç tane görebiliriz.
+"""
+col2
+20    2
+10    1
+13    1
+25    1
+Name: count, dtype: int64
+"""
+
+print(df["col2"] * 2) # her eleman tek tek işlem görür ve hepsi iki ile çarpılır.
+
+def kareal(x):
+    return x ** 2
+
+print(df["col2"].apply(kareal)) # direkt olarak df["col2"]'yi apply sayesinde gönderebilmiş olduk.
+print(df["col2"].apply(lambda x:x ** 2)) # böylede olabilir.
+
+
+df["col4"] = df["col3"].apply(len) # her col3 satırındaki stringin boyutu col4'un elemanı olacak index sırası ile.
+print(df["col4"])
+"""
+0    3
+1    3
+2    3
+3    3
+4    3
+Name: col4, dtype: int64
+"""
+
+result2 = len(df.columns) # kaç adet kolon var görebiliriz.
+result3 = len(df.index) # kaç adet satır var görebiliriz.
+
+result4 = df.sort_values("col2",ascending=False) # ascending = False olduğu için büyükten küçüğe bir sıralama yapacak. default olarak True konumda.  .sort_values()  ile sıralama yapabiliriz df üzerinde kolon seçer ve satır satır sıralarız.
+print(result4)
+"""
+   col1  col2 col3  col4
+4     5    25  dea     3
+1     2    20  bca     3
+3     4    20  cba     3
+2     3    13  ade     3
+0     1    10  abc     3
+"""
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+df = pd.DataFrame(data)
+df = df.pivot_table(index = "ay",columns = "kategori",values = "gelir")
+# kategori kolon oldu.  ay bilgisi kolon oldu. veriler ise gelirden oluştu.
+"""
+
 
 ............................................................................................................................................................................................................................................................................................................
 
+............................................................................................................................................................................................................................................................................................................
 
+import pandas as pd
+import numpy as np
 
+df = pd.read_csv("nba.csv")
+
+# ilk 10 kayıt
+result1 = df.head(10)
+print(result1) # böylece yazdırabiliriz.
+
+# toplam kaç kayıt var
+result2 = len(df.index) # df.index ile indexleri bir liste içerisinde görebiliriz len ile ise kaç tane satır yani kaç tane veri var görebiliriz.
+print(result2)
+
+# tüm oyuncuların maaş ortalaması nedir.
+result3 = df["Salary"].mean() 
+print(result3)
+
+# en yüksek maaş
+result4 = df["Salary"].max() # Salary Serisindeki en yüksek değeri aldık.
+print(result4)
+
+# en yüksek maaşı alan oyuncunun ismi kimdir?
+result5 = df[df["Salary"].max() == df["Salary"]].iloc[0] # ilk gelen değeri alırız .iloc[0] ile
+print(result5)
+
+# yaşı 20 ile 25 arasında olan oyuncuların ismi ve oynadıkları takım.
+result6 = df[(df["Age"] <= 25) & (df["Age"] >= 20)][["Name","Team"]] # birden fazla sutun istediğimiz için liste içerisinde verdik.
+print(result6)
+
+# ismi jon holland olan oyuncunun takımı nedir.
+result7 = df[df["Name"] == "jon holland"]["Team"].iloc[0] # direkt olarak string bilgiyi alırız. 
+print(result7)
+
+# takımlara göre oyuncuların ortalama maaş bilgisi.
+result8 = df.groupby("Team")["Salary"].mean()
+print(result8)
+
+# kaç farklı takım var
+result9 = len(df["Team"].unique) # direkt olarak df["Team"].nunquie'de yapabiliriz.
+print(result9)
+
+# her takımda kaç adet oyuncu var.
+result10 = df.groupby("Team").value_counts() # ilgili satırlarda kaç adet değer var görebiliriz. bir seri elde ederiz.
+print(result10)
+
+# ismi içinde and geçen kayıtlar
+df = df.dropna(subset="name",axis=0) # eğer NaN serilerden kurtulmazsak hata alabiliriz.
+result11 = df[df["Name"].str.contains("str")]
+print(result11)
+
+............................................................................................................................................................................................................................................................................................................
+
+............................................................................................................................................................................................................................................................................................................
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv("youtube-ing.csv")
+
+#ilk 10 kayıtı getiriniz
+print(df.head(10))
+
+# ikinci ilk 5i getiriniz.
+print(df.iloc[5:10]) # veya df.head(10).tail(5) yapabilirdik.
+
+# datasette bulunan kolon isimleri ve sayısını bulunuz.
+result1 = df.columns
+result2 = len(df.columns)
+
+# beğenme ve dislike sayılarının ortlamalarını bulunuz
+result3 = df[["like","dislike"]].mean() 
+
+# ilk 50 videonun like vce dislike kolonlarını getiriniz
+result4 = df.head(50)[["like","dislike"]]
+
+# en çok görüntülenen video hangisidir
+result5 = df[df["views"].max() == df["views"]].iloc[0]
+
+# en az görüntülenen video hangisidir.
+result6 = df[df["views"].min() == df["views"]].iloc[0]
+
+# en fazla görüntülenen 10 video hangisidir.
+result7 = df.sort_values("views",ascending = False).head(10)
+
+# kategoriye göre beğeni ortalamalarını sıralı şekilde getiriniz.
+result8 = df.groupby("Category").mean().sort_values("like")
+
+# kategoriye göre yorum sayılarını sıralayınız.
+result9 = df.groupby("Category").sum().sort_values("comments",ascending=False)
+
+# her kategoride kaç video var.
+result10 = df.groupby("Category").value_counts()
+
+# her videonun title uzunluğunu yeni bir kolonda gösteriniz.
+df["lentitle"] = df["title"].apply(len) # her satır için tek tek işlem olacak.
+
+# her videoda gösterilen tag sayısını yeni kolonda gösteriniz
+df["tag_count"] = df["tags"].apply(lambda x:len(x.split("|")))# | 'e göre böldük ve .apply(len) ile işlem yaptık. 
+
+# en populer videoları listeleyiniz like/dislike oranına göre.
+df.dropna(subset=["like","dislike"],how="any") #like veya dislike ikisinden birisi nan olursa o satır silinecek. 
+
+likeslist = list(df["like"])
+dislikelist = list(df["dislike"])
+liste1 = list(zip(likeslist,dislikelist))
+oranlist = []
+for a,b in liste1:
+    if a + b == 0:
+        oranlist.append(0)
+    else:
+        oranlist.append(a / (a+b))
+    
+df["begeniorani"] = oranlist    
+print(df.sort_values("begeniorani",ascending=False)[["title","like","dislike"]])
+        
+............................................................................................................................................................................................................................................................................................................
 
 ####################################################################################################################################################################################################################################################################################################################################
