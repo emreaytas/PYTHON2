@@ -1,0 +1,2314 @@
+####################################################################################################################################################################################################################################################################################################################################
+
+### pip install howdoi ile howdoi'yi yükleriz kullanımı ise howdoi write a function to add two numbers in python...böylece istenen bir fonksiyonu bize verecek...  
+
+### pip install jupyterlab  ... bu komut ile jupyter notebook indiririz.  jupyter-lab  bu komut ile ise jupyter notebook'u açarız.  
+
+pandasın altyapısı numpy üzerinedir. dataframe veri çerçevesi dmeektir. python kütüphanesidir. veri analizi makine öğrenmesi veri bilimi derin öğrenme için kullanılır.
+
+import pandas as pd ile pandas'ı import ederiz
+
+pd.read_excel('pokeman.xlsx') ile excel dosyası okuyabiliriz. xlsx ise excel uzantısıdır
+
+csv dosyası ise virgüllerle ayrılmış verilerden oluşur bazen noktalı virgül. pd.read_csv('sampiyon.csv',delimiter = ';') # eğer noktalı virgül ile ayrılmışsa veriler delimiter = ';' yaparız.
+
+pd.read_excel('pokeman.xlsx').head() yaparsak eğer en baştan alırız. 
+
+pokemon = pd.read_csv('pokemon.csv',delimiter = ';')    yaparsak eğer bu dosyaya bağlanırız.
+        ates = pokemon['Type1'] == 'Fire' # sadece ateş olan pokemonları getirir. bu şekilde koşul yapabiliriz   hiz = pokemon['hiz'] > 120 ile hızı 120den büyük olanları bulabiliriz.
+        pokemon.colums ile ise tüm kolonları görebiliriz.
+        pokemon.index ile ise indexleri görebiliriz.
+        pokemon.dropna() Nan olanları vs düşürürüz. onlardan kurtuluruz.
+        pokemon["Ranking"].astype("float") # bunun ile biz o kolonun veri türünü float yapabiliriz.
+        
+eğer csv okumak istersek cars = pd.read_csv('cars.csv') ile okuruz.   eğer csv noktalı virgül ile ayrılmışsa o zaman delimiter = ';' yapmamız lazım. default olarak virgul kullanılır csv'de.
+          cars.head(5) yaparsak o zaman baştan 5 tane alır. return eder değerleri.   .head() ile de ilk 5i gelir default olarak.
+          cars.tail(5) yaparsak o zaman sondan 5 tane alır. return eder değerleri.
+          AA = cars['type1'] == 'fire'  ile type1'i fire olan verileri getiririz. 
+          cars[AA] ile ise type1'i fire olanları getiririz.
+        
+          speed = cars['hiz'] > 120
+          cars[speed] ile hızı 120den yüksek olanları buluruz.  
+          cars['hiz'].unique() ile birbirinden farklı tüm tipleri getirir. birbirinden farklı hizları görürüz mesela iki tane 120 varsa birini kabul eder.
+          
+          cars['hiz'] = 120 yaparsak hepsi 120 olur. atama yapabiliriz.
+
+          
+sampi.set_index('year') ile yılı index haline getiririz. 
+sampi.iloc(0) 0. index'i getirir ilk satır demek.
+sampi.loc[1959] # 1959'yılındaki şampiyonu getirir. birden fazla ararsak liste içerisinde yollarız  sampi.loc[[1960,1961,1962]] gibi.
+
+ 
+pandas'ta | veya yerine geçer & bu ise ve yerine.
+
+panel datadan gelmiştir. panel data herhangi bir durum hakkında zamana bağlı olarak elde edilen veriler. mesela yıllık karsa düşen yağış miktarı.
+bir makine öğrenmesi algortimasının başarısını sağlamak için ona olabildiğince fazla veri vermek lazım. mesela ne kadar fazla film izlersek netflix bizim nelerden hoşlandığımızı bilir. çünkü hatalı veriler olabilir tam olarak ortalamayı sağlamak için daha fazla veri vermek lazım... 
+
+pandas ile veri analizi ve veri manipülasyonu yapacağız. yani değişim vs yapabileceğiz. temizleme yapabileceğiz.
+
+pandas ve numpy gibi frameworkler c dili ile yazılmıştır. hızlı çalışması için. 
+
+eğer excel üzerinden okuma yapmak istersek ayrı bir kütüphaneye ihtiyacımız olacak pip install xlrd diyerek bunu kütüphanemize eklememiz lazımdır... pip list ile gelmiş mi gelmemiş mi görebiliriz...
+
+pandasın çalışması için numpy'nin yüklü olması lazım.  *****
+
+pandas ile veri analizi ve manipülasyonu yaparız. 
+
+panda serileri sayesinde veri analizi ve manipülasyonu(değişiklikleri) yapabiliriz. numpy tek tür veriler ile çalışır ama pandas heterojen verilerle çalışabilir. numpy numeric olarak numaralandırır bilgisayar numaralandırması yani 0 1 2 ... pandas ile istenen numaralandırma yapılabilir... 
+
+import pandas as pd ile yapısı ile kullanacağız...
+
+makine öğrenmesi, yapay zeka derin öğrenme için hız önemlidir bu yüzden pandas c ile yazılmıştır bilgisayar diline yakın olduğu için hızlıdır...
+
+seriler tek boyutlu dataframe ise çift boyutludur(satır sutun) matris mantığı.
+
+pandas serilerinde de indexleme vardır. isteğe göre bunu ayarlayabiliriz.
+
+terminale pip show pandas dersek eğer pandas hakkındaki bilgileri görebiliriz. 
+
+///PANDAS SERİES 1/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+pandas aldığı verileri alır sutun ve satırlardan oluşan nesnelere çevirir. eğer tek boyutlu ise pandas serisi olur birden fazla sutuna sahip olursa ise pandas dataframe olur.
+
+print(pd.__version__) # 2.0.0 bu yapı ile pandasın verisyonunu görürüz. pip install --user --upgrade pandas ile ise güncelleme yapabiliriz.
+
+pandasın iki temek veri yapısı var series ve dataframe.
+
+............................................................................................................................................................................................................................................................
+
+        import pandas as pd
+        import numpy as np
+
+        # dataframe ve series nasıl çalışır = aldığı verileri(sql,csv,list,dict,excel) pandas bu verileri alır ve bu verileri sutun ve satırlardan oluşan verileri çevirir.  tek boyutlu olursa eğer pandas series'tir birden fazla boyutlu olursa aslında çift boyutlu olursa dataframe olurlar.
+        # pandas yapıları pythonun yapılarından daha hızlıdır. daha seridir. kendine özgü panda series ve pandas dataframe ile vs daha hızlı çalışır.
+
+        student = ['Arin',20,'ce']
+        print(student) 
+        print(type(student)) #<class 'list'>
+
+        ps_student = pd.Series(student) #içerisine gönderilen yapıyı panda serisi olarak return edece.
+
+        print(ps_student)
+        """
+        0    Arin
+        1      20
+        2      ce
+        dtype: object
+
+        """ # tek boyutludur seriler. series yapısının verdiği tablodur. bir index yapısıdır.
+        # panda seris farklı veri tiplerini alabilir.hem string hem int verileri aynı anda aldı eğer numpy olsa idi hepsini en üst olan veriye çevirirdi homojen bir yapı elde ederdi.
+        print(type(ps_student)) # <class 'pandas.core.series.Series'> 
+
+        dict1 = {"name":"emre","surname":"aytas","age":20}
+        pd_dict1 = pd.Series(dict1) # dict'i bir panda series'e çevirdik bunu nasıl yaptı. key'leri ilk sutuna valueleri ikinci sutuna koyarak key value yapısını bozmadı. key'leri panda series'te indexleme için kullandı. 
+        print(pd_dict1)  
+        """
+        name        emre
+        surname    aytas
+        age           20
+        dtype: object
+
+        """
+        print(type(pd_dict1)) # <class 'pandas.core.series.Series'>    panda series yapısı dictler ilede çalışır.  tek boyutludur. keyler indexleme için kullandıldı. 
+
+        student1 = pd.Series(["arin",23,"ce"]) #verileri bir liste içerisinde veririz. hepsini toplu göndermek lazım.
+        # dtype:object olarak verir. nedeni şu hepsini string'e çevirdi ve dtype'ı object haline getirdi.  
+
+        numbers = pd.Series([1,2,3,4,5,6,7,8])
+        print(numbers) #  dtype: int64 verir. bunun nedeni şu tamamı int64 sayılardan oluştuğu için ama heterojen olduğu zaman hepsini üst sınıfa çıkarıp object der dtype'a
+
+
+        booleans = pd.Series([True,False,True])
+        print(booleans) # dtype: bool olarak verir.  
+
+
+
+        student2 = pd.Series(data=["Arin",23,"CE"],index=["name","age","department"]) # serilere dict'te gönderebiliriz. ve hangsiinin indexleme hangisinin value olacağını belirtebiliriz.    data ve index ile hem index kolonunu hemde verileri kendimiz belirlemiş olduk.
+        print(student2)
+        """
+        name          Arin
+        age             23
+        department      CE
+        dtype: object
+
+        """ 
+
+        print(student2.values) #sadece valueleri görebiliriz.               ['Arin' 23 'CE']
+        print(student2.index) # indexleme elemanlarını görebiliriz.         Index(['name', 'age', 'department'], dtype='object')
+        print(student2.shape) # şekil bilgisi alabiliriz.                   (3,)  # (3,4) olsa mesela 3 satır 4 sutun...  tek boyut olunca (elemansayisi,) şeklinde oluyor.
+        print(student2.ndim) # boyut bilgisi alabiliriz.                    1
+        print(student2.size) # bellekte kaplanan alanı görebiliriz.         3 
+        print(student2.dtype) # veri tipini görebiliriz.                    object
+        print(student2.name) # ismi verecek. None verir
+        student2.name = "messi" # series'e isim verdik.
+        print(student2.name) # ismi verecek.                                messi   atama yaparak ismi messi olarak belirledik.
+
+        X = "name" in student2 # eğer student içinde name index'i varsa True verir yoksa False verir.
+        Y = "job" in student2 # index elemanlarının içinde job var mı yok mu bakar varsa True yoksa False verir.
+        Z = "Ahmet" in student2.values # value'lerin içinde Ahmet var mı yok mu kontrol eder bool bir değer return eder.
+        T = "Arin" in student2.values # True verir.
+
+        numbers = pd.Series([4,2.5,2])
+        print(numbers)
+        """
+        0    4.0
+        1    2.5
+        2    2.0
+        dtype: float64   # üst sınıf olarak float olduğu için hepsini float'a çevirdi. 
+
+        """ 
+        print(numbers.sum()) # toplamı verir üst class float olduğu için float olur dğeer ve hepsi matematiksel işleme uygun olduğu için sorun olmaz. 
+        print(numbers.mean()) #ortalamayı verir tüm değerler matematiksel olduğu için soorun olmaz.
+        print(numbers.product()) # çarpımım verir.  değeri üst değer olarak verir int ve float var bu yüzden değerler float olur.
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+///Pandas series 2/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////Pandas series 2////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        import pandas as pd
+        import numpy as np
+
+        # series içerinde dtype = ile veri tipi belirtebiliriz.
+        student = pd.Series(data=["Arin","Software",23,"CE"],index=["name","surname","age","department"]) # index elemanlarını ayrı olarak yazmazsak eğer o zaman 0 1 2 3 şeklinde default olarak ilerler.
+        student2 = pd.Series(["Arin","Software",23,"CE"],["name","surname","age","department"]) # default olarak ilki veri ikincisini index olarak algılar...
+        print(student)
+        print(student["name"]) # indexler ile valuelere ulaşabiliriz. ulaşmak istediğimiz verinin indexi ile ulaşabiliriz.
+        print(student[["name","surname"]]) # eğer birden fazla index ile valuelere ulaşmak istersek o zaman liste içerisine liste şeklinde göndereceğiz.  bize series şeklinde döner.
+        print(type(student[["name","surname"]])) # <class 'pandas.core.series.Series'> bir seri dönderdi.
+        print(student[1]) # birinci indexteki valueyi verir.   0 verse idik ilk value'yi veriridi..
+        print(student[[0,2]])
+        """
+        name    Arin
+        age       23
+        dtype: object
+
+        """ # bir seri dönderdi bize ve istenen indexlerdeki elemanları aldık.
+
+        print(student[0:2]) # numpy özellikleri ile aynı 0.index dahil 2. index dahil değil o aralıkta olan valueleri getir demek bir seri halinde gelecek. indexleri ile gelecekler.  tek bir eleman olsa idi student[0] o zaman sadece value gelirdi.
+        print(student[0]) # Arin seri halinde gelmedi.
+        print(type(student[0])) # <class 'str'> valuenin class'ı
+        print(student[-1]) # en sondaki value'yi getirir.
+        # aslında student[...] yapısı bize value veya series return ediyor.
+        print(student[:]) # tüm index ve valueleri al demek. [:]  yapısı hepsini al demek hepsini kapsa demek.
+        print(student[-2:]) # son iki elemanı alırız böylece.
+
+        print(student["name":"department"]) # name'den başla departmente kadar git demek.  tek farkı numeric ile olan fark son indexi dahil eğer departmentte dahil yani.
+
+        # loc -> location metotu indexleme kolonlarını keyleri kullanırız. ...  iloc -> index location metotu. numeric index sıralarını kullanırız.
+        print(student.loc["name"]) # Arin
+        print(student.loc[["name","age"]])   # student.loc[...]  bu yapıda bir değer veya series return eder.
+        """
+        name    Arin
+        age       23
+        dtype: object
+
+        """
+
+        # neden loc ve iloc kullanırız.  kesin olarak numeric index veya kesin olarak keyindex kullandığımızı biliriz. 
+
+        print(student.iloc[1]) # ikinci indexteki value'yi getirir.
+        # print(student.iloc["name"]) non integer hatası verir  iloc int değerler ile çalışır.
+
+
+
+
+        # pandas serilerinin değerleri değişebilir. pandas serileri oluştuktan sonra değiştirilebilir yapılardır.  mutable bir yapıdır. yani değiştirilebilir.
+
+        student["name"] = "ford" # bir değişim atama yapabiliriz pandas serilerinin üzerinde.
+        print(student["name"])
+        student.loc["name"] = "mercedes"
+        student.iloc[2] = 21
+        print(student)
+        """
+        name          mercedes
+        surname       Software
+        age                 21
+        department          CE
+        dtype: object
+
+        """ # loc ve iloc ilede yapılarda değişim yapabiliriz. 
+
+        student3 = student.drop("name") # .drop(...) orjinal veride değişiklik olmaz. student aynıdır ama bu metot bir seri return eder o seride ise drop edilmiş halde return edilir. 
+        print(student)
+        """
+        name          mercedes
+        surname       Software
+        age                 21
+        department          CE
+        dtype: object
+
+        """ # .drop orjinal seride bir değişim yapmaz. bir seri return eder droplanmış halini return eder. inplace = True olmazsa olursa direkt olarak siler verilen keyi ve valuesini.
+
+        print(student3)
+        """
+        surname       Software
+        age                 21
+        department          CE
+        dtype: object
+
+        """ # .drop komutu orjinal serinin değişmiş halini return eder. ikinci parametre olarak inplace = True dersek o zaman veriyi direkt olarak siler.
+        # neden .drop orjinal veride değişiklik yapmaz bunun nedeni drop edersek veriyi bozabiliriz.
+
+
+
+
+        # illaki bir seriden veri silmek istersek o zaman .drop(...,inplace = True) # olduğu yerde sil komutudur.
+        student.drop("name",inplace=True) # direkt olarak olduğu yerde siler orjinal veride değişiklik olur böylece.
+        print(student)
+        """
+        surname       Software
+        age                 21
+        department          CE
+        dtype: object
+
+        """
+
+        print(len(student)) # 3 studentin uzunluğunu görebiliriz. kaç tane değer var görürüz kaç value var görürüz.
+        print(list(student)) # ['Software', 21, 'CE'] bir listeyi seri yapabilirsek seriyide liste yapabiliriz. sadece valueleri getirir bir liste içerisinde
+        print(dict(student)) # {'surname': 'Software', 'age': 21, 'department': 'CE'} bir seriyi dict haline getirebiliriz. 
+        student.drop("age",inplace=True)
+        # eğer tüm veriler homojen ise o zaman .sorted() metotunu kullabiliriz. hepsi string veya sayı ise.
+        print(max(student)) # age'yi drop ettik inplace = True diyerek böylece en yüksek stringi görebiliriz.
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///Pandas series 3/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        import pandas as pd
+
+        # ReviewContent.csv adında bir csv dosyası yükledik ve pandas.py uzantılı dosyamızın yani çalışacak olan .py uzantılı dosyamızın path'ine ekledik.
+        # csv demek virgül veya noktalı virgül ile ayrılmış verilerin tutulduğu dosya demektir aslında.
+
+        # dosya okuma...
+        # pd.read_csv("ReviewContent.csv") #csv dosyası okuyacağımız için read_csv() metotunu kullanırız. içerisine path'te bulunan dosyanın adını ve uzantısını ekleriz.
+        print(pd.read_csv("ReviewContent.csv",encoding="utf-8")) # verileri tablo şeklinde gösterir.  encoding ile karakter seti belirleyebiliriz. engine = "python" engine belirleme yapabiliriz. 
+        """
+        Review ID  ... Room Availability
+        0      4055629  ...               338
+        1     25329416  ...                10
+        2     21705849  ...               268
+        3     41133812  ...               274
+        4      7465026  ...               281
+        ..         ...  ...               ...
+        995   44498863  ...               329
+        996   30544438  ...               309
+        997   46642535  ...                10
+        998   21403195  ...               357
+        999   38944752  ...               329
+
+        [1000 rows x 11 columns]    
+        """ 
+
+        review_content = pd.read_csv("ReviewContent.csv",encoding="utf-8") # gelen yapıyı return eder ve atama yaparız.
+        print(type(review_content)) # <class 'pandas.core.frame.DataFrame'>  bir DataFrame olarak gösterdi DataFrameler çok boyutludur.
+
+        review_content1 = pd.read_csv("ReviewContent.csv",usecols=["Review ID"],encoding="utf-8").squeeze() # .squeeze() olarak kullanırız. ama hala DataFrame bunun önüne geçmek için bir seri oalrak çalışmak için çalışacağımız sutunu seçeriz. usecols =[] ile kullanacağımız kolon seçimi yapmamız lazım...
+        print(type(review_content1)) # <class 'pandas.core.series.Series'>    eğer .squeeze(False) dese idik o zaman DataFramee olurdu bu sistem.  default olarak True allır ve True alırsa o zaman series'e çevirir yapıyı.
+        print(review_content1)
+        """
+        0       4055629
+        1      25329416
+        2      21705849
+        3      41133812
+        4       7465026
+                ...
+        995    44498863
+        996    30544438
+        997    46642535
+        998    21403195
+        999    38944752
+        Name: Review ID, Length: 1000, dtype: int64
+        """ # bir seri oldu. ve dtype tüm veriler aynı ve int olduğu için int64 oldu.. indexleme ise 0'dan başladı 999a kadar.
+
+        review_content2 = pd.read_csv('ReviewContent.csv',usecols=["Review ID","Room Availability"],encoding="utf-8").squeeze()
+        print(type(review_content2)) # <class 'pandas.core.frame.DataFrame'>   birden fazla kolon olunca o zaman dataframe olarak kaldı. bu normaldir. Series haline gelebilmesi için tek bir sutun olması lazım.
+
+        print(review_content1.head(13)) #eğer default olarak bırakırsak ilk 5 veriyi getirir.  ama içerisine 10 verirsek ilk 10u getirir 13 dersek 13 tanesini getirir en başından.
+        print(review_content1.tail()) # eğer default olarak bırakırsak en sonra 5 veriyi getirir. ama istenen sayıya göre ayarlanabilir.    okuma en baştan sona olur ama en sondaki değerler alınır yani   .tail() dersek 995 996 997 998 999 indexlerini sırası ile getirir.  999 998 997 996 995 değil...
+        """
+        995    44498863
+        996    30544438
+        997    46642535
+        998    21403195
+        999    38944752
+        Name: Review ID, dtype: int64
+
+        """ 
+
+        print(review_content1.head(10)) 
+        print()
+
+        # eğer verileri indexe göre değil verilere göre sıralamak istersek o zaman .sorted() metotunu kullanacağız. # kalıcı bir değişim sağlama bir Series return eder oda sıralanmış haldir.  sort_values(inplace = True) olursa değişim kalıcı olur.
+        print(review_content1.sort_values()) # sort_values() bir series return eder. eğer kalıcı değişim olsun istersek o zaman review_content1 = review_content1.sort_values()   veya    review_content1.sort_values(inplace = True) olması lazım o zaman ana Series'te kalıcı değişim olur. 
+        print(review_content1) # değişim yok ana content1'de kalıcı değişim olmadı.
+        rc = review_content1.copy() # neden copy kullandık bunun nedeni farklı bir yerde birbirinden bağımsız olsun diye seriesler.
+        rc.sort_values(inplace = True,ascending = False) #hem kalıcı değişim olacak hemde ascending = False olacağı için büyükten küçüğe bir sıralama olacak.
+
+        # indexe göre de sıralayabiliriz. 
+
+        rb = review_content1.copy() 
+        rb.sort_index(ascending =  False,inplace = True) # kalıcı ve büyükten küçüğe bir sıralama oldu.
+        print(rb) # 999 998 .... 1 0 olarak ilerledi indexler.
+        print(rb.head(10)) # 999 998 997 ... ilk 10 eleman gelir elimize.
+
+        print(rb[4]) # 44498863 
+        print(rb.get(4)) # .get() ilede verileri alabiliriz. içerisine index numarası gireriz.
+
+        #  rb[] ile rb.get()  arasında ne fark var...  rb[1004] dersek hata alırız. ama rb.get(1004) dersek None alırız aralarındaki fark budur.
+        print(rb.get(1004,default = "eleman yok")) # burada ise önce index sonra eleman yoksa None veri gelecekse neyi return edeceğini default ile belirtiriz.
+        print(type(rb[4])) # <class 'numpy.int64'>  tek değer series değil. numpy'e ait int değer.   pandas numpy üzerinne kuruludur. bunun kanıtıdır.
+        print(type(rb.get(4))) # <class 'numpy.int64'>   tek değer ile numpy class'ı olduğunu gördük. pandas numpy üzerine kuruludur. 
+        print(rb.get([0,4])) # 0. ve 4. indexteki elemanları görebileceğiz.  
+        print(type(rb.get([0,4]))) # <class 'pandas.core.series.Series'>   bir seri olduğunu görürüz.
+        
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///DataFrame oluşturmak./////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        import pandas as pd 
+
+        # boyut demek aslında şudur. = tek boyutlu demek tek ifade ile bir veriyi tanımlayabiliriz ama dataframe olunca iki ifade ile yer belirtebiliriz. 
+
+        students = [ # bir liste ve içerisinde dict veriler var. dictlerden oluşan bir liste. 
+        {
+                "name":"arin",
+                "age":21,
+                "gender":"F"
+        },
+                {
+                "name":"Fatih",
+                "age":22,
+                "gender":"M"
+        },
+                {
+                "name":"elis",
+                "age":24,
+                "gender":"F"
+        }
+        
+        ]
+
+        print(type(students)) # <class 'list'>
+
+        df_students = pd.DataFrame(students)
+        print(df_students)
+        """
+        name  age gender
+        0   arin   21      F
+        1  Fatih   22      M
+        2   elis   24      F
+
+        """   # indexleme var.  sutunlar ve değerleri var listenin elemanlarını kullanarak bir dataframe oluşturdu.  dict'teki keyleri sutun indexi olarak kullandı valueleri ise değerler olarak kullanır. konum belirtmek için hem satır indexi hemde sutun indexi kullanmamız lazım bunu nedeni bu bir DataFrame'dir.
+        print()
+        print(type(df_students)) # <class 'pandas.core.frame.DataFrame'>    bir DataFrame ...
+
+
+
+
+
+
+        # veriyi iki boyutlu olarak ifade edebilirsek DataFrame olarak kullanabiliriz.
+
+        teachers = {
+        "names":[
+                "ahmet",
+                "cansu",
+                "hakan"
+        ],
+        "ages":[
+                41,36,40
+                
+        ],
+        "genders":[
+                "M","F","M"
+        ]
+        
+        }
+
+        print(type(teachers)) # <class 'dict'>
+
+        df_teachers = pd.DataFrame(teachers) # bir dict içerisndeki veriler ile dataframe oluşturdk...
+        print(df_teachers)
+        """
+        names  ages genders
+        0  ahmet    41       M
+        1  cansu    36       F
+        2  hakan    40       M
+
+        """
+        print(type(teachers)) # <class 'pandas.core.frame.DataFrame'>    bir DataFrame ...
+
+
+
+
+
+        list_of_list = [
+        ["ahmet","mehmet","ayşe"],
+        [44,39,51]
+        
+        ]
+        print(list_of_list) # [['ahmet', 'mehmet', 'ayşe'], [44, 39, 51]]
+        print(type(list_of_list)) # <class 'list'>
+
+        df_listoflist = pd.DataFrame(list_of_list)
+        print(df_listoflist)
+        """
+        0       1     2
+        0  ahmet  mehmet  ayşe
+        1     44      39    51
+
+        """ # bir sutun bilgisi olmadığı için sutun ve satiri 0'dan indexledi.  listenin içindeki her bir listeyi bir satır olarak aldı her her veri bir sutuna denk geldi. 2 liste var 2 satir var listelerin içinde 3 eleman var 3 sutun var...
+        print(type(df_listoflist)) # # <class 'pandas.core.frame.DataFrame'>    bir DataFrame ...
+
+        # eğer bir yapı ile çift katlı yapı kurabilirsek DataFrame yapabiliriz.
+
+
+
+        names = ["ahmet","mahmut","fatih"]
+        print(type(names)) # <class 'list'>
+
+        df_names = pd.DataFrame(names)
+        print(df_names)
+        """
+                0
+        0   ahmet
+        1  mahmut
+        2   fatih
+
+        """ # liste tek boyutlu olsa bile biz bir DataFrame kurabiliriz... sonuçta satır ve sutun yapısı var  default olarka sutuna 0.index verildi ve her eleman bir satıra atandı..
+        print(type(df_names)) # <class 'pandas.core.frame.DataFrame'>
+        print(df_names.ndim) # 2 verdi yani 2 boyutlu o zmaan bir DataFrame yapısı...
+
+
+
+
+
+
+
+        students1 = {"name":"hale","age":24}
+        print(type(students1)) # <class 'dict'> 
+
+        #   df_stt = pd.DataFrame(students1)    # hata verir bunun nedeni klasik dict ile biz direkt olarak dataframe kuramayız bir index belirlememiz lazım
+        # hata vermesinin sebebi indexlemeyi dict'in keyleri ile yapamayız bunun yüzünden indexleme yapmamız lazım.
+
+        students2 = {"Hale":pd.Series(data=[25,"F","CE"],index=["age","gender","department"]),
+                "Ahmet":pd.Series(data=[32,"M","EE"],index=["age","gender","department"])}
+
+        # series ile biz indexleme kurduk data ve index belirterek.
+        print(type(students2)) # <class 'dict'>
+
+        df_stt1 = pd.DataFrame(students2)
+        print(df_stt1)
+        """
+                Hale Ahmet
+        age          25    32
+        gender        F     M
+        department   CE    EE
+
+        """ # keyleri sutun olarka kullandık bu yapı ile. indexler ise satırlar oldular indexlendiler her birinin indexe gelen değeri ise satıra yerleşti valueler indexler ile eşlenerek satırlara yerleştiler.
+        print(type(df_stt1)) # <class 'pandas.core.frame.DataFrame'>    bir DataFrame ...
+
+
+
+
+        # indexlemede değişim yaparsak.....
+
+
+        students3 = {"Hale":pd.Series(data=[25,"F","CE",172],index=["age","gender","department","height"]),
+                "Ahmet":pd.Series(data=[32,"M","EE",100],index=["age","gender","department","weight"])}
+
+        # series ile biz indexleme kurduk data ve index belirterek.
+        print(type(students3)) # <class 'dict'>
+
+        df_stt2 = pd.DataFrame(students3)
+        print(df_stt2)
+        """
+                Hale Ahmet
+        age          25    32
+        department   CE    EE
+        gender        F     M
+        height      172   NaN
+        weight      NaN   100
+
+        """ # indexlemenin hepsini yaptı ancak sutunlardan birinde eksik değer varsa NaN dedi indexlemeyi ihmal etmedi.  olabildiğince indexleme yaptı eğer sutunlardan birisinde eksik veri varsa NaN dedi. NaN demek veri yok demek pandas'ta.
+        print(type(df_stt2)) # <class 'pandas.core.frame.DataFrame'>    bir DataFrame ...
+
+# pandasın en güçlü yapısı budur olmayan verilerle çalıa
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////DataFrame yapısını değiştirmek.../////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        import pandas as pd
+
+        students = {"Hale":pd.Series(data=[25,"F","CE",61],index=["age","gender","department","weight"]),
+                        "Ahmet":pd.Series(data=[32,"M","EE",100],index=["age","gender","department","weight"]),"Fatma":pd.Series(data=[32,"M","EE",82],index=["age","gender","department","weight"])
+        }
+        df_students = pd.DataFrame(students)
+        print(df_students)
+        """
+                Hale Ahmet Fatma
+        age          25    32    32
+        gender        F     M     M
+        department   CE    EE    EE
+        weight       61   100    82
+
+        """ # aslında keyler kolon olarak kullanılıyor bu yapıda. value ise bir seri oluyor. seriden satılar oluşuyor indexlemesi ile index ve data sayesinde seri oluşturduk.
+
+        df_students2 = pd.DataFrame(students,columns=["Hale"]) # sadece hale kolonunu alacak... indexlemesi ve valueleri ile...
+        print(df_students2)
+        """
+                Hale
+        age          25
+        gender        F
+        department   CE
+        weight       61
+
+        """
+        df_students3 = pd.DataFrame(students,columns=["Hale","Ahmet"]) # Hale ve Ahmet kolonunu alacak... indexlemesi ve valueleri ile...
+        print(df_students3)
+        """
+                Hale Ahmet
+        age          25    32
+        gender        F     M
+        department   CE    EE
+        weight       61   100
+        """
+
+        df_students4 = pd.DataFrame(students,index=["age","gender"]) # sadece istediğimiz satırları alabiliriz bunu index ile belirleriz... eğer biz kolonlara göre bir ayrım yapmak istersek columns = [istenen kolonlar] istenen satırları görmek istersek o zaman index = [] yaparız..
+        print(df_students4)
+        """
+        Hale Ahmet Fatma
+        age      25    32    32
+        gender    F     M     M
+
+        """
+
+        df_students5 = pd.DataFrame(students,index=["age","gender"],columns=["Hale","Ahmet"]) # sadece istediğimiz satırları alabiliriz bunu index ile belirleriz... eğer biz kolonlara göre bir ayrım yapmak istersek columns = [istenen kolonlar] istenen satırları görmek istersek o zaman index = [] yaparız.. hem satır hemde sutun belirlemesi yaptık...
+        print(df_students5)
+        """
+        Hale Ahmet
+        age      25    32
+        gender    F     M
+
+        """ # series'in indexlemesini ve valuelerini aldık keyler sutun olarak kullanıldı...   DataFrame içerisinde parçalama yapabildik. index = [] ve columns = [] sayesinde...
+
+        
+
+
+
+
+        students6 = {"Hale":pd.Series(data=[25,"F","CE",61],index=["age","gender","department","weight"]),
+                        "Ahmet":pd.Series(data=[32,"M","EE",100],index=["age","gender","department","weight"]),"Fatma":pd.Series(data=[32,"M","EE",82],index=["age","gender","department","weight"])
+        }
+        df_students6 = pd.DataFrame(students6)
+
+        print(df_students6["Ahmet"]) # notasyon yapacağız. ahmet sutunundaki verileri görebiliriz böylecek.  indexlemeleri ve Ahmet'in verilerini alabiliriz.
+        """
+        age            32
+        gender          M
+        department     EE
+        weight        100
+        Name: Ahmet, dtype: object
+
+        """ # sutun indexi yok bunun nedeni bu bir seri.. tek parça olunca o zaman Series olur...
+        print(type(df_students6["Ahmet"])) # <class 'pandas.core.series.Series'>    aslında indexlemeler ve valueler Seriesler sayesinde oluştu bu serileri birleşerek DataFrame oldu. tek bir sutun alarak tek bir Series aldık bu yüzden bu yapı bir Series yapısıdır.
+
+        print(df_students6[["Ahmet","Hale"]]) # birden fazla veri varsa DataFrame olur... Seriler birleşince DataFrame olur..  birden fazla veri ile işlem yapacaksak veya sutun bilgisi ile işlem yapacaksak o zaman sutunları [] içerisinde göndeririz.
+        """
+                Ahmet Hale
+        age           32   25
+        gender         M    F
+        department    EE   CE
+        weight       100   61
+
+        """ 
+
+
+        print(df_students6[["Ahmet"]])
+        """
+                Ahmet
+        age           32
+        gender         M
+        department    EE
+        weight       100
+        """ #bu sefer [   ["Ahmet"]   ]   olarak gönderdik yani sutun bilgisi dahil oldu böylece ndim 2 olarak işlem gördü bu bir DataFrame...
+
+        print(type(df_students6[["Ahmet"]]))  #<class 'pandas.core.frame.DataFrame'>  bu sefer notasyona bir liste gönderdik bu sutun bilgisi ile gel demek böylece sutun indexi dahil olunca iki boyutlu oldu. bir DataFramedir bu bu yüzden.   [ ["Ahmet"] ] olarak gönderince sutun indexi dahil olsun istedik aslında.
+
+
+
+        print(df_students6.loc["age"]) # age satırı için bunu kullanırız. yaş satırını alacağımız için sadece o zaman bir series halinde geldi aslında satır veya sutun teklenirse Series olur.
+        """
+        Hale     25
+        Ahmet    32
+        Fatma    32
+        Name: age, dtype: object
+
+        """
+
+        print(type(df_students6.loc["age"])) # # <class 'pandas.core.series.Series'>   tek satır veya tek sutun olursa o zaman Series olur DataFrame.
+
+
+
+        print(df_students6.loc[["age","gender"]]) # birden fazla satır ile işlem yaparsak bir liste içerisinde göndeririz.
+        """
+                Hale Ahmet Fatma
+        age      25    32    32
+        gender    F     M     M
+
+        """ # bu bir DataFramedir çünkü iki boyutludur.
+
+
+        # DF[col][row] yapısı kullanırız. bu şekilde tek elemana ulaşırız.
+
+        print(df_students6["Hale"]["age"]) # 25  # once kolon sonra satır indexi yazılır. 
+
+        print(df_students6["Hale"][2]) # EE Hale sutunun 2.indexteki satırını getirir. 3 satırı getirir.
+
+        df_students6["Fatih"] = [17,"M","ELH",190]  # satır indexlemesine göre sırası ile yerleştirdik... burası önemlidir.  sutun ekleme işlemini böyle yapabiliriz.
+
+        print(df_students6)
+        """
+                Hale Ahmet Fatma Fatih
+        age          25    32    32    17
+        gender        F     M     M     M
+        department   CE    EE    EE   ELH
+        weight       61   100    82   190
+
+        """
+
+        df_students6["Fatih2"] = df_students6["Fatma"] + df_students6["Fatih"] # burada yeni bir sutun indexi ekledik... ama + diyerek aslında değerleri sırası ile topladı.. stringler sırası ile toplanınca  FM gibi bir şey oldu gender.  boylar toplandı yaşlat toplandı vs
+        print(df_students6)
+        """
+                Hale Ahmet Fatma Fatih Fatih2
+        age          25    32    32    17     49
+        gender        F     M     M     M     MM
+        department   CE    EE    EE   ELH  EEELH  # EE ve ELH toplanınca stirng olacağı için yan yana yazılır toplamaya ilk olarak Fatma verdiğimiz için başta onun verileri olur stringlerde vs
+        weight       61   100    82   190    272
+
+        """
+
+
+
+
+
+
+
+
+
+
+        students = {"Hale":pd.Series(data=[25,"F","CE",61],index=["age","gender","department","weight"]),
+                        "Ahmet":pd.Series(data=[32,"M","EE",100],index=["age","gender","department","weight"]),"Fatma":pd.Series(data=[32,"M","EE",82],index=["age","gender","department","weight"])
+        }
+
+        df_students7 = pd.DataFrame(students)
+
+        new_row = pd.DataFrame({"Hale":"kurek","Ahmet":"manav","Fatma":"mercedes"},index=["surname"]) # her sutuna gelecek değerleri yazdık bir dict içerisinmde ve index ile gelecek satırın adını belirttik.
+
+        df_students7 = pd.concat([df_students7,new_row],ignore_index=True) # bu yapı ile yeni satırı ekleriz.
+        print(df_students7)
+        """
+        Hale  Ahmet     Fatma
+        0     25     32        32
+        1      F      M         M
+        2     CE     EE        EE
+        3     61    100        82
+        4  kurek  manav  mercedes
+        """
+
+        # pop ile sadece sutun çıkarabiliriz...   drop metodu ile ise hem sutun hemde sutun çıkarabiliriz...
+
+        df_students7.pop("Ahmet")
+        print(df_students7)
+        """
+        Hale     Fatma
+        0     25        32
+        1      F         M
+        2     CE        EE
+        3     61        82
+        4  kurek  mercedes
+
+        """ # ahmet sutunu pop metotu sayesinde gitti.
+
+
+        df_students7.drop("Hale",axis=1,inplace=True)  # drop kalıcı değişim yapmaz kalıcı değişim olan halini return eder. eğer kalıcı olsun istersek o zaman inplace = True dememiz lazım.
+        print(df_students7)  # sutun ile işlem yapacağımız için biz axis = 1 deriz yoksa hata alırız... default olarak bir değeri yok yoksa hata alırız...
+        """
+        Fatma
+        0        32
+        1         M
+        2        EE
+        3        82
+        4  mercedes
+        """
+
+
+        students = {"Hale":pd.Series(data=[25,"F","CE",61],index=["age","gender","department","weight"]),
+                        "Ahmet":pd.Series(data=[32,"M","EE",100],index=["age","gender","department","weight"]),"Fatma":pd.Series(data=[32,"M","EE",82],index=["age","gender","department","weight"])
+        }
+
+        df_students8 = pd.DataFrame(students)
+
+        df_students8.drop("Hale",axis=1) # kalıcı bir değişim olmaz ama kalıcı değişim olan halini return eder. bir atama yapmadan kalıcı değişim olsun istersek eğer o zaman inplace = True diyebiliriz.
+        df_students8.drop(["Hale","Ahmet"],axis=1,inplace=True) # inplace = True olduğu için df_students8'de değişim kalıcı olacak.  birden fazla sutun olduğun için bir liste halinde gönderdim.  axis = 1 olduğu için sutunlar üzerinde oldu olan işlemler.    df9 = 
+        print(df_students8)
+        """
+                Fatma
+        age           32
+        gender         M
+        department    EE
+        weight        82
+
+        """ # bu bir DataFrame hem sutun hemde satır indexi var ndim = 2 yani iki boyutlu demekki bir DataFrame.
+
+
+
+        students = {"Hale":pd.Series(data=[25,"F","CE",61],index=["age","gender","department","weight"]),
+                        "Ahmet":pd.Series(data=[32,"M","EE",100],index=["age","gender","department","weight"]),"Fatma":pd.Series(data=[32,"M","EE",82],index=["age","gender","department","weight"])
+        }
+
+        df_students9 = pd.DataFrame(students)
+
+        df_students9.drop(["age","gender"],axis=0,inplace=True) # satırlardan bu şekilde kurtulabiliriz. verileri yok eder. satırların indexlemesini yok eder. eğer birden fazla satır iptal edeceksek o zaman liste içerisinde yaparız. axis = 0 olmalı bunun nedeni satırlarla işlem yapacağımız için. 
+        print(df_students9)
+        """
+                Hale Ahmet Fatma
+        department   CE    EE    EE
+        weight       61   100    82
+
+        """
+
+        df_students9.drop("weight",inplace=True,axis=0) # tek satırdan kurtulmak istersek liste içerisinde değil direkt olarak ismini yazarız. axis = 0 olduğu için satırı siler.
+        print(df_students9)
+        """
+                Hale Ahmet Fatma
+        department   CE    EE    EE
+
+        """
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//// NaN Eksik Veri, Dökümantasyon Okumak ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import pandas as pd
+
+# pandas NaN veriler ile çok iyi şekilde sorunsuz çalışabilir.
+
+students = {"Hale":pd.Series(data=[25,"Cetin","CE",161],index=["age","surname","department","height"]),
+                        "Ahmet":pd.Series(data=[32,"M","EE",100],index=["age","gender","department","weight"]),"Fatma":pd.Series(data=[32,"Gulsen","EE",175],index=["age","surname","department","height"])
+        }
+
+df_students = pd.DataFrame(students)
+print(df_students)
+"""
+             Hale Ahmet   Fatma
+age            25    32      32
+department     CE    EE      EE
+gender        NaN     M     NaN
+height        161   NaN     175
+surname     Cetin   NaN  Gulsen
+weight        NaN   100     NaN
+
+""" # var olan tüm satırları indexlemek için kullanır ve olmayan veriler için ise NaN der.  mesela Fatma sutunun weight bilgisi yok bu yüzden NaN verdi hata vermedi.
+
+
+
+# isnull()
+x = df_students.isnull()
+print(x)
+"""
+             Hale  Ahmet  Fatma
+age         False  False  False
+department  False  False  False
+gender       True  False   True
+height      False   True  False
+surname     False   True  False
+weight       True  False   True
+
+""" # verinin var olup olmamasına göre True False verir tüm değerlere veri yoksa True varsa False NaN olanlara True verdi.
+print(type(x)) # <class 'pandas.core.frame.DataFrame'>  bu bir DataFrame çünkü ndim = 2 ...
+
+
+
+y = df_students.isnull().sum() # her sutunda kaç tane True var yani boşdeğer var göreceğiz.
+print(y)
+"""
+Hale     2
+Ahmet    2
+Fatma    2
+dtype: int64
+
+""" # her sutunda kaç adet True var yani her suttunda kaç adet satır boşdeğer bunu görebiliriz.  
+print(type(y)) # <class 'pandas.core.series.Series'>  bu bir seridir ndim = 1   çünkü sutun boyutu yok tek boyutlu. bir seridir.
+
+
+
+
+z = df_students.isnull().sum().sum() # ikinci .sum() ile komple DataFramede kaç tane boş veri var bunu görebiliriz. Series'in elemanlarını topladı ve numpy.int veri haline geldi.
+print(z)  # 6
+print(type(z)) # <class 'numpy.int64'>
+
+
+
+
+
+
+
+
+# notnull()
+
+t = df_students.notnull() # isnull'ın tersidir. değer varsa True yoksa False verir..
+print(t)
+"""
+             Hale  Ahmet  Fatma
+age          True   True   True
+department   True   True   True
+gender      False   True  False
+height       True  False   True
+surname      True  False   True
+weight      False   True  False
+"""
+
+f = df_students.notnull().sum() # her sutunda kaç adet dolu değer var görebiliriz.
+print(f)
+"""
+Hale     4
+Ahmet    4
+Fatma    4
+dtype: int64
+
+"""
+print(type(f)) # <class 'pandas.core.series.Series'>  bu bir seridir. sutun bilgisi yoktur. tek boyutludur.
+
+
+g = df_students.notnull().sum().sum() # komple DataFramede kaç tane dolu veri var görebiliriz.
+print(g) # 12  
+print(type(g)) # <class 'numpy.int64'>
+
+
+
+
+
+# .count()
+
+h = df_students.count() # .count() = .notnull().sum()
+print(h)
+"""
+Hale     4
+Ahmet    4
+Fatma    4
+dtype: int64
+""" 
+
+j = df_students.count().sum()
+print(j) # 12
+print(type(j)) # <class 'numpy.int64'>
+
+
+
+
+
+# dropna()  
+
+x = df_students.dropna() # içerisinde NaN veri olan satırları kaldırır.
+print(x)
+"""
+           Hale Ahmet Fatma
+age          25    32    32
+department   CE    EE    EE
+
+""" # herhangi bir satırda NaN veri varsa o satırı kaldırır. sadece NaN verisi olmayan verileri kalır 
+print(type(x)) # <class 'pandas.core.frame.DataFrame'>
+
+df_students1 = df_students2 = df_students
+
+df_students.dropna()  # .dropna() anaDataFramede bir değişim yapmaz ama işlem görmüş DataFrame'yi return eder. ancak içerisinde inplace = True dersek o zaman kalıcı bir değişim sağlar kalıcı olarak eksik verisi olan satırlar yok olur.
+print(df_students)
+"""
+             Hale Ahmet   Fatma
+age            25    32      32
+department     CE    EE      EE
+gender        NaN     M     NaN
+height        161   NaN     175
+surname     Cetin   NaN  Gulsen
+weight        NaN   100     NaN
+""" # .dropna() anaDataFramede bir değişim yapmaz ama işlem görmüş DataFrame'yi return eder.
+
+
+x = df_students1.dropna(how="all")  # bunun mantığı şudur. eğer bir satırda tüm veriler NaN ise o satırı sil demek eğer  bir satırda bir tane bile veri varsa ona dokunmaz...
+print(x)
+"""
+age            25    32      32
+department     CE    EE      EE
+gender        NaN     M     NaN
+height        161   NaN     175
+surname     Cetin   NaN  Gulsen
+weight        NaN   100     NaN
+
+""" # 
+print(type(x)) # <class 'pandas.core.frame.DataFrame'> bu bir DataFrame çünkü iki boyutlu...
+
+
+df_students1["Ahmet"]["weight"] = None # bu yapı ile atama yapabiliriz. önce sutun sonra satır bilgisi ile direkt olarak kalıcı atama yapabiliriz
+u = df_students1.dropna(how="all")  # bunun mantığı şudur. eğer bir satırda tüm veriler NaN ise o satırı sil demek eğer  bir satırda bir tane bile veri varsa ona dokunmaz...
+print(u)
+"""
+             Hale Ahmet   Fatma
+age            25    32      32
+department     CE    EE      EE
+gender        NaN     M     NaN
+height        161   NaN     175
+surname     Cetin   NaN  Gulsen
+
+""" # tüm verileri NaN olan satıları sildi mesela weight satırını sildi çünkü weight'te ahmete None verdik böylece satır kayboldu.
+
+
+
+
+g = df_students2.dropna(thresh=2) # eğer thresh = 2 ise iki tane nan olmayan veri varsa silme der hepsi nan bir tane normal veri varsa sil veya hepsi nansa sil der.   yani thresh ile müsade ederiz eğer en az iki tane normal veri varsa silme dedik. burada
+print(g)
+"""
+age            25    32      32
+department     CE    EE      EE
+height        161   NaN     175
+surname     Cetin   NaN  Gulsen 
+""" # bir bir DataFrame   
+
+l = df_students2.dropna(axis=0) # NaN olan satırlar gitti...
+print(l)
+"""
+           Hale Ahmet Fatma
+age          25    32    32
+department   CE    EE    EE
+"""
+
+m = df_students2.dropna(axis=1) # içerisinde NaN olan sutunları silecek komple.. how = "all" dersek o zaman tüm satırları NaN olan sutunu silecek.
+print(m)
+"""
+Empty DataFrame
+Columns: [] 
+Index: [age, department, gender, height, surname, weight]
+""" # boş bir DataFrame oldu... çünkü veri kalmadı bunun nedeni her sutunda NaN veri var...
+
+
+
+
+
+
+
+
+
+
+students = {"Hale":pd.Series(data=[25,"Cetin","CE",161],index=["age","surname","department","height"]),
+                        "Ahmet":pd.Series(data=[32,"M","EE",100],index=["age","gender","department","weight"]),"Fatma":pd.Series(data=[32,"Gulsen","EE",175],index=["age","surname","department","height"])
+        }
+
+df_students3 = pd.DataFrame(students)
+
+df_students3.dropna(inplace=True) # DataFrame kalıcı olarak değişir...
+df_students4 = pd.DataFrame(students)
+
+
+x = df_students4.fillna(method="ffill")  
+print(x)
+"""
+             Hale Ahmet   Fatma
+age            25    32      32
+department     CE    EE      EE
+gender         CE     M      EE
+height        161     M     175
+surname     Cetin     M  Gulsen
+weight      Cetin   100  Gulsen
+""" # NaN verileri o NaN'dan önce gelen verileri verdi...  mesela gender'i NaN olan birisi gender olarak department'in değerini alır...
+
+y = df_students4.fillna(method="ffill",axis=1) # default olarak axis = 0. NaN veri bir önceki satırdan alınırdı ama eğer axis = 1 olursa NaN veri bir önceki sutun ile tamamlanır...
+print(y)
+"""
+             Hale  Ahmet   Fatma
+age            25     32      32
+department     CE     EE      EE
+gender        NaN      M       M
+height        161    161     175
+surname     Cetin  Cetin  Gulsen
+weight        NaN    100     100
+
+""" # bazı veriler NaN olarak kaldı bunun nedeni kendinden önce bir veri olmaması... kendisinden önce verisi olan bir sutun yoksa NaN olarak kalır...
+
+z = df_students4.fillna(method="backfill",axis=1) # kendisinden sonrakine bakarak doldurur backfill...
+print(z) # acis = 1 olduğu için alışveriş sutunlar arasında olacak yani değişim aynı satır düzleminde olacak sağdan sola şekilde. axis = 0 olsa idi ki zaten default olara 0 o zaman verileri NaN verileri Altındaki satırlardan alarak dolduracak.
+"""
+
+             Hale   Ahmet   Fatma
+age            25      32      32
+department     CE      EE      EE
+gender          M       M     NaN
+height        161     175     175
+surname     Cetin  Gulsen  Gulsen
+weight        100     100     NaN
+
+"""
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////CSV Dosya Analizi////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        import pandas as pd
+
+        # ReviewContent.csv adında bir dosya indirmemiz gerekir onuda indirdik.
+        # genel olarak işlenecek verileri dışarıdan alırız. csv,excel vs...
+
+        review = pd.read_csv("ReviewContent.csv") # uzantıları unutmamak lazım.
+        print(review)
+        """
+        Review ID  ... Room Availability
+        0      4055629  ...               338
+        1     25329416  ...                10
+        2     21705849  ...               268
+        3     41133812  ...               274
+        4      7465026  ...               281
+        ..         ...  ...               ...
+        995   44498863  ...               329
+        996   30544438  ...               309
+        997   46642535  ...                10
+        998   21403195  ...               357
+        999   38944752  ...               329
+
+        [1000 rows x 11 columns]
+
+        """ # bu şekilde gösterir. tümünü göstermeye kalkarsak. hepsini göremeyiz. bir kısmını gösterir bize sadece. normalde matplotlip vs ile verileri görselleştiririz.
+
+        review1 = review.copy() # birden fazla oluşturduk...
+        review2 = review1.copy()
+        print(type(review)) # <class 'pandas.core.frame.DataFrame'>     bir DataFrame...s
+        print(review.info()) # bilgileri verir DataFrame hakkında. .info() fonksiyonu.
+        """
+        <class 'pandas.core.frame.DataFrame'>
+        RangeIndex: 1000 entries, 0 to 999
+        Data columns (total 11 columns):
+        #   Column             Non-Null Count  Dtype
+        ---  ------             --------------  -----
+        0   Review ID          1000 non-null   int64
+        1   Review Date        1000 non-null   object        
+        2   Review Content     999 non-null    object   # bir tane boş veri var. bunu doldurursak tabloda komple hiç NaN veri olmaz.     
+        3   Listing Title      1000 non-null   object        
+        4   Neighbourhood      1000 non-null   object        
+        5   City               1000 non-null   object        
+        6   State              1000 non-null   object        
+        7   Country            1000 non-null   object        
+        8   Room Type          1000 non-null   object        
+        9   Room Price         1000 non-null   int64
+        10  Room Availability  1000 non-null   int64
+        dtypes: int64(3), object(8)
+        memory usage: 86.1+ KB
+        None
+        """ # bilgileri aldık df.info() ile bilgileri return etti print ile yazdırdık.
+        
+        print(review.head()) # ilk 5 değer default olarak ama sayı girersek istenen kadar verir bize.
+        print(review.tail()) # son 5 değer default olarak. girdiğimiz değere göre yukarıdan aşağıya istenen eleman sayısı kadar sondaki elemanları getirir.
+        print("............")
+        print(review.dtypes) # veri türlerini göster deriz kullanılan verilerin türlerini.
+        """
+        Review ID             int64
+        Review Date          object
+        Review Content       object
+        Listing Title        object
+        Neighbourhood        object
+        City                 object
+        State                object
+        Country              object
+        Room Type            object
+        Room Price            int64
+        Room Availability     int64
+        dtype: object
+        """ # tüm kolonlardaki verilerin yapısını görebiliriz. tek tek.
+        print(review.ndim) # 2 boyut bilgisini alırız. bu bir dataframe bu yüzden 2.
+        print(review.columns)
+        """
+        Index(['Review ID', 'Review Date', 'Review Content', 'Listing Title',
+        'Neighbourhood', 'City', 'State', 'Country', 'Room Type', 'Room Price',
+        'Room Availability'],
+        dtype='object')
+        """ # columns özelliği sadece DataFrame'de var. Series'lerde yok.
+        # columns gibi özellikler nesneni özellikleridir method değildir. method olsa idi () ile olması lazımdı.
+
+        # pandas.pydata.org  ile pandasın nasıl kullanılacağını görebiliriz. dökümantasyon okumak lazım her zaman.
+
+        print(review.memory_usage()) # böylece ne kadar hafıza kullanılır görebiliriz.
+        """
+        Index                 132
+        Review ID            8000
+        Review Date          8000
+        Review Content       8000
+        Listing Title        8000
+        Neighbourhood        8000
+        City                 8000
+        State                8000
+        Country              8000
+        Room Type            8000
+        Room Price           8000
+        Room Availability    8000
+        dtype: int64
+        """ # bu bir seridir. Series olarak geldi sadece satır indexlemesi var sutun indexlemesi yok tek boyutludur. 
+
+        toplam = review["Room Price"].sum() # tüm Room Price bilgilerine ulaştık ve sum dedik.
+        print(toplam)
+
+        # print(review.sum()) # her bir satırı toplar. bir seri elde ederiz. DataFrame olduğu için.  seride sum() kullanırsak tek bir değer elde ederiz ama DataFramede toplama kullanırsak o zaman Series elde ederiz.
+
+        print(review["Room Availability"])
+        """
+        0      338
+        1       10
+        2      268
+        3      274
+        4      281
+        ...
+        995    329
+        996    309
+        997     10
+        998    357
+        999    329
+        Name: Room Availability, Length: 1000, dtype: int64 
+
+        """
+        print(type(review["Room Availability"])) # <class 'pandas.core.series.Series'> DataFrameden tek bir parça aldık bu bu yüzden bir seridir. 
+
+        print(review["Room Availability"].add(10)) # her satıra 10 eklemesi yaptı... değişim kalıcı değil. olsun istersek bu yapıyı başka bir değişkene atamak lazım RTR = review["Room Availability"].add(10)   gibi...
+        # eğer review["Room Availability"] + 10 dese idikte aynısı olurdu pandas numpy üzerine kurulu olduğu için buna izin verirdi.
+
+        # sum toplama +, sub çıkarma - , div bölme /, mul çarpma *.   methodlarını veya işaretlerini kullanıncada çalışır bir sorun olmaz.
+        print(review["City"]) # bir Seri döner ve şehirleri görebiliriz.
+
+
+        # value_counts()  ile biz bir sutunda bir veri kaç kere kullanılmış kaç tane satırda var görebiliriz.
+        print(review["City"].value_counts("New York City")) # 135 ... City sutunundaki New York City  kaç tane satırda kullanılmış bunu görebiliriz...
+        print(review["Room Price"].value_counts()) # default olarak bırakınca her değerden kaç tane var bize gösterir.
+        """
+        Room Price
+        80     32
+        120    31
+        75     27
+        95     27
+        55     26
+        ..
+        360     1
+        775     1
+        500     1
+        265     1
+        191     1
+        Name: count, Length: 180, dtype: int64
+        """
+
+        print(review["Room Price"].sort_values(ascending=False)) # değerleri sırala demek aynı sutunda satırlar sıralanacak. ascending = False olursa azalarak bir sıralama gerçekleşir en yüksekten en düşüğe sıralar.
+        # .head(1) ile ise en baştaki en çok para olan odayı görebiliriz.
+
+        print(review["City"].sort_values()) # verileri alfabetik sıralamata göre sıralar.  ascending = False dersek ters Alfabetik sıralama yapar.
+        print(type(review["City"].sort_values())) # <class 'pandas.core.series.Series'>   DataFrame'den tek bir sutunu çıkarttık bu bir seri oldu... eğer bu seriyi kullanmak istersek bunu bir değişkene atamamız lazım    TYTY = review["City"].sort_values()  şeklinde....
+
+        print(review.sort_values("Room Price")) # Room Price sütununa göre sıralama yapar böylece.
+        """
+        Review ID Review Date                                     Review Content  ...        Room Type Room Price Room Availability
+        740   37117583  2012-04-20  Alex is a very considerate airbnb host. He mad...  ...      Shared room         16               326
+        718   47355526  2012-08-05  Manuel was very sweet and helpful! Very nice a...  ...     Private room         16               112
+        306   44838729  2012-06-03  It was easy to find and the room was clean. Ve...  ...     Private room         19               336
+        452   11937812  2012-05-28  I just had a wonderfull time in there: good co...  ...     Private room         19               333
+        795   37947941  2012-11-02  We only got to stay 12 hours, but this is exac...  ...     Private room         22                25
+        ..         ...         ...                                                ...  ...              ...        ...               ...
+        555    8381199  2014-10-25  This was my first Airbnb experience.  We were ...  ...  Entire home/apt        650               327
+        613   41553198  2014-12-10  Brian and his team were great! We had a group ...  ...  Entire home/apt        725               316
+        518   29952932  2013-06-15      Very beautiful apartment in a great location.  ...  Entire home/apt        775               316
+        489   25836446  2012-03-05  The reservation was canceled 79 days before ar...  ...  Entire home/apt        800               359
+        799    5239947  2013-01-15  The only issue that we had was that the elevat...  ...  Entire home/apt       1500               365
+
+        [1000 rows x 11 columns]
+
+        """  # en küçük Room Priceye göre DataFrame'nin satırlarını sıraladı. eğer ascending = False olsa idi o zaman Room Price sutununa göre  büyükten küçüğe sıralardı...
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///Veri Filtrelemek/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import pandas as pd
+
+pd.set_option("display.max_columns",None) # maximum sutunları göster deriz..
+review = pd.read_csv("ReviewContent.csv") # uzantısı ile gireriz.
+
+print(review)
+"""
+     Review ID Review Date                                     Review Content
+
+0      4055629  2012-10-06  Very nice accommodation in an aesthetically pl...  \
+1     25329416  2013-11-03  Me and my friends had such a nice time at Dott...
+
+2     21705849  2014-11-27  I stayed for 4night.She gave us a lot of snuck...
+
+3     41133812  2012-05-08  The apartment was situated on the first floor ...
+
+4      7465026  2013-08-16  Even though it was only for one night, we had ...
+
+..         ...         ...                                                ...
+
+995   44498863  2012-08-30  I loved staying here during my time in Paris. ...
+
+996   30544438  2013-02-28  Highly recommend this as a place to stay if yo...
+
+997   46642535  2014-08-30  John was a great host.  I came in on a red eye...
+
+998   21403195  2014-12-26  Very good experiance had a comfortable stay. V...
+
+999   38944752  2013-10-15  Thank you for the wonderful stay!   It was a c...
+
+
+                           Listing Title            Neighbourhood
+0    Nottinghill Portobello  Artist Flat   Kensington and Chelsea  \
+1     Quiet Pink Studio in the PIJP area  De Pijp - Rivierenbuurt
+2    PRIVATE Room in Spacious, Quiet Apt                   Harlem
+3         Bonito estudio en pleno centro              Universidad
+4          Acropolis Apartment brand new                 ΑΚΡΟΠΟΛΗ
+..                                   ...                      ...
+995              A typical parisian flat        Buttes-Montmartre
+996     The Venice Roost on Abbot Kinney                   Venice
+997      Top Floor Renovated 1 BR / 1BA              West Roxbury
+998  NR LGA/JFK & City Studio W/Bathroom          Jackson Heights
+999            15 Minutes from Manhattan                 Woodside
+
+              City                State          Country        Room Type    
+0           London              England   United Kingdom  Entire home/apt  \ 
+1        Amsterdam        North Holland  The Netherlands     Private room    
+2    New York City             New York    United States     Private room    
+3           Madrid  Comunidad de Madrid            Spain  Entire home/apt    
+4           Athens               Attica           Greece  Entire home/apt    
+..             ...                  ...              ...              ...    
+995          Paris        Île-de-France           France     Private room    
+996    Los Angeles           California    United States  Entire home/apt    
+997         Boston        Massachusetts    United States  Entire home/apt    
+998  New York City             New York    United States     Private room    
+999  New York City             New York    United States     Private room    
+
+     Room Price  Room Availability
+0           100                338
+1            80                 10
+2            57                268
+3            38                274
+4            62                281
+..          ...                ...
+995          35                329
+996         191                309
+997          95                 10
+998          75                357
+999         110                329
+
+[1000 rows x 11 columns]s
+"""
+
+.........................................................................................................
+
+
+        import pandas as pd
+
+        review = pd.read_csv("ReviewContent.csv") # uzantısı ile gireriz.
+
+        print(review["City"]) # tek bir sutunu alacağımız için bir seri dönecek.
+
+        print(review["City"] == "London") # City kolonunda London olanlara True verir olmayana False verir... 
+
+        """
+        0       True
+        1      False
+        2      False
+        3      False
+        4      False
+        ...
+        995    False
+        996    False
+        997    False
+        998    False
+        999    False
+        Name: City, Length: 1000, dtype: bool
+        """ # dtype = bool oldu    bool verilerden oluşan bir Seriestir bu...
+
+        print(review[review["City"] == "London"]) # burada London olanlar True olacağı için tüm satırlardan City == London olanlar gelecek. numpy mantığı.  içeri Seri gönderdik bool verilerden oluşan ve Seride aynı sutunda True olanlar geldi.
+        """
+        Review ID Review Date  ... Room Price Room Availability
+        0      4055629  2012-10-06  ...        100               338
+        7     10787310  2013-06-02  ...         60               351
+        10    24326991  2014-10-19  ...        140               151
+        20    38360407  2013-12-31  ...         85               344
+        27    37847700  2014-02-02  ...        129               279
+        ..         ...         ...  ...        ...               ...
+        943   30716660  2013-04-21  ...        350               345
+        963   37527770  2012-08-16  ...         27               362
+        966   11444280  2013-04-01  ...         49               128
+        967   31488970  2014-10-18  ...         39               365
+        971   21709517  2013-07-03  ...        165               301
+
+        [104 rows x 11 columns]
+        """ # City'si London olan veriler geldi.
+
+
+        mask = review["Room Type"] == "Private room" # tek eşit olursa veri değişimi olur. == olursa eğer o zaman eşit olana True olmayana False verecek bir Seri oluşturur. bu bir maskelemedir.
+        print(review[mask]) # bu seriyi DataFrame'ye göndererek biz aynı sutunda True olan verileri getirebiliriz. buna filtreleme denir.
+        """
+        Review ID Review Date                                     Review Content                        Listing Title  ...          Country     Room Type Room Price Room Availability
+        1     25329416  2013-11-03  Me and my friends had such a nice time at Dott...   Quiet Pink Studio in the PIJP area  ...  The Netherlands  Private room         80                10     
+        2     21705849  2014-11-27  I stayed for 4night.She gave us a lot of snuck...  PRIVATE Room in Spacious, Quiet Apt  ...    United States  Private room         57               268     
+        5     11372151  2014-11-19  We spent four days at Shane's place. The locat...   Great Light-filled Alberta Arts Rm  ...    United States  Private room         55               121     
+        7     10787310  2013-06-02  Carolines room is perfectly located to discove...        Private room - Central London  ...   United Kingdom  Private room         60               351     
+        8     37085487  2014-06-27  We had a great stay in Tyler's apartment. The ...                  Privacy + Free Beer  ...    United States  Private room         79               330     
+        ..         ...         ...                                                ...                                  ...  ...              ...           ...        ...               ...     
+        985   29498170  2013-12-17  The neighborhood was pretty central and my fri...           Great Room at the Gran Via  ...            Spain  Private room         30               338     
+        989   48665633  2012-11-19  Very nice place in a nice neighborhood. Not fa...            North Austin garden haven  ...    United States  Private room         65               364     
+        995   44498863  2012-08-30  I loved staying here during my time in Paris. ...              A typical parisian flat  ...           France  Private room         35               329     
+        998   21403195  2014-12-26  Very good experiance had a comfortable stay. V...  NR LGA/JFK & City Studio W/Bathroom  ...    United States  Private room         75               357     
+        999   38944752  2013-10-15  Thank you for the wonderful stay!   It was a c...            15 Minutes from Manhattan  ...    United States  Private room        110               329     
+
+        [340 rows x 11 columns]
+        """ # bu bir DataFrame çünkü iki boyutludur.
+
+
+        mask = review["Room Type"] != "Private room" #private room ise False alacak serideki satır öyle değilse True olacak.
+        print(review[mask]) # böylece Private room olanlar gelmeyecek.
+
+
+        mask1 = review["Room Price"] > 60 # bir seri oluşacak ve değeri 60dan yüksek olanlar True alacak.
+        mask2 = review["Room Price"] < 100 # 100den küçük olanlar True alacak ve bir seri oluşacak
+        # & = ve   | = veya demek.  c dilinden gelme c'de &&(ve)  ||(veya) demek... ama & | olur pandas'ta
+        print(review[mask1 & mask2]) # ikisininde aynı anda True olduğu satırları getirir. 60dan büyük 100den küçük olanları alacağız.
+        """
+        Review ID Review Date                                     Review Content                        Listing Title  ...          Country        Room Type Room Price Room Availability
+        1     25329416  2013-11-03  Me and my friends had such a nice time at Dott...   Quiet Pink Studio in the PIJP area  ...  The Netherlands     Private room         80                10  
+        4      7465026  2013-08-16  Even though it was only for one night, we had ...        Acropolis Apartment brand new  ...           Greece  Entire home/apt         62               281  
+        8     37085487  2014-06-27  We had a great stay in Tyler's apartment. The ...                  Privacy + Free Beer  ...    United States     Private room         79               330  
+        17     7568387  2013-02-01  Kristina and Ekaterine were lovley hosts. They...  Hollywood Furnished Private Bedroom  ...    United States     Private room         99               244  
+        20    38360407  2013-12-31  Nice contact. Very friendly and supportive. Th...  Curved wall Studio ST4 with Kitchen  ...   United Kingdom  Entire home/apt         85               344  
+        ..         ...         ...                                                ...                                  ...  ...              ...              ...        ...               ...  
+        992   13423090  2014-12-25  Ca' di paolo is a cozy apartment in a great lo...                         ca' di paolo  ...            Italy  Entire home/apt         99               303  
+        993   27392171  2012-03-07  What a great place to stay! In the heart of Ma...    Charming Studio - Heart of Marais  ...           France  Entire home/apt         95               284  
+        994   28605533  2014-09-24  We had a wonderful stay at this apartment. Alt...                       sunny and cosy  ...          Germany  Entire home/apt         62                 6  
+        997   46642535  2014-08-30  John was a great host.  I came in on a red eye...      Top Floor Renovated 1 BR / 1BA   ...    United States  Entire home/apt         95                10  
+        998   21403195  2014-12-26  Very good experiance had a comfortable stay. V...  NR LGA/JFK & City Studio W/Bathroom  ...    United States     Private room         75               357  
+
+        [293 rows x 11 columns]
+        """ # print(review[(review["Room Price"] > 60) & (review["Room Price"] < 100)]) # yapabilirdik buda olursa iki serinin aynı anda True olduğu satırları getirerek bir DataFrame return ederdi.
+
+        mask1 = review["Room Price"] > 200
+        mask2 = review["Room Availability"] > 300
+        print(review[mask1 | mask2]) # serilerin aynı indexli satıları en az bir True'li olurssa o veriyi getirerek bir DataFrame oluştururuz. aynı satırda Room Price ve Room Availability True olursa en az birisi o zaman o satır tüm stuunları ile gelir.
+
+
+
+        # isin method  ...  
+
+        mask = (review["City"] == "London") | (review["City"] == "Madrid") | (review["City"] == "Amsterdam") | (review["City"] == "Paris")
+        print(review[mask]) # Madrid, London, Amsterdam,Paris 'dan birisi olan veriler gelir.
+        # mesela bir tane daha şehir eklemek istedik o zaman ne yaparız  review["City"].isin(["London","Amsterdam","Paris","Madrid"]) yapabiliriz.
+        print(review[review["City"].isin(["Madrid"])]) # tek veri olsa bile liste içerisinde yollarız. 
+        print(review[review["City"].isin(["London","Amsterdam","Paris","Madrid"])])  # isin içerisindeki verileri bakar ve == olanları getirir her birinden bir seri oluşturur ve bunlar veya bağlacı ile bağlanır aslında.
+
+
+        # between() belirli değerler arasındaki veriler için kullanılır. mesela Room Price için.
+
+        mask = review["Room Price"].between(80,100) #önce düşük olan sonra büyük olan girilir. bir aralık belirlebir. # tarihler arasında da belirlenebilir.
+        print(review[mask]) # Room Price 80 ile 100 arasında ise. 
+
+        mask1 = review["Review Date"].between("2013-01-01","2014-01-01") # tarihleride bu şekilde aralığa alabiliriz.
+        print(review[mask1]) # tarihi belli aralıkta alan bir DataFrame return etti.
+
+
+        
+        # duplicated()   TEKRAR BAK.
+        review2 = review.copy() # farklı bir bellek alanında birbirinden bağımsız olacaklar böylece. .copy() sayesinde.
+        review.sort_values("City",inplace=True) # kalıcı olarak değiştirdi ve City'e göre sıraladı.
+        print(review["City"].duplicated()) # ilk defa görünce False verir bir veriye Diğerlerine True verir. birden fazla aynı değerden var mı yok mu bunu kontrol eder. mesela ilk defa Amsterdam gördü False verir diğerlerine True verir.
+
+        mask = ~review["City"].duplicated() # bunun başına ~ koyarak biz bunu review[mask] yaparak False olan verileri alacağız yani ilk defa görülen şehirlerin verilerinden bir DataFrame oluşacak.
+        print(review[mask])
+        mask1 = review["City"].duplicated() == False # böyle yaparsak bu seride False olanlar True olacak True olanlar False olacak bunu reviewe göndererek ilk defa beliren şehirlerin verilerini alabiliriz.
+        print(review[mask1])
+        #  mask1 = review["City"].duplicated() == False      bu ve   ~review["City"].duplicated()    bu aynı şeyy...   ~ ile bir Serinin Truelerini False Falselerini True yapabiliriz.
+
+
+        # drop_duplicates() 
+        print(len(review2)) # 1000 satır var. kaç tane satır var. görebiliriz. len() ile.
+        print(len(review2.drop_duplicates())) # aynı olan verileri sil demek. Tüm bir satırın ddiğer tüm bir satırla aynı olması gerekir yani her satırın kombinasyonu birbirinden farklı.
+        print(len(review2.drop_duplicates(subset=["City"]))) # her şehirden bir tane getir demek.  her şehrin ayrı olduğu bir DataFrame olacak. 27 olacak. 27'nin içindeki şehirler ise 
+
+
+        
+        # unique  ve nunique methods
+        print(review2["City"].unique()) # o seride kullanılan verileri tek tek getirir.  hepsi bir tane olacak şekilde.
+        print(type(review2["City"].unique())) # bu bir <class 'numpy.ndarray'>   bunun sebebi Series'ten elde ettiğimiz bir array olması. neden numpy bunun nedeni ise pandas numpy üzerine kurulu bir modül.
+        """
+        ['London' 'Amsterdam' 'New York City' 'Madrid' 'Athens' 'Portland'
+        'Melbourne' 'New Orleans' 'Venice' 'Paris' 'Chicago' 'Los Angeles'
+        'San Francisco' 'Washington' 'Berlin' 'Barcelona' 'Toronto' 'Vienna'
+        'Nashville' 'Sydney' 'Antwerp' 'Boston' 'Oakland' 'Brussels' 'Austin'
+        'Montreal' 'Seattle']
+        """  # 27 tane değer olacak.
+
+        print(review2["City"].nunique()) # 27 bize kaç tane unique değer var bunu görürüz. her değerin sayısı bir olursa kaç adet satır olur bunu görürüz.
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////Text ile çalışmak.////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import pandas as pd
+
+review = pd.read_csv("ReviewContent.csv")
+
+print(review)
+"""
+     Review ID Review Date                                     Review Content  ...        Room Type Room Price Room Availability
+0      4055629  2012-10-06  Very nice accommodation in an aesthetically pl...  ...  Entire home/apt        100               338
+1     25329416  2013-11-03  Me and my friends had such a nice time at Dott...  ...     Private room         80                10
+2     21705849  2014-11-27  I stayed for 4night.She gave us a lot of snuck...  ...     Private room         57               268
+3     41133812  2012-05-08  The apartment was situated on the first floor ...  ...  Entire home/apt         38               274
+4      7465026  2013-08-16  Even though it was only for one night, we had ...  ...  Entire home/apt         62               281
+..         ...         ...                                                ...  ...              ...        ...               ...
+995   44498863  2012-08-30  I loved staying here during my time in Paris. ...  ...     Private room         35               329
+996   30544438  2013-02-28  Highly recommend this as a place to stay if yo...  ...  Entire home/apt        191               309
+997   46642535  2014-08-30  John was a great host.  I came in on a red eye...  ...  Entire home/apt         95                10
+998   21403195  2014-12-26  Very good experiance had a comfortable stay. V...  ...     Private room         75               357
+999   38944752  2013-10-15  Thank you for the wonderful stay!   It was a c...  ...     Private room        110               329
+
+[1000 rows x 11 columns]
+"""
+# bir csv dosyasını excel ile açabiliriz.
+print(review["Country"]) # bu bir Seridir tek bit sutundan elde ettiğimiz parça tek boyutlu bu yüzden sutun indexlemesi yok.   
+
+# upper() tüm harfleri büyük harf yapar, lower() tüm harfleri küçültür. title() ilk harfleri büyük hale getirir.  len() uzunluk ölçer.  python methodları karışmasın diye başlarına str koyarız.
+print(review["Country"].str.upper()) # .str.upper() olarak kullanırız. pandasın str methodları pythonın str fonksiyonlarından farklı olsun diye  başına .str koyarak işlem yaparız.
+print(review["Country"].str.lower()) 
+print(review["Country"].str.title())
+# değişiklikler kalıcı olmaz kalıcı olsun diye atama yapmak lazım  mesela review["Country"] = review["Country"].str.lower() böylece ana DataFrame'de tüm Country verileri küçük harfli olur. kalıcı değişimi böyle sağlayabiliriz.
+# ard arda kullanabiliriz   review["Country"].str.title().str.lower()   # 
+print(review["Country"].str.len()) # tüm satırlardaki stringlerin uzunluğunu tek tek görebiliriz.
+"""
+0      14
+1      15
+2      13
+3       5
+4       6
+       ..
+995     6
+996    13
+997    13
+998    13
+999    13
+Name: Country, Length: 1000, dtype: int64
+""" # dtype:int64 oldu bunun nedeni belli çünkü uzunluğu int değer ile belirtebiliyor.
+print(type(review["Country"].str.len())) # <class 'pandas.core.series.Series'>  bu bir tek boyutlu seridir sutun indexlemesi yoktur satır indexlemesi vardır.
+
+
+# replace()   ana python kullanımı.
+str1 = "arin yazilim".replace("a","e") # önce değişecek sonra yeni gelecek değer.
+# .replace() pandas kullanımı
+print(review["Country"].str.replace("A","E")) # tüm A harflerş E olacak Country sutunundaki... kalıcı olsun istersek o zaman review["Country"] = review["Country"].str.replace("A","E")   yaparız böylece bir Seri'ye bir değişmiş bir Seri atarız DataFrameler veri Setlerinin birleeşmesi ile iki boyut kazanır ve öyşe oluşurlar.
+
+
+
+print(review["City"].str.upper().str.contains("YORK")) # City Sutununda YORK içereren satırları arayacağız.  Bir Series oluştururuz ve True False'dan oluşan verileri vardır satırın içinde eğer YORK varsa True verir yoksa False verir.
+# maskelemede yapabiliriz.
+mask = review["City"].str.upper().str.contains("YORK")
+print(review[mask]) # içerisindeki YORK geçen City Satırlarından oluşan bir DataFrame oluşur. filtreleme yapabiliriz. str.containts() ile.
+"""
+     Review ID Review Date                                     Review Content  ...        Room Type Room Price Room Availability
+2     21705849  2014-11-27  I stayed for 4night.She gave us a lot of snuck...  ...     Private room         57               268
+14    12792771  2013-08-22  Usman is a great host, the apartment is as des...  ...  Entire home/apt        600               334
+18     9329281  2013-12-03  This is not our first time to NYC, but this is...  ...  Entire home/apt        260               291
+25    22419996  2014-11-17  Apartment was clean and as described. Bed was ...  ...  Entire home/apt        199               313
+34    42823968  2013-04-25  We stayed at Tim’s and Ellen’s beautiful apart...  ...  Entire home/apt        195               249
+..         ...         ...                                                ...  ...              ...        ...               ...
+956    7940278  2014-10-17  Scott's apartment is such a havon in the bustl...  ...  Entire home/apt        250               312
+974   37762569  2013-12-30  Susanne provides a comfortable room in a spaci...  ...     Private room        100               278
+983    2018617  2013-12-22  Ysaira and Jose are the sweetest people. They ...  ...     Private room         40               302
+998   21403195  2014-12-26  Very good experiance had a comfortable stay. V...  ...     Private room         75               357
+999   38944752  2013-10-15  Thank you for the wonderful stay!   It was a c...  ...     Private room        110               329
+
+[135 rows x 11 columns]
+"""
+ 
+# bir string'in bir string'in başında veya sonunda olup olmamasını arayan methodlar
+#   .startswith() , endswith()
+
+print(review["City"].str.upper().str.startswith("LOS")) # LOS ile başlayan verileri buluruz. City Sutunundaki True ve FalseDen oluşan bir Seri döner VE sağlıyorsa True Yoksa False verir satır satır.
+print(review["City"].str.upper().str.endswith("LOS")) # LOS ile biten şehirleri görebiliriz. bool değerlerden oluşan bir Seri return eder bu sistem.
+
+# .str.strip()    
+print(review["City"].str.strip()) # kelimenin başında veya sonundda boşluk veya boşluklar varsa bundan kurtuluruz. kalıcı değişim olsun istersek o zaman atama yapmamız lazım.
+# "  arin yazilim    ".strip()   pythonda "arin yazilim" olur...
+# lstrip() soldaki boşluğu götürür en baştaki boşlukları yani sağ tarafa bakmaz.   rstrip() ise sağdaki boşlukları götürür sola bakmaz. 
+
+
+# .str.split()  methodu...
+liste1 = "benim adim arin".split(" ") # boşluğa göre böler boşluk hesaba katılmaz ele geçen veriler bir listeye atanır. 
+print(liste1) # ['benim', 'adim', 'arin']
+liste1 = " ".join(liste1) # verileri birleştirirken aralarına " " koyarak birleştirir.  "veri".join(liste)  yaparsak içerideki veriyi araya koyarak birleştirir .join()  fonksiyonu. 
+print(review["City"].str.split(" "))
+"""
+0               [London]
+1            [Amsterdam]
+2      [New, York, City]
+3               [Madrid]
+4               [Athens]
+             ...
+995              [Paris]
+996       [Los, Angeles]
+997             [Boston]
+998    [New, York, City]
+999    [New, York, City]
+Name: City, Length: 1000, dtype: object
+""" # her bir listeyi python listesine çevirerek bize getirir. 
+
+print(review["City"].str.split(" ").str.get(0)) # her listedeki ilk elemanı getirerek bir seri oluşturur.
+"""
+0         London
+1      Amsterdam
+2            New
+3         Madrid
+4         Athens
+         ...
+995        Paris
+996          Los
+997       Boston
+998          New
+999          New
+Name: City, Length: 1000, dtype: object
+""" 
+
+print(review["City"].str.split(" ",expand=True))
+"""
+             0        1     2
+0       London     None  None
+1    Amsterdam     None  None
+2          New     York  City
+3       Madrid     None  None
+4       Athens     None  None
+..         ...      ...   ...
+995      Paris     None  None
+996        Los  Angeles  None
+997     Boston     None  None
+998        New     York  City
+999        New     York  City
+
+[1000 rows x 3 columns]
+
+""" # expand = True ile DataFrame olarak döner sistem.
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+####################################################################################################################################################################################################################################################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+####################################################################################################################################################################################################################################################################################################################################
+
+import sqlite3
+import pandas as pd
+connection = sqlite3.connect("ders.db")
+df = pd.read_sql_query("select * from students",connection)
+
+print(df)      # bu yapı ile sql sorgusu ve bağlantı kullanarak biz DataFrame oluşturabiliriz.
+
+............................................................................................................................................................................................................................................................................................................
+pandas Series'ler içerisinde heterojen veriler taşıyabiliriz. eğer veriler heterojen olursa dtype:object olur buradan heterojen yapı olduğunu anlayabiliriz.
+eğer pandas'a serilerine ikii tane liste verirsek ilkini data ikincisini ise index olarak kabul edecek.     
+mesela:
+        ds = pd.Series([10,20,30,40],["a","b","c","d"])
+        print(ds)
+        """
+        a  10
+        b  20
+        c  30
+        d  40
+        dtype: int64
+        """
+        print(ds['e']) # bunu dersek NaN allırız hata vermez ama değerde yok...   
+        print(ds[["a","b"]]) # birden fazla veri ararsak eğer o zaman liste içerisinde göndeririz.
+        print(ds.sum()) # tüm verilerin toplamını görebiliriz. ds.dtype ile yapının veri tipini görebiliriz.   ds.shape ile yapısını.   ds.ndim ile boyutunu. 
+
+# iki seri toplanırsa eğer o zaman aynı indexte olanlar toplanırlar numpy mantığı.
+
+            ds = pd.Series([10,20,30,40],["a","b","c","d"])
+            print(ds[ds % 2 == 0]) # böylece tüm çift olan verileri ve indexlerini görebiliriz...
+            result = ds % 2 == 0    o zaman True ve False'den oluşan bir Series oluşur. indexleri ile birlikte bunu tekrar ds[]  içerisine gönderirsek hep olduğu gibi True olan gelir indexi ile False olan ise işleme dahil edilmez.
+            yani Series içerisine Series göndererek biz filtreleme yapabiliriz.  
+
+
+............................................................................................................................................................................................................................................................................................................
+
+import pandas as pd
+
+opel2018 = pd.Series(data=[20,30,40,10],index=["astra","corsa","mokka","insignia"])
+opel2019 = pd.Series(data=[40,30,20,10],index=["astra","corsa","grandland","insignia"])
+print(opel2018 + opel2019)
+"""
+astra        60.0
+corsa        60.0
+grandland     NaN  
+insignia     20.0
+mokka         NaN
+dtype: float64
+""" # iki Series arasında toplama yaparsak eğer indexleri aynı olan veriler toplanır eğer indexleri farklı ise tabloya katılır ancak verisi hesaplanmaz NaN alır.
+# yani sadece aynı indexlemesi olan satırlar toplanır eş indexi olmayan veriler işleme dahil edilmez ve NaN alır.
+# hata vermek yerine NaN verir.
+
+............................................................................................................................................................................................................................................................................................................
+
+DataFrame aslında serilerin yan yana dizilmiş hali gibi gözükebilir.
+
+............................................................................................................................................................................................................................................................................................................
+
+import pandas as pd
+
+s1 = pd.Series([1,2,3,4,5],index=["a","b","c","d","e"])
+s2 = pd.Series([6,7,8,9,10],index=["a","b","c","d","e"])
+data = dict(aplles = s1,oranges = s2)
+df = pd.DataFrame(data)
+print(df)
+"""
+a       1        6
+b       2        7
+c       3        8
+d       4        9
+e       5       10
+"""
+# serileri toplayarak böyle bir dataframe oluşturabiliriz.
+............................................................................................................................................................................................................................................................................................................
+import pandas as pd
+
+df = pd.DataFrame([1,2,3,4,5])
+print(df)
+print(df.info) # .info ile bilgileri alabiliriz.
+"""
+   0
+0  1
+1  2
+2  3
+3  4
+4  5
+"""
+............................................................................................................................................................................................................................................................................................................
+
+import pandas as pd
+
+df = pd.DataFrame([[1,2,3,4,5],[3,4,6,7,8],[5,6,7,8,9],[7,8,9,10,11],[9,10,11,12,13]],columns=["a","b","c","d","e"],index=["A","B","C","D","E"],dtype=float) # verileri verip satır indexlemesi ve kolon indexlemeesi yapabiliriz.
+print(df)
+"""
+     a     b     c     d     e
+A  1.0   2.0   3.0   4.0   5.0
+B  3.0   4.0   6.0   7.0   8.0
+C  5.0   6.0   7.0   8.0   9.0
+D  7.0   8.0   9.0  10.0  11.0
+E  9.0  10.0  11.0  12.0  13.0
+"""
+
+............................................................................................................................................................................................................................................................................................................
+
+import pandas as pd
+
+dict1 = {"name":["emre","arif","susam","ford"],"surname":["aytas","susam","simit","focus"]}
+
+df = pd.DataFrame(dict1,index=["A","B","C","D"])
+
+print(df)
+"""
+    name surname
+A   emre   aytas
+B   arif   susam
+C  susam   simit
+D   ford   focus
+"""
+# dict keyleri sutun indexlemesinde kullanıldı verileri sırası ile index sırası ile eşleşti ve satır satır veri oldu.  satır indexlemesi ise pandas içerisinde index =[]  ile yapıldı.
+
+............................................................................................................................................................................................................................................................................................................
+pandas ile birden fazla türde veri uzantısını okuyabiliriz.   .read_csv()   .read_excel()  .read_sql_query(query,connection)  .read_json() gibi...    xlsx uzantılı ise excel'dir.
+............................................................................................................................................................................................................................................................................................................
+
+import pandas as pd
+from numpy.random import randn
+df = pd.DataFrame(randn(3,3),index=["A","B","C"],columns=["col1","col2","col3"])
+print(df)
+"""
+       col1      col2      col3
+A  0.876487  0.291382 -0.860966
+B  0.880688 -0.308720 -1.216277
+C  1.038345  0.771560  0.560245
+"""
+df["col4"] = pd.Series(randn(3),index=["A","B","C"]) # bir col belirttik ve bir seri atadık. bu liste vsde olabilirdi. indexlemesi dataframenin indexlemesi ile aynı olmalıdır.
+print(df)
+"""
+       col1      col2      col3      col4
+A  0.876487  0.291382 -0.860966 -0.260276
+B  0.880688 -0.308720 -1.216277 -0.303827
+C  1.038345  0.771560  0.560245  0.116903
+"""
+
+df["col5"] = df["col4"] + df["col3"] # böylede yapabiliriz sonuçta bize gelen yeni bir seri seriler kendi aralarında toplanabilir.
+df.drop("col5",axis=1,inplace=True) # axis = 1 y koordinati  axis = 0 x koordinatı. inplace True ile ise kalıcı olmasını sağlarız.
+
+............................................................................................................................................................................................................................................................................................................
+
+import pandas as pd
+import numpy as np
+
+data = np.random.randint(10,100,75).reshape(15,5)
+df = pd.DataFrame(data=data,columns=["col1","col2","col3","col4","col5"])
+print(df)
+print(df.columns) # kolonları bir liste içerisinde görebiliriz.
+print(df.index) # satır indexleri bir liste içerisinde görebiliriz.
+print(df["col1"].head()) # col1'in ilk 5 verisini alır. bu bir seri olur tek boyutlu olduğu için.
+
+print(df[["col1","col2"]].tail()) # bir dataframe oluşur col1 ve col2 serisinden oluşan onların son 5 verisini alırız burada.
+print(df[["col1","col2"]][5:15]) # 5. ve 15. index col1 ve col2 dahil. 5 15 arası elde 10 tane satır olur. bu şekilde satır seçimi yapabiliriz.
+
+result = df > 50  # 50 büyük olan için True olmayan için False
+print(df[result]) # 50den büyük olanları gösterir ve küçük olanlara NaN verir onlar False olduğu için. numpy mantığı.
+result1 = df["col1"] > 50 # bir seri elde ederiz tek boyutlu True ve False den oluşan 50den büyük olan True.
+print(df[result1]) # col1 üzerinden True olan satırlar gelecek False olanlar ise gelmeyecek.
+
+............................................................................................................................................................................................................................................................................................................
+
+
+............................................................................................................................................................................................................................................................................................................
+import pandas as pd
+import numpy as np
+
+# gruplama işlemini biz belli değerlere göre yaparız. mesela departmana göre gruplama yaparsak eğer o zaman departmanı aynı olanlar aynı bölümde olur.
+
+personeller = {
+    "calisan":["ahmet","can","hasan","cenk","ali","riza","mustafa"],
+    "departman":["ik","bi","mu","ik","bi","mu","bi"],
+    "yas":[30,25,45,50,23,34,42],
+    "semt":["kadikoy","tuzla","maltepe","tuzla","maltepe","tuzla","kadikoy"],
+    "maas":[5000,3000,4000,3500,2750,6500,4500]
+
+}
+
+df = pd.DataFrame(personeller)
+print(df["maas"].sum()) # tüm maaşların toplamı. 29250
+result = df.groupby("departman").groups
+print(result) # departmanda gruplanan verileri görebiliriz.   {'bi': [1, 4, 6], 'ik': [0, 3], 'mu': [2, 5]}   bir dict içerisinde her elemanın indexi ile gelir. indexler key value biçimindedir. keyler gruplanan veriler. valuler ise liste içersiinde indexler. 
+result1 = df.groupby(["departman","semt"]).groups
+print(result1)  # {('bi', 'kadikoy'): [6], ('bi', 'maltepe'): [4], ('bi', 'tuzla'): [1], ('ik', 'kadikoy'): [0], ('ik', 'tuzla'): [3], ('mu', 'maltepe'): [2], ('mu', 'tuzla'): [5]}
+
+semtler = df.groupby("semt")
+for name,group in semtler:
+    print(name)
+    print(group)
+"""
+kadikoy
+   calisan departman  yas     semt  maas
+0    ahmet        ik   30  kadikoy  5000
+6  mustafa        bi   42  kadikoy  4500
+maltepe
+  calisan departman  yas     semt  maas
+2   hasan        mu   45  maltepe  4000
+4     ali        bi   23  maltepe  2750
+tuzla
+  calisan departman  yas   semt  maas
+1     can        bi   25  tuzla  3000
+3    cenk        ik   50  tuzla  3500
+5    riza        mu   34  tuzla  6500
+"""    
+     
+# tek bir grup alma
+result2 = df.groupby("semt").get_group("kadikoy") # sadece kadikoyu alırız.
+print(result2)
+"""
+  calisan departman  yas     semt  maas
+0   ahmet        ik   30  kadikoy  5000
+4     ali        bi   23  kadikoy  2750
+"""
+
+result3 = df.groupby("departman").sum()
+print(result3)
+"""
+departman
+bi         canalimustafa   90  tuzlakadikoymaltepe  10250
+ik             ahmetcenk   80         kadikoytuzla   8500
+mu             hasanriza   79         maltepetuzla  10500
+"""
+
+result4 = df.groupby("departman")["maas"].mean() # departmanların maaşlarının ortalamalarını alırız.
+print(result4)
+"""
+departman
+bi    3416.666667
+ik    4250.000000
+mu    5250.000000
+Name: maas, dtype: float64
+"""
+
+result5 = df.groupby("departman").get_group("ik") # departmanlar  gruplanacak ve ondan sadece get_group ile ik olanları alacağız.
+print(result5)
+"""
+  calisan departman  yas     semt  maas
+0   ahmet        ik   30  kadikoy  5000
+3    cenk        ik   50    tuzla  3500
+"""
+
+result6 = df.groupby("semt")["calisan"].count() # bize semtlere göre calisanların sayısını getirir. 
+print(result6)
+"""
+semt
+kadikoy    2
+maltepe    2
+tuzla      3
+Name: calisan, dtype: int64
+"""
+
+result7 = df.groupby("departman")["maas"].max()["mu"]   # departmana göre böler maasa göre mu olanın en yüksek maaşını getirir. maxlar arasından mu olanların arasından en yükseği getirir.
+print(result7) # 6500
+
+result8 = df.groupby("departman")["maas"].agg([np.sum,np.mean]) # birden fazla np işlemi olduğu için liste içerisinde gönderdik yoksa tek göndeririz.
+print(result8)
+"""
+             sum         mean
+departman
+bi         10250  3416.666667
+ik          8500  4250.000000
+mu         10500  5250.000000
+""" 
+
+
+
+............................................................................................................................................................................................................................................................................................................
+
+df = df.reindex(["a","b","c","d"])  # bunu yaparsak yeni satır indexlemeleri a b c d olur...
+df = df.drop(["col1","col2"],axis = 1) # birden fazla değer drop edeceksek liste içerisinde veririz. tekse gerek yok.
+
+df = df.notnull().sum() # değeri olan alanların sayısını görebiliriz. kolon kolon.
+df = df["col1"].isnull().sum() # col1 de kaç tane null değer var görebiliriz.
+
+............................................................................................................................................................................................................................................................................................................
+
+newcol = [np.nan,30,np.nan,51,np.nan,30,np.nan,10] # np.nan ile NaN veri verebiliriz. bunun için numpy'i import etmiş olmamız lazım.
+df["col4"] = newcol # kolon eklemesini böyle yapabiliriz.
+............................................................................................................................................................................................................................................................................................................
+
+print(df[df["col1"].isnull()]) # col1'de NaN olanlar gelir. satır satır hepsi gelir. ama col1'i nan olan satır gelmez.
+print(df[df["col1"].notnull()]["col1"]) # col1 gelir sadece ve NaN olmayan veriler gelir.
+    # axis = 1 sutun    axis = 0 ise satıra denk gelir.
+............................................................................................................................................................................................................................................................................................................
+df.dropna(subset = ["col1","col2"],inplace = True,how = "all") # birden fazla kolona bakabiliriz burada how all olduğu için col1 ve col2 nin aynı anda NaN olduğu satır silinir. inplace True olduğu için değişim kalıcı. eğer how = "any" olsaidi o zaman  aynı satırda col1 veya col2den biriis bile nan olsa o satır silinirdi. subset ile dropna'nın tarama yapacağı kolonları seçebiliriz.
+............................................................................................................................................................................................................................................................................................................
+df.dropna(thresh = 2) # en az 2 tane normal veri varsa silme demek.  6 veri var 4ü nan kisi normal o zaman silme ama 5 nan 1 normal o zaman siler.
+............................................................................................................................................................................................................................................................................................................
+df = df.fillna(value = "no input")   # nan olanların yerine no input yazacak.
+df = df.fillna(value = 1) # nan olanlara 1 değerini verir.
+............................................................................................................................................................................................................................................................................................................
+result = df.sum().sum() # DataFrame'deki toplam sayıyı verir.
+print(df.size) # kaç eleman var görebiliriz.
+print(df.isnull().sum().sum()) # toplam kaç tane nan veri var görebiliriz. eğer tek sum() olsa idi o zaman bir seri halinde her kolonda kaç tane nan veri var görebilirdik.
+............................................................................................................................................................................................................................................................................................................
+def ortalama(df):
+    toplam = df.sum().sum()
+    adet = df.size - df.isnull.sum().sum()
+    return toplam / adet
+
+df.fillna(value = ortalama(df),inplace = True)     # nan verilere ortalama değer vermiş olduk böylece.
+............................................................................................................................................................................................................................................................................................................
+
+df["indexler"] = df["name"].str.find("a") # isimlerin içinde a var ise o zaman indexler sutunundaki veriler ona göre True False alacak.
+df = df[df.Name.str.contains("jordan")] # df["Name"] olarak df.Name kullandık.
+#replace'ler arda arda dizilebilir.   a = a.replace(" ","-").replace("a","A").replace("b","B")  yapabiliriz.
+df = df.Team.str.replace(" ","-").replace("a","A")   # Team kolonu değişir. ve df Team kolonu olur değişmiş hali olur.
+............................................................................................................................................................................................................................................................................................................
+
+
+
+............................................................................................................................................................................................................................................................................................................
+import pandas as pd
+import numpy as np
+
+customers = {
+    "customerid":[1,2,3,4]
+    ,"firstname":["ahmet","ali","hasan","canan"],
+    "lastname":["yilmaz","korkmaz","celik","toprak"]
+}
+
+orders = {
+    "orderid":[10,11,12,13],
+    "customerid":[1,2,5,7],
+    "orderdate":["2010-07-04","2010-08-04","2010-07-07","2012-07-04"]    
+    
+}
+
+
+df_customers = pd.DataFrame(customers,columns=["customerid","firstname","lastname"])
+print(df_customers)
+"""
+   customerid firstname lastname
+0           1     ahmet   yilmaz
+1           2       ali  korkmaz
+2           3     hasan    celik
+3           4     canan   toprak
+"""        
+
+df_orders = pd.DataFrame(orders,columns=["orderid","customerid","orderdate"])
+print(df_orders)
+"""
+   orderid  customerid   orderdate
+0       10           1  2010-07-04
+1       11           2  2010-08-04
+2       12           5  2010-07-07
+3       13           7  2012-07-04
+"""
+
+result = pd.merge(df_customers,df_orders,how="inner") # iki tablo birleşecek. how inner ile inner join olduğunu belirttik.
+print(result)
+"""
+   customerid firstname lastname  orderid   orderdate
+0           1     ahmet   yilmaz       10  2010-07-04
+1           2       ali  korkmaz       11  2010-08-04
+""" # customerid'si eşlesenleri birleştirmiş. aynı olan kolon üzerinden inner join gerçekleştirdi. aynı olan değerlerde customerid için veriler birleştirildi.
+
+result = pd.merge(df_customers,df_orders,how="left") # left join yaptık. bütün müşteri bilgileri gelir. siparişin karşılığı yoksada getirir. sipariş için Nan verir.
+print(result)
+"""
+   customerid firstname lastname  orderid   orderdate
+0           1     ahmet   yilmaz     10.0  2010-07-04
+1           2       ali  korkmaz     11.0  2010-08-04
+2           3     hasan    celik      NaN         NaN
+3           4     canan   toprak      NaN         NaN
+""" # işlemler customerid üzerinden olacak çünkü aynı kolonları taşıyor iki df'de bunlar üzerinden join işlemleri oluyor.
+
+result = pd.merge(df_customers,df_orders,how="right") # right join yaptık tüm siparişler gelecek eşleşenler birleşecek o siparişi veren müşteri yok ise oraya NaN verilecek.
+print(result)
+"""
+   customerid firstname lastname  orderid   orderdate
+0           1     ahmet   yilmaz       10  2010-07-04
+1           2       ali  korkmaz       11  2010-08-04
+2           5       NaN      NaN       12  2010-07-07
+3           7       NaN      NaN       13  2012-07-04
+""" # işlemler customerid üzerinden olacak çünkü aynı kolonları taşıyor iki df'de bunlar üzerinden join işlemleri oluyor.
+
+result = pd.merge(df_customers,df_orders,how="outer") # full join yaptık. eşleşenler birleşecek. eğer bir siparişin karşılığı yoksa o zaman müşteri kısmı NaN alacak. eğer bir müşterinin sipariş karşılığı yoksa sipariş kısmı NaN olacak.
+print(result)
+"""
+   customerid firstname lastname  orderid   orderdate
+0           1     ahmet   yilmaz     10.0  2010-07-04
+1           2       ali  korkmaz     11.0  2010-08-04
+2           3     hasan    celik      NaN         NaN
+3           4     canan   toprak      NaN         NaN
+4           5       NaN      NaN     12.0  2010-07-07
+5           7       NaN      NaN     13.0  2012-07-04
+""" # işlemler customerid üzerinden olacak çünkü aynı kolonları taşıyor iki df'de bunlar üzerinden join işlemleri oluyor.
+
+
+
+
+
+
+customersA = {
+    "customerid":[1,2,3,4]
+    ,"firstname":["ahmet","ali","hasan","canan"],
+    "lastname":["yilmaz","korkmaz","celik","toprak"]
+}
+
+customersB = {
+    "customerid":[4,5,6,7]
+    ,"firstname":["yagmur","cinar","cengiz","can"],
+    "lastname":["bilge","turan","yılmaz","turan"]
+}
+
+
+df_customersA = pd.DataFrame(customersA,columns=["customerid","firstname","lastname"])
+print(df_customersA)
+"""
+   customerid firstname lastname
+0           1     ahmet   yilmaz
+1           2       ali  korkmaz
+2           3     hasan    celik
+3           4     canan   toprak
+"""
+df_customersB = pd.DataFrame(customersB,columns=["customerid","firstname","lastname"])
+print(df_customersB)
+"""
+   customerid firstname lastname
+0           4    yagmur    bilge
+1           5     cinar    turan
+2           6    cengiz   yılmaz
+3           7       can    turan
+"""
+
+result1 = pd.concat([df_customersA,df_customersB]) # birleştirme işlemi yapabiliriz. sırası ile önce A sonra B olacak şekilde iki df birleşti alt alta. bir liste içerisinde verdik birleşecek df'leri.  eğer [df_customersB,df_customersA] yapsa idik önce B'nin değerleri sonra ise A'nın değerleri eklenirdik.
+print(result1)
+"""
+   customerid firstname lastname
+0           1     ahmet   yilmaz
+1           2       ali  korkmaz
+2           3     hasan    celik
+3           4     canan   toprak
+0           4    yagmur    bilge
+1           5     cinar    turan
+2           6    cengiz   yılmaz
+3           7       can    turan
+""" # aynı kolonlara göre işlem yaptı.   birleştirme verilme sırasına göre yapıldı. alt alta sutuna göre veriler yerleşti.  satır indexlemesi ise her df kendi satır indexlerini getirdi. bir değişim yok.
+
+result2 = pd.concat([df_customersA,df_customersB],axis=1) # birleştirme işlemi yapabiliriz. sırası ile önce A sonra B olacak şekilde iki df birleşti alt alta. bir liste içerisinde verdik birleşecek df'leri.  eğer [df_customersB,df_customersA] yapsa idik önce B'nin değerleri sonra ise A'nın değerleri eklenirdik.
+print(result2)
+"""
+   customerid firstname lastname  customerid firstname lastname
+0           1     ahmet   yilmaz           4    yagmur    bilge
+1           2       ali  korkmaz           5     cinar    turan
+2           3     hasan    celik           6    cengiz   yılmaz
+3           4     canan   toprak           7       can    turan
+""" # axis = 1 olunca ise sutunlar yan yana koyuldu. 
+
+............................................................................................................................................................................................................................................................................................................
+import pandas as pd
+import numpy as np
+
+data = {
+    "col1":[1,2,3,4,5],
+    "col2":[10,20,13,20,25],
+    "col3":["abc","bca","ade","cba","dea"]
+    
+    
+}
+
+df = pd.DataFrame(data)
+print(df)
+"""
+   col1  col2 col3
+0     1    10  abc
+1     2    20  bca
+2     3    13  ade
+3     4    20  cba
+4     5    25  dea
+"""
+
+result = df["col1"].unique() # her verinin adeti 1 olunca elde edilen liste.
+print(result) 
+"""
+[1 2 3 4 5]
+"""
+
+result1 = df["col1"].nunique() 
+print(result1) # 5 kaç tane unique sayı var görebiliriz.
+
+
+print(df["col2"].value_counts()) # her eleman kaç tane görebiliriz.
+"""
+col2
+20    2
+10    1
+13    1
+25    1
+Name: count, dtype: int64
+"""
+
+print(df["col2"] * 2) # her eleman tek tek işlem görür ve hepsi iki ile çarpılır.
+
+def kareal(x):
+    return x ** 2
+
+print(df["col2"].apply(kareal)) # direkt olarak df["col2"]'yi apply sayesinde gönderebilmiş olduk.
+print(df["col2"].apply(lambda x:x ** 2)) # böylede olabilir.
+
+
+df["col4"] = df["col3"].apply(len) # her col3 satırındaki stringin boyutu col4'un elemanı olacak index sırası ile.
+print(df["col4"])
+"""
+0    3
+1    3
+2    3
+3    3
+4    3
+Name: col4, dtype: int64
+"""
+
+result2 = len(df.columns) # kaç adet kolon var görebiliriz.
+result3 = len(df.index) # kaç adet satır var görebiliriz.
+
+result4 = df.sort_values("col2",ascending=False) # ascending = False olduğu için büyükten küçüğe bir sıralama yapacak. default olarak True konumda.  .sort_values()  ile sıralama yapabiliriz df üzerinde kolon seçer ve satır satır sıralarız.
+print(result4)
+"""
+   col1  col2 col3  col4
+4     5    25  dea     3
+1     2    20  bca     3
+3     4    20  cba     3
+2     3    13  ade     3
+0     1    10  abc     3
+"""
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+df = pd.DataFrame(data)
+df = df.pivot_table(index = "ay",columns = "kategori",values = "gelir")
+# kategori kolon oldu.  ay bilgisi kolon oldu. veriler ise gelirden oluştu.
+"""
+
+
+............................................................................................................................................................................................................................................................................................................
+
+............................................................................................................................................................................................................................................................................................................
+
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv("nba.csv")
+
+# ilk 10 kayıt
+result1 = df.head(10)
+print(result1) # böylece yazdırabiliriz.
+
+# toplam kaç kayıt var
+result2 = len(df.index) # df.index ile indexleri bir liste içerisinde görebiliriz len ile ise kaç tane satır yani kaç tane veri var görebiliriz.
+print(result2)
+
+# tüm oyuncuların maaş ortalaması nedir.
+result3 = df["Salary"].mean() 
+print(result3)
+
+# en yüksek maaş
+result4 = df["Salary"].max() # Salary Serisindeki en yüksek değeri aldık.
+print(result4)
+
+# en yüksek maaşı alan oyuncunun ismi kimdir?
+result5 = df[df["Salary"].max() == df["Salary"]].iloc[0] # ilk gelen değeri alırız .iloc[0] ile
+print(result5)
+
+# yaşı 20 ile 25 arasında olan oyuncuların ismi ve oynadıkları takım.
+result6 = df[(df["Age"] <= 25) & (df["Age"] >= 20)][["Name","Team"]] # birden fazla sutun istediğimiz için liste içerisinde verdik.
+print(result6)
+
+# ismi jon holland olan oyuncunun takımı nedir.
+result7 = df[df["Name"] == "jon holland"]["Team"].iloc[0] # direkt olarak string bilgiyi alırız. 
+print(result7)
+
+# takımlara göre oyuncuların ortalama maaş bilgisi.
+result8 = df.groupby("Team")["Salary"].mean()
+print(result8)
+
+# kaç farklı takım var
+result9 = len(df["Team"].unique) # direkt olarak df["Team"].nunquie'de yapabiliriz.
+print(result9)
+
+# her takımda kaç adet oyuncu var.
+result10 = df.groupby("Team").value_counts() # ilgili satırlarda kaç adet değer var görebiliriz. bir seri elde ederiz.
+print(result10)
+
+# ismi içinde and geçen kayıtlar
+df = df.dropna(subset="name",axis=0) # eğer NaN serilerden kurtulmazsak hata alabiliriz.
+result11 = df[df["Name"].str.contains("str")]
+print(result11)
+
+............................................................................................................................................................................................................................................................................................................
+
+............................................................................................................................................................................................................................................................................................................
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv("youtube-ing.csv")
+
+#ilk 10 kayıtı getiriniz
+print(df.head(10))
+
+# ikinci ilk 5i getiriniz.
+print(df.iloc[5:10]) # veya df.head(10).tail(5) yapabilirdik.
+
+# datasette bulunan kolon isimleri ve sayısını bulunuz.
+result1 = df.columns
+result2 = len(df.columns)
+
+# beğenme ve dislike sayılarının ortlamalarını bulunuz
+result3 = df[["like","dislike"]].mean() 
+
+# ilk 50 videonun like vce dislike kolonlarını getiriniz
+result4 = df.head(50)[["like","dislike"]]
+
+# en çok görüntülenen video hangisidir
+result5 = df[df["views"].max() == df["views"]].iloc[0]
+
+# en az görüntülenen video hangisidir.
+result6 = df[df["views"].min() == df["views"]].iloc[0]
+
+# en fazla görüntülenen 10 video hangisidir.
+result7 = df.sort_values("views",ascending = False).head(10)
+
+# kategoriye göre beğeni ortalamalarını sıralı şekilde getiriniz.
+result8 = df.groupby("Category").mean().sort_values("like")
+
+# kategoriye göre yorum sayılarını sıralayınız.
+result9 = df.groupby("Category").sum().sort_values("comments",ascending=False)
+
+# her kategoride kaç video var.
+result10 = df.groupby("Category").value_counts()
+
+# her videonun title uzunluğunu yeni bir kolonda gösteriniz.
+df["lentitle"] = df["title"].apply(len) # her satır için tek tek işlem olacak.
+
+# her videoda gösterilen tag sayısını yeni kolonda gösteriniz
+df["tag_count"] = df["tags"].apply(lambda x:len(x.split("|")))# | 'e göre böldük ve .apply(len) ile işlem yaptık. 
+
+# en populer videoları listeleyiniz like/dislike oranına göre.
+df.dropna(subset=["like","dislike"],how="any") #like veya dislike ikisinden birisi nan olursa o satır silinecek. 
+
+likeslist = list(df["like"])
+dislikelist = list(df["dislike"])
+liste1 = list(zip(likeslist,dislikelist))
+oranlist = []
+for a,b in liste1:
+    if a + b == 0:
+        oranlist.append(0)
+    else:
+        oranlist.append(a / (a+b))
+    
+df["begeniorani"] = oranlist    
+print(df.sort_values("begeniorani",ascending=False)[["title","like","dislike"]])
+        
+............................................................................................................................................................................................................................................................................................................
+
+####################################################################################################################################################################################################################################################################################################################################
