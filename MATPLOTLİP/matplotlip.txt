@@ -10,16 +10,259 @@ plot ile çizgi grafiği oluştururuz.
 y label ile y eksenine isim verebilirz. x label ile ise x eksenine başlık verebiliriz. ve grafiğin ana başlığını belirleyebiliriz.
 line plot çizgi grafiğidir.
 
-import matplotlip.p
+import matplotlib.pyplot as plt
+import numpy as np
+
+"""
+x = [1,2,3,4]
+plt.plot(x)
+plt.show()
+"""
+
+"""
+x = [1,2,3,4]
+y = [1,4,9,16]
+plt.plot(x,y) # x listesi x eksenine y listesi ve değerleri y eksenine yerleşti.
+plt.axis([0,6,0,20]) # 0 ile 6 arasında olsun x ekseninin aralığı.  0 ile 20 arasında değer alsın y ekseninin aralığı deriz.
+plt.show() # plt.show() ile grafiği görebiliriz.
+"""
+
+"""
+x = [1,2,3,4]
+y = [1,4,9,16]
+plt.plot(x,y,color = "red",linewidth = "5") # x listesi x eksenine y listesi ve değerleri y eksenine yerleşti.  color ile çizgi rengi belirleriz.     linewidth ile ise kalınlık belirleriz.
+plt.axis([0,6,0,20]) # 0 ile 6 arasında olsun x ekseninin aralığı.  0 ile 20 arasında değer alsın y ekseninin aralığı deriz.  axis ile önce iki değer x aralığı son iki değer ise y aralığını belirleriz.
+plt.title("...GRAFIK BASLIGI...") # ana başlığı belirleriz.
+plt.xlabel("X EKSENI") # x ekseninin başlığını belirleriz.
+plt.ylabel("Y EKSENI") # y ekseninin baslıgını belirleriz.
+plt.show() # plt.show() ile grafiği görebiliriz.
+"""
+
+"""
+x = [1,2,3,4]
+y = [1,4,9,16]
+plt.plot(x,y,"-g") # x listesi x eksenine y listesi ve değerleri y eksenine yerleşti. üçüncü parametre olarak "-g" vererek biz düz yeşil çizgi yaparız.  --g olsa idi kesik çizgi olurdu yeşil renkli.   "o--r" olsa idi mesela değerlerin kesiştiği yerler içi dolu kesikli kırmızı çizgi olurdu.
+plt.axis([0,6,0,20]) # 0 ile 6 arasında olsun x ekseninin aralığı.  0 ile 20 arasında değer alsın y ekseninin aralığı deriz.  axis ile önce iki değer x aralığı son iki değer ise y aralığını belirleriz.
+plt.title("...GRAFIK BASLIGI...") # ana başlığı belirleriz.
+plt.xlabel("X EKSENI") # x ekseninin başlığını belirleriz.
+plt.ylabel("Y EKSENI") # y ekseninin baslıgını belirleriz.
+plt.show() # plt.show() ile grafiği görebiliriz.
+"""
+
+"""
+x = np.linspace(0,2,100)
+plt.plot(x,x,label = "lineer",color = "red") # önce x ekseninin değerleri sonra ise x ** 2 diyerek bir numpy array elde ederiz. oda y eksenin değerleri olaral label ile ise çizginin ismini belirleriz.
+plt.plot(x,x**2,label = "quadratic",color = "green")
+plt.plot(x,x**3,label="cubic",color = "gray")
+plt.title("BASLIK ISTE AMK")
+plt.xlabel("x ekseni...")
+plt.ylabel("y ekseni...")
+plt.legend() # labellere verdiğimiz değerler ekranda gözüksün istedik. 
+plt.axis([-1,3,-1,10]) # önce x sonra y ekseninin aralığnı belirledik. eksi değerler verebiliriz.
+plt.show()
+"""
+
+"""
+x = np.arange(0,2,100)
+fig,axs = plt.subplots(2) # iki tane axis alanı oluştururz..  bu metot iki adet return gerçekleştirir sırası ile karşılayabiliriz.
+axs[0].plot(x,x,color="red")
+axs[1].plot(x,x**2,color = "gray")
+axs[0].set_title("ilk alan")
+axs[1].set_title("ikinci alan")
+plt.legend()
+plt.tight_layout() # layout türünü değiştiririz. başlıkları düzeltir.
+plt.show()
+"""
+
+
+"""
+x = np.arange(0,2,100)
+fig,axs = plt.subplots(2,2) # 2 satır 2 kolon olacak.
+fig.suptitle("grafik basligi")
+axs[0,0].plot(x,x) 
+axs[0,1].plot(x,x ** 2)
+axs[1,0].plot(x,x ** 3)
+axs[1,1].plot(x,x ** 4)
+
+plt.show()
+"""
 
 
 
+"""
+import pandas as pd
+
+df = pd.read_csv("nba.csv")
+df = df.drop(["Number"],axis=1).groupby("Team").team()
+df.plot(subplots = True)
+plt.legend()
+plt.show()
+"""
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///matplotlib ile figure oluşturma./////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+"""        
+x = np.linspace(-10,9,20)
+y = x ** 3
+
+fig = plt.figure()
+axes = fig.add_axes([0.1,0.1,0.8,0.8]) # ilk olarak orana göre  soldan ne kadar sağa kayacak. ikincisi alttan yukarı ne kadar kayacak. sağdan sola ve yukarıdan aşağı ne kadar yüzde ile alan dbelirlenecek belirleriz.  [0.1,0.1,0.8,0.8]  demek yüzde 10 soldan sağa al sonra yüzde 10 aşağıdan yukarı sonra yüzde 100 - 80   yüzde 20 sağdan sola al   sonra 100-80  yüzde 20 yukarından aşağı al.
+
+axes.plot(x,y,"b") # ne gosterilecek? belirleriz.
+axes.set_xlabel("X") # x eksenine isim.
+axes.set_ylabel("Y") # y eksenine isim
+axes.set_title("TITLE") # baslık belirleriz
+plt.legend()
+plt.show()
+"""
 
 
 
+""" 
+x = np.linspace(-10,9,20)
+y = x ** 3
+
+fig = plt.figure()
+axes = fig.add_axes([0.1,0.1,0.8,0.8]) 
+
+axes.plot(x,y,"b") # ne gosterilecek? belirleriz.
+axes.set_xlabel("X") # x eksenine isim.
+axes.set_ylabel("Y") # y eksenine isim
+axes.set_title("TITLE") # baslık belirleriz
+
+axes_square = fig.add_axes([0.15,0.6,0.25,0.25]) # axes ekleriz.
+axes_square.plot(x,x ** 2,"r") # ne gosterilecek? belirleriz.
+axes_square.set_xlabel("X") # x eksenine isim.
+axes_square.set_ylabel("Y") # y eksenine isim
+axes_square.set_title("TITLE SQUARE") # baslık belirleriz
+
+plt.legend()
+plt.show() 
+
+"""
+
+"""
+x = np.linspace(-10,9,20)
+fig = plt.figure()
+axes = fig.add_axes([0,0,1,1])
+axes.plot(x,x**2,label = "square")
+axes.plot(x,x**3,label = "cubic")
+axes.legend(loc = 2) # loc ile bu bilgilendirme alanının nerede olacağını belirleriz.  loc = 1 birinci alan sol üst   loc = 3   sağ alt alan gibi...   x,y ekseninin alanları biçiminde ayarlanır.
+plt.show()
+"""
+
+"""
+x = np.linspace(-10,9,20)
+fig,axs = plt.subplots(nrows=2,ncols=1) # 2 satır 1 kolon. nrows ve ncols ile kaç satır kaç sutun olacak belirleyebiliriz. figsize = (4,4) gibi bir yapı ile figür boyutunu değiştirebiliriz.  kaydetme işlemide figsizeye göre olur.
+axs[0].plot(x,x**2)
+axs[0].set_title("square")
+axs[1].plot(x,x**3)
+axs[1].set_title("cubic")
+plt.tight_layout()
+plt.show()
+plt.savefig("fig1.png") # figuru resim olarak kaydedebiliriz.
+"""
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+///diğer grafik türleri./////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+""" yil = [2011,2012,2013,2014,2015]
+oyuncu1 = [8,10,12,7,9]
+oyuncu2 = [7,12,5,15,21]
+oyuncu3 = [18,20,22,25,19]
+
+# stack plot
+
+plt.plot([],[],color = "y",label = "messi")
+plt.plot([],[],color = "r",label = "ronalda")
+plt.plot([],[],color = "b",label = "mete")
+
+plt.stackplot(yil,oyuncu1,oyuncu2,oyuncu3,colors=["y","r","b"])
+plt.legend(loc = 2)
+plt.title("yillara göre gol sayilari.")
+plt.xlabel("yil")
+plt.ylabel("gol sayisi")
+plt.savefig("png2.png") # resmi kaydedebilirizzz.
+plt.show()
+ """
+
+ 
+""" goal_types = "penalti","kaleyesut","serbestvurus"
+goals = [12,35,7]
+colors = ["y","r","b"]
+plt.pie(goals,labels=goal_types,colors=colors,shadow=True,explode=(0.05,0.05,0.05),autopct="%1.1f") # veriler,isimlendirmeler ve renkler. shadow = True ile gölge ekleriz. explode=(0.05,0.05,0.05)  ile ise aradaki boşlukların arasını belirledik. autopct="%1.1f" ile ise verileri yüzdeye göre verir.
+plt.show()
+plt.savefig("png3.png")
+ 
+"""
+
+""" # bar grafiği
+
+plt.bar([0.25,1.25,2.25,3.25,4.25],[50,40,70,80,20],label = "BMW")
+plt.bar([0.75,1.75,2.75,3.75,4.75],[80,20,20,50,60],label = "MERCEDES")
+plt.legend(loc = 2)
+plt.xlabel("DAY")
+plt.ylabel("THE ROAD TAKEN")
+plt.title("CAR'S iNFOS")
+plt.show()
+plt.savefig("png4.png")
+ """
+
+""" # histogram...
+
+yaslar = [22,55,62,45,21,22,34,42,42,4,2,102,95,85,55,110,120,70,65,55,111,115,10,9,9,8]
+yasgrulari = [10,20,30,40,50,60,70,80,90,100]
+
+plt.hist(yaslar,yasgrulari,histtype="bar",rwidth=0.8) # rwidth=0.8 genişlik belirler.   histtype="bar"  tip belirledik. bar olarak gösterecek.
+plt.xlabel("yas gruplari")
+plt.ylabel("kisi sayisi")
+plt.title("histogram grafigi")
+plt.show()
+"""
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 ####################################################################################################################################################################################################################################################################################################################################
+####################################################################################################################################################################################################################################################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
