@@ -1258,5 +1258,43 @@ size = (9,) demek tek boyutlu 9 elemanlı demektir.
 
 ####################################################################################################################################################################################################################################################################################################################################
 
+temel işlemleri çok hızlı şekilde halleder numpy. bu yüzden kullanılır. birçok kütüphane numpy üzerine kuruludur.
+
+array = np.array(10) #der isek bir array oluşur. ama birden fazla veri olursa bir liste içerisinde göndermek gerekir verilerle alakalı tek bir değişken alacak yani.
+size = ()  ile işlem yaparız tek boyutlu olursa eğer   size = (sayi,) şeklinde olmalı...  
+ 
+........................................................................................................................................................................
+
+import numpy as np
+
+a = np.zeros((3,3))  # boyut belirtmek böyle olur
+print(a)
+"""
+[[0. 0. 0.]
+ [0. 0. 0.]
+ [0. 0. 0.]]
+"""
+b = np.ones((2,3)) # tek bir sayı olursa eğer o zaman float değerlerden ve hepsi bir olan bir array elde ederiz bu şekilde ise bir matris elde ederiz.
+print(b)
+"""
+[[1. 1. 1.]
+ [1. 1. 1.]]
+"""     
+
+........................................................................................................................................................................
+.reshape(a,b) ile bir arrayi uygunsa matris yapabiliriz.    .reshape(a,)  ile bir matrisi array yapabiliriz.  satırları yan yana koyar sırası ile.
+np.random(a,b,size(a,b)) ile boyut belirtebilriz. üçüncü parametre adet veya boyut olur.
+........................................................................................................................................................................
+
+
+
+
+
+........................................................................................................................................................................
+
+
+
+
+
 
 
