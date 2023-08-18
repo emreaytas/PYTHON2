@@ -1285,11 +1285,13 @@ print(b)
 .reshape(a,b) ile bir arrayi uygunsa matris yapabiliriz.    .reshape(a,)  ile bir matrisi array yapabiliriz.  satırları yan yana koyar sırası ile.
 np.random(a,b,size(a,b)) ile boyut belirtebilriz. üçüncü parametre adet veya boyut olur.
 ........................................................................................................................................................................
+array[:] ile aralık belirtebiliriz. ikincisi dahil olmaz.  
 
+matris[satirislemleri,sutunislemleri]   virgül ile satır suutn işlemlerini ayırırız.   : ile aralık belirleriz mesela. 
+    # bu bir matrisin kopyası olur onun referansını kullanılır.  kullanmaması için .copy() kullanmamız gerekir.
+matris[a:b] yaparsak sadece satırlar üzerinde işlem yapar.
 
-
-
-
+matrix[[1,2,4]] #bunu yaparsak 1. 2. ve 4. indexteki satırları getirir. 
 ........................................................................................................................................................................
 
 
