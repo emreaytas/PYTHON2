@@ -77,4 +77,132 @@ Analitik ortalamalar:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+aritmetik ortalama:
+    tüm değerlerin toplanıp gözlem sayısına bölünmesi ile bulunur. her değer aynı öneme sahiptir.
+
+ağırlıklı ortalama:
+    her değer eşit öneme sahip değildir. birimler belirlenen düzeyde ağırlıklandırılarak kullanılır. örnek olarak üniversite ders sistemi akts.  notlar kredisi ile çarpılır ve toplam sonuç kredilere bölünür. 
+
+geometrik ortalama:
+    gözlem sonuçlarının birbirini etkilediği duurmlarda kullanılır. mesela bir bakteri hücresinin günlere göre çoğalması bir önceki değere göre değişir.
+    mesela bir işletmenin 4 farklı ürünü var. elde ettiği kar sırası ile %3 %2 %4 %6   ortalama kar nedir.    4kök içerisinde 3*2*4*6   
+        değerler sıfırdan büyük ve pozitif olmalıdır.
+
+harmonik ortalama: 
+     hız verimlilik fiyat gibi oransal olarak ifade edilebilen değilkenlerin ortlamalarını bulmak için kullanılır.
+     ancak bir değişkenin sabit birisinin değişken birimde olması lazım.
+      mesela: iki şehir arası 150km giderken 75km dönerken ise 50km hızla ortalama hızla gittiğimizde ortalama hızın ne olacağını bulalım.
+ 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Analitik olmayan ortalamalar:
+    veri setindeki tüm gözlem birimlerine odaklanmak yerine ortadaki değere odaklanır. bundan dolayı aykırı gözlemlere karşı sağlam olarak bilinirler.
+
+mod: 
+   veride en çok tekrar eden değer.
+
+medyan:
+   küçükten büyüğe sıralanınca ortadaki değerdir. iki değer varsa onların ortalaması olur.
+
+kartiller/çeyrekler:
+    q1 = (n+1) / 4
+    q2 = medyan
+    q3 = 3*(n+1) / 4 
+    q4 = (q3 - q1) / 2
+
+sola çarpık ortalama:
+    aritmetik ortalama medyan ve moddan küçüktür
+
+normal dağılım:
+    mod medyan ortalama aynıdır.        
+
+sağa çarpık ortalama:
+    aritmetik ortalama medyan ve mod değerinden büyüktür.
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+frekans: bir değerin gözlemlenme sıklığıdır. tekrar sayısıdır.
+frekans tabloları:
+    verinin okunurluğu kolaylaştırılır.
+    veriler küçükten büyüğe sıralanır.  
+    en büyük ve en küçük değer bulunur. sonra farkı alınır. 
+    fark / sınıf sayısı   böylece göz sayısı belirleriz.
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+histogram:
+    sürekli değişkenlerin yorumlanması için kullanılır. verilerin dağılımı incelenir.
+
+sutun grafigi:
+    bar grafigi olarak bilinir. süreksiz veya kategorik değişkenleri görselleştirir.
+
+çizgi grafigi:
+    sürekli değişkenlerin değerlerine karşılık gelen frekans dağılımını göstermek için kullanlınır.
+
+daire grafigi:
+    bir bütün içerisinde verilerin ağırlıklarıo gösterilir
+
+saçılım grafigi:
+    iki sürekli değişken arasındaki ilişkiyi ve ilişkinin yönünü tespit etmek için kullanılır
+    ilikşi yok. eğrisel ilişki var veya doğrusal bir ilişki var şeklinde yorumlanabilir.
+
+Q-Q grafigi:
+    veri setinin dağılımı hakkında fikir verir.
+
+////OLASILIK///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+olasılık: 
+    geleceği bilme merakı varken geleceği bilme gibi bir olay yoktur.  belirsizlik vardır.  belirsizlik olasılık ile ölçülür.
+    belirsizlik içeren olaylar ve sonuçlara olasılık denir.
+
+deney: olayın sonucunu görmek için yapılan işlemdir.
+sonuç: deneyden elde edilen.
+örnek uzay:  deney sonucu meydana gelebilecek tüm sonuçların kümesi. mesela zar için 1 2 3 4 5 6 gibi değerlerin kümesi örnek uzay olur.
+olay: örnek uzayın her bir alt kümesi olayı verir.  olay olması istenen çıktılardır.  
+
+her olasılık değeri 0 ile 1 araasonda yer alır.  0 imknasız 1 kesindir.  bu aralıkta olmalıdır tüm olasılıkların.
+
+olay çeşitler:
+   bağımsız olay: 
+        bir olay gerçekleşirken başka bir olayı etkilemiyorsa 
+        mesela bir zarın atılması bir paranın sonucunu etkilemez.
+   bağımlı olay:
+        bir olay gerçekleşirken başka bir olayı etkilemiyorsa
+         mesela meyve sepetinden çekilen meyve geri atılmazsa denirse bir sonraki sonucu etkiler bu bağımlı bir olaydır.
+
+
+klasik olasılık:
+     p(A) = m / n  mesela zarın örnek uzayı 6   istenen 1 ise bu olayın olma olasılığı 1 / 6.
+          
+birleşik kesişik ve ayrık olaylar:
+     a ve b olaylarının her ikisine birden ait olan örneklerin oluşturduğu kümeye birleşik küme ddenir.
+     a ve b olaylarının en az birisi denirse birleşik olay denir.
+     a ve b olaylarının birbirisi ile ilikşisi yoksa o zaman ayrık olay denir.
+     
+     birleşik olay olasılığı:
+         p(aUb) = p(a) + p(b) - p(a kesişim b) 
+
+
+iki ayrık olasılığın birleşmesi birbiri ile olsalıklılarının toplanması demektir. mesela zar tek sayı veya 5ten büyük olacak olasılık nedir.
+
+bağıntılar:
+    1) tümleme = mesela zarda 3ve 3ten küçük deriz tümleyeni ise bunun 4 5 6 olur.
+    2) koşullu olma = mesela hava bulutlu iken yağmur yağma olasılığı değişir.
+       mesela bir zar deneyinde sonucun çift sayı olduğu biliniyorsa eğer 2 olma olasılığı nedir?  1/3 deriz. 2 gelme olasılığı 1/6  çift olma olaslığı  3/6   burdan böleriz ve 1/3 çıkar.     
+  
+Bayes teoremi:
+     var olan bir bilginin yeni bir bilgi ile nasıl güncelleneceğini ifade eder.
+     a ve b iki olay olsun. b olayı verilmişken a olayının gerçekleşme olasılığına koşullu olasılık demiştik. 
+     
+
+///dağılımlar.////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 ####################################################################################################################################################################################################################################################################################################################################
