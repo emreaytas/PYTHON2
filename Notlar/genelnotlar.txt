@@ -68,5 +68,32 @@ python çok fazla kütüphaneye sahiptir. çok farklı alanlarda işlem yapmaya 
 
 envormioent ile istenen paketleri kurabilir projemizi on kısmından istenen envormioent ile açabiliriz. gerekli kütüphaneleri yükler gereksizleri aradan çıkarırız. kendimize envormioent oluşturabiliriz istediğimi paketleri vs ekleyebiliriz.
 
+.....................................................................................................................
+
+python dosyasını .exe yapma:
+    python dosyasını executable yapabilmek için indirmek gereken paket var... 
+    pip install pyinstaller    
+    
+    tekrar terminalden projenin olduğu klasöre geliriz path olarak.
+    pyinstaller projeismi.py # birden fazla çıktı verir.
+    sadece .exe çıktısı alabilmek için:
+        projenin olduğu path içinde pyinstaller --onefile proje(istenen proje).py
+
+    eğer konsol gözükmesin istersek: (mesela keylogger için vs.)
+        aynı path olayı geçerli.
+        pyinstaller --onefile --noconsole proje(istenen proje).py
 
 
+
+    pyinstaller --onedir --noconsole first1.py  # ile  bir klasör içerisinde gelir tüm proje. ilgili kütüphaneler .dll'ler vs bir klasörde gelir. ve uygulamayı gerekli ikondan açabiliriz.
+
+    # eğer başka bir pcde çalışssın istersek. o zaman --onedir kullanmak lazım kütüphaneler vs ile ilgili sorun olmasın diye...
+
+
+    ikonları ,resimleri vs nasıl halledeceğiz...
+
+    kullandığımız resimleri vs executable folderle aynı path üzerinde olacak şekilde eklememiz lazım... aynı klasöre ekledik ve bitti. icon ve resimlerde belli oldu...
+    
+
+
+.....................................................................................................................
