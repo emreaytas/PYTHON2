@@ -62,3 +62,11 @@ eğer kendi modülümüzü oluşturmak istersek bir .py uzantılı dosya içeris
 bazı modüller c dili ile yazılır ve dll dosyasına eklenmiş olarak bulunur.  
 
 
+anaconda nedir = python sürümü olacak içerisinde. genelde python kodlarını yazdığımız bir platform. open source(açık kaynaklı...)     
+python çok fazla kütüphaneye sahiptir. çok farklı alanlarda işlem yapmaya olanak tanır.  
+  tüm paketler yüklü olur kurulum yapmadan istenen projeyi halledebilirsin.
+
+envormioent ile istenen paketleri kurabilir projemizi on kısmından istenen envormioent ile açabiliriz. gerekli kütüphaneleri yükler gereksizleri aradan çıkarırız. kendimize envormioent oluşturabiliriz istediğimi paketleri vs ekleyebiliriz.
+
+
+
