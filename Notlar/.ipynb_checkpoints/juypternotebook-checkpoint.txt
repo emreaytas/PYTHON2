@@ -7,6 +7,3 @@ pandas nupmy üzerine kurulu bir kütüphanedir.
 shift + enter ile çalıştırma yapabiliriz.
 
 cell kısmında run all diyerek bütün hücreleri sıfırdan çalıştırabiliriz.
-
-parça parça işlem yapmak için kullanılır.
-
