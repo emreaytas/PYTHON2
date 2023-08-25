@@ -384,8 +384,340 @@ window()
 
 //Qt designer kullanımı...///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+kod kullanmadan bir yapı oluşturmak için kullanılır. 
+mesela label'in içerisinde default olarak bir yazi yazsin istersek mesela sayi giriniz diye o zaman qlineedit'in text kısmından ayarlama yapabiliriz.
+
+mesela biz bir arayüz tasarladık sonra bunu koda dökeceğiz o zaman kaydediceğiz ama kodun çalıştığı path'e eklemek lazım   kaydedince xml olarak gelir...
+   sonra consola  pyuic5 MainWindow.ui -o MainWindow.py  yazacağız.   çeivrme yapacak ve böylece elimize kodlar geçecek....
+
+mesela PyQt5Designer ile değişim yaptık uygulama üzerinde o zamanda biz aynı kodu yazacağız ve değişiklik kaydolacak. ama hem değişen hem yeni elde olsun istersek yeninin adını değiştireceğiz çünkü öbür türlü yeni gelen isimden dolayı eskinin üstüne geliyor.
+
+biz arayüzü kullanmak için.
+
+groupbox kullanırsak self.ui.groupbox1... kullanmak lazım...
+
+pyuic5 MainWindow3.ui -o MainWindow3.py
+
+......................................................................................................................................................................................................
+
+import typing
+from PyQt5 import QtCore, QtWidgets
+import sys
+
+from PyQt5.QtWidgets import QWidget
+from MainWindow import Ui_MainWindow # bu yapıda kullanacağız bunun nedeni belli bir değişim olursa arayüzde kodlarla vs uğraşmamak için.
+
+class App(QtWidgets.QMainWindow):
+    
+    def __init__(self):
+        super(App,self).__init__()
+        self.ui = Ui_MainWindow() # self.ui aslında nesnenin kendisi olacak.
+        self.ui.setupUi(self)
+        self.ui.pushButton.clicked.connect(self.hesapla)
+        self.ui.pushButton_2.clicked.connect(self.hesapla)
+        self.ui.pushButton_3.clicked.connect(self.hesapla)
+        self.ui.pushButton_4.clicked.connect(self.hesapla)
+        
+        
+    def hesapla(self): # tek tek farklı farklı fonksiyon yazmamak için...
+        sender = self.sender() # tüm butonlar tek fonksiyonu çalıştıracak ama hangisinden basıldığımı self.sender() ile bulacağız...
+          # sender aslında butonun referansıdır... 
+          
+        if sender.text() == "TOPLA":
+            self.ui.label_3.setText("Sonuc: "+str(int(self.ui.txt_sayi1.text()) + int(self.ui.txt_sayi2.text())))
+        elif sender.text() == "CİKAR":
+            self.ui.label_3.setText("Sonuc: "+str(int(self.ui.txt_sayi1.text()) - int(self.ui.txt_sayi2.text())))
+        elif sender.text() == "CARP":
+            self.ui.label_3.setText("Sonuc: "+str(int(self.ui.txt_sayi1.text()) * int(self.ui.txt_sayi2.text())))
+        else:
+            self.ui.label_3.setText("Sonuc: "+str(int(self.ui.txt_sayi1.text()) / int(self.ui.txt_sayi2.text())))
+    
+    
+
+
+def app():
+    app =  QtWidgets.QApplication(sys.argv)
+    win = App()
+    win.show()
+    sys.exit(app.exec_()) 
+
+app()     
+        
+        
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//...Layout örnekleri...///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+mesela nesneleri yatayda nesneleri sıralandırmak için hortizonal layout  alt alta istersek vertical layout kullanabiliriz.
+   veya istenen konumda konumlardırmak için grid layouts kullanmak lazım...
+
+layout ile sıralama ve yaparız.
+
+bir butonu mesela QWidget kısmından size kısmından vercital kısmında expanding dersek eğer layout içini tam olarak kaplar.
+
+spacerler ile vir layout içerisinde elemanlar arasında boşluk vs oluşturabiliriz...
+
+MainWindow sağ tıkta layout kısmında eleman eklerken layout belirleyebiliriz.  istersek break layout diyerek ise bunu kapatabiliriz...
+
+ctrl + r ile PyQt5Designer içerisinde preview yapabiliriz.
+
+................................................................................................................................................
+
+
+import sys
+import typing
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QApplication,QWidget,QMainWindow
+from PyQt5.QtGui import QPalette,QColor
+
+from MainWindow1 import Ui_MainWindow # oluşturduğumuz sayfayı çağırdık...
+
+
+class MyApp(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(MyApp,self).__init__()
+        self.ui = Ui_MainWindow() # burada aslında biz qtdesigner ile oluşturduğumuz yapıyı kendi kodumuzaa dökmeye başlarız.
+        
+        self.ui.setupUi(self)
+        
+        self.ui.cbsinema.stateChanged.connect(self.show_state)
+        self.ui.cbkitapokumak.stateChanged.connect(self.show_state)
+        self.ui.cbspor.stateChanged.connect(self.show_state)
+        
+        self.ui.btnsecilenlerial.clicked.connect(self.getAll)
+    
+    def getAll(self):
+        result = ""
+        items = self.ui.centralwidget.findChildren(QtWidgets.QCheckBox)  # centralwidget bizim tüm checkboxlarımızın olduğu yer. findchildren ile bir  wigdet içerisindeki istenenleri alabiliriz. ne anlama geliyor?  istersek checkbox değil o layout içerisinde bulunan diğer yapılardanda alabiliriz.
+        
+        for item in items:
+            if item.isChecked():
+                print(item.text())
+                result += item.text() + "\n" 
+        
+        self.ui.lblresult.setText(result) # lbl'ye yazıları göndereceğiz.
+        
+    
+           
+    def show_state(self,value):
+        cb = self.sender() # metot hangi chechboxu çağırdı görebiliriz.
+        
+        print(cb.text())
+        print(cb.isChecked())
+        print(value)
+        
+        
+def app():
+    app = QApplication(sys.argv)
+    win = MyApp()
+    win.show()
+    sys.exit(app.exec_())
+
+app()
+
+
+
+
+
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+///RadioButton//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+eğer bir grid Layout içerisinde birden fazla RadioButton kullanırsak içerisinden sadece bir tanesi seçili olabilir. birden fazla seçim olamaz.
+RadioButton grubunu birbirinden ayırmazsak eğer uygulamada sadece bir tane RadioButton seçebiliriz. ama mesela ülke ayrı layout içerisinde seçilir. eğitim mesela ayrı layout içinde seçilir. böyle ayarlanır bir grupta sadece bir tane seçilebilir.
+
+normalde items = self.ui.gridlayout. findChildren kullanamayız...  findChildren kullanabilmek için groupbox kullanmamız lazım.   RadioButtonların olduğu layout bir groupbox içinde olmalı.
+.....................................................................................................................................................................................................................
+
+
+import sys
+import typing
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QApplication,QWidget,QMainWindow
+from PyQt5.QtGui import QPalette,QColor
+
+from MainWindow2 import Ui_MainWindow # oluşturduğumuz sayfayı çağırdık...
+
+class MyApp(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(MyApp,self).__init__()
+        self.ui = Ui_MainWindow() # burada aslında biz qtdesigner ile oluşturduğumuz yapıyı kendi kodumuzaa dökmeye başlarız.
+        
+        self.ui.setupUi(self)
+        
+        self.ui.turkiye.setChecked(True) # bu şekil olursa uygulama çalıştığında Türkiye seçili olur.
+        self.ui.ilkokul.setChecked(True) # default olarak lise seçilmiş olur...
+        
+        self.ui.turkiye.toggled.connect(self.onClicked)
+        self.ui.azerbaycan.toggled.connect(self.onClicked)
+        self.ui.yunanistan.toggled.connect(self.onClicked)
+        self.ui.almanya.toggled.connect(self.onClicked)
+        
+        self.ui.lise.toggled.connect(self.onClicked1)
+        self.ui.universite.toggled.connect(self.onClicked1)
+        self.ui.yukseklisans.toggled.connect(self.onClicked1)
+        self.ui.ilkokul.toggled.connect(self.onClicked1)        
+        
+        self.ui.btnulke.clicked.connect(self.getselectedCountry)
+        self.ui.egitimsecimi.clicked.connect(self.getselectedLesson)
+        
+        
+    def onClicked(self):
+        rb = self.sender()
+        if rb.isChecked():
+            print(rb.text())
+            
+    def onClicked1(self):
+        rb = self.sender()
+        if rb.isChecked():
+            print(rb.text())
+                            
+    def getselectedCountry(self):
+        items = self.ui.grp1.findChildren(QtWidgets.QRadioButton)
+        for rb in items:
+            if rb.isChecked():
+                self.ui.lblulke.setText("Secilen ulke: "+rb.text())
+                       
+        
+    def getselectedLesson(self):
+        items = self.ui.grp1.findChildren(QtWidgets.QRadioButton)
+        for rb in items:
+            if rb.isChecked():
+                self.ui.lblegitim.setText("Egitim seviyesi: "+rb.text())
+
+                       
+                        
+        
+        
+def app():
+    app = QApplication(sys.argv)
+    win = MyApp()
+    win.show()
+    sys.exit(app.exec_())
+
+app()
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+///ComboBox//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+import sys
+import typing
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QApplication,QWidget,QMainWindow
+from PyQt5.QtGui import QPalette,QColor
+
+from MainWindow3 import Ui_MainWindow # oluşturduğumuz sayfayı çağırdık...
+
+class MyApp(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(MyApp,self).__init__()
+        self.ui = Ui_MainWindow() # burada aslında biz qtdesigner ile oluşturduğumuz yapıyı kendi kodumuzaa dökmeye başlarız.
+        
+        self.ui.setupUi(self)
+        self.ui.btnload.clicked.connect(self.loadItems)
+        self.ui.btnitem.clicked.connect(self.getitem)
+        self.ui.pushButton.clicked.connect(self.clear)
+        
+        
+        self.ui.cbsehirler.currentIndexChanged.connect(self.change) # seçimde değişim olunca yeni gelenin indexi gelecek.
+        self.ui.cbsehirler.currentIndexChanged[str].connect(self.changeselect) # seçimde değişim olunca yeni gelenin indexi gelecek.
+    
+    def clear(self):
+        self.ui.cbsehirler.clear() # tüm veriler silinir comboboxtan...
+        
+        
+        
+    def changeselect(self,text):
+        print(text)
+        
+         
+    
+    def change(self,index):
+        print(index)
+                
+    def loadItems(self):
+        self.ui.cbsehirler.addItems(["Adana","İzmir","Antalya"]) # add item ile bir tane ekleriz addItems ile birden fazla ama o zaman liste içerisinde yollamak lazım...
+         
+    def getitem(self):
+        print(self.ui.cbsehirler.currentText()) # seçili text gelir.
+        print(self.ui.cbsehirler.currentIndex()) # hangi indexte o combobox içerisinde...
+        
+        count = self.ui.cbsehirler.count() # kaç adet veri var görebiliriz.
+        
+        for i in range(count):
+            print(self.ui.cbsehirler.itemText(i)) # verilen indexteki veriyi getirir combobox içerisindeki..
+            
+            
+            
+        
+            
+        
+            
+        
+        
+def app():
+    app = QApplication(sys.argv)
+    win = MyApp()
+    win.show()
+    sys.exit(app.exec_())
+
+app()
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///MessageBox//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 ####################################################################################################################################################################################################################################################################################################################################
+
+
+
+
+
+
+import sys
+import typing
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QApplication,QWidget,QMainWindow
+from PyQt5.QtGui import QPalette,QColor
+
+from MainWindow3 import Ui_MainWindow # oluşturduğumuz sayfayı çağırdık...
+
+class MyApp(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(MyApp,self).__init__()
+        self.ui = Ui_MainWindow() # burada aslında biz qtdesigner ile oluşturduğumuz yapıyı kendi kodumuzaa dökmeye başlarız.
+        
+        self.ui.setupUi(self)
+    
+            
+        
+        
+def app():
+    app = QApplication(sys.argv)
+    win = MyApp()
+    win.show()
+    sys.exit(app.exec_())
+
+app()
+
+
+
+
+
+
