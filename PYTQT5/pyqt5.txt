@@ -679,9 +679,443 @@ app()
 
 ///MessageBox//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+import sys
+import typing
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QApplication,QWidget,QMainWindow
+from PyQt5.QtGui import QPalette,QColor
+from PyQt5.QtWidgets import QMessageBox # mesaj kutusu için import ettik mesaj verecek bize...
+from PyQt5.QtGui import QIcon
+
+from MainWindow4 import Ui_MainWindow # oluşturduğumuz sayfayı çağırdık...
+
+class MyApp(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(MyApp,self).__init__() # aslında bir döngü oluşturdum...
+        self.ui = Ui_MainWindow() # burada aslında biz qtdesigner ile oluşturduğumuz yapıyı kendi kodumuzaa dökmeye başlarız.     
+        self.ui.setupUi(self)
+        
+        self.ui.btnExit.clicked.connect(self.showdialogue)
+    
+    def showdialogue(self):
+        msg = QMessageBox()
+        msg.setWindowIcon(QIcon("cal1.png")) # message app'e bir icon ekleyebiliriz.
+        msg.setWindowTitle("Close application")
+        msg.setText("Are you sure? ")
+        msg.setIcon(QMessageBox.Question) # QMessageBox.Warning ile uyarı şeysi kullanabiliriz.
+        msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel | QMessageBox.Ignore) # birden fazla buton oluşacak. içeride...
+        msg.setDefaultButton(QMessageBox.Ok) # default olarak seçili buton enter yapınca o çalışacak...
+        msg.setDetailedText("Details...") # bir hide details butonu oluşturdu...
+        msg.buttonClicked.connect(self.popup)
+        
+        
+        
+        
+        x = msg.exec_()
+        
+        print(x)
+    
+    def popup(self,i): # tıklanan butonu görebileceğiz...
+        print(i.text())
+        
+        if i.text() == "OK":
+            print("Ok")
+            QtWidgets.qApp.quit() # ilgi form kapanacak... komple form kapanır...
+        elif i.text() == "Cancel":
+            print("cancel")
+        else:
+            print("ignore.")
+    
+        
+                
+        
+
+
+
+        
+        
+def app():
+    app = QApplication(sys.argv)
+    win = MyApp()
+    win.show()
+    sys.exit(app.exec_())
+
+app()
+
+
+.......................................................................................................................................................................................................................................................................................
+
+
+
+import sys
+import typing
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QApplication,QWidget,QMainWindow
+from PyQt5.QtGui import QPalette,QColor
+from PyQt5.QtWidgets import QMessageBox # mesaj kutusu için import ettik mesaj verecek bize...
+from PyQt5.QtGui import QIcon
+
+from MainWindow4 import Ui_MainWindow # oluşturduğumuz sayfayı çağırdık...
+
+class MyApp(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(MyApp,self).__init__() # aslında bir döngü oluşturdum...
+        self.ui = Ui_MainWindow() # burada aslında biz qtdesigner ile oluşturduğumuz yapıyı kendi kodumuzaa dökmeye başlarız.     
+        self.ui.setupUi(self)
+        
+        self.ui.btnExit.clicked.connect(self.showdialogue)
+    
+    def showdialogue(self):
+        
+        result = QMessageBox.question(self,"Close app","Are you sure",QMessageBox.Ok | QMessageBox.Cancel | QMessageBox.Ignore,QMessageBox.Cancel) # başlık belirledik,sonra soru belirledik... sonra hangi butonlar olacak. sonra hangisi default olarak seçili olacak belirleriz...
+        
+        
+        if result == QMessageBox.Ok():
+            print("Yes cliked")
+            QtWidgets.qApp.quit()
+        else:
+            print("cancel...")
+            
+        
+    def popup(self,i): # tıklanan butonu görebileceğiz...
+        print(i.text())
+        
+        if i.text() == "OK":
+            print("Ok")
+            QtWidgets.qApp.quit() # ilgi form kapanacak... komple form kapanır...
+        elif i.text() == "Cancel":
+            print("cancel")
+        else:
+            print("ignore.")
+    
+        
+                
+        
+
+
+
+        
+        
+def app():
+    app = QApplication(sys.argv)
+    win = MyApp()
+    win.show()
+    sys.exit(app.exec_())
+
+app()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+///Date ve Time//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+time vs üzerine gelir calender popup seçersek takvim eklenebilir. takvim üzerinden tarih seçebiliriz.
+
+
+
+
+.......................................................................................................................................................................................................................................................................................
+
+
+import sys
+import typing
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QApplication,QWidget,QMainWindow
+from PyQt5.QtGui import QPalette,QColor
+from PyQt5.QtWidgets import QMessageBox # mesaj kutusu için import ettik mesaj verecek bize...
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QDate,QTime,QDateTime # tarih,zaman,tarih zaman kullanmak için çağırdık...
+
+from MainWindow5 import Ui_MainWindow # oluşturduğumuz sayfayı çağırdık...
+
+class MyApp(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(MyApp,self).__init__() # aslında bir döngü oluşturdum...
+        self.ui = Ui_MainWindow() # burada aslında biz qtdesigner ile oluşturduğumuz yapıyı kendi kodumuzaa dökmeye başlarız.     
+        self.ui.setupUi(self)
+        
+        self.ui.pushButton.clicked.connect(self.totalcal)
+    
+    
+    def totalcal(self):
+        start = self.ui.dateEdit_2.date() # tarih bilgisini aldık...
+        end = self.ui.dateEdit.date() # tarih bilgisini aldık...
+        print(start)
+        print(end)
+        
+        print("Days in month: {0}".format(start.daysInMonth()))
+        print("Days in year: {0}".format(start.daysInYear()))
+        
+        now = QDateTime.currentDateTime() # şu anki zaman bilgisi
+        now1 = QDate.currentDate() # şu anki tarih bilgisi.
+        now2 = QTime.currentTime() # şu anki saat bilgisi.
+        print(str(now) + " " +str(now1)+ " " + str(now2))
+         
+        
+        print("Days: {0}".format(start.daysTo(end))) # aradaki gün farkını görebiliriz.
+        
+                
+            
+        
+def app():
+    app = QApplication(sys.argv)
+    win = MyApp()
+    win.show()
+    sys.exit(app.exec_())
+
+app()
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+//ListView///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+import sys
+import typing
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QApplication,QWidget,QMainWindow
+from PyQt5.QtGui import QPalette,QColor
+from PyQt5.QtWidgets import QMessageBox,QLineEdit # mesaj kutusu için import ettik mesaj verecek bize...
+from PyQt5.QtGui import QIcon # ikon eklemek için kullanırız.
+from PyQt5.QtCore import QDate,QTime,QDateTime # tarih,zaman,tarih zaman kullanmak için çağırdık...
+from PyQt5.QtWidgets import QInputDialog # bir input oluşturacak add dediğimiz zaman...
+
+from MainWindow6 import Ui_MainWindow # oluşturduğumuz sayfayı çağırdık...
+
+
+class MyApp(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(MyApp,self).__init__() # aslında bir döngü oluşturdum...
+        self.ui = Ui_MainWindow() # burada aslında biz qtdesigner ile oluşturduğumuz yapıyı kendi kodumuzaa dökmeye başlarız.     
+        self.ui.setupUi(self)
+        # load students...
+        self.loadStudents()
+        
+        # add new students
+        self.ui.btnadd.clicked.connect(self.addstudent)
+        
+        # edit student
+        self.ui.btnedit.clicked.connect(self.editstudent)
+        
+        # delete student
+        self.ui.btnremove.clicked.connect(self.deletestudent)
+        
+        # up
+        
+        self.ui.btnup.clicked.connect(self.up)
+        
+        
+        # down
+        self.ui.btndown.clicked.connect(self.down)
+        
+        # sort
+        
+        self.ui.btnsort.clicked.connect(self.sortStudents)
+        
+        # close
+        
+        self.ui.btnexit.clicked.connect(self.close)
+        
+        
+    def down(self):
+        currentindex = self.ui.listitems.currentRow() # seçili rowun index numarası. 
+        if currentindex != self.ui.listitems.count() - 1:
+            item = self.ui.listitems.takeItem(currentindex) #
+            self.ui.listitems.insertItem(currentindex + 1,item)
+            self.ui.listitems.setCurrentItem(item)
+            
+            
+    def up(self):
+        currentindex = self.ui.listitems.currentRow() # seçili rowun index numarası. 
+        if currentindex != 0:
+            item = self.ui.listitems.takeItem(currentindex) #
+            self.ui.listitems.insertItem(currentindex - 1,item)
+            self.ui.listitems.setCurrentItem(item)
+    
+    def sortStudents(self):
+        self.ui.listitems.sortItems()        
+            
+    def deletestudent(self):
+        currentindex = self.ui.listitems.currentRow() # seçili rowun index numarası. 
+        item = self.ui.listitems.item(currentindex) # elemanı alacağız...
+        
+        if item is None:
+            return #fonksiyonu bitirmek için boş return kullandık...
+        
+        q = QMessageBox.question(self,"Remove Student","Do you want to remove student? " + str(item.text()), QMessageBox.Yes | QMessageBox.No)
+        if q == QMessageBox.Yes:
+            item = self.ui.listitems.takeItem(currentindex)
+            del item
+            
+    def close(self):
+        quit() # ilgili programı kapatacak...                    
+        
+    def editstudent(self):
+        currentindex = self.ui.listitems.currentRow() # seçili rowun index numarası. 
+        item = self.ui.listitems.item(currentindex) # elemanı alacağız...
+        
+        if item is not None:
+            text,ok = QInputDialog.getText(self,"Edit Student","New Name: ",QLineEdit.Normal,item.text())
+            if (ok and text is not None) and (text != ""):
+                item.setText(text) # isim değiştirme oldu...
+                
+        
+      
+    def addstudent(self):
+        currentindex = self.ui.listitems.currentRow() # seçili rowun index numarası. 
+        text, ok = QInputDialog.getText(self,"New Student","Student Name: ") # getInteger dersek sayı alır... getItem ile bir item alır vsss.
+                                           # başlık ismi ve alınacak isim ile ilgili bilgilendirme...        
+        
+        if (ok and text is not None) and (text != ""):  # ok ve text None değilse. demek.
+            self.ui.listitems.insertItem(currentindex,text) # index ve text eklemesi...
+        
+        
+    def loadStudents(self):
+        self.ui.listitems.addItems(["ahmet","ali","cinar"]) # birden fazla veri ekletebiliriz. ama liste içerisinde tek eklemek için ise addItem()    
+        self.ui.listitems.setCurrentRow(1) # birinci indexteki yani ikinci eleman default olara seçili olur...
+    
+        
+        
+         
+         
+        
+def app():
+    app = QApplication(sys.argv)
+    win = MyApp()
+    win.show()
+    sys.exit(app.exec_())
+
+app()
+
+# QlistWidget kullandık... gösterici olarak...
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+///TableView//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import sys
+import typing
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QApplication,QWidget,QMainWindow
+from PyQt5.QtGui import QPalette,QColor
+from PyQt5.QtWidgets import QMessageBox,QLineEdit,QTableWidgetItem # mesaj kutusu için import ettik mesaj verecek bize...
+from PyQt5.QtGui import QIcon # ikon eklemek için kullanırız.
+from PyQt5.QtCore import QDate,QTime,QDateTime # tarih,zaman,tarih zaman kullanmak için çağırdık...
+from PyQt5.QtWidgets import QInputDialog # bir input oluşturacak add dediğimiz zaman...
+
+from MainWindow7 import Ui_MainWindow # oluşturduğumuz sayfayı çağırdık...
+
+
+class MyApp(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(MyApp,self).__init__() # aslında bir döngü oluşturdum...
+        self.ui = Ui_MainWindow() # burada aslında biz qtdesigner ile oluşturduğumuz yapıyı kendi kodumuzaa dökmeye başlarız.     
+        self.ui.setupUi(self)
+        
+        self.loadproducts()
+         
+        self.ui.pushButton.clicked.connect(self.load)
+        self.ui.tableWidget.doubleClicked.connect(self.double)
+    
+    def double(self):
+        for item in self.ui.tableWidget.selectedItems():
+            print(item.row(),item.column(),item.text())
+        
+
+            
+    def load(self):
+        
+        name = self.ui.lineEdit.text()
+        price = self.ui.lineEdit_2.text()
+        
+        if name and price is not None:
+            rowcount = self.ui.tableWidget.rowCount() # kaç adet satır var görürürüz.
+            self.ui.tableWidget.insertRow(rowcount) # yani bir indexaçtık...
+            self.ui.tableWidget.setItem(rowcount,0, QTableWidgetItem(name)) # satır,sutun  sonra tablo elemanı ekledik...
+            self.ui.tableWidget.setItem(rowcount,1, QTableWidgetItem(price)) # satır,sutun  sonra tablo elemanı ekledik...
+            
+        
+              
+    def loadproducts(self):
+        
+        products = [
+            
+            {"name":"samsung s5","price":5000}, 
+            {"name":"samsung s6","price":6000},
+            {"name":"samsung s7","price":7000}
+            ,{"name":"samsung s8","price":8000}
+        ]
+        
+        self.ui.tableWidget.setRowCount(len(products)) # 3 satırlı oldu.
+        self.ui.tableWidget.setColumnCount(2) # 2 sutunlu oldu...
+        self.ui.tableWidget.setHorizontalHeaderLabels(("Name","Price")) # başlık belirledik...   Vertical ile ise istersek satır indexlemesi yapabilriiz.
+        self.ui.tableWidget.setColumnWidth(0,220) # 0. kolon 120 olsun...
+        self.ui.tableWidget.setColumnWidth(0,110)        
+        
+        rowindex = 0
+        for i in products:
+            self.ui.tableWidget.setItem(rowindex,0, QTableWidgetItem(i["name"])) # satır,sutun  sonra tablo elemanı ekledik...
+            self.ui.tableWidget.setItem(rowindex,1, QTableWidgetItem(str(i["price"]))) # satır,sutun  sonra tablo elemanı ekledik...
+            
+            rowindex += 1
+        
+        
+        
+            
+        """
+        self.ui.tableWidget.setItem(0,0, QTableWidgetItem("Samsung s5")) # satır,sutun  sonra tablo elemanı ekledik...
+        self.ui.tableWidget.setItem(0,1, QTableWidgetItem("5000")) # satır,sutun  sonra tablo elemanı ekledik...
+        self.ui.tableWidget.setItem(1,0, QTableWidgetItem("Samsung s6")) # satır,sutun  sonra tablo elemanı ekledik...
+        self.ui.tableWidget.setItem(1,1, QTableWidgetItem("6000")) # satır,sutun  sonra tablo elemanı ekledik...
+        self.ui.tableWidget.setItem(2,0, QTableWidgetItem("Samsung s7")) # satır,sutun  sonra tablo elemanı ekledik...
+        self.ui.tableWidget.setItem(2,1, QTableWidgetItem("7000")) # satır,sutun  sonra tablo elemanı ekledik...
+        """
+        
+        
+        
+         
+         
+        
+def app():
+    app = QApplication(sys.argv)
+    win = MyApp()
+    win.show()
+    sys.exit(app.exec_())
+
+app()
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ####################################################################################################################################################################################################################################################################################################################################
 
@@ -718,6 +1152,6 @@ app()
 
 
 
-
+# pyuic5 MainWindow3.ui -o MainWindow3.py
 
 
