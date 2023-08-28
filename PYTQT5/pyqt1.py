@@ -83,10 +83,14 @@ class MyApp(QtWidgets.QMainWindow):
          
         
 def app():
+    
+    
+    
     app = QApplication(sys.argv)
     win = MyApp()
     win.show()
     sys.exit(app.exec_())
+    
 
 app()
 

@@ -1155,3 +1155,15 @@ app()
 # pyuic5 MainWindow3.ui -o MainWindow3.py
 
 
+
+
+
+
+
+
+
+
+
+
+
+
