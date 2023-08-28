@@ -197,6 +197,39 @@ Bayes teoremi:
 
 ///dağılımlar.////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+dağılım:
+    hilesiz bir para atma deneyinde 100 kere atarsak olasılık olarakl 50 tura 50 yazı olur.
+          orantısız bir dağılım olabilir. hepsi tura olabilir.  deneylerin tekrar sayısı artıkkça yazı ve tura gelme olasılığının aynıı olduğunu görürüz.
+          sonsuz sayıda gerçekleştirilen deneyin çıktılarının frekansları olasılık dağılımı olarak belirtilir.
+
+
+dağılım ölçüsü:
+    elimizdeki serileri karşılaştırmamıza vs yarar.
+    neden bu ölçülere ihtiyaç var = örnek olarak elimizde A ve B şubelerine ait istatistik dersi vize sınavı sınıf ortalamaları olsun.  A şubesnin ortalaması:70  B şubesinin ortalaması:70
+                                    A:68,77,55,48,78,65,90,88,71,60 # not değişimi fazla değil öğrenciler arasında.
+                                    B: 98,22,45,34,88,95,100,88,30,100 # pek homojen değil notlar    
+
+dağılım ölçüleri:
+    Değişim ölçüsü(Ranj-Genişlik):
+            bir veri grubundaki en büyük en en küçük verinin arasındaki faark genişliği verir.
+            mesela 22 ve 100   78 demek değişim ölçüsü...
+
+            
+    Standart sapma:
+            bir gruptaki verilerin puan bazında aritmetik ortalamadan ne kadar uzaklaştıklarını gösterir.
+            mesela ortalama 70 olsun.
+            
+
+
+    Varyans:
+
+
+
+    Çarpıklık ve Basıklık:
+
+
+            
+
 
 
 
