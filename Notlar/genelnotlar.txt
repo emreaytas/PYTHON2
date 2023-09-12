@@ -97,3 +97,9 @@ python dosyasını .exe yapma:
 
 
 .....................................................................................................................
+
+sql injection bir hack yöntemidir. tasarım yaparken buna önlem alınması lazım. yoksa verdiği komutlar ile verilere sızabilir veri alabilir veri ekleyebilir.
+
+
+
+

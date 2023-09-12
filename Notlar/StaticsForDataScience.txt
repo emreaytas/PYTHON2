@@ -209,33 +209,69 @@ dağılım ölçüsü:
                                     A:68,77,55,48,78,65,90,88,71,60 # not değişimi fazla değil öğrenciler arasında.
                                     B: 98,22,45,34,88,95,100,88,30,100 # pek homojen değil notlar    
 
+
 dağılım ölçüleri:
     Değişim ölçüsü(Ranj-Genişlik):
             bir veri grubundaki en büyük en en küçük verinin arasındaki faark genişliği verir.
             mesela 22 ve 100   78 demek değişim ölçüsü...
 
             
-    Standart sapma:
+Standart sapma:
             bir gruptaki verilerin puan bazında aritmetik ortalamadan ne kadar uzaklaştıklarını gösterir.
-            mesela ortalama 70 olsun.
-            
+            mesela ortalama 70 olsun. her öğrencinin notunun aritmetik ortlamaya olan uzaklığını belirtir standart sapma.
+            standart sapma ne kadar fazla ise elemanların aritmetik ortalamaya uzaklığı fazla demektir. yani elemanlar arasında fark var demektir.
+            grupların ölçü birimlerine bakmak lazım. aynı ölçüm birimlerine sahip gruplar karşılaştırılabilir.
+            standart sapma eksi değer alamaz. eğer sıfırsa tüm elemanlar aynı demektir.
+
+Varyans:
+          standart sapmanın karesinin alınması ile elde edilir. her bir birimin ortalamadan farklı olduğu ortalama değeri ölçer.
+          standart sapma verilerin yayılışının tam değerine bakar varyans ise ortalama olarak ele alır.   bir seri setindeki değişikliğin ölçüsüdür.
+
+Çarpıklık ve Basıklık:
+          
+      çarpıklık dağılımın simetrik olmama ölçüsüdür.    
+
+bernoulli dağılımı: bir denemenin iki sonucu varsa bu dağılım kullanılır ve sadece bir kere deneme olur. 0 ve 1 olmak üzere iki değeri vardır.
+binom dağılımı: bernoulli'nin tekrarlı hali her deneme birbirinden farklı olmalıdır. deney çıktısı iki sonuçlu olmalıdır. ,
+poisson dağılımı = bir olayın bir zaman aralığında meydana gelme sıklığı.
+
+normal dağılım:
+       çan biçimindedir. sağ ve sol kuyruk birbirine eşittir. mod medyan ortalaam eşittir. ve hepsi tepe noktada blunur.
+
+ki_kare dağılımı:
+    çarpık bir dağılımdır. 
 
 
-    Varyans:
+serbestlik derecesi:
+    değerlerin değişiklik gösterebilme özgürlüğüdür.    
 
-
-
-    Çarpıklık ve Basıklık:
-
-
-            
-
-
-
+merkezi limit teoremi:
+    deney arttıkça olasılığın yüzde 50ye yaklaşma olayı.   mesela bir parayı yüz kere atmak ve milyon kere atmak. milyon kere atınca yüzde 50ye daha fazla yaklaşlır.
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+.... boş geçtik.
+
+
+///Regresyon////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Regresyon:
+      iki değişken arasındaki kolarasyonu ifade etmek. aralarında sebep saonuç bulunan verileri kullanarak tahmin etmek.
+      mesela gübre kalitesi ve ürün miktarı.
+      yağmur miktarı ve ürün miktarı gibi veri ilişkisi.
+      y = ax + b + e   y(bağımlı değişken)  x(bağımsız değişken hatasız ölçüldüğü düşünülür.)  b sabit değer.  a Regresyon katsayısı   e ise tesadüfi hata terimidir.
+
+      parametrelerin tahmini:
+           hata teriminin normal dağılımı varsayımı varsa en çok olabilirlik yöntemi kullanılır.
+           hata teriminin dağılışı ile ilgili herhangi bir varsayım yoksa en küçük kareler yöntemi kullanılır.
+           en küçük kareler yöntemi:
+                 toplam sapmaların karelerinin toplamını en küçük yapacak değerlerin bulunması vardır. 
+
+     
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ####################################################################################################################################################################################################################################################################################################################################
+
