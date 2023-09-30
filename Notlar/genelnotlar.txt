@@ -115,3 +115,10 @@ if __name__ == "main":   # bunun genel amacı importladığımız dosyaların bi
 
 import math 
 dir(math) # böylece tüm metotları görebiliriz.
+
+.......................................................................................................................
+
+google cloud gibi sistemler işlemleri internet hatta server üzerinde çalıştırmamızı sağlar. online sistemler için kullanılır genel olarak. eskiden fiziksel sunucular varmış ancak şimdi online olarak hallediliyor. hepsi cloud'a taşınmış durumda. sunucu işlemleri güvenlik işleri. bakım işlerini vs firmalar kendisi yapar.
+google cloud ile konteynar sistemi kurabiliriz bir uygulamayı 7/24 olarak kullanmamızı sağlayabilir. 
+
+
