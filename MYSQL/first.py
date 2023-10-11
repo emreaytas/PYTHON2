@@ -8,8 +8,6 @@ connection = sql.connect(
 
 print(connection) # <pymysql.connections.Connection    burada olduğu gibi bağlantı sağlanmış...
 
-# tablo oluşturma...
-
 cursor = connection.cursor() # bir cursor oluştururuz. komutları yollamak için.
 cursor.execute("""CREATE DATABASE if not exists EMRE""") # if not exists demek eğer yoksa oluştur demek.
 cursor.execute("USE EMRE") # şu an o database'yi kullanıyoruz. sistemde.
@@ -27,19 +25,15 @@ def createTable():
     
 createTable()
 
+def updateData(name):
+    sorgu = """update table1 set name = '%s' where name = '%s'""" # önce update edilecek tablo sonra set ile değişim olunca neler değişecek belirt. sonra 
+    cursor.execute(sorgu,("emre",name))
+    connection.commit()
 
-def showTables():
-    cursor.execute("show tables")
-    for i in cursor:
-        print(i) 
+    
 
-# showTables()           
+# showData()
+whereName("emre")
 
-def addData(name,age):
-    # verileri bir tuple içerisinde vermeliyiz.
-    veriler = (name,age)
-    sorgu = """insert into table1(name,age) values(%s,%s)""" # istersek name age yazmazdık hepsi sırası ile veri alırdı içine. ama eğer boş yer bırakmak istersek falan o zaman sırası ile hangi veriler girilecek belli ederiz.    
-    # %s demek gelecek verinin yeri demektir.
-    cursor.execute(sorgu,veriler)
-    connection.commit() # commit'leme yaparız böylece veriler databaseye gönderilir. göndermezsek cursorda kalır.
+
     

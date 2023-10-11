@@ -109,6 +109,10 @@ if __name__ == "main":   # bunun genel amacı importladığımız dosyaların bi
     ....
     # yani bu bloğun bulunduğu paket import edildi ise blok içerisi çalışmayacak...    bu blok şunu kontrol eder çalıştığım yer bulunduğum yer mi.  kendi paketimde mi çalışıyorum başka bir pakete mi gittim eğer başka bir yer import etti ise çalıştırmaz. kendi paketi için çalışır bu blok.
 
+print(__name __) # __main__ verir eğer ana dosyada isek. 
+# mesela iki tane dosya olsun ikisinde de print(__name__olsun)   modul1 ve modul2 olsun isimleri  modul2'yi çalıştırırsak eğer önce modul1 sonra __main__ verir. modul1'i çalıştırırsak eğer modul2 __main__ verir.   modul'ün çalıştığı yere göre isimlendirme değişir.
+# neden kullanırız. mesela bir modülü import edicez bazı kısımlarının çalışmasını istemiyoruz o zaman if __name__ == "__main__" deriz böylece bu modül import edilir bu blok içerisinde olan kısım gittiği yerde çalışmaz. sadece kendi içerisinde çalışır. bu yapılı kısm'ı olan modülün o kısmı gittiği yerde çalışmaz. python çalıştırılacak bir yer görmez.
+
 
 # python'da bir dosyayı import edersek eğer direkt olarak o dosya komple baştan sona çalışır. eğer çok büyük bir dosya ise içinden gerekli olan kısımları from ile almalıyız programı kastırmamak için.
 .....................................................................................................................
@@ -120,5 +124,31 @@ dir(math) # böylece tüm metotları görebiliriz.
 
 google cloud gibi sistemler işlemleri internet hatta server üzerinde çalıştırmamızı sağlar. online sistemler için kullanılır genel olarak. eskiden fiziksel sunucular varmış ancak şimdi online olarak hallediliyor. hepsi cloud'a taşınmış durumda. sunucu işlemleri güvenlik işleri. bakım işlerini vs firmalar kendisi yapar.
 google cloud ile konteynar sistemi kurabiliriz bir uygulamayı 7/24 olarak kullanmamızı sağlayabilir. 
+
+
+import paket
+print(paket.__file__) # bu yapı ile bir paketin nerede olduğunu görebiliriz.
+.......................................................................................................................
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
