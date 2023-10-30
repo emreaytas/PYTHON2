@@ -2,6 +2,7 @@
 import requests # modülü çağırırız.
 import json
 
+
 print(json.__file__) # json modülünün kurulduğu yeri görürüz.
 print(requests.__file__) # requests modülünün nerede bulunduğunun görebiliz
 # herhangi bir link'e request attığımızda bize bir veri dönecek. bir talebi python aracılığıyla yaparız.

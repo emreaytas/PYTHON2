@@ -102,7 +102,7 @@ sql injection bir hack yöntemidir. tasarım yaparken buna önlem alınması laz
 
 .....................................................................................................................
 
-if __name__ == "main":   # bunun genel amacı importladığımız dosyaların bizden habersiz çalışmasının önüne geçmek için kullanılır.
+if __name__ == "__main__":   # bunun genel amacı importladığımız dosyaların bizden habersiz çalışmasının önüne geçmek için kullanılır.
     ....
     ....
     ....
@@ -129,6 +129,8 @@ google cloud ile konteynar sistemi kurabiliriz bir uygulamayı 7/24 olarak kulla
 import paket
 print(paket.__file__) # bu yapı ile bir paketin nerede olduğunu görebiliriz.
 .......................................................................................................................
+
+
 
 
 
