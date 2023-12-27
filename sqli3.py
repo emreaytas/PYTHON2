@@ -19,7 +19,7 @@ def insert(name,lastname,username,password):
     data = (name,lastname,username,password)
     cursor.execute(addcommand.format(data)) 
     
-    conn.commit()
+    conn.commit() # commitlersek eğer veri tabloya işlenmiş olur...
     conn.close()
 
 def printall():
