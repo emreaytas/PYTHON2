@@ -10,7 +10,6 @@ x -> create dosya oluşturma. eğer dosya varsa hata verir. yoksa oluşturur. am
 r -> read okuma dosya konnumda yoksa veya yoksa hata verir. 
 
 
-
 with open(dosyaadi,mod):
     with open(dosyaadi,mod):
     #iç içe birden fazla dosya ile işlem yapabiliriz.
