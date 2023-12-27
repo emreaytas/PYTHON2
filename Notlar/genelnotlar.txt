@@ -128,8 +128,92 @@ google cloud ile konteynar sistemi kurabiliriz bir uygulamayı 7/24 olarak kulla
 
 import paket
 print(paket.__file__) # bu yapı ile bir paketin nerede olduğunu görebiliriz.
+
 .......................................................................................................................
 
+    THREAD
+    Bir iş yaparken diğer işe geçebilsin istersek eğer kullanmak gerekir. mesela bir yandan toplama yapacak bir yandan ise verileri çekecek gibi... buunn için işleri iş parçacığına bölmek gerekir... 
+
+import threading # threading ile çağırırız...
+import time
+
+def start():
+    print("Merhaba")
+    time.sleep(2)
+    print("selam")
+
+start()
+
+for i in range(10):
+    t = threading.Thread(target=start)
+    t.start()
+    
+
+
+ÇIKTI.............
+
+
+Merhaba
+selam
+MerhabaMerhaba
+
+Merhaba
+Merhaba
+Merhaba
+Merhaba
+Merhaba
+Merhaba
+Merhaba
+Merhaba
+selam
+selamselam
+
+selam
+selam
+selam
+selam
+selam
+selam
+selam
+
+Burada olan şudur... t.start() ile her seferinde ayrı ayrı parçacıkta THREAD oluşur ve her fonksiyon ayrı ayrı threadlerde çalışır...
+
+.......................................................................................................................
+
+.ipynb python notebook içindir.. onun uzantısıdır...
+
+....................................................................................................................................................................................................................................................................
+kodların bir yerde çalışabilmesi için cloud gerekir... veya pcmizzi sunucu yapacağız o zamanda clouda sunucu olarak tanıtmamız lazım ki insanlar bu kodlara erişebilsin...
+veya bir model oluşturduk bunu canlıya alacağız clouda yüklemek lazım cloud aslında internettir... bir nevi internet.
+sunucular artık merkzlerde toplamıştır aws google vs olarak... uygulama yedekleme ortamlarına gerek duyulur. bunlar sağlanır bunlara ise cloud sistemi ile erişebiliriz...
+
+Sunucu (server) ve depolama (storage) kavramları, bilgi teknolojileri alanında farklı ama birbirine bağlı olan iki önemli bileşendir.
+
+Sunucu (Server): Sunucu, genellikle ağ üzerindeki diğer cihazlara hizmet veren bir bilgisayar sistemidir. Sunucular, istemcilere (örneğin, bilgisayarlar, telefonlar veya diğer cihazlar) dosya paylaşımı, web sayfaları sunumu, e-posta hizmeti, veritabanı erişimi, oyun sunucuları gibi farklı hizmetleri sağlamak için kullanılır. Sunucular genellikle daha güçlü donanıma, yüksek depolama kapasitesine ve daha güçlü işlemcilere sahip olabilirler. Özel işletim sistemleri veya sunucu uygulamaları genellikle sunucular üzerinde çalışır.
+
+Depolama (Storage): Depolama, verilerin saklandığı, tutulduğu veya işlendiği bir alandır. Depolama, genellikle veri merkezlerinde veya sunucularda kullanılan donanım veya yazılım sistemlerini ifade eder. Bu depolama, sabit diskler, SSD'ler (Solid State Drive), bulut depolama hizmetleri veya diğer depolama aygıtları aracılığıyla gerçekleştirilebilir. Depolama, sunucularda kullanılan verilerin kalıcı olarak saklandığı alanı ifade eder.  serverlar depolama alanlarına bağlanırlar ve istenen kodları verileri tutarlar o server için.
+
+Yani, sunucu, genellikle hizmetleri sunmak veya istemcilere erişim sağlamak için kullanılan bir bilgisayar sistemidir. Bu sunucular, genellikle büyük miktarda veriyi depolamak için depolama sistemlerine ihtiyaç duyarlar. Depolama ise, verilerin kalıcı olarak saklandığı veya işlendiği alandır ve sunucuların ihtiyaç duyduğu bu verileri sağlamak için kullanılır.
+
+Kısacası, sunucu hizmetleri sağlayan bir bilgisayar sistemini temsil ederken, depolama, verilerin saklandığı donanım veya yazılım sistemlerini ifade eder ve sunucuların gereksinim duyduğu verilerin depolanmasını sağlar.
+Şirketlerde bulunan donanım veya yazılım uygulamalarını bir şirketin internet ile bize sağlamasıdır. bbilişim hizmetlerini başka bir yerden başka binada olan server ve storageden almaktır.
+
+....................................................................................................................................................................................................................................................................
+
+.net framework sadece windowsta çalışır .net core ise platfrom bağımsız...   asp.net core ile web uygulamaları yapılabilir. xamarin ile mobil. windows form ile ise masaüstü uygulamaları yapabiliriz. 
+.net framework ile core arasında büyük bir performans farkı var.
+5.0'dan sonra platform bağımsız yani .core olmuştur...
+.net core açık kaynak kodlu oldu. 5 ile. platform bağımsız oldu.
+
+.exe kullanıcının çalıştırabileceği yazılım uzantısı bunu ise compiler yapar... derlemenin iki çıktısı vardır exe ve dll...
+
+c# ile yazılan dili compiler ile biz makine koduna çeviririz o dosyayıda biz .exe ile çalıştırabiliriz...
+    derleme yapılır. derleme compiler etmektir.
+
+###############################################################################################################################################################################################################################################################################################################################################################
+###############################################################################################################################################################################################################################################################################################################################################################
+###############################################################################################################################################################################################################################################################################################################################################################
+###############################################################################################################################################################################################################################################################################################################################################################
 
 
 
@@ -138,10 +222,10 @@ print(paket.__file__) # bu yapı ile bir paketin nerede olduğunu görebiliriz.
 
 
 
-
-
-
-
+###############################################################################################################################################################################################################################################################################################################################################################
+###############################################################################################################################################################################################################################################################################################################################################################
+###############################################################################################################################################################################################################################################################################################################################################################
+###############################################################################################################################################################################################################################################################################################################################################################
 
 
 

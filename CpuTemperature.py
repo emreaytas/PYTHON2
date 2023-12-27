@@ -22,3 +22,10 @@ if temperature is not None:
     print(f"İşlemci Sıcaklığı: {temperature} °C")
 else:
     print("İşlemci sıcaklığına erişim mümkün değil veya desteklenmiyor.")
+    
+ 
+ 
+ 
+    
+    
+    
