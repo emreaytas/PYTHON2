@@ -220,7 +220,61 @@ artık c# ile yapılmış uygulamalar linux bir serverda çalışabilir oldu... 
 
 mikroservis nedir = 
     hizmetler bellidir. maaliyetler düşüktür. küçük servislerdir.
-    neden kullanırız = öncelikle kullanacakmıyız belirlememiz lazım.   
+    neden kullanırız = öncelikle kullanacakmıyız belirlememiz lazım. monotlitic mimariye rakiptir. hangisini kullanacağız belirlemek lazım.
+    mikroservis ise her biri ayrı birer fonksiyon gibidir. izole bir şekilde her yapı kendi işini yaparsa bu yapı mikroservis yapısı olur. 
+    mesela hepsiburada da sepete gittik ürünleri listele dedik sadece o mikroservis çalışır gerisine gerek yoktur. diğer mikroservislerle işi olmayacak. diğer mikroservislerin yaptığı işi yapmayacak.
+    olabildiğince izole ve küçük servislere ayırmak gerekiyor.
+    mikroservisler birbirinden izole olduğu için farklı dbler ve farklı diller kullanabilirler aynı dbyede bağlanabilirler. mantık budur bir projede mikroservis sayesinde farklı dilleri kullanabiliriz.
+    mikroservisler illaki dbye bağlanacak diye bir şey yok normal işlemlerde yapabilirler.
+    örnek olarak mikroservis sayesinde c# ve java hepsiburada da aynı anda kullanılabilir.
+    büyük işlerde mesela bir yazılımcı geldi sadece sepetle ilgilenecek o zaman tüm kodlara hakim olmasına gerek yok istediği dil ile kendi bölgesinde işlem yapabilir.
+    api gateway ise işlemlere göre çalışması gereken mikroservisi belirler...
+    dezavantaj olarak ise karmaşıklık olabilir.
+    mikroservisler eventbus ise mikroservislerin birbiri ile iletişim sağlaması için kullanılır.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+REST (Representational State Transfer), web tabanlı iletişimde kullanılan bir yazılım mimarisidir. Bu mimari, uygulama programlama arayüzü (API) tasarımı için kullanılır ve HTTP protokolünü temel alır. RESTful API'lar, istemcilerin sunucudaki kaynaklarla (veri, hizmet veya işlevsellik) etkileşimde bulunmasını sağlar.
+
+Temel prensipleri şunlardır:
+
+Kaynaklar (Resources): Her kaynak, tekil bir URI (Uniform Resource Identifier) ile tanımlanır. Örneğin, bir blog yazısı için "/posts" gibi.
+
+HTTP Metodları (HTTP Methods): CRUD işlemlerini gerçekleştirmek için HTTP metodları kullanılır. Temel metodlar şunlardır:
+
+GET: Kaynağın alınması için kullanılır.
+POST: Yeni bir kaynağın oluşturulması için kullanılır.
+PUT: Bir kaynağın güncellenmesi için kullanılır.
+DELETE: Bir kaynağın silinmesi için kullanılır.
+Temel Veri Formatları: Genellikle JSON veya XML gibi temel veri formatları kullanılır. JSON, son zamanlarda daha popülerdir.
+
+Stateless İletişim (Stateless Communication): İstemci ve sunucu arasındaki iletişimde herhangi bir oturum durumu saklanmaz. Her istek, tüm gerekli bilgiyi içermelidir.
+
+REST API'lar, web tabanlı uygulamalar arasında veri alışverişi ve iletişimi sağlamak için yaygın olarak kullanılır. Bu API'lar, genellikle uygulama geliştiricilerinin farklı platformlar arasında veri alışverişini kolaylaştırmak için tercih ettiği bir standart haline gelmiştir.
+
+rest http ile client server iletişimi yapabileceğimiz bir mimaridir.
+restte değişken url ile metotlar üzerinde işlem yapılır.
+restfull rest üzerine geliştirilmiştir. 
+
+..........................................
+// /**/   -> c java c#
+# """"  """  '''  '''  python yorum satırı
+pip list ile elde olan kütüphaneleri görebiliriz...
+howdoi how can i upgrade pandas? (pip install howdoi)
+..........................................
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+mesela windows bir platformdur. veya linux. uygulamın çalıştığı işletim sistemi veya donanım.
+  ama mesela .net core ve javada bir platformdur bunlarla yazılmış uygulamalar direkt olarak işletim siteminde değil bir sanal makine üzerinde çalışırlar. 
+  sanal makine sayesinde(.net core ve java) her işletim sistemi için farklı kod yazmak zorunda kalmazsınız.
+
+
+
+
+
+
 
 
 ###############################################################################################################################################################################################################################################################################################################################################################
