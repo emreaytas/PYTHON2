@@ -18,6 +18,12 @@ class MyApp(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow() # burada aslında biz qtdesigner ile oluşturduğumuz yapıyı kendi kodumuzaa dökmeye başlarız.     
         self.ui.setupUi(self)
         
+        
+        
+        
+        
+        
+        
          
         
 def app():
@@ -33,6 +39,8 @@ def app():
 app()
 
 
+    
+    
 
 
 

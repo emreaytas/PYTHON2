@@ -6,6 +6,9 @@ as ile mesela import numpy as np deriz ve numpy'i artık np ismi ile kullanabili
 
 import pandas as pd;import numpy as np   şeklinde bir kullanım yapabiliriz.
 
+list(range(1,6)) yaparak biz bunu bir liste haline almış oluruz normalde tuple.   ama [*range(1,6)] yaparakta liste haline alabiliriz...
+
+
 cmd'de python yazarsak eğer python kodlarını çalıştıracak şekle gelir o moda geçer quit() yaparsak cmd eski haline windows yönetici ekranı olarak çalışmaya başlar.
    yani python dil paketi yüklenince ide olmadanda kodlar çalışacak çünkü python paketi sayesinde bilgisayar bu kodları anlayabilecek. ama daha iyi bir yazım için en iyisi her zaman ide kullanmaktır. yoksa direkt olarak cmd ile bile kodlar çalışabilir eğer python paketi varsa... o paket ile kodlar bilgisayar diline döner.
 
