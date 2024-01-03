@@ -2,6 +2,10 @@ python yorumlayıcısı olan bir dildir. kütüphaneleri çok geniştir. bilgisa
 pythonda satırlar c java gibi ; ile bölünmediği için hangi hizada olduğu önemlidir kodların. 
 mesela class emre(): yapınca sınıfın içindeki her şeyin belirlenebilmesi için sana verilen hiza içerisinde kodları yazmak lazı. 
 
+as ile mesela import numpy as np deriz ve numpy'i artık np ismi ile kullanabiliriz.
+
+import pandas as pd;import numpy as np   şeklinde bir kullanım yapabiliriz.
+
 cmd'de python yazarsak eğer python kodlarını çalıştıracak şekle gelir o moda geçer quit() yaparsak cmd eski haline windows yönetici ekranı olarak çalışmaya başlar.
    yani python dil paketi yüklenince ide olmadanda kodlar çalışacak çünkü python paketi sayesinde bilgisayar bu kodları anlayabilecek. ama daha iyi bir yazım için en iyisi her zaman ide kullanmaktır. yoksa direkt olarak cmd ile bile kodlar çalışabilir eğer python paketi varsa... o paket ile kodlar bilgisayar diline döner.
 
@@ -23,16 +27,22 @@ python dosyalarının uzantısı .py javanın .java c'nin ise .c
 \t	tab (yatay boşluk)
 \n	Satır başı
 
+wCam,hCam = 640,480  # pythonda tek satırda birden fazla atama yapabiliriz...
 
+"""
+self.hands = self.mpHands.Hands(self.mode, self.maxHands, self.detectionCon, self.trackCon)
+
+biz bunu hands(detectionCon = 0.7) diyebiliriz. seçili olan parametrenin değerini belirleyebiliriz.
+
+"""
 
 sql server client server mimarisi üzerine kurulmuş bir sistemdir. işlem veririz karşılığında işlemi yapmasını beklersiniz.
 
  local sunucular kendi kaynaklarını kullanırlar. microsoft acsess mesela kendi kaynaklarınızı kullanarak sorgulama yapar ama sql server öyle değildir client işlemleri yapabiliriz. 
 
-bütün veritabanlarının dili sql'dir. mssql sadece biraz daha gelişmiş olan tsql kullanır.
+bütün veritabanlarının dili sql'dir. mssql sadece biraz daha gelişmiş olan tsql kullanır. ilişkisel veritabanlarından bahsediyoruz...
 
 biz sql ile mssql server'a sorgular verirsek eğer mssql serverin kaynakları kullanılacak sorgulama ve işlem yaparken. sorgularımız bilgisayarımız ile server'a gider ve sonuçlanma olur. network üzerinden dinleme ve sorgulama olur.
-
 
 sayi = None
 while True:
