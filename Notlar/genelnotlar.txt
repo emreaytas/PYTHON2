@@ -284,9 +284,63 @@ mesela windows bir platformdur. veya linux. uygulamın çalıştığı işletim 
   sanal makine sayesinde(.net core ve java) her işletim sistemi için farklı kod yazmak zorunda kalmazsınız.
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+class UserRepository():
+    def __init__(self):
+        self.users = []
+        self.isLoggedIn = False
+        self.currentUser = {}
+    #load users from .json file
+        self.loadUser()
+    
+    def loadUsers(self):
+        if os.path.exists("Datas.json"): # eğer bu dosya varsa o zaman True verecek...
+            with open("Datas.json","r",encoding="utf-8") as file:
+                users = json.load(file) # tüm bilgileri alacağız her nesne bir dict halinde ama string dict halinde gelecek.ve hepsi bir liste içerisinde gelecek.
+                for user in users:
+                    user = json.loads(user) # loads ile biz string dict olan json verisini dict haline getirebildik.
+                    print(user["username"]+" "+user["email"])
+                    newUser = User(username=user["username"],password=user["password"],email=user["email"]) # dict hale gelen nesneyi tekrar nesne haline getirdik.
+                    self.users.append(newUser)
+                #print(self.users)
+                
+                     
+    def register(self, user:User): # gelecek olan verinin User tipinde olacağını belirtiriz bu yapı ile.   // burada mesela bir class'ın metotuna başka bir class'ın nesnesinin referance'ı gelecke  o zaman onu belirtmemiz lazım user ismi:User ise referance verecek nesneni oluşturulduğu class'tır *****************************************************
+        self.users.append(user)
+        self.saveToFile()
+        print('kullanici olusturuldu...')
+    
+    def login(self,username,password):
+        if self.isLoggedIn:
+            print("Zaten login oldunuz...")
+        else:
+            for user in self.users:
+                if user.username == username and user.password == password:
+                    self.isLoggedIn = True
+                    self.currentUser = user
+                    print("Login yapildi...")
 
+    def saveToFile(self):
+        liste = []
+        for user in self.users:
+            liste.append(json.dumps(user.__dict__)) # user.__dict__ ile biz aslında bir nesneyi dict yapısına çevirdik. böylece dumps için kullanılacak hale getirdik... yoksa class ile direkt olarak işlem yapamazdık.
+    
+        with open('Datas.json',"w") as file: # her şeyi siler ve biz elde olanları sıfırdan yazdıracağız. 
+            json.dump(liste,file) # dump ile jsona yazdırma yapacağız. ve biz buna bir liste içinde classlar olarak yolladık. dumps ise jsona uygun hale getirir. 
+    
+    def logOut(self):
+        self.isLoggedIn = False
+        self.currentUser = {}        
+        print("Cikis basarili...")
+    
+    def identity(self):
+        if self.isLoggedIn:
+            print(f'username: {self.currentUser["username"]}')
+        else:
+            print("Giris yapilmamis...")    
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
