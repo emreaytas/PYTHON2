@@ -1,0 +1,85 @@
+// blank solution boş bir çözüm ekranı açar...
+// existing project ile projelerin benzer kısımlarını çekebiliriz...
+// bazen framework sürüm farklılığından dolayı projeler çalışmayabilir buna dikkat etmek lazım...
+// Sürümlerde üst olan hepsini kapsar ama 4.7.2   4.8 ile yazılmış olanı desteklemeyebilir. ama 4.8 kendinden alt olanları destekler.  
+// nuget ile biz istersek dependies ekleyebiliriz entity framework gibi...
+// c#da her veri wrapper classtır yani her ver bir nesnedir. bu yüzden her verinin metotlarını kullanabiliriz. mesela int a = 8; deriz a.equals vs kullanabiliriz...  eğer bir metotta yollayıp değerinin değişmesini falan istersek o zaman ref ile yollarız...
+// static metot static main içinde çalışabilir static olmayan değer static içinde çalışmaz... static-static veya non-static - non-static olmalı...
+// mesela bir class'ın oluşması için önce onun superclass'ı oluşmalı oluşurken default constructor çalışır....
+degistir(ref a)
+public void degisttir(ref int b) gibi...
+
+c#da ilkel yapılar yoktur. her şey nesnedir...
+            Console.WriteLine(int.MinValue);   // mesela direkt olarak int class'ının içindeki static MinValue değerini çağırabiliriz...  static olan değerleri ve metotları direkt olarak class ile kullanabiliriz...
+            Console.WriteLine(int.MaxValue);
+
+
+c#tada diğer dillerde olduğu gibi tüm veriler tanımlanır bir metot eğer bir değer dönderiyorsa o zaman tipinde karşılanır int sayi1 = sayigetir(); gibi.
+
+Tam Sayı Veri Tipleri:
+
+int: 32 bitlik işaretli tam sayı.
+long: 64 bitlik işaretli tam sayı.
+short: 16 bitlik işaretli tam sayı.
+byte: 8 bitlik işaretli tam sayı.
+sbyte: 8 bitlik işaretli tam sayı.
+Ondalıklı Sayı Veri Tipleri:
+
+float: 32 bitlik ondalıklı sayı.
+double: 64 bitlik ondalıklı sayı.
+decimal: 128 bitlik ondalıklı sayı.
+Karakter Veri Tipleri:
+
+char: 16 bitlik Unicode karakter.
+Boolean Veri Tipi:
+
+bool: Mantıksal (true veya false) değeri temsil eder.
+Metinsel Veri Tipleri:
+
+string: Metin verilerini tutan veri tipi.
+Object Veri Tipi:
+
+object: Tüm diğer türlerin temel türüdür. Her türden bir nesneyi temsil edebilir.
+Diziler:
+
+int[], string[], vb.: Belirli bir türdeki elemanları içeren diziler.
+Nullable Veri Tipleri:
+
+int?, bool?, vb.: Nullable türler, değerlerin null olabileceği anlamına gelir.
+Enumerations (Enum):
+
+enum: Belirli bir türdeki sabit değerlerin adlarını içeren bir türdür.
+Yapılar (Structures):
+
+struct: Değer türleri olan, ancak sınıflar gibi davranabilen türler.
+Sınıflar (Classes):
+
+class: Referans türleri olan ve nesne tabanlı programlamanın temelini oluşturan türler.
+Interface ve Arayüzler:
+
+interface: Bir sınıfın uygulamasını zorlayan bir sözleşme sağlayan tür.
+
+################################################################################################################################################################################################################################################
+
+struct node
+{
+    public int deger;
+    public String name;
+
+}
+
+public static void Main(String[] args){
+            node node1 = new node();
+
+            node1.name = "emre";
+            node1.deger = 15;
+}
+
+################################################################################################################################################################################################################################################
+
+// Main sadece bir tane olur ve programın çalışması için gerekli olan o metottur ana metottur...
+// String ile string arasında bir fark yoktur...  
+// 
+
+
+
