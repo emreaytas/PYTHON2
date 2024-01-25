@@ -342,7 +342,42 @@ class UserRepository():
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+IPython.display modülü içinde bulunan Image sınıfını kullanarak Jupyter Notebook içinde resim gösterimi yapabilirsiniz. İşte basit bir örnek:
 
+python
+Copy code
+from IPython.display import Image
+
+# Resmin dosya yolu veya URL'si
+resim_dosya_yolu = 'dosya_adı.png'
+
+# Image sınıfını kullanarak resmi gösterme
+Image(filename=resim_dosya_yolu)
+Yukarıdaki örnekte, dosya_adı.png kısmını kendi resminizin dosya adı veya URL'si ile değiştirmelisiniz.
+
+Eğer resminizi bir URL üzerinden göstermek istiyorsanız, Image sınıfını şu şekilde de kullanabilirsiniz:
+
+python
+Copy code
+from IPython.display import Image
+
+# Resmin URL'si
+resim_url = 'https://example.com/resim.png'
+
+# Image sınıfını kullanarak resmi gösterme
+Image(url=resim_url)
+Bu örneklerde Image sınıfını kullanarak resmi direkt olarak gösterirsiniz. Ancak eğer resmi bir HTML sayfasında daha fazla kontrol sağlamak istiyorsanız, HTML sınıfını ve img etiketini kullanabilirsiniz:
+
+python
+Copy code
+from IPython.display import HTML
+
+# Resmin URL'si
+resim_url = 'https://example.com/resim.png'
+
+# HTML kodu ile resmi gösterme
+HTML(f'<img src="{resim_url}">')
+Bu örnekte, HTML sınıfını ve img etiketini kullanarak resmi HTML sayfasında gösteriyoruz. İhtiyacınıza bağlı olarak, bu yöntemleri kullanarak resimleri Jupyter Notebook içinde farklı şekillerde gösterebilirsiniz.
 
 
 ###############################################################################################################################################################################################################################################################################################################################################################
