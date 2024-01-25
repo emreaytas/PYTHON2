@@ -9,9 +9,21 @@
 degistir(ref a)
 public void degisttir(ref int b) gibi...
 
-c#da ilkel yapılar yoktur. her şey nesnedir...
+c#da ilkel yapılar yoktur. her şey nesnedir... wrapper classtır aslında veriler.
             Console.WriteLine(int.MinValue);   // mesela direkt olarak int class'ının içindeki static MinValue değerini çağırabiliriz...  static olan değerleri ve metotları direkt olarak class ile kullanabiliriz...
             Console.WriteLine(int.MaxValue);
+
+Console.WriteLine(int.MinValue + " EMRE"+ byte.MinValue+" FORD"+byte.MaxValue);
+     + demek String'de ekleme yap demektir. böylece tüm değerler string'e döner ve işlem yapabiliriz...
+
+
+
+            double say11 = 12.2;
+            Console.WriteLine(say11);
+            float say12 = (float)12.33;  // her noktalı değer aslında double'dir bizim atama yaparken float'a tip dönüşümü yapmamız lazım uppercasting yapmamız gerekiyor...
+            Console.WriteLine(say12);
+
+
 
 
 c#tada diğer dillerde olduğu gibi tüm veriler tanımlanır bir metot eğer bir değer dönderiyorsa o zaman tipinde karşılanır int sayi1 = sayigetir(); gibi.
@@ -59,9 +71,15 @@ Interface ve Arayüzler:
 
 interface: Bir sınıfın uygulamasını zorlayan bir sözleşme sağlayan tür.
 
+// oop demek encapsulation,polymorphism and inheritance demektir aslında...
+// interfaceler aslında birer sözleşmelerdir böylece içerisindeki metotları override etmek zorunlu olur implement eden class tarafından...
+
+
 ################################################################################################################################################################################################################################################
 
-struct node
+// struct tanımlama ve kullanımı
+
+struct node 
 {
     public int deger;
     public String name;
@@ -78,8 +96,44 @@ public static void Main(String[] args){
 ################################################################################################################################################################################################################################################
 
 // Main sadece bir tane olur ve programın çalışması için gerekli olan o metottur ana metottur...
-// String ile string arasında bir fark yoktur...  
-// 
+// String ile string arasında bir fark yoktur... ikiside aynıdır referans bilmem ne vs vs... 
+
+            bool dogrumu = false;
+
+            while (dogrumu)
+            {
 
 
 
+
+
+            }
+            if (dogrumu)
+            {
+
+                    
+            }else if (dogrumu) { 
+            
+            
+            }else { Console.WriteLine("FORD ");
+            }
+
+// değişkenler verileri tutan yapılardır. her sınıf bir blok içerisindedir.
+// bir class içerisinde tanımlananlar aslında o class'a özgüdür...
+// c#da değişkenler rakamla vs başlayamaz... metinsel ifadeler falan mantıklıdır. ve dikkat etmemiz gerekn bir nokta  class isimleri büyükle başlar fonkisyonlar vve değişkenler ise küçükle başlar yeni kelimede o kelimenin baş harfi büyür.
+class: EmreAraba   metot: gitAraba() değişken: arabaMotor = 12; gibi...
+// değişken bir class içerisinde kullanıldı ise tüm class ona erişebilir.
+
+// stack ve heap dene iki bölge var bellekte ana bölgede ramle bellek arasında fark var stack ve heap olarak. değer tipliler stackte tutulur referance tipliler ise heap alanında tutulur sınıflara ait nesneler heapte tutulur.
+// string dışındakiler stack'te tutulur. string ise heapte.
+
+// sabit ve değişken farkı nedir... const mesela değişmez ve değeri tanımlanırken atanmalı.
+          const int deger2 = 11;  gibi.
+          int deger1 = 11; 
+          deger1 = 12; // sabit değildir değişkendir const değilse... porgramda zamanla değişebilir.
+
+// c# dilinde bir veriye double int float vs değer verilmediyse eğer o zaman 0 olur string ise null olur vs vs mesela class ürettik emre diye emre emre1; dedik emre1 nulldır. default olarak 0 veya null ataması yapılır...
+//             int[] matris1 = new int[100]; dizi oluşturma böyle yapılır.
+
+// string bir referans türüdür, yani değer tipleri gibi doğrudan değeri saklamaz. Bunun yerine bellekte bir referans saklar ve bu referans, metni içeren bellek bölgesini gösterir.
+     
