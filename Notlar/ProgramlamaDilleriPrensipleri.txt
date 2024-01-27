@@ -1,0 +1,39 @@
+makine dili = 0,1
+düşük seviyeli diller: assembly
+orta seviyeli c,c++
+yüksek seviyeli: python,java c# vs vs... insan algılaması kolay...
+
+yazılan diller sonradan derlenir yorumlanır vs makine diline dönerler çalışacak bilgisayara göre...
+dizi ve matris yönetmek için çıkarılmış diller: fortran,c,pascal...
+mesleki uygulamalar: cobol.
+yapay zeka dili: python, prolog, lisp,  diziler yerine linkedlist kavramı.
+sistem programlama: c, assembler.   sistem programlama olduğu sürece c ölmez.
+web: biçimlendirme: html,js, arka plan: java c# php,js... 
+........................................................................................................................
+PROGRAMLAMA DİLLERİ DEĞERLENDİRME KRİTERLERİ:
+  okunabilirlik, yazılabilirlik, güvenirlik, maliyet.
+
+a ve b int ise toplama sonucu int string ise sona eklenmiş hali vs vs...
+overloading demek aslında gelen verilere göre hangsinin çalışacağını programa bırakmaktır c#ın kendisi bunu bulacak hangisinin kullanılacağını...
+
+c'de boolen gibi veriler yoktur java, python,ve c#da ise vardır true false olarak.
+while class, public abstract vs gibi kelimeler ile biz okunabilirlik arttırabiliriz.  public static mesela ikisi birleşir ve okunabilirlik artar.
+
+abstraction demek soyutlama modelleme demektir. kalıtım yapma zorunluğu üretmektir. amacı.
+% // + ** gibi yazılabilirlik arttıran operatörler vardır.
+
+güvenirlik nedir. int değişken var mesela string değer atamaya kalktık o zaman hata verir(tip kontrolü)     int a = 10.2;  hata verir tip kontrolü ile.
+
+istisna işleme try catch vs vs...(hiyerarşik olmalıdır...)
+takmaad = nyp ile yapılır özellikle aynı bellek konumu için iki veya daha fazla farklı referance alma yöntemi.
+bir program ne kadar kolay yazılırsa o kadar güvenilir olur genelde.
+
+maaliyetler = derleme, öğrenme maliyeti, program çalıştırma, yazma, ücretsiz derleyicilerin kullanılabilirliği... güvenilirlik: zayıf güvenirlik yüksek maaliyetlere yol açar.  programların bakımı...
+
+taşınabilirlik demek = bir programın bir uygulamadan bir uygulamaya değiştirilmeye gerek duymadan taşınabilmesi...
+genellik = geniş uygulama yelpazesinde uygulanabilirlik.
+iyi tanımlılık = dilin resmi tanımının tamlığı ve kesinliği.
+bir dilin hedefleri = performans, üretkenlik, güven. 
+
+
+

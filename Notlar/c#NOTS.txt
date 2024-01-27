@@ -137,3 +137,19 @@ class: EmreAraba   metot: gitAraba() değişken: arabaMotor = 12; gibi...
 
 // string bir referans türüdür, yani değer tipleri gibi doğrudan değeri saklamaz. Bunun yerine bellekte bir referans saklar ve bu referans, metni içeren bellek bölgesini gösterir.
      
+
+        public static int toplama(int a)
+        {
+            return a;
+        }
+        public static int toplama(int a,int b)
+        {
+            
+            return a + b; 
+        }
+        // ikisinide aynı anda kullanabiliriz gönderilen verilere göre hangi metotun çalışacağını ise c# belirler buna method overloading denir...
+        mesela toplama(5) dersem en üstteki çalışır toplama(10,8) dersen alttaki çalışır...
+
+
+
+
