@@ -34,6 +34,12 @@ taşınabilirlik demek = bir programın bir uygulamadan bir uygulamaya değişti
 genellik = geniş uygulama yelpazesinde uygulanabilirlik.
 iyi tanımlılık = dilin resmi tanımının tamlığı ve kesinliği.
 bir dilin hedefleri = performans, üretkenlik, güven. 
+........................................................................................................................
 
-
+von neumann:
+    bellekte saklanan veriler ve programlar. bellek cpudan ayrdır.
+    komutlar ve veriler bellekten cpuya aktarılırlar.
+    değişkenler bellektedir. atamalarda aktarım olur. iterasyon etkilidir.
+    von neumann bilgisayarı, hem veriler hem programlar aynı bellekte saklanır.
+    
 
