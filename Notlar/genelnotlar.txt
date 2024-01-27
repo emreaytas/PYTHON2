@@ -100,14 +100,16 @@ python dosyasını .exe yapma:
 
     pyinstaller --onedir --noconsole first1.py  # ile  bir klasör içerisinde gelir tüm proje. ilgili kütüphaneler .dll'ler vs bir klasörde gelir. ve uygulamayı gerekli ikondan açabiliriz.
 
-    # eğer başka bir pcde çalışssın istersek. o zaman --onedir kullanmak lazım kütüphaneler vs ile ilgili sorun olmasın diye...
+    pyinstaller --onedir isim.py  # yaparsak terminalde çalışan kodumuzu her pcde çalışır hale getirebiliriz...
+    
 
+    # eğer başka bir pcde çalışssın istersek. o zaman --onedir kullanmak lazım kütüphaneler vs ile ilgili sorun olmasın diye...
 
     ikonları ,resimleri vs nasıl halledeceğiz...
 
     kullandığımız resimleri vs executable folderle aynı path üzerinde olacak şekilde eklememiz lazım... aynı klasöre ekledik ve bitti. icon ve resimlerde belli oldu...
     
-
+# EXE YAPMA YANİ CANLIYA ALMA GİBİ DÜŞÜNEBİLİRİZ...
 
 .....................................................................................................................
 
@@ -380,8 +382,41 @@ HTML(f'<img src="{resim_url}">')
 Bu örnekte, HTML sınıfını ve img etiketini kullanarak resmi HTML sayfasında gösteriyoruz. İhtiyacınıza bağlı olarak, bu yöntemleri kullanarak resimleri Jupyter Notebook içinde farklı şekillerde gösterebilirsiniz.
 
 
+
+
+
 ###############################################################################################################################################################################################################################################################################################################################################################
+pip list ile her yüklü olan kütüphaneleri görebiliriz...
 ###############################################################################################################################################################################################################################################################################################################################################################
+mesela bir python dosyamız var bunu nasıl exe yapabiliriz.
+ChatGPT
+Python dosyasını bir "exe" (yürütülebilir) dosyaya dönüştürmek için genellikle "PyInstaller" veya "cx_Freeze" gibi üçüncü taraf araçları kullanılır. Bu araçlar, Python kodunuzu çalıştırabilir bir dosyaya derleyerek, Python yüklü olmayan bilgisayarlarda da çalışmasını sağlar.
+
+İşte PyInstaller kullanarak bir Python dosyasını exe'ye dönüştürme adımları:
+
+PyInstaller'ı Yükleyin:
+Terminal veya komut istemcisine şu komutu yazarak PyInstaller'ı yükleyin:
+
+bash
+Copy code
+pip install pyinstaller
+Exe Oluşturma:
+Python dosyanızın bulunduğu dizine gidin ve şu komutu çalıştırarak exe dosyanızı oluşturun:
+
+bash
+Copy code
+pyinstaller --onefile dosya_adı.py
+Burada "dosya_adı.py" yerine kendi Python dosyanızın adını yazmalısınız.
+
+--onefile parametresi, tüm bağımlılıkları tek bir exe dosyasında birleştirir.
+
+Exe Dosyasını Bulma:
+PyInstaller işlemi tamamlandığında, "dist" adlı bir klasör oluşturulur ve bu klasörde exe dosyanız bulunur.
+
+İsteğe Bağlı Ayarlar:
+PyInstaller birçok ayara sahiptir. Örneğin, ikon eklemek için --icon=ikon.ico gibi ek parametreler ekleyebilirsiniz.
+
+Bu adımları takip ederek Python dosyanızı exe'ye dönüştürebilirsiniz. Unutmayın ki dönüştürülen exe dosyası, dönüştürüldüğü bilgisayar mimarisine uygun olacaktır. Yani, 32-bit bir Python yüklü ise 32-bit exe, 64-bit ise 64-bit exe üretilecektir.
 ###############################################################################################################################################################################################################################################################################################################################################################
 ###############################################################################################################################################################################################################################################################################################################################################################
 

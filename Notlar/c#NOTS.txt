@@ -152,4 +152,28 @@ class: EmreAraba   metot: gitAraba() değişken: arabaMotor = 12; gibi...
 
 
 
+class isimler
+{
+
+
+    private int deger;
+    private String name;
+    private isimler isimlersonraki = null;  // burada mesela her nesne oluştuğunda otomatik olarak null olacak...
+
+    
+    public isimler(int deger, string name)
+    {   
+        this.deger = deger;
+        this.name = name;
+    }
+         public isimler() // default constructor'dur bu mesela...   iki tane constructor var bunada constructor overloading denir... parametrelere göre hangisi çlaışacak c# belirler bunu
+    {   
+        
+    }
+     
+
+}
+
+
+
 
