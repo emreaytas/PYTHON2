@@ -1,3 +1,61 @@
+Install-Package System.Data.SQLite   console manager kısmına yazarak SQLite kullanabiliriz... masaüstü uygulamaları için harika entity framework'te kullanabiliriz orm olarak destekler...
+        SQLite NuGet Paketini Yükleme:
+        Projenize SQLite ile çalışmak için System.Data.SQLite NuGet paketini ekleyin. Visual Studio kullanıyorsanız, "NuGet Package Manager Console" penceresini açıp aşağıdaki komutu kullanarak paketi yükleyebilirsiniz:
+
+        bash
+        Copy code
+        Install-Package System.Data.SQLite
+******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+Form1 ff = new Form1();
+         ff.ShowDialog();
+
+
+          Console.WriteLine("merhababaaaaaa");
+c# dilinde showDialog ile form açılıyor ama ben açıldıktan sonra alltaki yazıyıda yazdırsın istiyorum yani programın okuması orada takılı kalıyor ne yapmam lazım
+ChatGPT
+ShowDialog metodu, ilgili form kapatılana kadar kontrolü ele geçirir. Bu nedenle, ShowDialog metodundan sonra gelen kodlar, form kapandığında çalışır. Eğer formun üzerindeki işlemler tamamlandıktan sonra bir şeyler yapmak istiyorsanız, Form1 sınıfınızda bir olay (event) tanımlayarak bu olayı uygun bir durumda tetikleyebilirsiniz. Örneğin, formunuz kapatıldığında bir olay tetikleyerek ardından gelen kodları çalıştırabilirsiniz.
+
+c#'da from uygulaması showDialog ile açıldıktan sonra o panel açık olduğu sürece alt satıra geçmez programın okuma imleci orada takılı kalır taki kapanana kadar...
+
+
+************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
+C# dilini daha ileri seviyede öğrenmek için aşağıdaki konulara odaklanabilirsiniz. Bu konular, C# programlamadaki ileri seviye konseptlere ve geliştirme tekniklerine odaklanmaktadır:
+
+Nesne Yönelimli Programlama (OOP):
+    C#'da nesne yönelimli programlama temel bir konsepttir. Sınıflar, nesneler, miras, soyut sınıflar, arayüzler, çoklu kalıtım gibi OOP konularını öğrenmek önemlidir.
+
+İleri Seviye Dil Özellikleri:
+    C#'daki en yeni dil özelliklerini anlamak ve kullanmak için çalışın. Örneğin, C# 8 ve sonraki sürümlerdeki özellikler arasında nullable reference types, pattern matching, switch expressions gibi konular bulunmaktadır.
+
+LINQ (Language Integrated Query):
+    LINQ, veri sorgulama ve manipülasyonu için kullanılan güçlü bir dil entegre sorgu aracıdır. LINQ kullanarak veri tabanlarına, koleksiyonlara ve diğer veri kaynaklarına sorgular yazmayı öğrenmek önemlidir.
+Asenkron ve Paralel Programlama:
+    Modern uygulamalar genellikle asenkron ve paralel programlama tekniklerini kullanır. async ve await anahtar kelimelerini kullanarak asenkron programlamayı, paralel programlamayı da inceleyerek çoklu iş parçacığı (multithreading) konularını anlamak önemlidir.
+
+Exception Handling (İstisna Yönetimi):
+    Hata işleme konusunu daha iyi anlamak için try, catch, finally bloklarını kullanma becerisi geliştirmek önemlidir.
+Veri Tabanı Programlaması:
+    Entity Framework veya Dapper gibi C# ile entegre veri tabanı erişim araçlarını öğrenmek ve kullanmak.
+    
+ASP.NET MVC veya ASP.NET Core:
+    Web uygulamaları geliştirmek için ASP.NET MVC veya ASP.NET Core framework'ünü öğrenmek. MVC tasarım deseni, routing, middleware kavramlarına hakim olmak önemlidir.
+
+Unit Testing (Birim Testleri):
+    NUnit, xUnit veya MSTest gibi birim testi çerçeveleri kullanarak uygulamalarınızı test etmeyi öğrenmek. Test yazma, test odaklı geliştirme ve test otomasyonu konularına hakim olmak önemlidir.
+Dependency Injection ve IoC (Inversion of Control):
+    Uygulama bağımlılıklarını yönetmek için Dependency Injection (Bağımlılık Enjeksiyonu) ve IoC konularını anlamak ve uygulamak.
+
+Git ve Source Control Sistemleri:
+
+Git gibi versiyon kontrol sistemlerini kullanarak kodunuzu yönetmeyi öğrenmek.
+Bu konuları öğrenmek ve uygulamak, C# dilindeki yeteneklerinizi daha da geliştirmenize yardımcı olacaktır. Ayrıca, projeler üzerinde çalışmak ve gerçek dünya uygulamaları geliştirmek de öğrenme sürecinizi hızlandıracaktır.
+
+......................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+
+
+
 // blank solution boş bir çözüm ekranı açar...
 // existing project ile projelerin benzer kısımlarını çekebiliriz...
 // bazen framework sürüm farklılığından dolayı projeler çalışmayabilir buna dikkat etmek lazım...
@@ -35,20 +93,25 @@ long: 64 bitlik işaretli tam sayı.
 short: 16 bitlik işaretli tam sayı.
 byte: 8 bitlik işaretli tam sayı.
 sbyte: 8 bitlik işaretli tam sayı.
+
 Ondalıklı Sayı Veri Tipleri:
 
 float: 32 bitlik ondalıklı sayı.
 double: 64 bitlik ondalıklı sayı.
 decimal: 128 bitlik ondalıklı sayı.
+
 Karakter Veri Tipleri:
 
 char: 16 bitlik Unicode karakter.
+
 Boolean Veri Tipi:
 
 bool: Mantıksal (true veya false) değeri temsil eder.
+
 Metinsel Veri Tipleri:
 
 string: Metin verilerini tutan veri tipi.
+
 Object Veri Tipi:
 
 object: Tüm diğer türlerin temel türüdür. Her türden bir nesneyi temsil edebilir.
@@ -74,8 +137,171 @@ interface: Bir sınıfın uygulamasını zorlayan bir sözleşme sağlayan tür.
 // oop demek encapsulation,polymorphism and inheritance demektir aslında...
 // interfaceler aslında birer sözleşmelerdir böylece içerisindeki metotları override etmek zorunlu olur implement eden class tarafından...
 
+################################################################################################################################################################################################################################################
+
+
+            Console.WriteLine(Byte.MaxValue); // 255    256 vermeye çalışırsan Byte değere o zaman hata verir...
+            Console.WriteLine(Byte.MinValue); // 0
+            Console.WriteLine(long.MinValue); // -9223372036854775808
+            Console.WriteLine(long.MaxValue); //   9223372036854775807
+            Console.WriteLine(int.MaxValue); // 2147483647    32 bit 4 byte 2^^32 değer alır.
+            Console.WriteLine(int.MinValue); // - 2147483648
+            Console.WriteLine(long.MaxValue / int.MaxValue); // 4294967298
+            Console.WriteLine(double.MinValue); //-1,79769313486232E+308
+            Console.WriteLine(double.MaxValue); // 1,79769313486232E+308
+            Console.WriteLine(ulong.MaxValue); // 18446744073709551615
+            Console.WriteLine(ulong.MinValue); // 0
+            Console.WriteLine(sbyte.MaxValue); // 127
+            Console.WriteLine(sbyte.MinValue); // - 128
+            Console.WriteLine(short.MaxValue); // 32767
+            Console.WriteLine(short.MinValue); //-32768
+            Console.WriteLine(ushort.MaxValue); //65535
+            Console.WriteLine(ushort.MinValue); //0
+            Console.WriteLine(uint.MaxValue); // 4294967295
+            Console.WriteLine(uint.MinValue); // 0
+            Console.WriteLine(decimal.MaxValue); // 79228162514264337593543950335     // 12 byte'dır noktadan sonra 28-29 basamak duyarı vardır...  doublede 15 16 basamak iken decimalde 28 29 böylece hassaslık çok artar...
+            Console.WriteLine(decimal.MinValue); // -79228162514264337593543950335  
+            Console.WriteLine(char.MinValue); // nulldan başlar
+            Console.WriteLine(char.MaxValue); // ?'e kadar gider çok fazla karakterleri tutabilir. tüm dillerin alfabelerindeki harfleri tutabilir. 2 bytedir 16 bit...
+
+bool true veya false alır mantıksal veridir... a == b demek (a == b)   bize true veya false döndürecek demektir    return a == b diyebiliriz a == b 'de true veya false dönecek zaten...
+
+internal bir erişim belirleyicisidir ve C# dilinde bir sınıfın veya bir üyenin, yalnızca bulunduğu proje içinde erişilebilir olmasını sağlar. internal olarak işaretlenen bir sınıf veya üye, aynı derleme içindeki diğer sınıflar tarafından erişilebilir, ancak başka bir derleme tarafından erişilemez.
+
+    "Aynı derleme" ifadesi, bir C# projesinde bir araya getirilen tüm kodun toplandığı ve derlendiği yapıyı ifade eder. Bir C# projesi, bir veya birden fazla sınıf ve dosyanın bir araya getirildiği bir "derleme" üretir. Bu derleme genellikle bir .dll (dinamik bağlantı kitaplığı) veya .exe (yürütülebilir dosya) uzantısına sahiptir.
+
+    Bir C# projesindeki tüm sınıflar, yapılar, enum'lar, metotlar ve diğer üyeler, projenin derlenmiş çıktısı içinde bir araya getirilir. Bu çıktıya "derleme" denir. Eğer tüm bu kodlar aynı proje içinde yer alıyorsa, bu kodlar aynı derleme içindedir.
+
+    Eğer bir sınıf veya üye internal olarak işaretlenmişse, bu, bu sınıfın veya üyenin sadece aynı derleme içindeki diğer kodlar tarafından erişilebileceği anlamına gelir. Yani, internal olarak işaretlenen bir sınıf veya üyenin erişilebilir olması için, bu sınıf veya üyenin bulunduğu proje içinde olması gerekmektedir.
+
+    Aynı derleme içinde olmak, bir C# projesinin sınıflarının, üyelerinin ve diğer yapılarının bir araya getirildiği ve derlendiği fiziksel sınırları ifade eder. Eğer farklı projeler arasında kod paylaşımı yapmak istiyorsanız, bu durumu public veya başka bir erişim belirleyici ile yönetmeniz gerekir.
+
+
+// her kesirli sayı doubledir float vs yapmak istersek o zaman tip dönüşümü yapmak lazım (float) 5.6   veya 5.6f  olarak
+double sayi1 = 5/4;  1.0 olur   5 int 4 int spnuç int 1 olur double olunca 1.0 olur....    (double) 5 / 4 olsa 5.0 / 4 olur  o zaman 1.25 çıkar direkt olarak...
+
+bölümde falan kesirli sayılarda kayıplar olabilir bunun için decimal kullanılır... hassas hesaplar için decimal kullanırız. bunu e ticaret sitelerinde vs kullanabiliriz...
+     tip dönüşümlerinde kayıplar vs olabilir kesirlerden kaynaklı kayıplar olabilir bunun için decimal kullanırız hassas hesaplarda...
+
+karakterler '' içeriisnde stringler ise "" içerisinde belirtilmelidir. pythona böyle bir fark yoktur mesela...
+'' içerisinde tek bir karakter belirtilebilir.
+"" olursa karakter dizisi içerebilir.
+
+\ demek benden sonra gelecek olan bilgisayarın program komutu değil demektir.
+          ana \n alt satır \t ise bir tab boşluk demektir.
+
+c# büyük harf küçük harf ayrımı yapar int sayi1,Sayi1; yapabiliriz... yani farklı olacaktir ikiside...
+
+*******CASTİNG büyük alandaki veri küçük alana geçemez geçecek olursa kayıplar olur ancak casting ile kayıplarla beraber yapmak mümkün. küçük veriyi büyük veri tipine sorunsuz dönüştürebiliriz. 
+  mesela floatı doubleye sorunsuz atabiliriz.  ama doubleyi dönüşüm yapmadan atamayız atarsakta kayıplar olur veri kaybı olur.
+  long inti sorunsuz alır veri kaybı olmadan ama tam tersi zor.
+  intin long'a atanması implicit(istemsiz) dönüşümdür bir hata vermez.     
+  longun int olması ise explicit döünüşümdür dönüşümü belirtmek lazım downcasting yapmak gerekir. 
+  longu int yapmak için derleyiciyi ikna etmemiz lazım....
+  c#da java gibi önce derlenir sonra yorumlanır.
+  explicit yaparsak manuel yapmalıyız  double sayi1 = 18.8;    int sayi2 = (int)sayi1; gibi...
+
+
+            Console.WriteLine(Convert.ToString(3.43));
+            Console.WriteLine(Convert.ToInt64(3.43));
+            int sayi12 = Convert.ToInt32("12");
+            long sayi13 = Convert.ToInt64("1221");
+
+Convert.ToTip   ile biz içerisine attığımız değeri istenen değere çeviririz. ve bu yapı isteneni return eder... int'e atama yapacaksak Convert.ToInt32(); kullanmamız lazım 
+Convert.ToInt32() bu bize değer return edecek ve kullanacağız.
+
+
 
 ################################################################################################################################################################################################################################################
+
+dizilerde veri tipleri aynı olur;
+Array bir sınıftır
+
+            int[] array = { 1, 2, 3, 4, 5, }; // burada direkt atama yapabiliriz... 
+            int[] array2 = new int[10]; // burada ise 10 tane int değer alacak yer ayırırız ve otomatik olarak hepsi sıfır olur sayılarda ilk atama otomatik sıfırdır string ve class'larda ise nulldır.
+
+Arraylerde referancelerla çalışır yani 
+        public static void degistir(int[] a)
+        {
+
+            a[0] = 11;
+
+
+        }   // buraya bir array gelirse ilk değeri 11 olacak kalıcı şekilde...  bunun nedeni arrayler aslında referancedir.
+
+int[][] ab = new int[10][];  // burada 10 tane int dizisi olacak diyoruz... ikinci [] atamaya gerek yok ama atarsak sabit olarak onlarda o sayı kadar değer taşıyan int arrayler olacak... 
+yani ab 10 tane int array taşıyan bir array'dir.  ab.length dersek 10 alırız...
+int[][] ab = new int[10][6]; dersek eğer 10 tane 6 tane int değer taşıyan aarray vardır 6,6,6,6,6,6,6,6,6,6,6 olacak şekilde...
+
+            int[][] ab = new int[10][];
+            for (int i = 0; i < ab.Length; i++)
+            {
+                ab[i] = new int[9];
+            }
+            // bu şekilde ise 10 kere çalışır for ve her arraye bellekte yer ayırır her arrya 9 tane değer alabilir hale gelir.  bu yapı ile kapasiteleri farklı arraylerden oluşan matrisler kurabiliriz.
+
+ab[1][1] = 100; diyerek direkt atama yapabiliriz...
+
+mesela 10 kapasiteli bir array var 11.ciye atama yapmak istersek hata alırız.
+
+string[] ise string değer taşıyan bir arraydir bu bir referancedir.
+
+array[index]  ile istenen elemana ulaşırız. indexin arrayin boyutuna göre olması gerekir bu önemlidir.  yoksa hata verebilir.
+
+int[,] demekte 2 boyutlu bir dizidir.
+int[,,] ise 3 boyutlu demektir...
+
+..........................................................................................
+
+            int[][] aa = new int[10][];
+            for (int i = 0; i < aa.Length; i++) {
+                aa[i] = new int[9];
+            }
+
+            for (int i = 0;i < aa.Length; i++) { 
+            for (int j = 0; j < aa[i].Length; j++)
+                {
+                    Console.Write(aa[i][j]);  // aa[i,j] de olabilir fark etmez... 
+
+                }
+                Console.WriteLine();
+
+            }
+
+int[,] aa = new int[2,3] yapabiliriz  3,3 eleman taşıyan bir matris olur böylece.
+veya aa = {{1,1,1},{1,1,1}} yapabiliriz.
+
+
+..........................................................................................
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+
+            class1 cl1 = new class1("w","w",11);
+            cl1 = new class1("w", "a", 11);
+            Console.WriteLine(cl1);
+            degistir(ref cl1);
+            Console.WriteLine(cl1);
+
+
+
+        }
+        public static void degistir(ref class1 a)
+        {
+
+            a = new class1("ff","aa",11);
+
+
+
+        }
+
+    }  // array değilse bir değerin değişimi biz metot vs ile yapmak istersek ref kullanırız stringler için class'lar için vs vs...
+
+..................................................................................................
+
+################################################################################################################################################################################################################################################
+
 
 // struct tanımlama ve kullanımı
 
@@ -173,6 +399,47 @@ class isimler
      
 
 }
+
+
+// c# dilinde veri tipleri ilkel değildir. hepsi bir nesnedir.
+// her sınıf soyut bir veri yapısıdır.
+// /**/  buda uzun veri sistemi.
+// common type sistem = ortak veri modeli.
+// import yerine using kullanırız...
+
+/*
+            Console.Write("Kullanici adi giriniz: ");
+            string isim = Console.ReadLine();
+            Console.WriteLine(isim);
+
+*/ consoldan veri alma böyle yapılır string için... 
+
+// c# dilinde global değişken yoktur her veri bir class'a özgü olmalıdır. her metot her değişken bir class'a bağlı olmalıdır.
+// değişkenler rakamlarla başlamaz arada boşluk olamaz para simgeleri olabilir ! & vs gibi karakterler olmaz.
+// değişkenlerde iki tip vardır değer ve referance tipleri.  stack ve heap bölgeleri vardır bellekte.   ramda stack ve heap vardır.  referance tipleri heapte tutulur.   classla başlayan yapılar heapte tutulur string dışı değerler stackte tutulut değer tiplidir çünkü...
+// charda aslında sayısal olarak tutar ama biz onu karakterlere çeviririz dil ile.
+
+            Console.Write("");  // yazar ve alt satıra geçirmez...
+            Console.WriteLine(""); // yazar ve alt satıra geçirir otomatik olarak \n eklenir...
+
+            Console.Write( 14 + " " +  4); demek aslında append demek...  tüm değerleri string yapar eğer +'nın içerisinde string varsa ve sırası ile hepsini append eder...
+
+string yazi1 = "emre" + 15; hata vermez... 15 string'e çevrilir ve + ile append edilir..
+string yazi2 = 15; hata verir...   
+
+// encapsulation demek nesnenin vcerilerine nesne.  şeklinde ulaşmayı private ile kısıtlamak demektir...     nesnenin verilerine nesnenin metotları ile ulaşmak kontrollü şekilde... getter setter kullanırız genel olarak. 
+
+
+
+ctrl + class'ın üstüne tık ile içerisine gidebilir bilgileri görebiliriz...
+
+
+
+
+
+
+
+
 
 
 

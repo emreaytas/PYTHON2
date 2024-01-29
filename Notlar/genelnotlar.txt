@@ -101,7 +101,7 @@ python dosyasını .exe yapma:
     pyinstaller --onedir --noconsole first1.py  # ile  bir klasör içerisinde gelir tüm proje. ilgili kütüphaneler .dll'ler vs bir klasörde gelir. ve uygulamayı gerekli ikondan açabiliriz.
 
     pyinstaller --onedir isim.py  # yaparsak terminalde çalışan kodumuzu her pcde çalışır hale getirebiliriz...
-    
+
 
     # eğer başka bir pcde çalışssın istersek. o zaman --onedir kullanmak lazım kütüphaneler vs ile ilgili sorun olmasın diye...
 
@@ -110,6 +110,7 @@ python dosyasını .exe yapma:
     kullandığımız resimleri vs executable folderle aynı path üzerinde olacak şekilde eklememiz lazım... aynı klasöre ekledik ve bitti. icon ve resimlerde belli oldu...
     
 # EXE YAPMA YANİ CANLIYA ALMA GİBİ DÜŞÜNEBİLİRİZ...
+    bir dosya oluşur ve programadi.exe'yi istersek kısayol oluşturur masaüstüne atar istediğimiz gibi kullanabiliriz. 
 
 .....................................................................................................................
 
