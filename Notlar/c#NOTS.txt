@@ -110,7 +110,11 @@ bool: Mantıksal (true veya false) değeri temsil eder.
 
 Metinsel Veri Tipleri:
 
-string: Metin verilerini tutan veri tipi.
+string: Metin verilerini tutan veri tipi...  
+        Console.WriteLine(String.Format("{0} {1}",str1,str2));   böylede kullanabiliriz...
+        .Length ile uzunluk alabiliriz...
+        string aa = bb.Clone(); ile ise biz bb'nin içeriğini aa'ya atayabiliriz. 
+        string.IsNullOrWhiteSpace(str1)   true false çevirir... boş değilse false çevirir mail adresi için falan kullanılır.
 
 Object Veri Tipi:
 
@@ -271,34 +275,177 @@ int[,,] ise 3 boyutlu demektir...
 int[,] aa = new int[2,3] yapabiliriz  3,3 eleman taşıyan bir matris olur böylece.
 veya aa = {{1,1,1},{1,1,1}} yapabiliriz.
 
+..................................................................................................
 
-..........................................................................................
+% kalan bulma... a += b ;  a'ya b eklenir -= çıkarır *= çarpar.    ++ tek arrttırma -- tek çıkarma     solda veya sağda olması önemli solda olursa önce değeri değişir sonra işleme dahil olur sağda olursa önce işleme dahil olur sonra değeri değişir.
+
+(float) a / b    ile (float) a / (float) b arasında fark olabilir dikkat etmek lazım...
+
+        C# dilinde, operatörler matematiksel işlemlerden mantıksal kontrol işlemlerine kadar birçok farklı kategoride bulunmaktadır. Ayrıca, operatörlerin öncelik sıralaması da önemlidir, çünkü bu sıralama ifadeyi değerlendirirken kullanılır.
+
+        İşte C# dilinde kullanılan bazı temel operatörler ve öncelik sıralaması:
+
+        Matematik Operatörleri:
+
+        + (toplama)
+        - (çıkarma)
+        * (çarpma)
+        / (bölme)
+        % (mod alma)
+        Artırma ve Azaltma Operatörleri:
+
+        ++ (artırma)
+        -- (azaltma)
+        Atama Operatörleri:
+
+        = (atama)
+        +=, -=, *=, /=, %= (toplama, çıkarma, çarpma, bölme, mod ile atama)
+        Mantıksal Operatörler:
+        a /= 10; demek a'yı 10 böl çıkan değeri a'ya ata demek %= içinde aynısı geçerli diğerleri içinde geçerliler...
+
+
+        && (ve - AND)
+        || (veya - OR)
+        ! (değil - NOT)
+        () parantezlerin içinin önceliği var... buna dikkat etmek lazım.
+        (a > b) && (b  < c)  önce sağ sol parantez sonuç return eder sonra && çalışır...
+        Karşılaştırma Operatörleri:  True veta False ile çalışırlar.
+
+        == (eşit)
+        != (eşit değil)
+        < (küçük)
+        > (büyük)
+        <= (küçük veya eşit)
+        >= (büyük veya eşit)
+        Bitwise Operatörler:
+
+        & (ve)
+        | (veya)
+        ^ (XOR - özel veya)
+        ~ (bütünleyen)
+        << (sol kaydırma)
+        >> (sağ kaydırma)
+        Koşullu Operatör:
+
+        ? : (koşullu ifade)   (koşul <= mesela) ? True halde return edilecek: False halde return edilecek;
+
+
+            int a = 0, b = 1;
+            string sonuc = (a == b) ? "esit" : "degil"; // True ise soldakini atar False ise sağdakini atar...
+            Console.WriteLine(sonuc); // degil...
+
+        Tip Dönüşüm Operatörleri:
+
+        (tip) (dönüşüm operatörü)
+        as (as operatörü)
+        is (is operatörü)
+        Operatörlerin öncelik sıralaması, bir ifadenin hangi operatörün önce değerlendirileceğini belirler. Öncelik sıralaması, matematiksel operatörlerin öncelikli olması, ardından karşılaştırma, mantıksal ve diğer operatörleri içerir. Ancak, ifadeyi açıklığa kavuşturmak için parantezler kullanılabilir. Örneğin, parantez içindeki ifadeler her zaman önceliklidir.
+
+
+bir if else if else bloğunda sadece bir tanesi çalışır...  sırası ile okur ilk sağlanan koşula girer hiçbirisi çalışmazsa else çalışır. else olmasada olur...
+int a = -10;
+if(a > 0){
+
++
+
+}else if(a == 0){
+
+0
+
+}else{
+
+-
+
+}
+
+
+################################################################################################################################################################################################################################################
+
     internal class Program
     {
         static void Main(string[] args)
         {
+            int sayi1 = 0;
+            atamayap(ref sayi1);
+            Console.WriteLine(sayi1);
 
-            class1 cl1 = new class1("w","w",11);
-            cl1 = new class1("w", "a", 11);
-            Console.WriteLine(cl1);
-            degistir(ref cl1);
-            Console.WriteLine(cl1);
+
 
 
 
         }
-        public static void degistir(ref class1 a)
+
+        public static void atamayap(ref int a)
         {
 
-            a = new class1("ff","aa",11);
-
-
-
+            a = Convert.ToInt32(Console.ReadLine());
+        
         }
 
-    }  // array değilse bir değerin değişimi biz metot vs ile yapmak istersek ref kullanırız stringler için class'lar için vs vs...
 
-..................................................................................................
+    } // sayıya atama yapan bir program...
+
+
+static ile class'a bağlarız bir değeri veya metotu... static metot içerisinde static olmayan metot nesnesiz şekilde çalışamaz...
+void geriye değer döndermez. bir metot kullanacaksak return yapacaksa ne türden yapacak belirlememiz lazım.
+
+static int kucukharfsayisi(string s){
+
+int aa = 0;
+
+foreach(var i in s){
+
+if(char.IsLower(i))aa++; 
+
+}
+return aa;
+
+}
+
+
+################################################################################################################################################################################################################################################
+
+        namespace appConsole
+        {
+
+
+            public class MyName
+            {
+                
+
+
+
+
+            }
+
+
+            internal class Program
+            {
+                static void Main(string[] args)
+                {
+                    int sayi1 = 0;
+                    atamayap(ref sayi1);
+                    Console.WriteLine(sayi1);
+
+
+
+
+
+                }
+
+                public static void atamayap(ref int a)
+                {
+
+                    a = Convert.ToInt32(Console.ReadLine());
+                
+                }
+
+
+            }
+        }
+
+
+
 
 ################################################################################################################################################################################################################################################
 
@@ -436,9 +583,111 @@ ctrl + class'ın üstüne tık ile içerisine gidebilir bilgileri görebiliriz..
 
 
 
+..............................................................................................................................................................................................................................................................................................................................................................
+
+        C# dilinde iki stringin aynı referansı taşıyıp taşımadığını kontrol etmek için == operatörü değer karşılaştırması yapar, yani iki string'in içeriğini kontrol eder, referans karşılaştırması yapmaz. Yani == operatörü, stringlerin içeriğini kontrol eder.
+
+        Örneğin:
+
+        string isim1 = "emre";
+        string isim2 = "emre";
+
+        if (isim1 == isim2)
+        {
+            Console.WriteLine("İsimler eşittir.");
+        }
+        else
+        {
+            Console.WriteLine("İsimler eşit değildir.");
+        }
+        Yukarıdaki örnekte, isim1 ve isim2 string'leri aynı değeri taşıdığı için == operatörü true dönecektir.
+
+        Ancak, C# dilinde referans karşılaştırması yapmak istiyorsanız object.ReferenceEquals metodunu kullanabilirsiniz:
+
+
+        if (object.ReferenceEquals(isim1, isim2))
+        {
+            Console.WriteLine("İsimler aynı referansı taşıyor.");
+        }
+        else
+        {
+            Console.WriteLine("İsimler aynı referansı taşımıyor.");
+        }
+        Bu durumda, object.ReferenceEquals metodu, iki string'in aynı referansı taşıyıp taşımadığını kontrol eder. Ancak, genellikle string karşılaştırmalarında == operatörü daha yaygın olarak kullanılır.
+
+..............................................................................................................................................................................................................................................................................................................................................................
+
+string isim = "emre";
+string isim2 = isim;  // buda emre olur ama referance yüüzden değil değer ataması yapılır burada. javadaki gibi değil..
+
+        Araba araba1 = new Araba { Model = "Toyota" };
+        Araba araba2 = araba1;
+
+        araba1.Model = "Ford";
+
+        Console.WriteLine(araba2.Model);  // Bu, "Ford" yazdırır çünkü class'lardan oluşan nesneler referancelerle çalışırlar...
+
+..............................................................................................................................................................................................................................................................................................................................................................
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+
+            class1 cs1 = new class1("aaa", "bbb", 111);
+
+            degistir(cs1);
+            Console.WriteLine(cs1.age); // bir yazdırdı...
 
 
 
+        }
+
+        public static void degistir(class1 b)
+        {
+            b.age = 1;
+          
+        }
+
+    }
+
+class'lar kendi oluşturduklarımız vs onlardan oluşan nesneler referanceleri ile çalışırlar... bu yüzden void metotta değişim oldu gönderdiğimiz nesnenin değeri kalıcı olarak değişti... bunun sebebi pointer mantığıdır. nesneler heap ve stack olacak şekilde referanslı veya referancesiz olarak saklanırlar. bizim oluşturduklarımız ile oluşanlarda referance mantığı işler...
+classlar(kendimizin) ve arraylar referance mantığı ile çalışır diğerleri çalışsın istersek o zaman ref yapısını kullanırız...
+
+
+..............................................................................................................................................................................................................................................................................................................................................................
+
+break ve continue bağlı oldukları döngü için çalışırlar sadece bir döngü için çalışırlar...
+
+for while do while hepsi için aynı neredeyse...
+
+..............................................................................................................................................................................................................................................................................................................................................................
+
+        static void Main(string[] args)
+        {
+
+            string[] isimler = new string[3];
+            isimler[0] = "aaaa";
+            isimler[1] = "bbbb";
+            isimler[2] = "cccc";
+
+            foreach (string i in isimler)   // önce tipi belirtiriz. sonra i deriz iterasyon yapacak yapıya. ve dönülecek yapı.
+            {
+                Console.WriteLine(i);
+            }
+        }
+
+        // string yerine biz var yazabilirdik bir fark olmazdı ikiside çalışır...  
+        // var = bu anahtar kelime ile değişken oluşturursak ve atamasını yaparsak var tarafından onun tipi belirlenir. pythondaki yapı ile aynı neredeyse...
+
+C# programlama dilinde "var" bir değişkenin türünü belirlemeden önce, derleme zamanında türünün belirlenmesine izin veren bir anahtar kelimedir. "var" anahtar kelimesini kullanarak bir değişken tanımladığınızda, derleyici, değişkenin türünü sağlanan başlatma değerinden çıkarır.
+
+Örneğin:
+
+var sayi = 42; // sayi değişkeni int türünde bir değişkendir.
+var metin = "Merhaba, Dünya!"; // metin değişkeni string türünde bir değişkendir.
+Bu durumda, derleyici, sayi değişkenini int ve metin değişkenini string olarak anlar. Ancak, "var" kullanılarak tanımlanan değişkenlerin başlangıç değeri ile türü belli olmalıdır, çünkü derleyici, başlangıç değeri üzerinden türü çıkarır. Ayrıca, bir kez atanmış bir değişkenin türü değiştirilemez.
+..............................................................................................................................................................................................................................................................................................................................................................
 
 
 
