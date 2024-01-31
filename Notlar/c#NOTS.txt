@@ -52,8 +52,42 @@ Bu konuları öğrenmek ve uygulamak, C# dilindeki yeteneklerinizi daha da geli�
 
 ......................................................................................................................................................................................................................................................................................................................................................................................................
 
+C# programlama dilinde, bellek yönetimi iki temel alanı içerir: stack (yığın) ve heap (örtü). Bu iki alan, programın çalışma zamanında verileri depolamak için kullanılır, ancak farklı özelliklere sahiptir.
 
+Stack (Yığın):
+Stack, programın çalışma zamanında yönetilen bir bellek alanıdır. Bu alanda veriler, sıralı bir şekilde depolanır ve bu verilere hızlı erişim sağlanır. Stack'te veri depolamak için kullanılan bellek alanı, genellikle yönetilen (managed) veri tipleri ve değer tipleri içindir. İşte stack'te tutulan bazı veri tipleri:
 
+Değer Tipleri:
+
+int, char, float, double, bool gibi temel veri tipleri.
+struct tarafından tanımlanan yapılar.
+Yerel Değişkenler:
+
+Metot içerisinde tanımlanan değişkenler.
+Metot Çağrıları:
+
+Metot çağrıları ve metot çağrılarına ait yerel değişkenler.
+Stack'te depolanan veriler, programın akışı içinde meydana gelen işlemlerle birlikte otomatik olarak tahsis edilir ve serbest bırakılır. Stack, veri tipleri için hızlı erişim sağlar, ancak boyutları genellikle sınırlıdır ve yaşam süreleri kısa olduğu için otomatik olarak serbest bırakılır.
+
+Heap (Örtü):
+Heap, programın çalışma zamanında yönetilen bir diğer bellek alanıdır. Heap'te depolanan veriler, daha uzun ömürlüdür ve belirli bir yaşam süresine sahiptir. Genellikle heap, dinamik olarak tahsis edilen ve serbest bırakılan bellek alanıdır. Heap'te tutulan bazı veri tipleri şunlardır:
+
+Referans Tipleri:
+
+class tarafından tanımlanan nesneler.
+string gibi dinamik bellek tahsisi gerektiren türler.
+Dinamik Bellek Tahsisi:
+
+new anahtar kelimesi ile oluşturulan nesneler.
+Heap'te depolanan veriler, programcı tarafından elle serbest bırakılmalıdır (örneğin, Dispose veya Close gibi yöntemler kullanılarak), aksi takdirde bu bellek sızıntılarına neden olabilir.
+
+İki bellek alanı arasındaki temel farklar şunlardır:
+
+Hız ve Erişim Süresi: Stack, hızlı bir erişim sağlar çünkü bellek alanı sıralıdır. Heap ise daha fazla işlem gerektirir ve dolayısıyla daha yavaş erişim sağlar.
+
+Ömür ve Kapsam: Stack'te depolanan veriler genellikle kısa ömürlüdür ve otomatik olarak serbest bırakılır. Heap'te depolanan veriler daha uzun ömürlüdür ve programcı tarafından serbest bırakılmalıdır.
+
+......................................................................................................................................................................................................................................................................................................................................................................................................
 
 
 // blank solution boş bir çözüm ekranı açar...
@@ -393,14 +427,165 @@ static int kucukharfsayisi(string s){
 
 int aa = 0;
 
-foreach(var i in s){
+foreach(var i in s){    // foreach ile karakter karakter string üzerinde dönebiliriz...
 
-if(char.IsLower(i))aa++; 
+if(char.IsLower(i)) aa++; 
 
 }
 return aa;
-
 }
+
+
+
+......................................................................................................................................................................................
+
+        static void Main(string[] args)
+        {
+
+            yazdir(a: "TT",c:"YY",b:"GHGH");   // bu şekilde bir metota gönderilecek değerlerin hangisi tarafından karşılanmasını istediğimizi belirtebiliriz...
+
+        }
+
+
+
+
+        public static void yazdir(string a , string b, string c)
+        {
+
+            Console.WriteLine(a + " " + b + " " + c);
+
+        }
+
+        public static void yazdir(string a , string b)  // burada ise aynı tipte aynı isimde farklı parametreli metotlar ile metot overloading yapaarız ve program verilen değişkenlere göre kendisini en az yoran ve en uygun olanı çağırır...
+        {
+
+            Console.WriteLine(a + " " + b);
+
+        }
+
+......................................................................................................................................................................................
+
+C# programlama dilinde metotlar, kodunuzu modülerleştirmenin ve tekrar kullanılabilirliği artırmanın önemli bir yolu olarak karşımıza çıkar. Metotlar, belirli bir görevi yerine getiren ve genellikle bir isimle çağrılabilen kod bloklarıdır. Bu yazıda, C# dilinde metotların nasıl tanımlandığı, kullanıldığı ve özelleştirildiği konularına detaylı bir şekilde odaklanacağız.
+
+Metot Tanımı:
+C# programlama dilinde bir metot, aşağıdaki gibi bir yapıda tanımlanır:
+
+erişim_belirleyici dönüş_türü MetotAdı(parametre_listesi)
+{
+    // Metotun içeriği
+}
+Erişim Belirleyici (Access Modifier): Metodun ne kadar görünür olduğunu belirler. Örneğin, public, private, protected, internal gibi.
+
+Dönüş Türü (Return Type): Metodun geri döndüğü değerin türünü belirtir. Eğer metot bir değer döndürmüyorsa void kullanılır.
+
+Metot Adı: Metodu çağırırken kullanılacak ismi belirtir.
+
+Parametre Listesi: Metotun içinde kullanılacak değerleri almak için kullanılır. Parametreler opsiyonel olabilir.
+
+Örnek Bir Metot Tanımı:
+
+public int Topla(int sayi1, int sayi2)
+{
+    int toplam = sayi1 + sayi2;
+    return toplam;
+}
+Bu metot, iki tane int tipinde parametre alır (sayi1 ve sayi2), bu sayıları toplar ve sonucu int türünde geri döner.
+
+Metot Kullanımı:
+Bir metodu kullanmak için, öncelikle sınıfın bir örneğini oluşturmalı veya metot static olarak tanımlanmışsa sınıf adı üzerinden çağrılmalıdır.
+
+
+// Metot çağrısı
+int sonuc = Topla(5, 7);
+Console.WriteLine("Toplam: " + sonuc);
+Parametre Türleri ve Seçenekler:
+Metotlara parametreler ile veri iletimi yapılır. Parametreler, değer türleri (int, float, char, vb.) veya referans türleri (class, array, interface, vb.) olabilir. Ayrıca, parametreler opsiyonel olabilir, varsayılan değerler atanabilir.
+
+
+public void Yazdir(string metin, int tekrarSayisi = 1)
+{
+    for (int i = 0; i < tekrarSayisi; i++)
+    {
+        Console.WriteLine(metin);
+    }
+}
+Bu metot, bir metni belirli bir sayıda ekrana yazdırmak için kullanılır. tekrarSayisi parametresi varsayılan olarak 1'e ayarlanmıştır, ancak metot çağrısı sırasında farklı bir değer atanabilir.
+
+Overloading (Aşırı Yükleme):
+Bir sınıf içinde aynı isme sahip fakat farklı parametre listelerine sahip birden fazla metot tanımlamak mümkündür. Bu duruma "overloading" denir.
+
+
+public int Topla(int sayi1, int sayi2)
+{
+    return sayi1 + sayi2;
+}
+
+public double Topla(double sayi1, double sayi2)
+{
+    return sayi1 + sayi2;
+}
+Bu örnekte, Topla isimli iki farklı metot tanımlanmıştır. İlk metot int türünde, ikinci metot ise double türünde çalışır.
+
+
+
+
+ref ve out Parametreleri:
+ref ve out parametreleri, metotların değerleri dışarıdan değiştirmesine izin verir.
+
+
+public void Arttir(ref int sayi)
+{
+    sayi++;
+}
+
+public void Bol(ref int bolen, int bolunen, out int bolum)
+{
+    bolum = bolen / bolunen;
+}
+
+
+
+params Parametresi:
+params anahtar kelimesi, değişken sayıda parametre alabilen bir metot tanımlamak için kullanılır.
+
+
+public int Topla(params int[] sayilar)
+{
+    int toplam = 0;
+    foreach (int sayi in sayilar)
+    {
+        toplam += sayi;
+    }
+    return toplam;
+}
+
+
+
+static Metotlar:
+Bir metot static olarak tanımlandığında, sınıf adı üzerinden çağrılabilir ve sınıfın bir örneği oluşturulmasına gerek yoktur.
+
+
+public class Matematik
+{
+    public static int KareAl(int sayi)
+    {
+        return sayi * sayi;
+    }
+}
+
+// Kullanım
+int sonuc = Matematik.KareAl(4);
+Bu örnekte, KareAl metodu static olarak tanımlanmış ve Matematik sınıfı üzerinden çağrılmıştır.
+
+Lambda İfadeleri ile Kısa Metotlar:
+C# 3.0 ve sonrasında lambda ifadeleri kullanarak kısa metotlar tanımlamak mümkündür.
+
+
+Func<int, int, int> topla = (x, y) => x + y;
+Console.WriteLine(topla(3, 4));
+Bu örnekte, topla adında bir lambda ifadesi kullanılarak kısa bir toplama metodu tanımlanmıştır.
+
+
 
 
 ################################################################################################################################################################################################################################################
@@ -448,15 +633,295 @@ return aa;
 
 
 ################################################################################################################################################################################################################################################
+    ref Anahtar Kelimesi:
+    ref anahtar kelimesi, bir metoda argüman olarak geçirilen bir değişkenin, metot içinde değiştirilebileceğini belirtir. Bu, metot içinde değişen değerin, çağrıldığı yerdeki orijinal değişkeni etkileyebileceği anlamına gelir.
+
+    
+    public void Arttir(ref int sayi)
+    {
+        sayi++;
+    }
+
+    // Kullanım
+    int sayi = 5;
+    Arttir(ref sayi);
+    Console.WriteLine(sayi); // 6
+    Bu örnekte, Arttir metodu bir ref parametre alır ve bu parametre üzerinde yapılan değişiklikler, orijinal değişkeni etkiler.
+
+    out Anahtar Kelimesi:
+    out anahtar kelimesi, bir metot tarafından bir değer döndürülmesini sağlar. Ancak, out ile belirtilen bir parametre, metot çağrısı yapmadan önce başlatılmasına rağmen, metot içinde değer atanması gerekmez. out parametreleri, metottan birden fazla değeri döndürmek amacıyla da kullanılabilir.
+
+  
+    public void Bol(int bolen, int bolunen, out int bolum)
+    {
+        bolum = bolen / bolunen;
+    }
+
+    // Kullanım
+    int bolum;
+    Bol(8, 2, out bolum);
+    Console.WriteLine(bolum); // 4
+    Bu örnekte, Bol metodu out parametre kullanarak bir değeri döndürüyor. out parametreler, metottan değeri döndürmek için kullanıldıklarında, metotun içinde değer atanması zorunlu değildir.
+
+    ref ve out Kullanımına İlişkin Noktalar:
+    ref ve out parametreleri, metot çağrısı yapmadan önce başlatılmalıdır. out parametreleri özellikle metot içinde değer atanmasa bile başlatılmalıdır.
+
+    ref ve out kullanımı, genellikle bir metotun birden fazla değeri değiştirmesi veya döndürmesi gerektiğinde tercih edilir.
+
+    ref kullanımında, değer atanmış bir değişkenin referansı geçilir ve metot içinde değiştirilen değer, orijinal değişkeni etkiler.
+
+    out kullanımında, metotun değeri döndürmesi gerektiğinde veya metotun içinde değer atanması gerektiğinde tercih edilir.
+
+    Hem ref hem de out parametreleri, metotun başlığında belirtilen türde olmalıdır.
+
+    Bu anahtar kelimeler, programlamada değerleri metotlar arasında aktarırken ve metotlardan değer alırken kullanılır ve C# dilinde esnek bir parametre geçirme ve döndürme mekanizması sağlar.
+################################################################################################################################################################################################################################################
+
+constructor yapıcı metotdur. çok önemlidir... constructor overloading yapabiliriz. istediğimiz parametreler ile çalışır hale getirebiliriz...
+
+public olursa her yerden erişebilir... public'te erişim kısıtı yoktur.
+protected ait olduğu sınıftan ve o sınıftan türetilen yerlerden erişilebilir.
+
+
+
+
+            C# programlama dilinde, erişim belirleyicileri (access modifiers), bir sınıfın, üyenin (örneğin, bir alan, bir metot veya bir özellik) veya bir derlemenin başka kod bloklarından ne kadar görünür ve erişilebilir olduğunu belirten özel anahtar kelimelerdir. Erişim belirleyicileri, sınıfın, üyenin veya derlemenin erişilebilirliğini kontrol etmek için kullanılır ve bu sayede programın modülerliğini ve güvenliğini sağlar.
+            C# dilinde beş temel erişim belirleyici bulunmaktadır:
+
+            public:
+
+            Herkes tarafından erişilebilir.
+            Örneğin: public class Example { }
+
+
+            private:
+
+            Sadece tanımlandığı sınıf içerisinden erişilebilir.
+            Örneğin: private int count;
+
+
+            protected:
+
+            Tanımlandığı sınıf ve bu sınıftan türetilmiş sınıflar tarafından erişilebilir. yani kalıtım almış sınıflar ve kendi sınıfı erişebilir bu metotlara ve değişkenlere... 
+            Örneğin: protected void DoSomething() { }
+
+
+            internal:
+
+            Bulunduğu derleme içerisindeki herhangi bir sınıf tarafından erişilebilir.
+            Örneğin: internal class InternalClass { }
+
+
+            protected internal:
+             
+            Tanımlandığı sınıf, türetilmiş sınıflar ve bulunduğu derleme içerisindeki herhangi bir sınıf tarafından erişilebilir.
+            Örneğin: protected internal string Name { get; set; }
+               mesela bir class içinde protected bir değişken var kendi içeriisnde ve kalıtım alanların içerisinde çalışır bu protected metotlar ve değişkenler. başka bir class'ta nesne oluşturup'ta erişemeyiz. 
+               private olursa eğer super kullanmadan erişemeyiz kalıtım devreye girerse. 
+
+                                class class1
+                                {
+
+                                    protected string name = "emre";
+
+                                }
+
+                                class Program
+                                {
+
+                                    static void Main(string[] args)
+                                    {
+
+                                        Console.WriteLine();
+                                        Console.WriteLine(aa.name); // hata verir. erişemeyiz...
+
+                                    }
+
+                                }
+
+
+            Bu erişim belirleyicileri, sınıfların, üyelerin ve derlemelerin ne kadar görünür olduğunu kontrol etmek için kullanılır. Bu, bir kod tabanının iyi bir şekilde organize edilmesini, sınıfların ve üyelerin sadece gerekli yerlerden erişilebilir olmasını ve kodun güvenliğini sağlamak açısından önemlidir.
+
+################################################################################################################################################################################################################################################
+
+namespace appConsole
+{
+    class TTT
+    {
+
+        private int skor;
+        public int Skor
+        {
+            
+            get { return skor; } // get bloğu skor okunmak istediği zaman çalışır.
+            set {  skor = value; } // set ise atama yapılmak istendiği zaman çalışır.
+
+        }
+
+    }
+    class Program
+    {
+
+        static void Main(string[] args)
+        {
+
+            TTT aaa = new TTT();
+            aaa.Skor = 1; // set çalışır. private değişkene atama yapar.
+            Console.WriteLine(aaa.Skor); // get çalışır burada.  private skorun değerini döndürür...
+
+        }
+
+
+    }
+}
+
+
+.........................................................................................................................
+
+    class Kisi
+    {
+        private int yas;
+        private string dogumyeri;
+        private string meslek;
+
+        public int Yas { 
+
+        get { return yas; }
+            set { 
+            
+
+                if (value < 0)
+                {
+
+                    yas = 0;
+                }
+                else
+                {
+                    yas = value;
+                }
+            
+            }
+        
+        }
+
+        public string Dogumyeri
+        {
+
+             get { return dogumyeri; }
+            set { dogumyeri = value;}
+
+        }
+
+        public string Meslek
+        {
+
+            get { return meslek; }
+            set { meslek = value; }
+        
+        }
+
+
+
+        public Kisi(int yas, string dogumyeri, string meslek)
+        {
+            this.yas = yas;
+            this.dogumyeri = dogumyeri;
+            this.meslek = meslek;
+        }
+
+
+
+    }
+
+
+################################################################################################################################################################################################################################################
+
+// properity olayı...
+
+
+namespace appConsole
+{
+    class Kisi
+    {
+        public int yas {  get; set; }
+        public string dogumyeri { get; set; } 
+        public string meslek {  get; set; }
+
+        public Kisi(int yas, string dogumyeri, string meslek)
+        {
+            this.yas = yas;
+            this.dogumyeri = dogumyeri;
+            this.meslek = meslek;
+        }
+    }
+
+
+    class Program
+    {
+
+        static void Main(string[] args)
+        {
+            Kisi kisi1 = new Kisi(1,"b",meslek:"c");
+            kisi1.yas++; kisi1.dogumyeri = "ist"; kisi1.meslek = "otomasyon";
+            Console.WriteLine(kisi1.meslek);
+            Console.WriteLine(kisi1.dogumyeri+" "+kisi1.yas);
+
+        }
+
+
+    }
+}
+
+################################################################################################################################################################################################################################################
+
+            C# programlama dilinde, bellek yönetimi iki temel alanı içerir: stack (yığın) ve heap (örtü). Bu iki alan, programın çalışma zamanında verileri depolamak için kullanılır, ancak farklı özelliklere sahiptir.
+
+            Stack (Yığın):
+            Stack, programın çalışma zamanında yönetilen bir bellek alanıdır. Bu alanda veriler, sıralı bir şekilde depolanır ve bu verilere hızlı erişim sağlanır. Stack'te veri depolamak için kullanılan bellek alanı, genellikle yönetilen (managed) veri tipleri ve değer tipleri içindir. İşte stack'te tutulan bazı veri tipleri:
+
+            Değer Tipleri:
+
+            int, char, float, double, bool gibi temel veri tipleri.
+            struct tarafından tanımlanan yapılar.
+            Yerel Değişkenler:
+
+            Metot içerisinde tanımlanan değişkenler.
+            Metot Çağrıları:
+
+            Metot çağrıları ve metot çağrılarına ait yerel değişkenler.
+            Stack'te depolanan veriler, programın akışı içinde meydana gelen işlemlerle birlikte otomatik olarak tahsis edilir ve serbest bırakılır. Stack, veri tipleri için hızlı erişim sağlar, ancak boyutları genellikle sınırlıdır ve yaşam süreleri kısa olduğu için otomatik olarak serbest bırakılır.
+
+            Heap (Örtü):
+            Heap, programın çalışma zamanında yönetilen bir diğer bellek alanıdır. Heap'te depolanan veriler, daha uzun ömürlüdür ve belirli bir yaşam süresine sahiptir. Genellikle heap, dinamik olarak tahsis edilen ve serbest bırakılan bellek alanıdır. Heap'te tutulan bazı veri tipleri şunlardır:
+
+            Referans Tipleri:
+
+            class tarafından tanımlanan nesneler.
+            string gibi dinamik bellek tahsisi gerektiren türler.
+            Dinamik Bellek Tahsisi:
+
+            new anahtar kelimesi ile oluşturulan nesneler.
+            Heap'te depolanan veriler, programcı tarafından elle serbest bırakılmalıdır (örneğin, Dispose veya Close gibi yöntemler kullanılarak), aksi takdirde bu bellek sızıntılarına neden olabilir.
+
+            İki bellek alanı arasındaki temel farklar şunlardır:
+
+            Hız ve Erişim Süresi: Stack, hızlı bir erişim sağlar çünkü bellek alanı sıralıdır. Heap ise daha fazla işlem gerektirir ve dolayısıyla daha yavaş erişim sağlar.
+
+            Ömür ve Kapsam: Stack'te depolanan veriler genellikle kısa ömürlüdür ve otomatik olarak serbest bırakılır. Heap'te depolanan veriler daha uzun ömürlüdür ve programcı tarafından serbest bırakılmalıdır.
 
 
 // struct tanımlama ve kullanımı
 
-struct node 
-{
+struct node // struct demek yapı ismi node ise kullanılacak isim.   class'lara benzerler... classların nesneleri heap alanında tutulur referancelidir.  structlarınki ise stack alanında tutulur ilkel veriler gibi.
+{ // metottda tanımlayabiliriz...
+
     public int deger;
     public String name;
+    public void yazdir(){
 
+Console.WriteLine("AAAAA"); // WriteLine alt satıra geçirir Write alt satıra geçirmez...
+
+    }
 }
 
 public static void Main(String[] args){
@@ -465,6 +930,14 @@ public static void Main(String[] args){
             node1.name = "emre";
             node1.deger = 15;
 }
+
+
+
+################################################################################################################################################################################################################################################
+
+
+
+
 
 ################################################################################################################################################################################################################################################
 

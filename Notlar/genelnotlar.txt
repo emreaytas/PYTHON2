@@ -214,6 +214,7 @@ Yani, sunucu, genellikle hizmetleri sunmak veya istemcilere erişim sağlamak i�
 Kısacası, sunucu hizmetleri sağlayan bir bilgisayar sistemini temsil ederken, depolama, verilerin saklandığı donanım veya yazılım sistemlerini ifade eder ve sunucuların gereksinim duyduğu verilerin depolanmasını sağlar.
 Şirketlerde bulunan donanım veya yazılım uygulamalarını bir şirketin internet ile bize sağlamasıdır. bbilişim hizmetlerini başka bir yerden başka binada olan server ve storageden almaktır.
 
+classlar soyut verilerdir abstract ise soyutlanmış classlardır. nesneler ise somutlaşmış halleridir...
 ....................................................................................................................................................................................................................................................................
 
 .net framework sadece windowsta çalışır .net core ise platfrom bağımsız...   asp.net core ile web uygulamaları yapılabilir. xamarin ile mobil. windows form ile ise masaüstü uygulamaları yapabiliriz. 
@@ -418,6 +419,27 @@ PyInstaller işlemi tamamlandığında, "dist" adlı bir klasör oluşturulur ve
 PyInstaller birçok ayara sahiptir. Örneğin, ikon eklemek için --icon=ikon.ico gibi ek parametreler ekleyebilirsiniz.
 
 Bu adımları takip ederek Python dosyanızı exe'ye dönüştürebilirsiniz. Unutmayın ki dönüştürülen exe dosyası, dönüştürüldüğü bilgisayar mimarisine uygun olacaktır. Yani, 32-bit bir Python yüklü ise 32-bit exe, 64-bit ise 64-bit exe üretilecektir.
+###############################################################################################################################################################################################################################################################################################################################################################
+
+cmd'ye winsat formal yaz... bekle sonra... C: diski windows klasörü sonra performance klasörü oradan winsat klasörü en son oluşanı aç ve   winspr  altında puanlama var ve 10 üzerinden puanlamış değerleri...
+
+WinSPR>
+<SystemScore>8.2</SystemScore>
+<MemoryScore>9.3</MemoryScore>
+<CpuScore>9.3</CpuScore>
+<CPUSubAggScore>8.7</CPUSubAggScore>
+<VideoEncodeScore>9.9</VideoEncodeScore>
+<GraphicsScore>8.2</GraphicsScore>
+<Dx9SubScore>9.9</Dx9SubScore>
+<Dx10SubScore>9.9</Dx10SubScore>
+<GamingScore>9.9</GamingScore>
+<DiskScore>8.95</DiskScore> 
+
+
+
+
+###############################################################################################################################################################################################################################################################################################################################################################
+###############################################################################################################################################################################################################################################################################################################################################################
 ###############################################################################################################################################################################################################################################################################################################################################################
 ###############################################################################################################################################################################################################################################################################################################################################################
 
