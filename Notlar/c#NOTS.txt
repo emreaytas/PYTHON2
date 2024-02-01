@@ -935,13 +935,847 @@ public static void Main(String[] args){
 
 ################################################################################################################################################################################################################################################
 
+c#da her şey class'lar içerisinde yer alır global değişken vs gibi bir şey yoktur...
+string sınıf referance ile çalışır. bir metot onu değiştirebilsin istersek eğer o zaman ref ile göndermemiz gerekir ref ile karşılamamız gerekir.
+string name; yaparsak name otomatik null olur... null ise "" dir...  ascii'daki 0...
+string sınıfı System kütüphanesinin altında yer alır System.string olarak kullanabiliriz...
+string s;  s.Length ile uzunluk alabiliriz...  s[0] s[1] ... ile istenen indexteki elemana ulaşabiliriz...
+
+
+            foreach (var item in kisi1.meslek)
+            {
+                Console.Write(item + " ");
+            } // foreach ile string üzerinde dönebiliriz...
+
+
+string s = "emre";
+string b = s.Clone(); // böylece içerik kopyalama yapabiliriz Clone() ile...
+s == b True verir... içerik kıyaslaması yapar c# eğer referance karşılaştırması yapmak istersek o zaman string.ReferenceEquals(a,b); kullanırız.
+
+Endswith(); ve StarsWtih() ile nasıl başayıp nasıl bittiğini görebiliriz...
+.Indexof() ise arar yoksa -1 verir varsa başlangıç indexini verir...
+LastIndexOf() ise sondan aramaya başlar...
+Insert(index,"istenen"); ile ekleme yapabiliriz. return eder yeni metni... araya eklersek isteneni diğerleri sağa kayar... sağında kalanlar istenen araya girer yani...
+SubString(index,index2); index dahil index2 dahil değil arada kalan metni return et demektir...
+.Replace(eski,yeni); return eder kalıcı değişim değildir. eski ile yeniyi değiştirir...
+.Remove(index,index2); return eder istenen aralıktaki şeyleri siler...
+
+kullanılmayan değerler garbage collector tarafından silinir...
+
+###ENUM#############################################################################################################################################################################################################################################
+
+nesneleri numaralandırmak için kullanılırlar...
+
+
+namespace appConsole
+{
+    class Kisi
+    {
+        public int yas {  get; set; }
+        public string dogumyeri { get; set; } 
+        public string meslek {  get; set; }
+
+        public Kisi(int yas, string dogumyeri, string meslek)
+        {
+            this.yas = yas;
+            this.dogumyeri = dogumyeri;
+            this.meslek = meslek;
+        }
+    }
+
+
+
+
+
+    class Program
+    {
+
+        enum Aylar  // veritabanınıda yer almasını istemediğimiz verileri static olarak tutar programda. public statictir.
+        {
+           Ocak,Şubat,Mart,Nisan,Mayıs,Haziran,Temmuz,Ağustos,Eylül,Ekim,Kasım,Aralık
+        }
+
+        enum SiparisDurumu : byte // byte ile sıralandır demektir...
+        {
+
+            Hazırlanıyor,Hazırlandı,Kargolandı
+
+        }
+
+        enum Meyveler : int  
+        {
+            Elma = 1,muz = 2,Çilek = 3
+
+        }
+
+        static void Main(string[] args)
+        {
+
+            byte a = (byte)Meyveler.muz;
+            byte b = (byte)Meyveler.Elma;
+            byte c = (byte)Meyveler.Çilek;
+            Console.WriteLine("{0} {1} {2}",a , b , c);
+            
+            Console.Read();
+
+
+        }
+
+
+    }
+}
+
+
+
+################################################################################################################################################################################################################################################
+
+            namespace appConsole
+            {
+            
+                class Person
+                {
+
+                    public Person() // constructor....
+                    {
+
+                        Console.WriteLine(1 + " ");
+                    }
+
+                }
+
+                class Person2 : Person // Person2 Persondan kalıtım almış oldu... Person superclass Person2 ise Subclass olur...
+                {
+
+                    public Person2() // constructor....
+                    {
+
+                        Console.WriteLine(2);
+                    }
+
+                }
+
+                class Program { 
+
+                    static void Main(string[] args)
+                    {
+
+                        Person2 person = new Person2();  // 1 2 yazdırır çünkü bir subclass'ın oluşabilmesi için superclass'ın default constructor'unun çalışması lazım... ve hatta önce değişkenler oluşur bir class'ta sonra metotlar. class'lar değişkenler ve metotlardan oluşurlar...
+                        // superclass'un default constructoru(boş olan) çalışmadan bitmeden subclass oluşmaz...
+                    }
+
+
+                }
+            }
+
+...................................................................................................................................
+
+    class Person3
+    {
+        string name;
+
+        public void yazdir(string name)
+        {
+            Console.WriteLine(name); // metota gelen name'yi yazdırır... eğer metota gelenle nesnenin namesi farklı isimle tanımlanmış olsa name1,name2 olarak o zaman this. vs kullanmaya gerek kalmazdır... hangisi nesnenin hangisi metotun belirtmeye gerek olmazdı...
+            Console.WriteLine(this.name); // nesnenin namesini yazdırır... 
+
+        }
+        
+    }
+
+...................................................................................................................................
+
+        using System;
+
+        // Birinci sınıf (kalıtım alınan sınıf)
+        public class Animal
+        {
+            public void Eat()
+            {
+                Console.WriteLine("The animal is eating.");
+            }
+        }
+
+        // Birinci arayüz
+        public interface IMove
+        {
+            void Move();
+        }
+
+        // İkinci arayüz
+        public interface ISound
+        {
+            void MakeSound();
+        }
+
+        // Sınıf, hem Animal sınıfından kalıtım alıyor hem de IMove ve ISound arayüzlerini uyguluyor.
+        public class Dog : Animal, IMove, ISound // yani : karşısına kalıtım alınacak nesne ve interfaceler yazılırsa iş tamamlanmış oluyor...
+        {
+            public void Bark()
+            {
+                Console.WriteLine("Woof woof!");
+            }
+
+            public void Move()
+            {
+                Console.WriteLine("The dog is moving.");
+            }
+
+            public void MakeSound()
+            {
+                Console.WriteLine("Barking sound");
+            }
+        }
+
+        class Program
+        {
+            static void Main()
+            {
+                // Dog sınıfından bir örnek oluşturup kullanım
+                Dog myDog = new Dog();
+                myDog.Eat();        // Animal sınıfından kalıtım alınan metodu kullanma
+                myDog.Bark();       // Dog sınıfının kendi metodunu kullanma
+                myDog.Move();       // IMove arayüzünden gelen metodu kullanma
+                myDog.MakeSound();  // ISound arayüzünden gelen metodu kullanma
+            }
+        }
+
+...................................................................................................................................
+
+mesela bir class'ın birden fazla interfacesi var ve bunların metotlarını override etmedi o zaman o class abstract olur... abstract class'tan nesne üretilemez... eğer abstract class'tan türetilen bir sınıf override edilmemiş şeyleri yani hepsini override etmezse abstract olur... nesne oluşturulması için bir o yapıda en kötü ihtimalle abstract olmayan class'ta hepsinin(geriye doğru toplam) override edilmesi lazım
+
+...................................................................................................................................
+
+Polimorfizm, bir nesnenin farklı türlerde davranabilme yeteneğidir. C# dilinde polimorfizm, genellikle iki şekilde gerçekleştirilir: method overriding (metot ezme) ve arayüzler.
+
+1. Method Overriding (Metot Ezme):
+Polimorfizmin temel özelliklerinden biri method overriding'dir. Bu özellik, bir alt sınıfta, üst sınıfta tanımlanan bir metodun aynı imza (signature) ile tekrar tanımlanmasını ifade eder. Bu, üst sınıftan türetilen nesnelerin aynı ad ve parametrelerle farklı davranışlar sergilemesini sağlar.
+
+
+        public class Animal
+        {
+            public virtual void MakeSound()  // virtual olması lazım eğer bir metot'un override edilebilir olması için...
+            {
+                Console.WriteLine("Animal makes a sound");
+            }
+        }
+
+        public class Dog : Animal
+        {
+            public override void MakeSound() // override ile ise override ettiğimizi belirtiriz... böylece subclass'ın nesnesine özgü olacak metot...
+            {
+                Console.WriteLine("Dog barks");
+            }
+        }
+
+        public class Cat : Animal
+        {
+            public override void MakeSound()
+            {
+                Console.WriteLine("Cat meows");
+            }
+        }
+
+        class Program
+        {
+            static void Main()
+            {
+                Animal animal1 = new Dog();
+                Animal animal2 = new Cat();
+
+                animal1.MakeSound(); // Dog barks
+                animal2.MakeSound(); // Cat meows
+            }
+        }
+
+superclass subclass'larına referance olabilir mesela buradan köpekten golden türetelim o zaman Animal ona referance olabilirdi...
+
+...................................................................................................................................
+
+namespace appConsole
+{
+
+    public class Animal
+    {
+        public virtual void MakeSound()
+        {
+            Console.WriteLine("Animal makes a sound");
+        }
+    }
+
+    public class Dog : Animal
+    {
+        public override void MakeSound()
+        {
+            
+            Console.WriteLine("Dog barks");
+
+        }
+
+        public void sesyaphele()
+        {
+        
+            Console.WriteLine("SES");
+
+        }
+
+    }
+
+    public class Cat : Animal
+    {
+        public override void MakeSound()
+        {
+            Console.WriteLine("Cat meows");
+        }
+    }
+
+    class Program { 
+
+        static void Main(string[] args)
+        {
+
+
+            Dog aa = new Dog();
+         aa.sesyaphele();
+             Animal bb = new Dog();
+            // bb.MakeSound(); // hata veriyor bunun nedeni şudur = çünkü çalışan değişkenler ve metotlar Referance'ın içindekilerine erişebiliyor. Yani Referans ne ise onu kullanabilir c# onun kod bloğu içerisini görebiliriz...
+
+            if(bb is Dog) // is ile bir nesne new Dog()'tan mı oluşturulmuş bunu görebiliriz... 
+            {
+                Dog cc = (Dog)bb; // ama bunun çözümü belli şunu yapabiliriz... Tip dönüşümü ile bu sorunu çözebiliriz.
+                cc.sesyaphele();
+            }
+
+
+        }
+
+
+    }
+}
+
+################################################################################################################################################################################################################################################
+
+encapsulation demek verinin veya metotun class içerisinde örtülmesi demektir. private ile yapabiliriz. verielrin veya metotların korunması içindir. kaliteli program yazmak içindir.
+  ortak olan yzılımcıdan ve kendimizden kontrolsüz erişimi engellemek için kullanırız....
+
+                    Encapsulation, sınıfın içindeki verilerin ve metodların sınıf dışından gelen erişimlere karşı korunmasıdır. Bu, sınıfın iç detaylarının saklanarak, sadece belirlenen metodlar aracılığıyla dış dünyaya erişilebilmesini sağlar.
+
+                    using System;
+
+                    public class BankAccount
+                    {
+                        private string accountNumber;
+                        private decimal balance;
+
+                        public BankAccount(string accountNumber, decimal initialBalance)
+                        {
+                            this.accountNumber = accountNumber;
+                            this.balance = initialBalance;
+                        }
+
+                        // Getter ve setter metotları aracılığıyla private alanlara erişim
+                        public string AccountNumber
+                        {
+                            get { return accountNumber; }
+                            set { accountNumber = value; }
+                        }
+
+                        public decimal Balance
+                        {
+                            get { return balance; }
+                            private set { balance = value; }
+                        }
+
+                        // Para çekme işlemi
+                        public void Withdraw(decimal amount)
+                        {
+                            if (amount > 0 && amount <= balance)
+                            {
+                                balance -= amount;
+                                Console.WriteLine($"{amount:C} withdrawn. New balance: {balance:C}");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid withdrawal amount or insufficient funds.");
+                            }
+                        }
+
+                        // Para yatırma işlemi
+                        public void Deposit(decimal amount)
+                        {
+                            if (amount > 0)
+                            {
+                                balance += amount;
+                                Console.WriteLine($"{amount:C} deposited. New balance: {balance:C}");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid deposit amount.");
+                            }
+                        }
+                    }
+
+                    class Program
+                    {
+                        static void Main()
+                        {
+                            // Encapsulation örneği
+                            BankAccount myAccount = new BankAccount("123456789", 1000.00m);
+
+                            // Getter ve setter kullanımı
+                            Console.WriteLine($"Account Number: {myAccount.AccountNumber}");
+                            myAccount.AccountNumber = "987654321";
+                            Console.WriteLine($"New Account Number: {myAccount.AccountNumber}");
+
+                            // Getter kullanımı
+                            Console.WriteLine($"Balance: {myAccount.Balance:C}");
+
+                            // Para çekme ve yatırma işlemleri
+                            myAccount.Withdraw(500.00m);
+                            myAccount.Deposit(200.00m);
+                        }
+                    }
+
+...................................................................................................................................
+
+
+    // property ile kapsülleme... 
+    public class Bolum
+    {
+
+        private String bolumadi;
+
+        public String GetBolumAdi()
+        {
+
+            return this.bolumadi;
+
+        }
+
+        public void SetBolumadi(string bolumadi)
+        {
+
+            if (bolumadi != null ) // buradaki bolumadi fonksiyona gelen bolumadi...
+            {
+                this.bolumadi = bolumadi;
+
+            }
+            else
+            {
+                this.bolumadi="null";
+            }
+          
+        }
+
+    }
+
+
+
+
+...................................................................................................................................
+
+   
+    public class Bolum
+    {
+
+        private String bolumadi;
+
+          public string Bolumdi
+        {
+            get { return bolumadi; } 
+            set { 
+
+                if (value.Equals("Programlama"))
+                {
+
+                    this.bolumadi = "boyle bir bolum yok..";
+
+                }
+                else
+                {
+
+                      bolumadi = value;
+                }
+            
+            }
+        } 
+
+
+    }
+
+    
+...................................................................................................................................
+            namespace appConsole
+            {
+
+                class Program {
+
+                    static int deger = 0; // static olursa bir değer veya metot class'a özgü olur...
+                    private string isim {  get; set; } // getter setterarı böyle kullanabiliriz...
+                    private string id;
+                    public string Id
+                    {
+                        get { return this.id; }
+                        set { 
+
+                            if (value == null) { 
+                            this.id = "null";
+
+                            }
+                            else
+                            {
+                                this.id = value;
+                            }
+
+                                
+                                ; }
+                    }
+
+                    public void yazdir() 
+                    {
+                        if (Program.deger == 3)
+                        {
+
+                            return; // return void bir metotu bitirmek içinde kullanılabilir...
+                            
+                        }
+
+                        Program.deger++; // static değer değişimini class üzerinden yapıyoruz...
+                        Console.WriteLine("\\"); // \ demek benden sonra gelen komut karakteri değil demek \\ ile biz \yazdırırız.. tek \ olursa " olarak kalır hata verir çünkü diğerine komut değilsin der ama o komut...
+                        Program aa = new Program(); //  her seferinde yeni nesne oluşuyor...
+                        aa.yazdir(); // recursive olarak çalışır...
+
+
+                    }
+
+                    public override string ToString()
+                    {
+                        return "SELAM KAHPE";
+                    }
+
+                    static void Main(string[] args)
+                    {
+                        Program aa = new Program(); // bir class içeriisnde kendi türünde nesne oluşturabiliriz... ve metotlarını değişkenlerini kullanabiliriz...
+                        aa.isim = "aa";// burada set çalışır 
+                        Console.WriteLine(aa.isim); // aa yazdırır... ve get çalışır... {get; set;} ile otomatik olarak getter setter ekleyebiliriz... 
+                        Console.WriteLine(aa); // SELAM KAHPE
+                        aa.yazdir();
+
+
+
+                    }
+
+
+                }
+            }
+
+..................................................................................................................................................................................................................................................
+
+
+            using System;
+
+            // Üst sınıf (superclass)
+            public class Animal
+            {
+                // Üst sınıfa ait iki değişken
+                protected string name;
+                protected int age;
+
+                // Üst sınıfın constructor'ı
+                public Animal(string name, int age)
+                {
+                    this.name = name;
+                    this.age = age;
+                }
+
+                // Üst sınıfa ait bir metot
+                public void DisplayInfo()
+                {
+                    Console.WriteLine($"Name: {name}, Age: {age}");
+                }
+            }
+
+            // Alt sınıf (subclass)
+            public class Dog : Animal
+            {
+                // Alt sınıfa ait üçüncü değişken
+                private string breed;
+
+                // Alt sınıfın constructor'ı
+                public Dog(string name, int age, string breed) 
+                    : base(name, age) // Üst sınıfın constructor'ını çağırma super yerine :base(...) yapısı vardır... nnormalde super olur ve en üstte tanımlanır burada ise :base() ile en üstte olup olmama durumu ortadan kalkmış direkt olarak çalışır super() yani base()...
+                {
+                    this.breed = breed;
+                }
+
+                // Alt sınıfa ait kendi metodu
+                public void DisplayBreed()
+                {
+                    Console.WriteLine($"Breed: {breed}");
+                }
+
+                // Alt sınıfa ait bir metot, üst sınıftan gelen metodu çağırma
+                public new void DisplayInfo()
+                {
+                    base.DisplayInfo(); // Üst sınıfın metodu
+                    Console.WriteLine($"Breed: {breed}");
+                }
+            }
+
+            class Program
+            {
+                static void Main()
+                {
+                    // Alt sınıfın nesnesini oluşturma
+                    Dog myDog = new Dog("Buddy", 3, "Golden Retriever");
+
+                    // Alt sınıfın metotlarını çağırma
+                    myDog.DisplayInfo();   // Üst sınıftan gelen metodu çağırma
+                    myDog.DisplayBreed();  // Alt sınıfa ait metodu çağırma
+                }
+            }
+
+
+
+################################################################################################################################################################################################################################################
+
+interface sözleşme gibidir... metotları override edilmelidir.
+interfaceler property barındılarabilir metotların tipini çalışma biçimini barındırabilirler...  int sayi{get;set;} gibi sonradan özelleştirmemiz lazım ama...
+gövdeli metot olamaz. değişken tanımlanamaz.
+constructor olamaz.
+interface ile nesne üretilemez. ancak referance olabilir ama kendi metotlarına(tam emin değilim öyle herhalde)....
+interfaceler kendisi arasında türetilebilir subinterface superinterface olayı vardır.
+interfaceler genel olarak I ile başlarlar...
+çoklu kalıtım interfaceler ile yarım yamalak sağlanırlar...
+interfaceler erişim belirleyici almaz daima public'tir... public olmayan bir şey alamaz interface...
+interface içerisinde static bir yapı kuramayız...
+interfaceler parametreli metot imzası alabilir... void yazdir(string a, int 5); ...
+
+
+
+............................................................................................................................................................................................................................................................................................
+                C# dilinde, bir arayüz (interface), bir veya birden fazla sınıfın veya struct'ın belirli metotları, özellikleri ve olayları uygulamasını sağlayan bir türdür. İnterfaceler, çok sayıda türü ortak bir davranışa sahip olacak şekilde birleştirmek ve kodun daha esnek, modüler ve okunabilir olmasını sağlamak için kullanılır.
+
+                Temel Arayüz Tanımı:
+                Bir arayüz tanımı şu şekildedir:
+
+        
+                public interface ILogger
+                {
+                    // Metot tanımı
+                    void Log(string message);
+
+                    // Özellik tanımı
+                    string LogName { get; set; }  // get ve setleri belirlememiz lazım ama...
+                    
+                    // Olay tanımı
+                    event EventHandler LogEvent;
+                }
+                Bu örnekte, ILogger adında bir arayüz tanımlanmıştır. Bu arayüz, bir logger'ın (günlük kaydedici) temel davranışını tanımlar: Log metodu ile bir mesajı kaydetmek, LogName özelliği ile log adını almak ve LogEvent olayını kullanarak bir log olayını bildirmek.
+
+                Arayüzü Uygulayan Bir Sınıf:
+                Bir sınıf, bir arayüzü implements (uygular) anahtar kelimesiyle uygular. Örneğin:
+
+            
+                public class ConsoleLogger : ILogger
+                {
+                    // ILogger arayüzünden gelen metot
+                    public void Log(string message)
+                    {
+                        Console.WriteLine($"Log: {message}");
+                    }
+
+                    // ILogger arayüzünden gelen özellik
+                    public string LogName
+                    {
+                        get { return "ConsoleLogger"; }
+                        set { /* Setter içeriği, gerektiğine göre uygulanabilir */ }
+                    }
+
+                    // ILogger arayüzünden gelen olay
+                    public event EventHandler LogEvent;
+
+                    // Başka metotlar, özellikler ve olaylar da eklenebilir.
+                }
+                Bu örnekte, ConsoleLogger sınıfı, ILogger arayüzünü uygular. Arayüzden gelen metot, özellik ve olaylar bu sınıf içinde gerçekleştirilir.
+
+
+                Arayüz Kullanımı:
+               
+                class Program
+                {
+                    static void Main()
+                    {
+                        // ILogger arayüzü üzerinden nesne oluşturma
+                        ILogger logger = new ConsoleLogger();
+
+                        // Arayüz metotları kullanımı
+                        logger.Log("Hello, Interface!");
+                        Console.WriteLine($"LogName: {logger.LogName}");
+
+                        // Arayüz olayına abone olma
+                        logger.LogEvent += (sender, e) =>
+                        {
+                            Console.WriteLine("Log event triggered!");
+                        };
+
+                        // Arayüz olayını tetikleme (örnek amaçlı)
+                        logger.LogEvent?.Invoke(null, EventArgs.Empty);
+                    }
+                }
+                Bu örnekte, ILogger arayüzünü kullanarak bir ConsoleLogger nesnesi oluşturulmuş ve ardından arayüzün metotları, özellikleri ve olayları kullanılmıştır.
+
+                Arayüzler, bir sınıfın birden fazla arayüzü uygulayabilmesine olanak tanır. Bu da çoklu kalıtımın sağladığı esneklik avantajlarını sunar. Ayrıca, interfaceler, kodun daha modüler olmasına ve kodun test edilebilirliğini artırmaya katkıda bulunur.
+............................................................................................................................................................................................................................................................................................
+
+    interface Idemo
+    {
+        void goster();
+
+    }
+
+    interface Iicerikler : Idemo
+    {
+
+        int sayi1 { get; set; }
+
+
+    }
+
+    class AA : Iicerikler
+    {
+        public int sayi1 { get { return sayi1; } set {sayi1 = value; } }
+
+        public void goster()
+        {
+            Console.WriteLine("LETS GO...");
+
+        }
+    }
+
+    // interfaceler kendi aralarında subinterface superinterface İlişkisi kurabilir. subinterface'i implement eden class superinterface'ide implement etmiş olur...
+
+
+
+################################################################################################################################################################################################################################################
+
+abstract olan bir metot subclass'ta override edilmeli edilmezse o classta abstract olur... çünkü gövdesiz metot vardır...
+abstract metot varsa class'ta abstract'tır... kullanılma amacı override zorunluluğudur...
+
+public abstract void Add();
+public abstract void Delete(); 
+public abstract void Update(); 
+public abstract void Get(); 
+
+gibi... bunun yerine interfacede kullanabilirdik...
+eğer bir class abstract metot içeriyorsa ve interface implement edip tüm metotları override etmediyse abstract olur class...
+static metot abstract olamaz...
+abstract classlar private olamaz. public protected olabilir.
+abstract classlar sealed anahtar kelimesi ile ifade edilemez...
+
+
+                namespace appConsole
+                {
+
+
+                    abstract class Database
+                    {
+                        public abstract void Add();
+                        public abstract void Delete();
+                        public abstract void Update();
+                        public abstract void Get();
+
+                    }
+
+
+                    class SQLserver : Database // extends edenler tüm metotları doldurur ve biz böylece override zorunluluğu sağlamış oluruz...
+                    {
+                        public override void Add()
+                        {
+                        }
+
+                        public override void Delete()
+                        {
+                            
+                        }
+
+                        public override void Get()
+                        {
+                            
+                        }
+
+                        public override void Update()
+                        {
+                            
+                        }
+                    }
+
+                    class MySql : Database
+                    {
+                        public override void Add()
+                        {
+                        }
+
+                        public override void Delete()
+                        {
+
+                        }
+
+                        public override void Get()
+                        {
+
+                        }
+
+                        public override void Update()
+                        {
+
+                        }
+                    }
+
+
+
+
+                    class Program {
+
+                        static void Main(string[] args)
+                        {
+                            MySql mySql = new MySql();
+                            mySql.Add();
+                            
+
+
+                        
+                                
+                        }
+
+
+
+
+                    }
+
+
+
+                }
+
+
+
+
+##collectionS##############################################################################################################################################################################################################################################
+
+
+
+
+
+
+
 
 
 
 
 ################################################################################################################################################################################################################################################
 
+
 // Main sadece bir tane olur ve programın çalışması için gerekli olan o metottur ana metottur...
+// C# dilinde bir uygulama sadece bir tane Main metodu içerebilir. Bu metot, programın başlangıç noktasını temsil eder ve programın çalışmasına başladığı yerdir. Main metodu, static olarak işaretlenmiş ve genellikle bir sınıf içinde yer alır.
 // String ile string arasında bir fark yoktur... ikiside aynıdır referans bilmem ne vs vs... 
 
             bool dogrumu = false;
@@ -1053,8 +1887,55 @@ string yazi2 = 15; hata verir...
 
 ctrl + class'ın üstüne tık ile içerisine gidebilir bilgileri görebiliriz...
 
+..............................................................................................................................................................................................................................................................................................................................................................
+            C# dilinde, bir sınıfın alanlarına erişimi kontrol etmek ve bu alanlara değer atamak için genellikle property'ler kullanılır. Property'ler, sınıfın dışındaki kodun sınıf içindeki verilere güvenli ve kontrol edilmiş bir şekilde erişmesini sağlar. Property'ler, genellikle sınıfın dışındaki kodun sınıfın içindeki verilere okuma ve yazma işlemleri gerçekleştirmesine izin verir.
 
+            Temel Property Tanımı:
+            Property, genellikle bir alanın okunması ve yazılmasını kontrol eden bir çift metottur. Aşağıda basit bir property tanımı örneği bulunmaktadır:
 
+         
+            public class Person
+            {
+                // Private bir alan (field)
+                private string _name;
+
+                // Public bir property
+                public string Name
+                {
+                    get { return _name; } // Okuma işlemi
+                    set
+                    {
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            _name = value; // Yazma işlemi
+                        }
+                        else
+                        {
+                            Console.WriteLine("Name cannot be null or empty.");
+                        }
+                    }
+                }
+            }
+            Bu örnekte, Person sınıfında _name adında bir private alan ve Name adında bir public property bulunmaktadır. Name property'si hem okuma (get) hem de yazma (set) işlemlerini kontrol etmektedir.
+
+            Property Kullanımı:
+            Ardından, bu property'yi kullanmak için şu şekilde bir örnek yapabiliriz:
+
+        
+            class Program
+            {
+                static void Main()
+                {
+                    Person person = new Person();
+
+                    // Property'yi kullanma
+                    person.Name = "John"; // Yazma işlemi
+                    Console.WriteLine($"Name: {person.Name}"); // Okuma işlemi
+                }
+            }
+            Bu örnekte, Person sınıfından bir nesne oluşturulmuş ve Name property'si hem yazılmış (set), hem de okunmuş (get). Property içinde yapılan kontrol, adın boş veya null olmamasını sağlar.
+
+            Property'ler, nesne yönelimli programlamada sıkça kullanılır ve sınıfın dışındaki kodun sınıfın içindeki verilere güvenli bir şekilde erişmesine olanak tanır. Ayrıca, bir property'nin altındaki gerçek işlevselliği saklamak için metotlar içerebilirler.
 
 ..............................................................................................................................................................................................................................................................................................................................................................
 
