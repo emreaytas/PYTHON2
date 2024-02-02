@@ -1732,35 +1732,236 @@ abstract classlar sealed anahtar kelimesi ile ifade edilemez...
                     }
 
 
-
-
                     class Program {
 
                         static void Main(string[] args)
                         {
+
+
                             MySql mySql = new MySql();
                             mySql.Add();
                             
 
-
-                        
                                 
                         }
 
-
-
-
                     }
-
-
 
                 }
 
 
-
-
 ##collectionS##############################################################################################################################################################################################################################################
 
+                C# dilinde, bir sınıfın alanlarına erişimi kontrol etmek ve bu alanlara değer atamak için genellikle property'ler kullanılır. Property'ler, sınıfın dışındaki kodun sınıf içindeki verilere güvenli ve kontrol edilmiş bir şekilde erişmesini sağlar. Property'ler, genellikle sınıfın dışındaki kodun sınıfın içindeki verilere okuma ve yazma işlemleri gerçekleştirmesine izin verir.
+
+                Temel Property Tanımı:
+                Property, genellikle bir alanın okunması ve yazılmasını kontrol eden bir çift metottur. Aşağıda basit bir property tanımı örneği bulunmaktadır:
+
+                public class Person
+                {
+                    // Private bir alan (field)
+                    private string _name;
+
+                    // Public bir property
+                    public string Name
+                    {
+                        get { return _name; } // Okuma işlemi
+                        set
+                        {
+                            if (!string.IsNullOrEmpty(value))
+                            {
+                                _name = value; // Yazma işlemi
+                            }
+                            else
+                            {
+                                Console.WriteLine("Name cannot be null or empty.");
+                            }
+                        }
+                    }
+                }
+                Bu örnekte, Person sınıfında _name adında bir private alan ve Name adında bir public property bulunmaktadır. Name property'si hem okuma (get) hem de yazma (set) işlemlerini kontrol etmektedir.
+
+                Property Kullanımı:
+                Ardından, bu property'yi kullanmak için şu şekilde bir örnek yapabiliriz:
+
+
+                class Program
+                {
+                    static void Main()
+                    {
+                        Person person = new Person();
+
+                        // Property'yi kullanma
+                        person.Name = "John"; // Yazma işlemi
+                        Console.WriteLine($"Name: {person.Name}"); // Okuma işlemi
+                    }
+                }
+                Bu örnekte, Person sınıfından bir nesne oluşturulmuş ve Name property'si hem yazılmış (set), hem de okunmuş (get). Property içinde yapılan kontrol, adın boş veya null olmamasını sağlar.
+
+                Property'ler, nesne yönelimli programlamada sıkça kullanılır ve sınıfın dışındaki kodun sınıfın içindeki verilere güvenli bir şekilde erişmesine olanak tanır. Ayrıca, bir property'nin altındaki gerçek işlevselliği saklamak için metotlar içerebilirler.
+
+                User
+                c#da collectionsları detaylı şekilde anlatabilir misin
+                ChatGPT
+                Evet, tabii ki! C# dilinde, Collections (Koleksiyonlar) genel olarak gruplandırılmış verileri yönetmek için kullanılan veri yapılarıdır. .NET Framework içerisinde birçok farklı koleksiyon sınıfı bulunmaktadır. Bu koleksiyon sınıfları, verileri depolamak, sıralamak, filtrelemek ve genel olarak işlemek için kullanılır. İşte C# dilinde sıkça kullanılan bazı koleksiyon türleri:
+
+                1. List<T>:
+                List<T> sınıfı, dinamik bir dizi olarak düşünülebilir ve belirli bir türdeki öğeleri içerir.
+
+
+                using System;
+                using System.Collections.Generic;
+
+                class Program
+                {
+                    static void Main()
+                    {
+                        // List<T> kullanımı
+                        List<string> names = new List<string>();
+                        
+                        // Öğe ekleme
+                        names.Add("Alice");
+                        names.Add("Bob");
+                        names.Add("Charlie");
+
+                        // Öğeleri gezme
+                        foreach (var name in names)
+                        {
+                            Console.WriteLine(name);
+                        }
+                    }
+                }
+
+
+                2. Dictionary<TKey, TValue>:
+                Dictionary<TKey, TValue> sınıfı, anahtar-değer çiftleri içeren bir koleksiyondur.
+
+
+                using System;
+                using System.Collections.Generic;
+
+                class Program
+                {
+                    static void Main()
+                    {
+                        // Dictionary<TKey, TValue> kullanımı
+                        Dictionary<int, string> students = new Dictionary<int, string>();
+                        
+                        // Öğe ekleme
+                        students.Add(1, "Alice");
+                        students.Add(2, "Bob");
+                        students.Add(3, "Charlie");
+
+                        // Öğeleri gezme
+                        foreach (var student in students)
+                        {
+                            Console.WriteLine($"Student ID: {student.Key}, Name: {student.Value}");
+                        }
+                    }
+                }
+
+
+
+                3. Queue<T>:
+                Queue<T> sınıfı, birinci giren, birinci çıkan (First In First Out - FIFO) prensibiyle çalışan bir kuyruk yapısını temsil eder.
+
+
+                using System;
+                using System.Collections.Generic;
+
+                class Program
+                {
+                    static void Main()
+                    {
+                        // Queue<T> kullanımı
+                        Queue<string> queue = new Queue<string>();
+                        
+                        // Öğe ekleme
+                        queue.Enqueue("Apple");
+                        queue.Enqueue("Banana");
+                        queue.Enqueue("Cherry");
+
+                        // Öğeleri çıkarma
+                        while (queue.Count > 0)
+                        {
+                            Console.WriteLine(queue.Dequeue());
+                        }
+                    }
+                }
+
+
+
+                4. Stack<T>:
+                Stack<T> sınıfı, son giren, ilk çıkan (Last In First Out - LIFO) prensibiyle çalışan bir yığın yapısını temsil eder.
+
+
+                using System;
+                using System.Collections.Generic;
+
+                class Program
+                {
+                    static void Main()
+                    {
+                        // Stack<T> kullanımı
+                        Stack<string> stack = new Stack<string>();
+                        
+                        // Öğe ekleme
+                        stack.Push("Apple");
+                        stack.Push("Banana");
+                        stack.Push("Cherry");
+
+                        // Öğeleri çıkarma
+                        while (stack.Count > 0)
+                        {
+                            Console.WriteLine(stack.Pop());
+                        }
+                    }
+                }
+
+
+..............................................................................................................................................................................................................................................................................................................................................................
+
+
+        namespace appConsole
+        { 
+
+            class Program {
+
+                static void Main(string[] args)
+                {
+
+                    ArrayList arraylist = new ArrayList();
+
+
+                    referancemi(arraylist);
+                    foreach(var item in arraylist)
+                    {
+                        Console.Write(item); // eeee  aaaa... yazdırdı...
+                    }
+                        
+                }
+
+                public static void referancemi(ArrayList a)
+                {
+                    a.Add("eeee");
+                    a.Add("aaaa...");
+
+                }
+
+
+            }
+
+        }
+
+        // yani tıpkı diziler gibi System.collections ile çalışanlarda referanceler ile çalışırlar... bir metota ben onu yolladığımda onu karşılayanda referans ve yolladığımın referanceını karşılıyor böylece değişim olursa kalıcı değişim oluyor... 
+        // arraylistler nesne alırlar... sayı vs gönderebiliriz ama c#da sayılar vs her şey zaten nesne mantığı ile çalışır. 
+        // hem string hem int vss istenen nesneleri yollayabiliriz karmaşık şekilde tutabiliriz... yeterki nesne yolla... ama c#da zaten her veri nesne olarak geçiyor... her şey class'tan türüyor. ama heapta ve stack'te tutulanlar olarak ayrılıyorlar...
+
+
+
+..............................................................................................................................................................................................................................................................................................................................................................
+c#da string'de int gibi davranır... bir tek java ile fark odur...
+..............................................................................................................................................................................................................................................................................................................................................................
 
 
 
@@ -1768,11 +1969,152 @@ abstract classlar sealed anahtar kelimesi ile ifade edilemez...
 
 
 
+
+
+
+
+
+####multithreading############################################################################################################################################################################################################################################
+
+                    using System;
+                    using System.Collections.Generic;
+                    using System.Linq;
+                    using System.Text;
+                    using System.Threading.Tasks;
+                    using System.Data.SQLite;
+                    using System.Collections;
+                    using System.Threading; // bunu çağırmak lazım... hem thread üretmek hemde sleep için...
+
+                    namespace appConsole
+                    { 
+
+                        class Program {
+
+                            static void Main(string[] args)
+                            {
+
+                                Thread mainThread = Thread.CurrentThread;
+                                mainThread.Name = "Main Thread";
+                                Console.WriteLine(mainThread.Name);
+
+                                /*
+                                CountDown();
+                                CountUp();
+                                
+                                Main Thread
+                    Time #1:10 Seconds
+                    Time #1:9 Seconds
+                    Time #1:8 Seconds
+                    Time #1:7 Seconds
+                    Time #1:6 Seconds
+                    Time #1:5 Seconds
+                    Time #1:4 Seconds
+                    Time #1:3 Seconds
+                    Time #1:2 Seconds
+                    Time #1:1 Seconds
+                    Time #1:0 Seconds
+                    timer #1 is complete...
+                    Time 21:0 Seconds
+                    Time 21:1 Seconds
+                    Time 21:2 Seconds
+                    Time 21:3 Seconds
+                    Time 21:4 Seconds
+                    Time 21:5 Seconds
+                    Time 21:6 Seconds
+                    Time 21:7 Seconds
+                    Time 21:8 Seconds
+                    Time 21:9 Seconds
+                    Time 21:10 Seconds
+                    timer #2 is complete...
+
+
+                                */ // Threadsiz kullanım bu şekilde sırası ile çalışır Thread kullanırsak eğer o zaman iş değişir.
+
+                                Thread thread1 = new Thread(CountUp);
+                                Thread thread2 = new Thread(CountDown);
+
+                                thread1.Start(); // başlatır ve aşağı satıra geçirir kodu bu yüzden thread1 çalışırken thread2'de çalışmaya başlayabilir...
+                                thread2.Start();
+
+                                /*
+                                Main Thread
+                    Time 21:0 Seconds
+                    Time #1:10 Seconds
+                    Time #1:9 Seconds
+                    Time 21:1 Seconds
+                    Time #1:8 Seconds
+                    Time 21:2 Seconds
+                    Time #1:7 Seconds
+                    Time 21:3 Seconds
+                    Time #1:6 Seconds
+                    Time 21:4 Seconds
+                    Time 21:5 Seconds
+                    Time #1:5 Seconds
+                    Time 21:6 Seconds
+                    Time #1:4 Seconds
+                    Time #1:3 Seconds
+                    Time 21:7 Seconds
+                    Time #1:2 Seconds
+                    Time 21:8 Seconds
+                    Time 21:9 Seconds
+                    Time #1:1 Seconds
+                    Time 21:10 Seconds
+                    Time #1:0 Seconds
+                    timer #2 is complete...
+                    timer #1 is complete...
+
+                                
+                                */
+
+
+
+
+
+
+                                Console.ReadKey();
+
+
+                            }
+
+                            public static void CountDown()
+                            {
+
+                                for (int i = 10; i >= 0; i--)
+                                {
+
+                                    Console.WriteLine("Time #1:" + i + " Seconds");
+                                    Thread.Sleep(1000); // 1000 milisaniye...
+
+                                }
+                                Console.WriteLine("timer #1 is complete...");
+                            }
+
+                            public static void CountUp()
+                            {
+
+                                for (int i = 0; i <= 10; i++)
+                                {
+
+                                    Console.WriteLine("Time 21:" + i + " Seconds");
+                                    Thread.Sleep(1000); // 1000 milisaniye...
+
+                                }
+                                Console.WriteLine("timer #2 is complete...");
+                            }
+
+
+                        }
+
+
+                        
+
+                    }
+
+// yani işleri metotlara bölerek biz threadlere metotları vererek işleri bölebiliriz. thread başlarsa direkt olarak çalışır ve program aşağı satırları okumaya başlar... o anda o thread'da çalışır halde kalır...
 
 
 
 ################################################################################################################################################################################################################################################
-
 
 // Main sadece bir tane olur ve programın çalışması için gerekli olan o metottur ana metottur...
 // C# dilinde bir uygulama sadece bir tane Main metodu içerebilir. Bu metot, programın başlangıç noktasını temsil eder ve programın çalışmasına başladığı yerdir. Main metodu, static olarak işaretlenmiş ve genellikle bir sınıf içinde yer alır.
