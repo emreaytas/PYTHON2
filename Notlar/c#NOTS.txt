@@ -1964,14 +1964,350 @@ c#da string'de int gibi davranır... bir tek java ile fark odur...
 ..............................................................................................................................................................................................................................................................................................................................................................
 
 
+            using System;
+            using System.Collections.Generic;
+            using System.Linq;
+            using System.Text;
+            using System.Threading.Tasks;
+            using System.Data.SQLite;
+            using System.Collections;
+            using System.Collections.Specialized;
+
+
+            namespace appConsole
+            { 
+
+                class Program
+                {
+                    static void Main(string[] args)
+                    {
+                        
+                        ArrayList arraylist = new ArrayList();
+                        arraylist.Add(1);arraylist.Add(2);arraylist.Add(3);
+                        foreach (int i in arraylist) {
+                            Console.WriteLine(i);
+                        }
+
+                        Console.WriteLine(arraylist[1]); // 2. veriyi görebiliriz... arraylist[index] ile istenen veriyi get edebiliriz...
+                        Console.WriteLine(arraylist.Capacity); // 3 eleman ekledik mesela kapasitesini 4 yaptı. yeni bir elemana yer bırakıyor hepp
+                        Console.WriteLine(arraylist.Count); // 3 eleman var diyorr...
+
+
+
+                        ArrayList arr = TTT(); // metot içerisinde bir arraylist referansı oluşur metot biter return eder ama referansı bellekte tutulduğu için garbage collector onu silmez...
+                        
+                        foreach (var item in arr)
+                        {
+                            Console.WriteLine(item);
+
+                        }
+                        arraylist.Add(11);
+                        arraylist.Add((int) 1);
+                        arraylist.Add((int) 2);
+                        arraylist.Add((int) 3);
+                        arraylist.Add(4);
+                        arraylist.Sort(); // kalıcı değişim yapar önce küçükten büyüğe sıralayıp sonra return etmez..
+                        arraylist.Reverse(); // terse çevirir...  kalıcı değişim yapar...
+
+
+                        foreach(var i in arraylist)
+                        {
+                            Console.WriteLine(i);
+                        }
+
+
+                        Console.WriteLine("........");
+
+                        StringCollection aaaa = ORN4();
+                        foreach(var item in aaaa)
+                        {
+                            Console.WriteLine(item);
+                        }
+
+
+                        ORN5();
+                        ORN6();
+                        ORN7();
+                        ORN8();
+                        ORN9();
 
 
 
 
 
+                    }
+
+                    public static ArrayList TTT()
+                    {
+
+
+                        ArrayList arraylist = new ArrayList();
+                        arraylist.Add((int)1);
+                        arraylist.Add((int)2);
+                            arraylist.Add((int)3);
+                            arraylist.Add((int)4);
+                            arraylist.Add((int)5);
+                        return arraylist;
+                    }
+
+
+                    public static StringCollection ORN4()
+                    {
+                        StringCollection sc = new StringCollection(); // sadece string değerlerden oluşacaksa collection sadece string taşıyacaksa kullanmak mantılıdır...
+                        // neden kullanırız çünkü  daha performanslıdır eğer hepsi String olacaksa veriler...
+
+                        sc.Add("a");sc.Add("b");sc.Add("c");sc.Add("d");
 
 
 
+                        return sc;
+
+
+                    
+                    }
+
+                    static void ORN5()
+                    {
+
+                        StringDictionary stringDictionary = new StringDictionary(); // String değerler taşıyan bir yapı kurabiliriz... key ve value ilişkisi olur dict yapısı kurabiliriz böylecek...
+                        stringDictionary.Add("a", "b");
+                        stringDictionary.Add("c", "d");
+                            stringDictionary.Add("e", "f");
+                        
+                        foreach(var item in stringDictionary.Keys) // a c e
+                        {
+                            Console.WriteLine(item);
+                        }
+                        foreach(var item in stringDictionary.Values) // b d f 
+                        {
+                            Console.WriteLine(item); 
+                        }
+                        Console.WriteLine(stringDictionary["a"]); // b
+                        Console.WriteLine(stringDictionary["c"]); // d
+
+
+                    }
+
+                    public static void ORN6() // lifo... last int first out... yığın çamaşır yığını gibi...
+                    {
+
+                        Stack stack = new Stack();  
+                        stack.Push("a");
+                        stack.Push("b");
+                            stack.Push("c");
+                        while(stack.Count > 0)
+                        {
+                            Console.WriteLine(stack.Pop()); // c b a yazdırır...
+
+                        }
+
+                    }
+
+                    public static void ORN7()
+                    {
+
+                        Queue queue = new Queue();
+                        queue.Enqueue("a");
+                            queue.Enqueue("b");
+                            queue.Enqueue("c");
+                        queue.Enqueue("d");
+
+                        while (queue.Count > 0)
+                        {
+
+                            Console.WriteLine(queue.Dequeue()); // a b c d
+
+
+                        }
+                    }
+
+
+                    public static void ORN8()
+                    {
+                        Hashtable hashtable = new Hashtable(); // object tiplerin hızla depolanmasını ve hızla çekilmesini sağlayan yapıdır... hız konusunda iyidir... dict mantığı kullanır...
+                        hashtable.Add("a", "b");
+                        hashtable.Add("c", "d");
+                        hashtable["e"] = true;
+
+                        foreach (var item in hashtable.Keys)
+                        {
+                            Console.WriteLine(item);
+
+
+                        }
+                        foreach (var item in hashtable.Values)
+                        {
+                            Console.WriteLine(item);
+
+
+                        }
+
+                        Console.WriteLine(hashtable["a"]);
+                        Console.WriteLine(hashtable["c"]);
+
+                    }
+
+
+                    public static void ORN9()
+                    {
+                        Console.WriteLine("...................");
+                        Dictionary<int,string> dictionary = new Dictionary<int,string>(); // int keyler ve string keyler olacak demektir... dict yapısı ve generic değildir tipi kendimiz belirleriz...
+                        dictionary.Add(1, "emre");
+                        dictionary.Add(2, "ford");
+                        dictionary.Add(3, "bmw");
+
+                        foreach (var item in dictionary)  // hem keyi hem value'yi elde edebiliriz...
+                        {
+                            Console.WriteLine(item.Key);
+                            Console.WriteLine(item.Value);
+
+                        }
+                        Console.WriteLine(dictionary[1]); // keyi verir valueyi alabiliriz...
+                        dictionary[1] = "MAX"; // kalıcı değişim sağlama yapabiliriz...
+                        Console.WriteLine(dictionary[1]); // key ile valueyi aldık...
+                        Console.WriteLine(dictionary.ContainsKey(45)); // yani 45 anahtarı var mı yok mu arama yapabiliriz true veya false döner burada false dönecek..
+                        Console.WriteLine(dictionary.ContainsValue("bmw")); // bmw olan value var mı bakar ve vardır true döner tüm valueleri tarar aranan valueye göre true false döner...
+
+
+
+
+                    }
+
+
+                    class User
+                    {            public int Id { get; set; }
+                        public string FirstName { get; set; }
+                        public string LastName { get; set; }
+
+                        public override string ToString()
+                        {
+                            return Id + " " + FirstName + " " + LastName; // eğer bir Console.WriteLine() içerisine girerse bu class'tan türemiş nesne bu değeri return edecek yapı...
+                        }
+                    }
+
+                    public static void ORN10()
+                    {
+                        
+                        List<User> users = new List<User>();
+                        users.Add(new User { Id = 1, FirstName = "emre", LastName = "aytas"}); // Property ile tanımlanmış ise class'ın değerleri new class{} gibi bir yapı ile atama yapabiliriz... 
+                        users.Add(new User { Id = 2, FirstName = "TTT", LastName = "YYY" });
+                        users.Add(new User { Id = 3, FirstName = "Ford",LastName = "Focus" });
+                        Console.WriteLine(users.Contains(users[0])); // eğer içeriyorsa True verir yoksa false verir...
+                        Console.WriteLine(users[0].ToString()); // böylede ToString kullanabiliriz...
+                        Console.WriteLine(users[1]); // ToString metotu içeriğini return edecek...
+                        
+
+
+                        foreach (var item in users)
+                        {
+
+                            Console.WriteLine(item.Id + " "+ item.FirstName + " " + item.LastName);
+
+
+                        }
+
+                        List<User> users1 = new List<User>()
+                        {
+                        new User { Id = 1, FirstName = "emre", LastName = "aytas"},
+                        new User { Id = 2,FirstName = "TTT", LastName = "YYY"},
+                        new User { Id = 3, FirstName = "Ford",LastName = "Focus" }
+
+                        }; // direkt olarak atama almış hali ile başlatabiliriz...
+                        // buda gayet geçerli bir kullanım...
+
+                        var yenikullanici = new User();
+                        yenikullanici.Id = 1;
+                        yenikullanici.FirstName = "memo";
+                        yenikullanici.LastName = "awp";
+                        users1.Add(yenikullanici);
+                        users1.AddRange(users); // başka bir aynı tip değerler taşıyan list ekleyebiliriz...
+                        Console.WriteLine(users1.Contains(yenikullanici)); // eğer varsa True yoksa False return eder...
+                        Console.WriteLine(users1.Count); // buradan kaç eleman olduğunu görebiliriz...
+                        var index = users1.IndexOf(yenikullanici); // hangi indexte ise getirir.. yoksa -1 verir...
+                        var index1 = users.LastIndexOf(yenikullanici); // sondan okumaya başlar ve indexi getirir yoksa -1 getirir...
+                        
+                        users1.Insert(1, new User { Id = 5,FirstName = "emre",LastName = "Ford"}); // istediğimiz indexe ekleme yapabiliriz .Insert() ile kalıcı değişim yapar... 
+                        Console.WriteLine($" users1 de yenikullanici {index}. indexte idi....");  // $"{AA} {BB}"   gibi bir şekilde kullanım yapabiliriz...
+
+
+
+                    }
+
+
+                }
+
+            }
+
+########################################################################################################################################################################################################################################################################################################################################################################################################################################################################################
+
+hatanın en kötü ihtimalle Main içine düşmeden yakalanması gerekir... ve hiyerarşik şekilde dizilmeliidr hatalar... finally her zaman çalışır hata olsa da olmasa da... mesele try catch finally bir while içinde olsun tryde break görsün ona rağmen çalışır finally...
+Exception ve error farklıdır... sistem hatalarının ve açıklarının yüzde 80i Exceptionlar yüüzden çöker...
+finally genel olarak açık dosya ve veritabanı kapatmak için kullanılır...
+
+
+                using System;
+                using System.Collections.Generic;
+                using System.Linq;
+                using System.Text;
+                using System.Threading.Tasks;
+
+                namespace appConsole
+                {
+                    class class1
+                    {
+
+                        static void Main(string[] args)
+                        {
+
+                            while
+                                (true)
+                            {
+
+                                try
+                                {
+                                    break;
+                                }
+                                catch (Exception ex)
+                                {
+
+
+                                }
+                                finally // döngü break görse bile finally çalışır... ve sonra döngüden çıkılır...
+                                {
+                                    Console.WriteLine("aaaa");
+                                }
+
+
+                            } 
+
+                            try
+                            {
+                                aaaa();
+                            }catch (Exception ex)
+                            {
+                                Console.WriteLine(ex);
+                            }
+                            finally // 
+                            {
+                                Console.WriteLine("aaaa");
+                            }
+
+
+
+
+                        }
+
+
+                        public static void aaaa()
+                        {
+
+                            throw new Exception("HELLO"); // throw new HataTürü(mesaj); yapısı ile hata fırlatabiliriz... 
+
+                        }
+
+
+                    }
+                }
 
 
 ####multithreading############################################################################################################################################################################################################################################
@@ -2389,3 +2725,370 @@ Bu durumda, derleyici, sayi değişkenini int ve metin değişkenini string olar
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################
+################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################
+################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################
+################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################
+################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################
+
+FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM FORM
+
+form uygulamalarında static değerler ve arraylistler ile çalışmak gerekir çünkü form static değerlere ulaşabiliyor...
+windows form() c# items olanı seçeriz...
+.net 4.7.2 kullanacağız genel olarak...
+// events kısmından ne gibi durumlarda ne gibi işlemler yapılacak bunu belirleyebiliriz...
+this.Close(); ile açık olan form kapatılır... ve böylece normalde bekleyen kod okuma formda bekleyen okuma devam eder...
+
+.Show() ile .ShowDialog() arasında şu fark vardır. geri döndürme izni yoktur biri kapanmadan diğerine geçişe izin vermez... 
+  // bir form kapatılmadan diğer form'a geri dönülmesin istersek ShowDialog() kullanabiliriz geçiş olabilsin istersen .Show() kullanırız ve biter...
+
+this.Hide() ile ilgili pencereyi gizleyebiliriz... arka planda çalışmaya devam eder form kapanmaz... uygulama çalışmaya devam etsin ama gizlensin istersek... mesela keylogger için...
+
+form1.ActiveForm.Close() demek ise aktif olan formu kapa demek...
+
+Application.Exit() komple uygulamayı kapatır...
+
+form1.Text = "sol üstteki isim değişti...";
+  veya this.Text = ".....";   ile geçerli olanın ismini değiştirebiliriz...
+
+formun events kkısmında yapılan işleme göre aksiyon belirleyebiliriz... şimşek ikonlu olan events kısmı...
+
+form'un load eventi çok önemli...
+
+
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+C# Windows Forms uygulamalarında kullanılan birçok form olayı (event) bulunmaktadır. Her olay, belirli bir durumu, etkileşimi veya durumu işlemek üzere çağrılır. Aşağıda, yaygın olarak kullanılan bazı form olayları ve genel kullanım amaçları hakkında bilgi bulunmaktadır:
+
+Load:
+
+Form yüklendiğinde tetiklenir.
+Form'un başlangıç durumuyla ilgili işlemler için kullanılır.
+
+private void Form1_Load(object sender, EventArgs e)
+{
+    // Form yüklendiğinde yapılacak işlemler
+}
+Closing:
+
+Form kapatılmadan önce tetiklenir.
+Form kapatma işlemi iptal edilebilir.
+
+private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+{
+    // Form kapatılmadan önce yapılacak işlemler
+    // e.Cancel = true; // Form kapatma işlemi iptal edilir
+}
+Closed:
+
+Form kapandığında tetiklenir.
+Form kapandığında yapılacak işlemler için kullanılır.
+
+private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+{
+    // Form kapandığında yapılacak işlemler
+}
+Activated:
+
+Form, aktif duruma geldiğinde tetiklenir.
+Formun kullanıcı tarafından etkileşime hazır olduğu durumlar için kullanılır.
+
+private void Form1_Activated(object sender, EventArgs e)
+{
+    // Form aktif duruma geldiğinde yapılacak işlemler
+}
+Deactivate:
+
+Form, pasif duruma geldiğinde tetiklenir.
+Formun kullanıcı tarafından etkileşime kapandığı durumlar için kullanılır.
+
+private void Form1_Deactivate(object sender, EventArgs e)
+{
+    // Form pasif duruma geldiğinde yapılacak işlemler
+}
+Resize:
+
+Form boyutu değiştiğinde tetiklenir.
+Formun boyutu değiştiğinde yapılacak işlemler için kullanılır.
+
+private void Form1_Resize(object sender, EventArgs e)
+{
+    // Form boyutu değiştiğinde yapılacak işlemler
+}
+KeyDown ve KeyUp:
+
+Bir tuşa basıldığında (KeyDown) veya serbest bırakıldığında (KeyUp) tetiklenir.
+Klavye olaylarını yakalamak için kullanılır.
+
+private void Form1_KeyDown(object sender, KeyEventArgs e)
+{
+    // Bir tuşa basıldığında yapılacak işlemler
+}
+
+private void Form1_KeyUp(object sender, KeyEventArgs e)
+{
+    // Bir tuş serbest bırakıldığında yapılacak işlemler
+}
+Bu olaylar, bir formun yaşam döngüsü, boyut değişiklikleri, klavye etkileşimleri ve formun kapatılması gibi birçok senaryoda kullanılır. Projeye bağlı olarak, farklı olaylar da kullanılabilir ve bu olaylar formun davranışını özelleştirmek için güçlü araçlar sunar.
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+eğer from üzerine gelir çift ttıklarsak bu metot gelir kod kısmına. bu nedir form açılmadan önce çalışacak metottur mesela veritabanından verileri çekip listede yazdırmak için açılıdğında hazır olsun diye...
+veya ekranda göstermek istediğimiz bir componenti gösterebilir veya gizleyebiliriz...
+
+        private void Form1_Load(object sender, EventArgs e) // form yüklenirken çalışan metot mesela veritabanından ürünleri çekip açılıdığında gözüksün die hazır edebiliriz...
+        {
+
+
+        }   // form üstüne çift tıklayarak elde ederiz... veya form üzerinde sağtık + events kısmında önemli metotları işleyebiliriz...
+        // events kısmında Load var oradan ne işlem yapılacağını belirleyebiliriz...  
+        // events kısmı properties kısmında şimşek ikonu...
+
+        // buda buton ekleyip üzerine çift tıklayınca ortaya çıkan detay... istediğimiz değerleri girebiliriz...
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+
+        }
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+        static void Main(string[] args)
+        {
+            Thread formThread = new Thread(() =>
+            {
+                // Formu başka bir thread üzerinde çalıştır
+                new Form1().ShowDialog();
+            });
+
+            // Thread'i başlat
+            formThread.Start();
+
+            Console.WriteLine("LETS GOOO");
+
+
+
+
+
+        }
+
+// Thread ile form çalıştırma özelliği böylece form çalışır açık kalır ve sonrasında ise kod alt satıra geçer okumaya devam eder normalde c#da kod açık kalan form'da kapanana kadar kalır alt satıra geçebilir...
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+            comboBox1.Items.Add("a");
+
+            foreach (var item in comboBox1.Items)
+            {
+                Console.WriteLine(item);
+            }
+
+comboBox1 eleman ekleme ve elemanlarını yazdırma...  comboadi.Items ile elemanlara ulaşabiliriz. ve comboadi.Items.Add() ile ekleme yapabiliriz. bu özellik ile biz istersek 
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+form'un events kısmında Form closed kısmındaki eventler ile form kapatılırken ne olacağını seçebiliriz...
+
+            MessageBox.Show("EKRAN KAPATILDI...");
+            // bu şekilde bir messagebox kullanabiliriz.
+
+MessageBox() kod okumasını kendinde tutar bu yüzden tamam'a basmadan alt satıra geçirmeme yapabilir bunun için Thread kullanmak zorunda kalabiliriz...
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+toolbox kısmında timer var... interval kaç milisaniyede bir atacağını belirtir...
+
+        using System;
+        using System.Collections.Generic;
+        using System.ComponentModel;
+        using System.Data;
+        using System.Drawing;
+        using System.Linq;
+        using System.Text;
+        using System.Threading.Tasks;
+        using System.Windows.Forms;
+
+        namespace ConsoleApp2
+        {
+            public partial class Form3 : Form
+            {
+                public Form3()
+                {
+                    InitializeComponent();
+                }
+
+                private void Form3_Load(object sender, EventArgs e) // form başlarken işlem yapar...
+                {
+                    timer1.Enabled = true;
+                    timer1.Interval = 500;
+
+
+                }
+
+                private void timer1_Tick(object sender, EventArgs e) // Enabled = true olursa sürekli olarak zamanlayıcısına göre çalışır...
+                {
+
+                    Random random = new Random(); // rastgele değer üretmemizi sağlar...
+                    this.BackColor = Color.FromArgb(random.Next(0,255), random.Next(0, 255), random.Next(1, 255));
+
+                }
+
+                private void Form3_KeyDown(object sender, KeyEventArgs e) 
+                {
+
+                    if(e.KeyCode == Keys.F4) // eğer f4 tuşuna basılırsa kapanacak...
+                    {
+                        this.Close();
+                    }
+                
+                }
+
+                private void Form3_KeyUp(object sender, KeyEventArgs e)
+                {
+
+                    if (e.KeyCode == Keys.Escape) // eğer f4 tuşuna basılırsa kapanacak...
+                    {
+                        MessageBox.Show("FORM KAPATILACAK", "UYARI!"); // ilki mesaj diğeri ise başlık messagebox için...
+        ;                this.Close();
+                    }
+
+
+
+                }
+
+                private void button1_Click(object sender, EventArgs e)
+                {
+                    DialogResult sonuc;
+                    sonuc = MessageBox.Show("ÇIKMAK İSTER MİSİN", "UYARI",MessageBoxButtons.OKCancel);
+
+                    if(sonuc == DialogResult.OK)
+                    {
+                        this.Close();
+                    }
+
+                } // diyaloğa göre ok veya cancel dedik dönen sonuca göre işlem yapabiliriz. ok mu bastı cancel mi?
+            }
+        }
+
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            if (MessageBox.Show("ÇIKMAK İSTER MİSİN", "UYARI", MessageBoxButtons.OKCancel,MessageBoxIcon.Error) == DialogResult.OK) 
+            {
+                this.Close();
+
+            }
+
+
+        }
+
+// uyarı penceresi açar iconlu bir biçimce ve ok veya cancele basmaya göre işlem yapabiliriz...
+// groupbox ile gruplama yapabiliriz...
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+namespace ConsoleApp2
+{
+    static class Program
+    {
+
+        public static ArrayList arrayList = new ArrayList();
+        static void Main(string[] args)
+        {
+
+            Thread formThread = new Thread(() =>
+            {
+                // Formu başka bir thread üzerinde çalıştır
+                new Form1().ShowDialog();
+            });
+
+            // Thread'i başlat
+            formThread.Start();
+
+
+        }
+    }
+}
+
+// projenin başlayacağı class'ın staticc olması iyidir. ve şayet static değerler static arraylistler vs ile işlem yapmak önemlidir ki formlar bu verilere ulaşabilsin.
+
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+int x = 1;
+int y = 2;
+(y,x) = (x,y); //  arka planda üç değişkenle işlem yapar aslında ama burada üçüncü değişken kullanmayız...
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+
+        private void domainUpDown1_SelectedItemChanged(object sender, EventArgs e)
+        {
+
+            for (int i = 0; i < 50; i++)
+            {
+                domainUpDown1.Items.Add(FontFamily.Families[i].Name); // içerisine nesne vermek lazım... sistemdeki fontlardan 50 tanesini domainupdowna ekledik.
+               
+            }
+
+            domainUpDown1.Wrap = true; // liste sonunda ilk veya son öğeye ilerle...
+
+
+        }
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+tarih ve saat seçimi için datetimepicker kullanırız..
+Textbox'ta multiline izni verirsek satır satır yazma yapabilir...
+
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            textBox1.Text ="İki tarih arasındaki gün: " + (dateTimePicker2.Value - dateTimePicker1.Value).Days.ToString();
+
+
+        }
+        
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
