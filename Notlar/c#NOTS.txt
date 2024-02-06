@@ -3082,13 +3082,573 @@ Textbox'ta multiline izni verirsek satır satır yazma yapabilir...
 
 
         }
-        
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(textBox2.Text))
+            {
+                int sayi = (int)Convert.ToUInt32(textBox2.Text);
+                progressBar1.Maximum = sayi;
+                for (int i = 0; i < sayi; i++)
+                {
+                    progressBar1.Value = i;
+
+                }
+
+
+            }
+            else MessageBox.Show("SAYİ GİRNİZ...", "UYARİ");
+
+
+        }
+
+progressbar aslında ne kadar yüklendi yükleniyor eventi için kullanılır...
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+menustrip ile biz istersek üst kısımdaki dosya vs vs işlemleri yapan barı ekleyebiliriz...
+contextMenustrip sağ tık işlemleri için kullanılır sağ tık deriz ve istenen işlemleri yaptırabiliriz mesela kes kopyala yapıştır vs vs... contextMenustrip kısmından seçmemiz lazım ama bunun için... oreadan istenen menustrip'i seçeriz ve işlem yapabiliriz...
+richtextBox ve metotları önemli...
+toolstrip ekler üç noktaya sağ tıklar sonra insert standart items dersek sürekli kullanılan kısımları bize getirir...
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+    C# Windows Forms uygulamalarında TrackBar kontrolü, kullanıcının bir aralıktaki değeri seçmesine izin veren bir kontrol olarak kullanılır. İşte TrackBar kullanımına dair basit bir örnek:
+
+    TrackBar Eklemek:
+
+    Visual Studio'da bir form tasarımını açın.
+    Araç Kutusu'nda "TrackBar" kontrolünü formunuza sürükleyip bırakarak ekleyin.
+    TrackBar'ın özelliklerini (Name, Minimum, Maximum, Value vb.) tasarım zamanında veya kod içinde ayarlayabilirsiniz.
+    Olay (Event) Eklemek:
+
+    TrackBar'da değer değiştikçe bir olaya tepki verebilirsiniz. Bu genellikle Scroll veya ValueChanged olaylarıdır.
+    Kod İle Olaya Tepki Verme:
+
+    Aşağıda, bir TrackBar kontrolünün ValueChanged olayına tepki veren basit bir örnek bulunmaktadır.
+
+
+    using System;
+    using System.Windows.Forms;
+
+    namespace TrackBarExample
+    {
+        public partial class Form1 : Form
+        {
+            public Form1()
+            {
+                InitializeComponent();
+            }
+
+            private void trackBar1_ValueChanged(object sender, EventArgs e)
+            {
+                // TrackBar'ın değeri değiştiğinde yapılacak işlemler
+                int selectedValue = trackBar1.Value;
+                label1.Text = "Selected Value: " + selectedValue.ToString();
+            }
+        }
+    }
+    Yukarıdaki örnekte, ValueChanged olayı kullanılarak TrackBar kontrolünün değeri her değiştiğinde label1 kontrolü güncellenir.
+
+    Tasarım Zamanında Olay Ekleme:
+    Visual Studio tasarım görünümünde, TrackBar kontrolüne sağ tıklayın.
+    Özellikler penceresinden Events (Olaylar) sekmesine geçin.
+    ValueChanged olayına çift tıklayarak olaya tepki verecek bir metot oluşturun.
+    Oluşturulan metotun içine istediğiniz kodu ekleyebilirsiniz.
+    Bu örnekte, ValueChanged olayına tepki vererek TrackBar'ın değerini bir Label kontrolüne yazdık. Bu temel bir örnek olup, TrackBar kontrolü kullanımını daha fazla özelleştirebilir ve ihtiyacınıza göre uyarlayabilirsiniz.
+
+trackBar1.Minimum = 10;trackBar1.Maximum = 25;trackBar1.TickFrequency = 2;
+ // min max artış belirleyebiliriz...
+  
+scroll diye bir eventi vardır... aktif etmek için dizayn modunda üzerine çift tıklarız ve işlem yapar böylece...
+
+bir ekran üzerinde birden fazla ekran kullanabilelim istersek eğer o zaman tabcontrol kullanabiliriz... işimizi kolaylaştırır...
+             tabControl1.SelectedTab = tabPage2; // ikinci taba geçer burada...
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog.Title = "RESİM SECİNİZ...";
+            // OpenFileDialog.ShowDialog();
+            openFileDialog1.Filter = "(*.jpg)|*.jpg|(*.png)|*.png"; // sadece png ve jpg olanlar gelecek... sadece resim seçimi yapabilmek için kullanırız...
+            OpenFileDialog1.FilterIndex = 1; 
+            if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                pictureBox1.Image = Image.FromFile(OpenFileDialog.FilaName);
+               
+
+            }
+
+
+
+        }
+
+butona basınca resim seçeceğiz ve resmi göstereceğiz...
+
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 
 
+
+
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
+
+
+
+
+################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################
+################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################
+################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################
+################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################
+################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################
+
+SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL SQL
+sql server microsoftun veritabanı sistemi... çok fazla kullanılır...
+azure bir bulut sistemidir. buluta sql server koyarız ve global olarak herkes kullanabilir...
+express web üzerinde ve küçük sunucularda çalışan ve uygulamaları geliştirmek ve üretmek için ideal olan bir sürümdür...
+   devoloper ile express arasında kapasite farkı var ama çok önemli değil...
+
+Visual studioda iş yükleri kısmında veri depolama ve işleme seçersek visual studio sql server kurar bize... sistemimize kurar bunu...
+
+server type database engine ise veritabanı motoru yöneteceğiz demektir...
+
+mesela sql server'ı pythonda javada vs kullanmak istersek bağlayıcı kullanmamız gerekebilir...
+
+servername kısmına . veya (localhost) yazarak local veya tam sürüme bağlanabiliriz...
+canlı bir sunucudaki veritabanına erişeceksek eğr o zaman server name kısmına ip adresi gireriz...
+authentication kısmında sql server authentication yazarsak eğer login işlemlerini yapmmaız gerekir canlı sunucuya bağlanmak içindir...
+
+server name kısmına (localhost) yazarak biz local sunucuya bağlanabiliriz.
+log dosyası üzerinde yapılan tüm işlemler kaydedilir...
+
+new database kısmında veritabanı max mb olduğunda ne yapılsın bunu belirleyebiliriz... mesela 64 mb olduğunda 64 mb 64 mb büyüt veya in percent ile yüzde kaç kaç büyüyeceğini belirleyebiliriz..
+    Maximum file size belirlersek eğer mesela 100 mb dedik 100 mb olursa database o zaman daha fazla büyüme deriz databaseye...
+
+database diagram demek ilişkisel tablolar arasındaki ilişkileri gösterir...
+
+sql'de ingilizce karakter kullanamaya dikkat edin...
+
+execute demek işlemleri uygula demek mesela insert vs değişim yaparsak lazım olur.
+
+column demek kolon demek...
+    bigint büyük değer alabilen int... 
+    text metin dosyası var string yerine.
+    bit demek 0 1 
+    char veri tipi char array yapısı kurabiliriz char(10) ile mesela Unicode desteği yok.  char(10) dersek sürekli bellekte 10luk yer kaplar...
+    nchar(10) başında n harfi olan veriler Unicode(tüm alfabeler çince arapça japonca vs vs) desteklidir. uluslararası tüm alfabeleri destekler demektir...
+    varchar(50)  verinin boyutu kadar yer kaplar. 8000 maks karakter tutar... mesela isim yaparsak bazıları 5 harfli bazıları 8 kalan kısmı doldurma içindeki veri kadr alan kapla dersek.
+    nvarchar(50) mesela varchar gibi ama Unicode desteği var...  dinamiktir varchar...
+    text = belirtilenden az veri girilse bile girilen kadar yer tutar ne kadat gönderirseniz o kadar alan alır ama tabiki üst sınırı var ama yüksek...
+    ntext = text ile aynı ama Unicode destekli...
+    varchar(MAX) dersek (MAX demek alan sınırı yok istediğin kadar veri verebilirsin demektir...)
+
+    başında n olan veriler Unicode destekli...
+
+allow nulls tikli olursa null olabilir demektir id tiksiz olmalı...
+bir tablonun üzerine gelir sağtık design dersek dizayn edebiliriz kolon ekleyip çıkarabiliriz vs vs...
+
+table sağtık add table ile tablo ekleme yapabiliriz...
+tablonun üzerinde sağtık edit top 200 rows dersek kendimiz eleman ekleyebiliriz...
+tablo sağtık Select 1000 ilk 1000 satırı getir demek... bize sql kodunu otomatik verir...
+
+
+bir sql dosyasına yükleme ekleme falan yaparsak eğer ne olur = tıpkı bir txtde tutulduğu gibi harddiskte yani bellekte kalıcı olarak tutulur böylece pc kapansa sistem kapansada veriler o .sql dosyasında .db dosyasında tutulur... fiziksel olarak saklanmaya başlar.
+
+identity column olursa eğer otomatik artan olur mesela id...
+
+............................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+PRIMARY key olan sutunların kombinasyonu aynı olamaz  unique olursa bir kolon o kolonda her değer farklı olmaz zorundadır...
+PRIMARY key olan bir sutunda hiçbir değer null olamaz. unique null olabilir ama sadece bir tane null olabilir o sutunda.
+
+    Primary Key (Birincil Anahtar):
+
+    Birincil anahtar, bir tablodaki kayıtları benzersiz bir şekilde tanımlayan bir sütundur.
+    Her birincil anahtar değeri eşsiz olmalıdır ve NULL değer içeremez.
+    Bir tabloda sadece bir tane birincil anahtar tanımlanabilir.
+    Birincil anahtar, veritabanındaki diğer tablolarla ilişkilendirilerek referans alınabilir.
+    Örnek bir birincil anahtar tanımı:
+
+    CREATE TABLE Customers (
+        CustomerID INT PRIMARY KEY,
+        FirstName VARCHAR(50),
+        LastName VARCHAR(50)
+    );
+    Yukarıdaki örnekte CustomerID sütunu birincil anahtardır.
+
+    Unique Key (Benzersiz Anahtar):
+
+    Benzersiz anahtar, bir tablodaki kayıtları benzersiz bir şekilde tanımlayan bir sütundur.
+    Bir benzersiz anahtar değeri eşsiz olmalıdır, ancak birincil anahtarın aksine NULL değer içerebilir.
+    Bir tabloda birden fazla benzersiz anahtar tanımlanabilir.
+    Bir benzersiz anahtar, birincil anahtara alternatif olarak kullanılabilir, ancak birden fazla benzersiz anahtar tanımlanabilir.
+    Örnek bir benzersiz anahtar tanımı:
+
+
+    CREATE TABLE Products (
+        ProductID INT PRIMARY KEY,
+        ProductCode VARCHAR(20) UNIQUE,
+        ProductName VARCHAR(100)
+    );
+    Yukarıdaki örnekte ProductCode sütunu benzersiz bir anahtar olarak tanımlanmıştır.
+
+    Her iki anahtar türü de veritabanı tasarımında veri bütünlüğünü sağlamak ve veri tekrarını önlemek için kullanılır. Birincil anahtar genellikle bir tablonun ana tanımlayıcısı olarak kullanılırken, benzersiz anahtarlar ise belirli bir sütunu benzersiz bir hale getirmek için kullanılır.
+
+............................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+SQL'de VARCHAR ve TEXT veri tipleri, metin tabanlı verileri depolamak için kullanılır, ancak bazı farklılıkları vardır. İşte bu iki veri tipi arasındaki temel farklar:
+
+Depolama Boyutu:
+
+VARCHAR: Sabit bir maksimum karakter uzunluğunu belirtir, ancak gerçek veri uzunluğuna göre boyut alır. Örneğin, VARCHAR(255) ifadesi en fazla 255 karakterlik bir metni depolar, ancak gerçek metin boyutuna göre değişir.
+TEXT: TEXT veri tipi, değişken karakter uzunluğu olan büyük miktardaki metin verisini depolamak için kullanılır. Genellikle çok büyük metin verilerini depolamak için kullanılır ve bir sınırlama olmadan büyük miktarda metni destekler.
+Endeksleme:
+
+VARCHAR: İndeksleme için kullanılabilir ve genellikle daha etkili bir arama performansı sunabilir.
+TEXT: Eskiden beri bu tip alanlar üzerinde indeksleme sınırlıydı, ancak modern SQL Server sürümleri (örneğin SQL Server 2005 ve sonrası) bu konuda daha fazla esneklik sunar.
+Karakter Seti ve Kollasyon:
+
+VARCHAR: Karakter seti ve kollasyon belirtilerek oluşturulabilir, bu da metin sıralama ve karşılaştırma kurallarını belirlemenizi sağlar.
+TEXT: Genellikle, bu tip bir alanın üzerinde karakter seti ve kollasyon belirtilmez. Ancak, modern veritabanı sistemlerinde bu belirtilmesi mümkün olabilir.
+Veri Uzunluğu ve Performans:
+
+VARCHAR: Uzunluğu belirtilmiş bir VARCHAR alanı, depolanan verinin gerçek uzunluğu kadar yer kaplar. Bu, bellek kullanımını optimize edebilir.
+TEXT: Genellikle, çok büyük metin verilerini depolamak için kullanılır, ancak VARCHAR'a kıyasla daha fazla bellek kullanabilir.
+Veri Manipülasyonu ve Fonksiyonlar:
+
+VARCHAR: Metin manipülasyonu ve fonksiyonları daha esnek bir şekilde destekler.
+TEXT: Bazı durumlarda, TEXT alanlarında çalışırken bazı metin manipülasyon fonksiyonları veya işlemleri VARCHAR alanlara göre daha karmaşık olabilir.
+Özetle, VARCHAR ve TEXT veri tipleri arasındaki temel farklar, depolama boyutu, endeksleme, karakter seti ve kollasyon belirleme, veri uzunluğu ve performansla ilgilidir. Hangi veri tipini kullanacağınız, projenizin ihtiyaçlarına ve veri kullanım senaryolarına bağlı olacaktır. Çoğu durumda, VARCHAR tercih edilir, ancak büyük metin verileri için TEXT de uygun bir seçenektir.
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+    Microsoft SQL Server, farklı işletim sistemleri üzerinde çalışabilen bir veritabanı yönetim sistemidir. SQL Server, şu işletim sistemlerinde desteklenir:
+
+    Windows İşletim Sistemleri:
+
+    Microsoft SQL Server, öncelikle Windows işletim sistemleri üzerinde çalışmak üzere tasarlanmıştır. Bu işletim sistemleri arasında Windows Server ve Windows Desktop sürümleri bulunmaktadır.
+    Örneğin, Windows Server 2019, Windows Server 2016, Windows 10, Windows 8.1 gibi işletim sistemleri desteklenir.
+    Linux İşletim Sistemi:
+
+    SQL Server 2017 sürümü ve sonrası, Linux işletim sistemlerini de desteklemektedir. Bu, Linux tabanlı sistemlerde SQL Server kullanma imkanı sağlar.
+    Örneğin, Ubuntu, Red Hat Enterprise Linux (RHEL), SUSE Linux Enterprise Server (SLES) gibi Linux dağıtımları desteklenir.
+    Docker Üzerinde Çalışma:
+
+    SQL Server, Docker konteyner teknolojisi üzerinde de çalışabilir. Bu, SQL Server'ı çeşitli ortamlarda hızlı bir şekilde dağıtmak ve yönetmek için kullanışlıdır.
+    Bu çeşitlilik, SQL Server'ın farklı ortamlarda ve altyapılarda kullanılabilmesini sağlar. Ancak, her SQL Server sürümü her işletim sistemini desteklemez. Bu nedenle, kullanmak istediğiniz SQL Server sürümünün belirli bir işletim sistemini destekleyip desteklemediğini kontrol etmek önemlidir. SQL Server'ın resmi belgeleri ve Microsoft'un web sitesi, desteklenen işletim sistemleri hakkında güncel bilgi sağlar.
+
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+        T-SQL (Transact-SQL), Microsoft SQL Server veritabanı yönetim sistemleri için özel olarak tasarlanmış bir sorgu ve programlama dilidir. T-SQL, SQL (Structured Query Language) dilini temel alır, ancak SQL diline ek olarak bir dizi Microsoft özelliği ve genişletmesi içerir. SQL Server üzerinde veritabanı işlemlerini yönetmek, sorguları çalıştırmak, depolamak ve iş mantığı uygulamak için kullanılır.
+
+        T-SQL, aşağıdaki gibi temel özelliklere sahiptir:
+
+        Sorgu Dili:
+
+        T-SQL, SQL dilinin bir genişletmesi olarak kullanılır. Temel SQL sorguları ile birlikte T-SQL, veritabanı üzerinde çeşitli işlemleri gerçekleştirmek için kullanılır.
+        Saklı Prosedürler ve Fonksiyonlar:
+
+        T-SQL, saklı prosedürler ve fonksiyonlar oluşturmak ve bu nesneleri veritabanında depolamak için kullanılır. Bu, daha karmaşık işlemleri gerçekleştirmek ve tekrar kullanılabilir kod blokları oluşturmak için önemlidir.
+        Veritabanı Yönetimi:
+
+        T-SQL, veritabanı yönetimi için kullanılır. Veritabanı, tablo oluşturma, indeksleme, güncelleme, silme gibi işlemleri gerçekleştirmek ve veritabanı nesnelerini yönetmek için T-SQL sorguları kullanılır.
+        Triggers (Tetikleyiciler):
+
+        T-SQL, veritabanında belirli olaylar gerçekleştiğinde otomatik olarak çalışan tetikleyiciler oluşturmak için kullanılır. Bu, belirli bir tablo üzerinde yapılan işlemlere tepki verme yeteneği sağlar.
+        Transact-SQL İfadeleri:
+
+        T-SQL, transaktions (işlemler) yönetimi için ifadeler içerir. İşlemleri başlatma, kaydetme, geri alma ve işlemleri yönetme yeteneği sunar.
+        T-SQL, özellikle Microsoft SQL Server üzerinde kullanıldığı için, SQL Server özelliklerini ve fonksiyonlarını destekler. Ancak, standart SQL sorgularının çoğunu da içerir. T-SQL, SQL Server veritabanı yönetim sistemi içinde kullanılmak üzere tasarlanmış olmasına rağmen, başka veritabanı yönetim sistemlerinde (örneğin, Azure SQL Database, Azure Synapse Analytics, SQL Server on Linux) sınırlı bir şekilde desteklenebilir.
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+1. Veritabanı Oluşturma:
+
+CREATE DATABASE MyDatabase;
+2. Kullanılacak Veritabanını Seçme:
+
+USE MyDatabase;
+3. Tablo Oluşturma:
+
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Department VARCHAR(50)
+);
+4. Veri Eklemek:
+
+INSERT INTO Employees (EmployeeID, FirstName, LastName, Department)
+VALUES (1, 'John', 'Doe', 'IT');
+5. Veri Sorgulama:
+
+SELECT * FROM Employees;
+6. Koşullu Sorgulama:
+
+SELECT * FROM Employees WHERE Department = 'IT';
+7. Veri Güncelleme:
+
+UPDATE Employees SET Department = 'HR' WHERE EmployeeID = 1;
+8. Veri Silme:
+
+
+DELETE FROM Employees WHERE EmployeeID = 1;
+9. Düzenlenmiş Sorgu:
+
+SELECT FirstName, LastName FROM Employees WHERE Department = 'HR' ORDER BY LastName DESC;
+10. Toplam veya Ortalama Alma:
+
+SELECT COUNT(*) AS TotalEmployees FROM Employees;
+SELECT AVG(EmployeeID) AS AvgEmployeeID FROM Employees;
+Bu temel SQL sorguları, bir veritabanı oluşturmak, tablo eklemek, veri eklemek, sorgulamak, güncellemek, silmek ve çeşitli analitik işlemleri gerçekleştirmek için kullanılabilir. Gerçek projelerde, sorgular daha karmaşık olabilir ve JOIN, GROUP BY gibi daha gelişmiş SQL özellikleri kullanılabilir. SQL Server belgeleri ve kaynakları, daha fazla bilgi ve öğrenme kaynakları sağlayabilir.
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+    
+    SELECT [id]
+        ,[adi]
+        ,[soyadi]
+        ,[email]
+        ,[telefon]
+        ,[katildigiEgitim]
+        ,[EvAdresi]
+    FROM [emre].[dbo].[Ogrenciler];
+
+    select kolonlar veya * from db.table;     * demek tüm demektir...
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+sql sorguları büyük küçük harfe duyarlı değildir.  select * from ogrenciler ile select * from OGRENCILER arasında fark yok inglizce karakterlre dikkat etmek lazım sadece.
+tools -> options ->  word wrap ok dersek eğer ekranın dışına çıkarsa sorfu o zaman alt saıta geçirir.   line numbers ok dersek satır numaralarını görebiliriz.
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+/*
+
+bu karakterler ile çoklu satır yapabiliriz. 
+sql komutları kullanım amaçlarına göre 3 kategoriye ayrılırlar.
+1- ddl(data definition language) -> temel olarak bir veritabanın  tablolalarının fonksiyonlarının vs vs oluştutulmasını sağlayan yapıdır.    create table drop table vs vs... tablo database silmek için drop ama veri silmek için delete kullanırız.
+
+2- dml(data manipulation language) -> veri girmek silmek güncellemek için kullanılan yapı... CRUD   create read update delete işlemleri. yani
+3- dcl(data control language) -> veritabanı kulanıcısı ile ilgili işlem yetkileri ayarı vs vs...
+    mesela sadece select yapabilsin insert yapamasın gibi...
+*/
+
+-- ile /**/ yorum satırlarıdır sqlde.
+... pythonda #   ile """  """  ''' ''' vardır... 
+
+
+            Veritabanı işlemleri sırasında kullanılan komutlar farklı kategorilere ayrılabilir. En yaygın üç kategori Data Definition Language (DDL), Data Manipulation Language (DML) ve Data Control Language (DCL) olarak bilinir. İşte bu kategorilerin açıklamaları:
+
+            Data Definition Language (DDL):
+
+            DDL, veritabanı yapısını tanımlamak ve değiştirmek için kullanılan komutları içerir.
+            DDL komutları, tablo oluşturma, değiştirme ve silme gibi veritabanı nesnelerini tanımlamak için kullanılır.
+            DDL komutları, veritabanı şemasını (schema) oluşturmak ve değiştirmek için kullanılır.
+            Örnek DDL komutları:
+
+            CREATE TABLE: Yeni bir tablo oluşturur.
+            ALTER TABLE: Mevcut bir tabloyu değiştirir.
+            DROP TABLE: Bir tabloyu siler.
+            Data Manipulation Language (DML):
+
+            DML, veritabanında saklanan verileri sorgulamak, eklemek, güncellemek ve silmek için kullanılan komutları içerir.
+            DML komutları, veri manipülasyonunu gerçekleştirmek için kullanılır ve veritabanındaki kayıtları etkiler.
+            Örnek DML komutları:
+
+            SELECT: Veri sorgulama ve getirme işlemleri için kullanılır.
+            INSERT: Yeni veri eklemek için kullanılır.
+            UPDATE: Mevcut veriyi güncellemek için kullanılır.
+            DELETE: Veriyi silmek için kullanılır.
+            Data Control Language (DCL):
+
+            DCL, veritabanı kullanıcılarının erişim haklarını kontrol etmek için kullanılan komutları içerir.
+            DCL komutları, kullanıcıların veritabanı nesnelerine (tablo, görünüm, prosedür vb.) erişimini kontrol etmek için kullanılır.
+            Örnek DCL komutları:
+
+            GRANT: Kullanıcılara belirli erişim hakları verir.
+            REVOKE: Kullanıcılardan belirli erişim haklarını kaldırır.
+            Bu kategoriler, veritabanı yönetimi ve güvenliği için temel yapı taşlarını oluşturur. DDL, veritabanı nesnelerini tanımlar; DML, veritabanındaki verileri işler; ve DCL, veritabanı güvenliğini yönetir.
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+create database OrnekDb;  // veritaban oluşturmak için kullanırız iki kere üst üste kullanırsak verir. çünkü oluşturulmuşun üstüne aynısı oluşmaz.
+
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'OrnekDb')
+BEGIN
+    EXEC('CREATE DATABASE OrnekDb;');
+END;
+
+-- database oluştur eğer varsa bu isimde atla demektir...
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+alter database ornekdb modify name = ornekdatabase;    -- veritabanının ismini değiştirmek için kullanırız alter demek db ve table üzerinde güncelleme yap demektir... modify kelimesi şarttır.
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+drop database ismi;  -- ile biz table veya db silebilir ve bağlantıdan silebiliriz...
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+use dbismi;
+create table tablename(verismi veritürü, verisimi veritürü...);    -- önce verinin ismi sonra türü kullanılır... 
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+create database ornekdb
+go 
+use ornekdb1 
+go 
+create table Personel(id int, adi varchar(50), soyadi varchar(50)); -- bu duurumda veriler null olabilir demek bunun önüne geçmek için not null deriz.
+
+-- go ile bir sonraki satıra geç diyebiliriz...   create database ornekdb ile oluşturduk db go ile bir sonraki işleme geç dedik use ornekdb dedik seçili db o olsun dmeek... go dedik sonra diğer işleme geç demek tablo oluşturduk... önce verinin ismi soonra türü programlamalardan farklı bir yapısı var.
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+create database ornekdb
+go  -- benden önceki işlemi bitir sonra diğer işleme geç demek
+use ornekdb1 
+go 
+create table Personel(id int not null, adi varchar(50) not null, soyadi varchar(50) not null, Email nvarchar(50) null); -- null demesek bile otomatik olarak null olabilir ibaresi koyacak allow nulls izni verecek...
+
+-- null dedik diye veriler null olmaz... istersek null olabilir boş bırakılabilir satırda...
+-- Email için nvarchar(50) kullan...
+
+....SONRADAN TABLODA DEĞİŞİKLİK YAPMA....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+use ornekdatabase;
+go
+alter table Personel add Email nvarchar(50); 
+
+-- bir kolon ekledik...
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+use ornekdatabase;
+go
+alter table Personel alter column Email nvarchar(40);
+
+-- alter ile tabloda değişim yapacağız dedik alter column ile kolonda güncelleme ypacağız dedik sonra ise değişecek halini girdik.
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+use ornekdatabase;
+go
+alter table Personel alter column id int not null;
+
+-- kolonda değişiklik ve not null ekledik boş geçilemez hiçbir satırda dedik aslında.
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+use ornekdatabase;
+go
+alter table Personel drop column Email;
+-- burada tablodaki kolonu silebiliriz... komple o kolon düşer.
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+use ornekdatabase;
+go
+insert into Personel(id,adi,soyadi) values(1,'merco','ford');
+insert into Personel values(1,'merco','ford'); -- tüm sütünların değerlerini göndermemiz gerekir bu yapıda... null olmasını istediğimizin değerini null veerebiliriz. mesela soyadi null deriz.
+go
+insert into Personel(id,adi) values(1,'BMW');
+
+select * from Personel;
+
+-- burada şu olur insert into tablo(ekleme yapılacak kolonlar ) istediğimiz sıra ile ama values sırası ile aynı olur atama sırası 
+-- insert into Personel values(1,'merco','ford') yaparsak tüm kolonları alır sırası ile ekleme yapar values ile... varsayılan kolonlar üzerinden işlem yapar.
+-- insert into Personel(id,adi) values(1,'BMW');   burada ise sırası ile atama alacak olan kolonların ismini gireriz ve sonrasında alacak değerlerini ama şu var null olabilenleri yazmayabiliriz not null koşulu olanları girmemiz lazım...
+
+insert into Personel(id,adi) values(1,'BMW');
+-- burada soyadi null olur...
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+use ornekdatabase;
+go
+update Personel set adi = 'ferrari' where adi = 'emre'; --   update ile var olan veriler üzerinde işlem yaparız.
+-- set demek neler değişecek değişince ne gelsin yeni olarak deriz. where kısmını yazmazsak hepsi ferrari olur true kabul eder.
+-- where adi = 'emre' and soyadi = 'aytas' dersek adi emre soyadi aytas olan birisinin ismi ferrari olur...
+-- where kısmı önemlidir yoksa hepsi aynı değeri alır set ne belirlediyse.
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+use ornekdatabase;
+go
+delete from Personel where id = 1;
+
+-- delete from tablename where id = 1;    where olmadanda olabilir.
+-- eğer where olmazsa true kabul eder her satırı siler..
+-- delete silerken komple satırı siler.
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+use ornekdatabase;
+go
+--  backup yani yedek alma...
+
+backup database ornekdatabase to disk = 'C:\\Users\emreaornekdbyedek.bak';
+-- to disk demek diske al demek 
+-- sonra = der ve bir dizin gireriz.
+-- .bak yedek databasenin uzantısıdır.
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+use ornekdatabase;
+go
+
+Truncate table Personel;
+select * from Personel;
+-- Truncate table tabloismi demek tablodaki tüm verileri sil demektir...
+drop table Personel;
+-- drop table tabloismi demek tabloyu dbden sil dmektir.
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+    create database Bilisim;
+    go
+    use Bilisim;
+    go
+    create table Bolumler(bolumno int not null,bolumadi nvarchar(50) null, primary key(bolumno));
+    -- en son primary key alanı oluşturduk ve içerisine pk olacak olan sutunların isimlerini girdik...
+    go
+    create table 
+    Calisanlar
+    (tcno nvarchar(11) not null,
+    adi nvarchar(50) not null,
+    bolumno int,
+    cinsiyet nchar(1),
+    primary key(tcno), -- primary key(....) içerisinde biz primary key olacak olan verileri belirleyebiliriz.
+    foreign key(bolumno) references bolumler(bolumno)      -- foreign key demek yabancı anahtar demek ikincilde denebilir. başka bir tablodaki alanla bu tablodaki alanı ilişkilendiricez demektir.
+    -- foreign keyler ile tabloların ortak noktalarını belirleriz... böylece aslında bellekte fazladan yer kaplamamasını ve daha kullanılabilir olmasını sağlarız.
+    );
+
+    go
+
+    create table 
+    Urunler(
+
+    urunno int not null,
+    urunadi nvarchar(50) not null,
+    urunsayisi int null,
+    urunfiyati decimal(18,2),-- decimal(18,2) 18 basamağa kadar ve 2 basamak küsürat alabilen demektir float vs yerine decimal kullanılır hassastır iyidir. 
+    bolumno int not null,
+    primary key(urunno),
+    foreign key(bolumno) references bolumler(bolumno) -- foreign key(bağlantı alacak olan sutunadı) references referansverecektablo(referans alınacak sutunuismi)
+    -- mesela burada bolumno'yu bolumlerdeki bolumno ile ilişkilendirdik... eğer bolumlerdeki bolum nosu olmayan bir bolumno gieresek urunlere hata verir ilişkili olması lazım...
+    );
+
+    go
+
+    create table -- her veriyi , ile ayırırız  create table isim(, , , ); yapısı kullanırız
+    Satislar(
+    satisno int not null,
+    urunno int not null,
+    calisantcno nvarchar(11) null,
+    miktar int null,
+    fiyat decimal(18,2),
+    tarih date null,
+    primary key(satisno),
+    foreign key(urunno) references Urunler(urunno),
+    foreign key(calisantcno) references Calisanlar(tcno) -- foreign key tanımladık iki tane alt alta -- calisantcno eldeki tablo references Calisanlar(tcno) referenceseten sonrası başka tablodan gelecek demektir.
+
+    );
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
