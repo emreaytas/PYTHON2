@@ -116,7 +116,8 @@ python dosyasını .exe yapma:
 
 sql injection bir hack yöntemidir. tasarım yaparken buna önlem alınması lazım. yoksa verdiği komutlar ile verilere sızabilir veri alabilir veri ekleyebilir.
 .....................................................................................................................
-
+mesela telefonda eğer reklem çıkmasın istersek özel dns veya gizli dns kısmına  dns.adguard.com   yazarak reklamsız kullanabiliriz androidde ama... 
+.....................................................................................................................
 venv nedir... bilgisayarınzda ekstra bir python kurmanızı sağlarız... kütüphaneleri yeniden kurmamıza gerek kalmaz... mesela python 3.6 ile yapılmış proje var venv 3.6'ya taşırsak eğer projeyi sprunlar çözülür...
 pip install virtualenv yaparız....
 bir uygulamayı exe vs yapabiliriz...
@@ -210,7 +211,33 @@ Burada olan şudur... t.start() ile her seferinde ayrı ayrı parçacıkta THREA
 .......................................................................................................................
 
 .ipynb python notebook içindir.. onun uzantısıdır...
+..............................................................................................................................................................................................................................................................................................
 
+        CSRF (Cross-Site Request Forgery), web uygulamalarında yaygın bir güvenlik açığı türüdür. CSRF saldırısı, bir kullanıcının tarayıcısında, genellikle başka bir site üzerinden kötü niyetli bir şekilde yürütülen isteklere dayanır. Saldırgan, bu istekleri kullanıcının tarayıcısı üzerinden gerçekleştirir ve kullanıcının oturumunu kötü niyetli eylemler için kullanabilir.
+
+        CSRF saldırılarından korunmak için birçok yöntem vardır ve bu yöntemlerden biri de "CSRF Token" kullanmaktır.
+
+        CSRF Token Nedir:
+        CSRF token, web uygulamalarında güvenlik önlemlerinden biridir ve saldırılara karşı koruma sağlar. Bu token, kullanıcının oturumunu ve istekleri doğrulamak için kullanılır. Web uygulaması, kullanıcının tarayıcısına gömülen bu token'ı kullanarak, kullanıcının gerçekleştirdiği her isteği doğrular.
+
+        Nasıl Çalışır:
+
+        Kullanıcı bir web uygulamasına giriş yapar ve oturum açar.
+        Web uygulaması, kullanıcının tarayıcısına özel ve tek kullanımlık bir CSRF token gönderir.
+        Kullanıcı, bir form gönderdiğinde veya belirli bir işlemi gerçekleştirmek için bir istekte bulunduğunda, tarayıcı bu CSRF token'ı kullanarak isteği gönderir.
+        Web uygulaması, gelen isteği aldığında, CSRF token'ı kontrol eder ve bu token geçerli değilse isteği reddeder.
+        CSRF Token Kullanımı:
+        CSRF token'ın kullanımı genellikle web uygulamasındaki form gönderme işlemleri sırasında ortaya çıkar. Örneğin, bir kullanıcının bir form aracılığıyla bir şeyi değiştirmesini isteyen bir web sayfası düşünelim. Bu durumda, form içine gömülen bir CSRF token, formun güvenilir bir şekilde gönderildiğini doğrular.
+
+       -HTML....
+        <form action="/example" method="post">
+            <!-- Diğer form alanları -->
+            <input type="hidden" name="csrf_token" value="buraya_token_gelecek">
+            <button type="submit">Gönder</button>
+        </form>
+        Web uygulaması, formu aldığında ve işlem yapacağında, gönderilen CSRF token'ı kontrol eder. Eğer token geçerli değilse veya eksikse, işlem reddedilir.
+
+        CSRF token kullanımı, web uygulamasını bu tür güvenlik tehditlerine karşı daha dirençli hale getirir.
 ....................................................................................................................................................................................................................................................................
 kodların bir yerde çalışabilmesi için cloud gerekir... veya pcmizzi sunucu yapacağız o zamanda clouda sunucu olarak tanıtmamız lazım ki insanlar bu kodlara erişebilsin...
 veya bir model oluşturduk bunu canlıya alacağız clouda yüklemek lazım cloud aslında internettir... bir nevi internet.
