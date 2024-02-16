@@ -174,6 +174,8 @@ WHERE şartlar...
 >   büyüktür eğer öyleyse true verir yoksa false verir...
 =   eşittir eğer öyleyse true verir yoksa false verir...
 <>  eşit değildir eğer öyleyse true verir yoksa false verir...
+>= büyük eşittir değilse false öyleyse true...
+<= küçük eşittir değilse false öyleyse true...
 in (....)   ... içinde aranan varsa true yoksa false birden fazla değer arayacaksak kullanırız...
 not in (....)   ... içindekilerden birisi değilse true yoksa false birden fazla olmayan ararsan o zaman kullanırız...
 between arasındadır...
@@ -191,7 +193,7 @@ not like  ile başlamaz... ile bitmez... içermez...
                select * from products where price >= 18; 
                --KÜÇÜK EŞİTTİR
                select * from products where price <= 18; 
-               -- EŞİT DEĞİLDİR
+               -- EŞİT DEĞİLDİR(yerine not kullanabiliriz...mesela select * from tablename where not city = 'izmir')   
                select * from products where price <> 18;  -- eşit değildir operatorleri <> demektir...
 
                --birden fazla koşul...
@@ -228,7 +230,11 @@ not like  ile başlamaz... ile bitmez... içermez...
                select * from products where country not in ('UK','germany','brazil') -- () içine girilenler harici satırları getirir...birden fazla seçenek için kullanılır...
 
 
+select * from customers where birthdate > '19901001'   -- tarih formatını böyle kullananiliriz yılaygün  veya 'yıl-ay-gün' yapabiliriz...
+SELECT * FROM CUSTOMERS where BIRTHDATE between '19901001' and '20001201'; -- iki tarihte  dahil... <=  ve => birleşimidir...
+                                               -- tarih formatını böyle yazarsak eğer o zaman dilden bağımsız olur...
 
+SELECT * FROM CUSTOMERS where CITY in('istanbul','kars') AND CUSTOMERNAME IN ('EMRE','FARUK'); -- AND OR VS VS İLE BİRDEN FAZLA KOŞULU BİRBİRİNE BAĞLAYABİLİRİZ...
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,8 +242,327 @@ not like  ile başlamaz... ile bitmez... içermez...
 
 ///AND VE OR OPERATORLERİ...///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+AND VE OR İLE BİRDEN FAZLA KOŞULU BİRBİRİNE BAĞLAYABİLİRİZ...
+
+SELECT * FROM CUSTOMERS WHERE CUSTOMERNAME <> 'EMRE' AND CITY = 'KARS';   -- TRUE OLMASI İÇİN İKİ KOŞULUNDA SAĞLANMASI GEREKİR...
+SELECT * FROM CUSTOMERS WHERE (CUSTOMERNAME <> 'EMRE' AND CITY = 'KARS') or AGE = 22;  -- () OR ()   İKİSİNDEN BİRİSİ TRUE OLSA YETERLİDİR...
+bir koşul bloğunu () içerisine koyabiliriz ve (() and ())  or ()  gibi yapılar kurabiliriz...
+
+SELECT * FROM CUSTOMERS WHERE (BIRTHDATE > '20001011' AND BIRTHDATE <= '20101012');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///DISTINCT   Anahtar KELİMESİ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+TEKRAR EDEN SATILARI TEKİLLEŞTİRMEK İÇİN KULLANILAN KOD... MESELA 5000 BİN SATIŞ OLMUŞ HER ALICI 10 ÜRÜN ALMIŞ 500 TEKİL MÜŞTERİYİ DISTINCT İLE KULLANABİLİRİZİ.
+
+SELECT DISTINCT * VEYA KOLONLAR  FROM  TABLOADI WHERE ....
+SELECT DISTINCT CITY FROM CUSTOMERS; -- ŞEHİRLERİ TEKİLLEŞTİRİR GETİRİR. KAÇ ADET ŞEHİR VAR GÖREBİLİRİZ...
+SELECT DISTINCT CITY,DISCRICT FROM CUSTOMERS WHERE CITY = 'İSTANBUL'; -- İSTANBULDAKİ İLÇELERİ TEKİLLEŞTİRİP GETİRECEK...
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///ORDER BY KOMUTU///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+SIRALAMAK İÇİN KULLANIRIZ... sisteme ekleme sırasına göre yaşa göre ada date'ye göre vs vs sıralayabilirzi..
+
+select * from tablename where .... order by kolon1 asc, kolon2 desc,...     -- tek bir kolona göre sıralama olacak diye bir şey yok...
+ -- burada önce kolon1'e göre sıralar... sonra kolon1 değerleri aynı olanlar kolon2'ye göre sıralanır...
+-- asc küçükten büyüğe sıralama... desc büyükten küçüğe sıralama...    srtringlerde sıralama alfabeye göre olur...
+
+SELECT * from CUSTOMERS order by ID asc,CUSTOMERNAME;  -- asc desc belirtmezsek default olarak asc kabul eder...
+  -- asc desc olarak belirtmezsek eğer o zamana default olarak asc yani küçükten büyüğe sıralar.
+
+order by id,name,surname; -- önce id sonra name sonra surnameye göre sıralr... id aynı  olanları name'ye name'si aynı olanları suranmeye göre sıralar. öncelik id... sonra id'si aynı olanlar nameye göre vs vs...
+
+SELECT * from CUSTOMERS order by city asc,CUSTOMERNAME desc where gender = 'K';
+
+SELECT * from CUSTOMERS where gender = 'K' order by CITY asc,CUSTOMERNAME desc ; -- ŞEHİRLERİ TEKİLLEŞTİRİR GETİRİR. KAÇ ADET ŞEHİR VAR GÖREBİLİRİZ...
+-- WHERE İLE BERABER KULLANIMI...
+
+SELECT * from CUSTOMERS  order by 2,1 ;  -- 2.kolon,1.kolon demektir... 
+-- order by 1,2... dersek sırası ile 1. kolon 2. kolon verilen sayılar kolonların yerine girilir.
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+//TOP KOMUTU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+EN DEĞERLERİ GETİRMEK İÇİN KULLANILIR... BİR VERİSETİNDEKİ VERİLERİN BİR KISMINI GÖRMEMİZ İÇİNDİR... YÜZDE VEYA SAYI İLE BELİRTME YAPABİLİRİZ...
+
+SELECT TOP(N) *VEYAKOLONLAR FROM TABLENAME WHERE.... ORDER BY....; GİİB KULLANILABİLİR...
+
+SELECT TOP(100) * FROM CUSTOMERS ORDER BY CUSTOMERNAME;
+   -- ÖNCE SIRALAR SONRA İLK 100 KAYDI GETİRİR. YÜZ TANE VEYA DAHA AZ SATIR VARSA O ZAMAN HEPSİNİ GETİRİR... GİRİLEN DEĞER MAKS HACİMDİR ASLINDA...
+
+SELECT TOP 20 PERCENT * FROM CUSTOMERS ORDER BY CUSTOMERNAME;
+  -- TOP N PERCENT DERSEK %N KADARINI GETİRİR... 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+///ORNEK DATABASE RESTORE ETMEK...///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+-- .BAK dosyası veritabanı dosyasıdır...
+databases -> sağtık -> restore database oradan device sorna .bak dosyasını seç ve ekle...
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//aggregate functions////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+GENELDE GROUP BY İLE KULLANILIR... 
+SUM,MİN,MAX,AVG GİBİ METOTLAR...
+
+SELECT COUNT(*) FROM SALES; -- KAÇ SATIR VAR GÖREBİLRİİZ...
+SELECT * FROM SALES ORDER BY AMOUNT; -- EN AZ ALANDAN EN ÇOK ALANA GÖRE SIRALADIK...
+SELECT MIN(AMOUNT) FROM SALES; -- EN AZ ALAN'I GÖREBİLİRİZ...
+SELECT MAX(AMOUNT) FROM SALES; -- EN FAZLA ALANI GÖREBİLİRİZ...
+SELECT AVG(AMOUNT) FROM SALES; -- ORTALAMA ALIMI GÖREBİLİRİZ..
+
+SELECT AVG(AMOUNT) AS 'ORTALAMA',MIN(AMOUNT) AS 'MINIMUM',MAX(AMOUNT) AS 'MAKSIMUM',COUNT(AMOUNT) AS 'SATIR SAYISI', SUM(AMOUNT) AS 'TOPLAM AMOUNT' FROM SALES;
+-- COUNT(*) VEYA BİR KOLON OLABİLİR SATIR SATIR OKUMA YAPACAK KAÇ ADET KOLONA DENK GELDİ ONU SAYACAK...
+SELECT AVG(TOTALPRICE) AS 'ORTALAMA',MIN(TOTALPRICE) AS 'MINIMUM',MAX(TOTALPRICE) AS 'MAKSIMUM',COUNT(TOTALPRICE) AS 'SATIR SAYISI', SUM(TOTALPRICE) AS 'TOPLAM AMOUNT' FROM SALES WHERE CITY = 'İSTANBUL'; --ŞEHİR ŞARTI EKLEDİK... AS İLE İSİMLENDİRDİK... aggregate METOTLARI İLE İSTENEN DEĞERLERİ RETURN ETTİRDİK...
+
+SELECT * FROM SALES ORDER BY TOTALPRICE ASC; -- DEFAULT OLARAK ASC ZATEN...
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+///GROUP BY KULLANIMI...///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+GROUP BY gruplamaK İÇİN ORDER BY İSE SIRALAMAK İÇİN KULLANILIR...
+mesela satışların olduğu tablo var... şehirlere göre gruplarız ve her şehrin değerini ise toplatırız... böylece her şehirde ne kadar satış yapmışız görebiliriz...
+
+select kolon1,kolon2... sum(price),count(id),min(price),max(price)... from tabloname group by kolon1,kolon2... 
+
+select CITY AS 'SEHİR',AVG(TOTALPRICE) AS 'ORTALAMA',MIN(TOTALPRICE) AS 'MINIMUM',MAX(TOTALPRICE) AS 'MAKSIMUM',COUNT(TOTALPRICE) AS 'SATIR SAYISI', SUM(TOTALPRICE) AS 'TOPLAM AMOUNT' FROM SALES group BY CITY;
+-- GROUP BY CITY İLE SEHİRLERE GÖRE GRUPLANDIRDIK... SELECTTEN SONRA MAX MIN CITY VS VS İÇİN DEĞERLERİ GETİREBİLİRİZ. GRUPLANMIŞ VERİLER ÜZERİNDEN.
+
+select top(10) CITY AS 'SEHİR',AVG(TOTALPRICE) AS 'ORTALAMA',MIN(TOTALPRICE) AS 'MINIMUM',MAX(TOTALPRICE) AS 'MAKSIMUM',COUNT(TOTALPRICE) AS 'SATIR SAYISI', SUM(TOTALPRICE) AS 'TOPLAM AMOUNT' FROM SALES group BY CITY order by sum(TOTALPRICE) desc; -- group by ile grupladık... order by ile ise sıralarız... desc büyükten küçüğe demektir...
+-- top(10) ile ilk on şehir ama en çok satış yapan şehirleri getirdik...
+
+
+
+use ETRADE2;
+
+select * from SALES WHERE CITY = 'ANKARA' ORDER BY TOTALPRICE DESC;
+SELECT *,CONVERT(DATE,DATE_) AS 'DATE2' FROM SALES WHERE CITY = 'ANKARA' ORDER BY DATE_; -- SELECT *, CONVERT(DATE,DATA_) DEDİK TÜM KOLONLARA EK OLARAK DATE OLMUŞ  DATETİME BİLGİSİNİ ALIRIZ...
+SELECT CONVERT(date,'2019-01-20 13:47:54.000'); -- DATE DEMEK TARİH DEMEK DATETİME İSE TARİH VE ZAMAN BİLGİSİ DEMEKTİR...
+SELECT CONVERT(datetime,'2019-01-20 13:47:54.000'); -- CONVERT İLE DÖNÜŞÜM YAPABİLİRİZ...  ÖNCE HANGİ TÜRE ÇEVİRECEĞİZ BUNU VERİRİZ SONRA İSE VERİSİNİ VERİRİZ...
+
+update SALES set DATE2 = CONVERT(date,DATE_); -- date2 kolonu ekledik date tipinde ve null olan verileri düzenledik...
+
+select * from SALES where CITY = 'ANKARA' AND DATE2 = '2019-01-01' ORDER BY DATE_;
+
+SELECT CITY,SUM(TOTALPRICE) AS 'TOTAL PRİCE' FROM SALES WHERE CITY = 'ANKARA'
+GROUP BY CITY,DATE2 ORDER BY CITY,DATE2
+
+SELECT CITY from SALES GROUP BY CITY; -- şehirleri grupla ve şehri getir dedik...
+
+-- hata verir...SELECT * from SALES GROUP BY CITY; -- böyle yaparsak seçim yok veriler gruplandı şehirlere göre ama biz hangi değerleri alacağız... max mın avg sum gibi değerleri çağırmamız lazım...
+
+
+use ETRADE2;
+
+SELECT AVG(TOTALPRICE) as 'TOTAL PRİCE', COUNT(TOTALPRICE) AS 'SEHİRDE KAC SATIS OLMUS' from SALES GROUP BY CITY; -- şehirlere göre grupla. ve şehirlerin ortalama totalprice değerini getir dedik...
+-- COUNT(TOTALPRİCE) DEMEK VERİLER GRUPLANDI ÖNCE SONRA COUNT(TOTALPRİCE) DİYEREK HER ŞEHİRDE KAÇ KERE TOTALPRİCE VAR BUNU GÖREBİLİRİZ...
+
+select CITY from SALES GROUP BY CITY ORDER BY CITY; -- ŞEHİRLERE GMRE GRUPLA, GRUPLARIN İÇİNDEN CITY BİLGİSİNİ GETİR VE CITYE GÖRE SIRALA DEDİK...
+
+SELECT CITY,SUM(TOTALPRICE) AS TOPLAM_SATIS FROM SALES GROUP BY CITY; -- ŞEHİRLERİ GRUPLADIK VE TOPLAM SATIŞLARINI İSİMLERE GÖRE SIRALAYARAK GÖRDÜK...
+
+
+SELECT CITY,DATE2,SUM(TOTALPRICE)AS TOPLAM_SATIS ,COUNT(DATE2) AS 'TEKRAR SAYISI' FROM SALES GROUP BY CITY,DATE2 ORDER BY CITY; -- HEM ŞEHRE HEM TARİHE GÖRE GRUPLADIK... ÖNCE ŞEHİRLERE GÖRE SONRA ŞEHİRLER KENDİ ARALARINDA TARİHLERE GÖRE GRUPLANDILAR...
+
+
+select DATE2,CITY,SUM(TOTALPRICE) AS 'TOPLAM SATIŞ' from SALES where DATE2 = '20190101' 
+GROUP BY DATE2,CITY
+ORDER BY SUM(TOTALPRICE) DESC; -- DATE2,CITY,SUM(TOTALPRICE) BU DEĞERLERİ GETİR. DATE2 VE CITY'YE GÖRE GRUPLA SUM(TOTALPRİCE) DESC İLE SATIŞA GÖRE BÜYÜKTEN KÜÇÜĞE SIRALA DEDİK...
+
+select CITY,DATE2,SUM(TOTALPRICE) AS 'TOPLAM SATIŞ',COUNT(DATE2) AS 'BELLİ SEHİRDE BELLİ BİR TARİHTE YAPILAN SATIS SAYISI' from SALES 
+GROUP BY DATE2,CITY
+ORDER BY CITY; -- GROUP BY DATE2,CITY DEDİK BUNUN ANLAMI ÖNCE ŞEHİRLERE GÖRE GRUPLA SONRA GRUPLADIĞIN ŞEHİRLERİ TARİHLERE GÖRE GRUPLA AYNI OLANLAR GRUPLANSIN YANİ VERİ ÖNCE ŞEHİRLERE BÖLÜNECEK SONRA TARİHE GÖRE ŞEHİRLER BÖLÜNECEK VE BİR NESNE OLUŞACAK...
+-- ORDER BY İLE İSE SIRALADIK...
+
+
+use ETRADE2;
+-- YENİ BİR KOLON EKLEDİK... DATAPART(MONTH,DATE)  BİZE BİR SAYI DÖNER YILIN HANGİ AYINDASIN BUNU RETURN EDER...
+UPDATE SALES SET MONTHNAME_ = '01.OCAK' WHERE DATEPART(MONTH,DATE2) = 1;
+UPDATE SALES SET MONTHNAME_ = '02.SUBAT' WHERE DATEPART(MONTH,DATE2) = 2;
+UPDATE SALES SET MONTHNAME_ = '03.MART' WHERE DATEPART(MONTH,DATE2) = 3;
+UPDATE SALES SET MONTHNAME_ = '04.NİSAN' WHERE DATEPART(MONTH,DATE2) = 4;
+UPDATE SALES SET MONTHNAME_ = '05.MAYIS' WHERE DATEPART(MONTH,DATE2) = 5;
+UPDATE SALES SET MONTHNAME_ = '06.HAZİRAN' WHERE DATEPART(MONTH,DATE2) = 6;
+UPDATE SALES SET MONTHNAME_ = '07.TEMMUZ' WHERE DATEPART(MONTH,DATE2) = 7;
+UPDATE SALES SET MONTHNAME_ = '08.AĞUSTOS' WHERE DATEPART(MONTH,DATE2) = 8;
+UPDATE SALES SET MONTHNAME_ = '09.EYLÜL' WHERE DATEPART(MONTH,DATE2) = 9;
+UPDATE SALES SET MONTHNAME_ = '10.EKİM' WHERE DATEPART(MONTH,DATE2) = 10;
+UPDATE SALES SET MONTHNAME_ = '11.KASIM' WHERE DATEPART(MONTH,DATE2) = 11;
+UPDATE SALES SET MONTHNAME_ = '12.ARALIK' WHERE DATEPART(MONTH,DATE2) = 12;
+-- NEDEN AYLARIN ÖNÜNE SAYI KOYDUK BUNUN NEDENİ SIRALAMA YAPARKEN AY SIRASINA GÖRE OLSUN DİYE YOKSA AĞUSTOS OCAKTAN ÖNCE GELEBİLİR BU YÜZDEN SIRASI İLE EKLEME YAPTIK...
+
+
+SELECT MONTHNAME_,SUM(TOTALPRICE) AS 'TOPLAM SATIŞ' FROM SALES
+GROUP BY MONTHNAME_
+ORDER BY MONTHNAME_;  -- AYLARA GÖRE SATIŞLAR...
+
+SELECT CITY,MONTHNAME_,SUM(TOTALPRICE) AS 'TOPLAM SATIŞ' FROM SALES
+GROUP BY CITY,MONTHNAME_
+ORDER BY CITY,MONTHNAME_
+; -- ŞEHİRLERİN AYLIK SATIŞLARINI GÖREBİLİRİZ...
+
+
+SELECT CITY,MONTHNAME_,SUM(TOTALPRICE) AS 'TOPLAM SATIŞ' FROM SALES
+GROUP BY CITY,MONTHNAME_
+ORDER BY SUM(TOTALPRICE) DESC
+; -- ŞEHİRLERİ VE AYLARI GRUPLADIK ÖNCE ŞEHİRLER SONRA SEHİRLER AYLARA GÖRE GRUPLANDI...
+-- SIRALAMA TOTAL SATIŞA GÖRE BÜYÜKTEN KÜÇÜĞE...
+-- BİZ ŞEHİR,AY VE TOPLAM SATIŞI ÇEKTİK ŞEHRE VE AYA GÖRE BÖLÜNMÜŞ NESNELERDEN...
+
+
+         use ETRADE2;
+
+         SELECT  CATEGORY1,CATEGORY2,CATEGORY3,CATEGORY4 ,
+         SUM(TOTALPRICE) AS 'TOTAL FİYAT',
+         COUNT(*) AS 'KAC ADET?', 
+         SUM(AMOUNT) AS 'TOTAL AMOUNT'
+         FROM SALES
+         GROUP BY CATEGORY1,CATEGORY2,CATEGORY3,CATEGORY4
+         ORDER BY CATEGORY1,CATEGORY2,CATEGORY3,CATEGORY4;
+                        CT1,  CT2,              CT3,        CT4,         
+                        ---------------------------------------------------------------------------
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	BAKIM ORTULERI	579,3	7	37
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	BARDAK	2331,3	20	98
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	BEBE SABUNLARI	304,2	5	36
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	BEBE SAMPUANLARI	1844,5	37	175
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	BEBEK BAKIM SETLERI	1136,22	6	29
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	BEBEK DETERJAN	265,68	7	36
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	BEBEK KREMLERI	4023,2	30	149
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	BEBEK PUDRA	2216,85	23	120
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	BEBEK YAGLARI	2051,35	17	85
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	BESLENME	1676,2	11	58
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	BIBERON	12766,37	136	715
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	BIBERON UCU	275,5	6	29
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	BURUN ASPIRATORU	2147,85	25	129
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	DIGER URUNLER	725	5	29
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	DIS KASIYICI	542,15	6	35
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	DISLIK	1049,41	15	84
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	EMZIK	15031,736	314	1698
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	FIRCA	2266,3	23	131
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	GOGUS KORUYUCU	481,35	8	45
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	ISLAK MENDIL	154,368	4	24
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	KASIK	658	5	40
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	LOSYON VE SUTLERI	2396,8	20	91
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	PISIK KREMLERI	1646,39	12	61
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	SAC KREMLERI	175	4	20
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	SAMPUAN	6935,132	87	505
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	TIRLE	332	4	16
+                        BEBEK	BEBE MALZEMELERI	BEBEK BAKIM	TIRNAK MAKASI	397,75	6	37
+                        BEBEK	BEBE MALZEMELERI	CILT BAKIM	GUNES KREMI	6072,876	15	81
+                        BEBEK	BEBE MALZEMELERI	COCUK BEZLERI	GECE KILODU	1697,3	14	67
+                        BEBEK	BEBE MALZEMELERI	COCUK BEZLERI	STANDART PAKET	193346,164	1094	6028
+                        BEBEK	BEBE MALZEMELERI	KATI SABUNLAR	BEBE SABUNLARI	1875,7	17	83
+                        BEBEK	BEBE MALZEMELERI	SAMPUANLAR	SAC KREMLERI	1967,1	17	79
+                        BEBEK	BEBE MALZEMELERI	SAMPUANLAR	SAMPUAN	4114,316	73	412
+                        BEBEK	BEBE MALZEMELERI	SAMPUANLAR	VUCUT SAMPUANI	145,536	4	16
+                        BEBEK	BEBEK MALZEMELERI	ISLAK HAVLU	BEYAZ	2315,7	13	83
+                        BEBEK	BEBEK MALZEMELERI	KOLONYALAR	BEBE KOLONYALARI	5668,42	67	347
+                        BEBEK	GIYIM	BEBE GIYIM	PENYE	179,4	8	39
+                        BEBEK	GIYIM	BEBE GIYIM	TAKIM	3475,392	56	308
+                        BEBEK	GIYIM	BEBE GIYIM	TEK ALT	538,92	22	108
+                        BEBEK	HAZIR YEMEK-MAMA	HAZIR COCUK YEMEKLERI	BEBE BISKUVISI	2220,788	68	364
+                        BEBEK	HAZIR YEMEK-MAMA	HAZIR COCUK YEMEKLERI	HAZIR MAMALAR	72745,2939991999	605	3502
+                        BEBEK	IC GIYIM	CORAPLAR	COCUK CORAP	6036,646	291	1644
+                        BEBEK	SAGLIK URUNLERI	PAMUK-KULAK CUBUGU	PAMUK	1892,3	20	127
+                        BEBEK	TEKSTIL-GIYIM-AKSESUAR	CAMASIRLAR	COCUK CAMASIR	15793,716	793	4279
+                        BEBEK	VUCUT-EL BAKIM	KREMLER	VAZALIN	861,8	15	62
+
+
+
+select COUNT(CUSTOMERCODE) AS 'ALICI SAYISI' from SALES; --SALE'TEKİ TÜM SATILARI GEZER VE KAÇ ADET ALICI VAR GÖREBİLİRİZ...
+SELECT  FICHENO,COUNT(FICHENO)  FROM SALES WHERE MONTHNAME_ = '01.OCAK' AND CITY = 'ADANA' GROUP BY FICHENO; -- HEM ADANA HEM OCAK AYI FİŞ NUMARASINA GÖRE GRUPLA. VE KAÇ ADETKULLANICI VAR GÖREBİLİRİZ...
+
+use ETRADE2;
+
+SELECT CITY,COUNT(DISTINCT FICHENO),
+COUNT (DISTINCT CUSTOMERNAME) AS 'TEKİL KULLANICI' 
+FROM SALES
+WHERE MONTHNAME_ = '01.OCAK'
+GROUP BY CITY
+ORDER BY CITY;
+
+
+use ETRADE2;
+
+SELECT TOP 50 CITY,SUM(TOTALPRICE) AS 'TOPLAM SATIS' -- TOP 50 DEDİK AMA 50 TANE YOKSA HEPSİİN GETİRİR MAKS 50 DEMEK ASLINDA..
+FROM SALES -- WHERE ŞARTINDA SUM VS KULLANAMAYIZ MIN MAX KULLANAMAYIZ BUNUN NEDENİ BOOL DEĞERLER İLE ÇALIŞIR KOŞUL BLOKLARI...
+GROUP BY CITY HAVING SUM(TOTALPRICE) > 40000 --ŞEHİRLERE GÖRE GRUPLAYINCA TOPLAM SATIŞI 40000 ÜZERİNDE OLAN ŞEHİRLERİ GETİR DEMEKTİR...
+ORDER BY (SUM(TOTALPRICE)) DESC;
+-- aggregate METOTLARI EĞER BİR KOŞULLA KONTROL ETMEK İSTERSEK HAVING'E VERMEMİZ LAZIM...
+
+use ETRADE2;
+
+SELECT CITY,SUM(TOTALPRICE) AS 'TOPLAM SATIS',COUNT(DISTINCT CUSTOMERNAME) AS 'CUSTOMER COUNT'  -- ŞEHİR,TOPLAMSATIŞ VE TEKİLLEŞTİRİLMİŞ KAÇ ADET KULLANICI ADI VAR GETİR...
+FROM SALES 
+GROUP BY CITY -- ŞEHRE GÖRE GRUPLA...
+HAVING COUNT(DISTINCT CUSTOMERNAME) > 1500 AND SUM(TOTALPRICE) >= 40000 -- aggregate METOTLARDAN DÖNEN DEĞERLERİ BİR ŞART OLARAK KULLANMAK İSTERSEK EĞER O ZAMAN HAVING KULLANMAMIZ GEREKİR...
+ORDER BY (SUM(TOTALPRICE)) DESC; -- TOPLAM SATIŞA GÖRE SIRALA BÜYÜKTEN KÜÇÜĞE DEMEKTİR...
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+SQL = Structured Query Language
+VERİTABANI, TABLOLAR,SATIRLAR VE SUTUNLARDAN OLURŞUR... SUTUNLARIN VERİ TİPİ VE İSMİ BELLİ OLMALIDIR...
+
+//TAM SAYI VERİ TİPLERİ...////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////,,
+
+SAYISAL VERİ TİPLERİ = BİGİNT(8 BYTE) 64BİT  64 - 1 = 63  MİNİMUM -2^^63, MAKS 2 ^^ 63 - 1
+                       İNT(4 BYTE)
+                       SMALLİNT(2 BYTE)
+                       TİNYİNT(1 BYTE)
+                       BİT(1BİT) EĞER TABLODA 8 VEYA DAHA AZ BİT KOLONU VARSA 1BYTE YER KAPLAR 9 OLURSA 2 BYTE YER KAPLAR... ALAN AÇILIR BYTE BYTE SONRA DOLAR. YETMEZSE YENİ BYTE AÇILIR...
+                       .......ONDALIKLI...............
+                       decimal 1'den 9'a kadar 5 byte, 10'dan 19'a kadar 9 byte, 20'den 26'ya kadar 13 byte, 29'dan 38'e kadar 17 byte...
+                       money 8 byte virgülden sonra 4 basamak tutar özel bir decimal(18,4) default olarak...
+                       smallmoney 4 byte virgülden sonra 4 basamak tutar
+                       float 7 basamağa kadar 4 byte 15 basaamağa kadar 8 byte... esnek olduğu için tercih edilir...
+                       real 4 byte,virgülden sonra 4 basamak tutar...
+ 
+EĞER DORĞU ŞEKİLDE KULLANIRSAK O ZAMAN ÇOK FAZLA TASARRUF EDEBİLİRİZ...
+DECİMAL(18,2) DEMEK 18 DİGİTLİK YER TUT VİRGÜLDEN SONRA 2 HANELİK YER AYIR DEMEKTİR...
+decimal(18,4) yaparsak virgülden sonra 4 hane tutar bölme vs vs işlemler olacaksa gayet güzel.
+
+///METIN(STRING) VERİ TİPLERİ...///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+karakterlernden oluşan yapılar...
+başında n olursa mesela n varchar unicode olur demektir her alfabeyi kapsar... n olmazsa 255 karakter asciiden tutar... n olursa eğer o zaman tüm alfabeleri tutacak şekilde unicode olur. ama n olursa her karakter için fazladan byte tutar çünkü 255 değerinden fazla değer tutmaya çalışır... n olursa her karakter için 2byte yer kaplar...
+CHAR(50) DERSEK EĞER O ZAMAN STATİC OLARAK 50 KARAKTERLİK YER AYIRIR... 10 DERSEK 10 KARAKTERLİK YER AYIRIR...
+NCHAR(SAYİ) OLURSA EĞER O ZAMAN UNİCODE OLUR VE STATİC YER KAPLAR...
+varchar(...) olursa dinamik olur... dezavantajı var oda işlem yapar fazladan girilen verinin uzunluğuna göre işlem yapar... ama mesela 11 haneli tcno kullanacaksan o zaman char(11) kullanmak en mantıklısıdır performans için... ama isim adres vs vs için varchar() kullanmak mantıklıdır...
+char(50) 50bytelik yer kaplar nchar(50) 100 bytelık yer kaplar...
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
