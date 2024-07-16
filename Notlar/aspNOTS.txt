@@ -1,1 +1,39 @@
 ASP İLE İLGİLİ BİLGİLER...
+SQL Server şifreniz çalıntı şifrelerden birini içeriyor mu?
+10 milyon şifre içinde sizin SQL Server kullanıcı şifrenizin olup olmadığını gösteren sorgu.
+
+#Hergüne1SQLBilgisi
+Teşekkürler Eitan Blumin. 🙏 
+
+Thank you Eitan Blumin.
+I made a little changes to your article and I used it with 10 million passwords.
+
+https://madeiradata.com/post/detect-weak-passwords-in-sql-server?utm_content=buffer290f4&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer
+
+--Tablo Oluştur
+CREATE TABLE PasswordList (
+ Password_ VARCHAR(255)
+);
+--Tabloyu truncate et
+truncate table passwordlist
+/*Github adresinden indirdiğin 10 milyon çalıntı
+şifre listesini tabloya insert et
+https://lnkd.in/gRiPfvjf
+Common-Credentials/10-million-password-list-top-1000000.txt*/
+BULK INSERT PasswordList
+FROM 'E:\DATA\10-million-password-list-top-1000000.TXT'
+WITH (
+ ROWTERMINATOR = '0x0a' 
+);
+--sys.sql_logins tablosunda hash li şekilde tutulan şifrelerin 
+--olup olmadığını PWDCOMPARE ile kontrol et
+select 
+PWDCOMPARE(p.Password_,l.[password_hash]) Eslesme,
+http://l.name Kullanici, p.Password_ CalintiSifre from PasswordList p
+cross apply (select * from sys.sql_logins) l 
+where 
+PWDCOMPARE(p.Password_,l.[password_hash])=1
+
+....................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
