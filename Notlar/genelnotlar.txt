@@ -209,7 +209,20 @@ selam
 Burada olan şudur... t.start() ile her seferinde ayrı ayrı parçacıkta THREAD oluşur ve her fonksiyon ayrı ayrı threadlerde çalışır...
 
 .......................................................................................................................
+Bilgisayarınıza, kripto virüsünü bulaştırma yöntemlerinden en yaygın olanı.
 
+1-Önce ülkedeki tüm sabit ip adreslerinin listesi elde edilir.
+2-Portcheck edilerek 1433 portu yoklanır.
+3-sa kullanıcı adı ile listedeki şifreler sırayla denenir.
+4-bingo sql e bağlantı sağlandı.
+5-T-sql ile cmd shell kullanarak bilgisayardaki tüm dosyalar şifrelenir.
+6-şantaj metni bilgisayara bırakılır.
+KORUNMAK İÇİN,
+1433 portunu değiştirin.
+Sa kullanıcı adını kullanmayın.
+Güçlü şifreler oluşturun.
+Bitti gitti.
+.......................................................................................................................
 .ipynb python notebook içindir.. onun uzantısıdır...
 ..............................................................................................................................................................................................................................................................................................
 
