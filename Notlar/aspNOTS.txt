@@ -58,5 +58,116 @@ mesela bir web uygulaması geliştirmek için bir sdk gerekiyor. sdk ile gelişt
 sdk ile uygulama geliştirdiysem uygulama türüne uygun runtime gerekir canlıya almak gerekir.
 runtime sdk'dan daha hafif bir kütüphaneler topluluğu. elde hazır uygulama var ve canlıya almak istersek o zaman runtime yeterli olacaktır.
 ...........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+mvc tasarım deseni nedir? bir çözüm kalıbıdır. bir tasarım desenidir design pattern'dir.
+model - view - controller üçlüsü. 3 ana component vardır. ilgili kodun ilgili yerde bulunmasını sağlar bize.
+model iş kurallarımızı tanımladığımız yerdir. tc kimlik aldık mesela doğru mu gibi iş kuralları tanımladığımız yerdir.
+view kısmı ise kullanıcının gördüğü kısımdır. üretilen sonuç yani view tarayıcıya yollanır ve oda derleyerek bir görüntü oluşturur...
+controller(istek ilk controllere gelir) ise isteğe göre iş yapar. veritabanı gerektiricek bir işlem mi vs bunu kontrol eder eğer gerekirse modelden bir cevap ister. controller cevapını view olarak gönderir tarayıcıya tekrar olarak.
+
+Requestler controllere gelir sonuç ise controllerden tarayıcılara gönderilir.
+mvc bir tasarım kalıbıdır. bir framework değildir.
+
+controller -> view  
+controller -> model 
+view -> model
 
 ...........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+asp.net core web app(model view controller) olanı seçeriz. croos platform olanı alalım linux,macos'da dahil olanı seçtik. hazır bir proje şablonu oluşturacak.
+solution bir kap gibidir bir solution içinde birden fazla proje olabilir.
+.....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+asp.net core web app(model view controller) ile bir proje oluşturursak oluşan dosyaların ne olduğunu ne işe yaradığını göreceğiz.
+
+conntected services klasörü var biz ora sayesinde 3. part servislere bağlanabiliriz.
+dependies ksımında ise frameworkleri ekleyebildiğimiz bir kısım var.
+
+properties içinde ise uyglamanın ayağa kalkması için nasıl bir yol izlenecek bunu ayarlayabiliriz.
+
+wwwrot kısmı ise bir klasördür tüm static dosyalarımızı barındırırız. videolar resimler ,css js kütüphaneleride default olarak gelir. css için bootstrap js için jquery hazır olarak geliyor.
+
+controllers kısmı ise controller kısmıdır. request'in ilk geldiği yerdir. tüm controllerleri controllers klasörü altında toplayacağız.
+
+models kısmı hem bussiness kodunun olduğu yer hemde veritabanı işlemlerinin olduğu yerdir.
+
+views kısmı ise kullanıcının göreceği arayüzü biz views kısmı içerisinde ayarlıyoruz. linkin ekranını bu klasörde yaparız.
+
+appsettings.json ise uygulamadaki static yolları barındıracağımız yerdir. mesela veritabanına bağlanmak için yolu buraya koyabiliriz. veya facebooka bağlanmak için gereken key'i buraya koyabiliriz.
+
+Program.cs dosyası ise uygulamanın ayağa kalktığı yerdir. main'dir aslında. mesela veritabanına bağlanmak istersek bir session kullanmak istersek buradan ayaralarız. uygulamanın genel ayarları burada yapılır.
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+asp.net core web app(model view controller) ile oluşturdğumuz bir projeyi nasıl ayağa kaldıracağız.
+cross platform olduğu için iss ile ya da kestrel ile ayağa kaldırabiliriz. klasik .net olsaydı sadece iss olurdu. ama cross platform olduğu için kestrel'de kullanabiliriz...
+
+properties içindeki launchsetttings.json içinde ayarları vardır iss ve kestrel kısımlarının
+
+        {
+        "iisSettings": {
+            "windowsAuthentication": false,
+            "anonymousAuthentication": true,
+            "iisExpress": {
+            "applicationUrl": "http://localhost:39372",
+            "sslPort": 44374
+            }
+        },
+        "profiles": {
+            "turkcell1.Web": {
+            "commandName": "Project",
+            "dotnetRunMessages": true,
+            "launchBrowser": true,
+            "applicationUrl": "https://localhost:7289;http://localhost:5258",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+            },
+            "IIS Express": {
+            "commandName": "IISExpress",
+            "launchBrowser": true,
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+            }
+        }
+        }
+
+üstte iss express seçersek iss ile ayağa kaldırırız. hem http hemde https ile ayağa kalkar. https ile ayağa almalıyız ki client ile server arasındaki iletişim şifrelensin.
+
+kestrel ile ayağa kaldırmak için ise uygulamanın ismini seçeriz.              "turkcell1.Web EMRE": {  ama buradan bir isim değişimi yapabiliriz.
+kestrel ile ayağa kaldırınca bir console ekranı geliyor bunun sebebi aslında cross olduğu için konsol arayüzü geliyor. web uygulamamız özünde bir konsol uygulaması. open source olarak ayağa kaldırırsak bir konsol arayüzü geliyor bize.
+
+program.cs'de bir main metotu yok ama ara dillerde ekleniyor ama biz main metotu ile uğraşmıyoruz. app.run direkt olarak uygulamayı çalıştırıyor.
+
+linux ve macos için kestrel kullanabiliriz windows içinde kestrel kullanabiliriz. ama iss sadece microsoft.  
+
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+Visual Studio'da oluşturduğunuz web sitesini Internet Information Services (IIS) ile ayağa kaldırırken varsayılan tarayıcı yerine kendi istediğiniz tarayıcıyı çalıştırmak için aşağıdaki adımları takip edebilirsiniz:
+
+Visual Studio Ayarları:
+
+Visual Studio'yu açın ve projenizi yükleyin.
+Üst menüden "Tools" (Araçlar) menüsüne gidin ve "Options" (Seçenekler) öğesine tıklayın.
+Sol taraftaki menüden "Projects and Solutions" (Projeler ve Çözümler) altında "Web Projects" (Web Projeleri) öğesini seçin.
+"Use the 64 bit version of IIS Express for web sites and projects" seçeneğini işaretleyin (Eğer 64-bit kullanıyorsanız).
+Özel Tarayıcı Ayarı:
+
+Projenizde "Solution Explorer"(ctrl + alt + l) (Çözüm Gezgini) penceresini açın.
+Projenizin adının yanındaki küçük oka tıklayarak alt öğelerini genişletin.
+"Properties" (Özellikler) klasörüne sağ tıklayın ve "Open" (Aç) öğesini seçin.
+"Web" sekmesine geçin.
+"Start Action" (Başlangıç Eylemi) bölümünde "Start External Program" (Harici Program Başlat) seçeneğini seçin.
+"Program" alanına, kullanmak istediğiniz tarayıcının çalıştırılabilir dosyasının yolunu girin. Örneğin, Google Chrome için bu yol genellikle C:\Program Files\Google\Chrome\Application\chrome.exe şeklindedir.
+"Command line arguments" (Komut satırı argümanları) bölümüne ise projenizin URL'sini girin. Örneğin, http://localhost:8080 gibi.
+Kayıt ve Çalıştırma:
+
+Bu ayarları kaydedin ve projenizi başlatın.
+Artık projeniz, belirlediğiniz tarayıcıda açılacaktır.
+Bu adımları izleyerek varsayılan tarayıcı yerine kendi seçtiğiniz tarayıcıyı kullanabilirsiniz.
+
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+temel routing yapısı.
+
+
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
