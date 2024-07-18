@@ -33,7 +33,30 @@ http://l.name Kullanici, p.Password_ CalintiSifre from PasswordList p
 cross apply (select * from sys.sql_logins) l 
 where 
 PWDCOMPARE(p.Password_,l.[password_hash])=1
-
+...............................................................
+web uygulamaları tarayıcılar ile çalışır. tarayıcılar html üzerinden derleyerek bize bir sayfa çıkarır. static sayfalar sadece gösterim yaparlar resim video vs ama kullanıcı ile etkileşime girmezler. dinamik sayfalar ise kullanıcı ile aktif olarak etkileşime geçerler. bir üye geldi bilgilerini girdi ve veri kaynağına kaydettik mesela o zaman dinamik bir sayfadır.
+sayfalarımız bir serverde veya servera çevrilmiş bir yapıda durur ve client(istemci) istek attığında sayfayı çalıştırdığında istemcinin tarayıcısı sayfayı derler ve bize bir sonuç getirir. bir sayfa döner html css ve js. tarayıcılarda buna göre sayfa getirir...
+tarayıcılar html css ve javascript dışında bir dil bilmezler sadece bunlarla çalışırlar... diğer etkileşimleri ise sunuculardaki kodlar yapar.
+  sayfalar css veya js içermek zorunda değil ama html zorunludur. html üzerine kurulur sistem. html iskelettir.
+dinamik olması için bir sayfanın veri kaynağı olması ve bilgi alışverişi olması gerekir.
+static sayfalar kullanıcıya göre değişmez verikaynağına bağlı değildir.
+........................................................................................................................
+application mesela asp ile yazılan ona veritabanı bağlı application ise html,css,js ile yazılmış sayfaya bağlıdır.
+application isteğe göre veritabanı ile haberleşir ve html css ve js çıktısı üretir ve cevap olarak tarayıcıya gönderilir.
+uygulama veritabanına bağlı. isteğe göre requeste göre veritabanı ile ilteşim kurarak veya direkt olarak html,css,js çıktısı(çıktı her zaman html,css,js olabilir başka bir dilden anlamaz tarayıcılar.) üretir. ve tarayıcıya yollar.
 ....................................................................................................................................................................................................................................................................................................................................................................................................................................
+.net her türden uygulama yapabildiğimiz sistem.    .net5.0 ile core ifadesi kalktı. 
+cross platform olmayanlar sadece windowsta çalışıyordu şimdi ise linux,windows,macos'ta çalışabilir hale geldi.
+core hem cross platform hem esnek(bir güncellemeyi daha kolay yapıyoruz ve daha sürdürülebilir daha uzun ömürlü oluyor.) hem yüksek performanslı hem geniş uygulama desteği var.
+....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+sdk ve runtime nedir?.
+.net sdk = bir .net uygulaması geliştirmek için gereken kütüphaneleri ve araçları veren software development kit'tir. yazılım geliştirme kiti. bu kitin olması gerekiyor geliştirmek için.
+runtime = .net ile geliştirilmiş bir uygulamanın çalışmasına imkan veren bir ortamdır. uygulamanın çalışması için gerekli kütüphaneleri barındırır. uygulamayı canlıya alır.
+sdk'nın içinde runtime vardır.
 
+mesela bir web uygulaması geliştirmek için bir sdk gerekiyor. sdk ile geliştirdiğimiz bir uygulamayı canlıya almak için ise runtime yeterlidir.
+sdk ile uygulama geliştirdiysem uygulama türüne uygun runtime gerekir canlıya almak gerekir.
 
+...........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+...........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
