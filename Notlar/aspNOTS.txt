@@ -138,6 +138,8 @@ program.cs'de bir main metotu yok ama ara dillerde ekleniyor ama biz main metotu
 
 linux ve macos için kestrel kullanabiliriz windows içinde kestrel kullanabiliriz. ama iss sadece microsoft.  
 
+iss ve kestrel kısmı yeşil play butonunun orada seçim yaparak ayağa kaldırabiliriz.
+
 
 ................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
@@ -167,6 +169,699 @@ Bu adımları izleyerek varsayılan tarayıcı yerine kendi seçtiğiniz tarayı
 
 ................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 temel routing yapısı.
+routing'ten kastımız kullanıcıların url girmeleri veya bir linke tıklamaları.
+
+Program.cs içinde 
+app.MapControllerRoute(
+    name: "default", 
+    pattern: "{controller=Home}/{action=Index}/{id?}"); //kısmı var. // buradaki ='ler default olarak nasıl davranılır bunu belirliyor.
+    // pattern uygulamamızın default routing pattern'i.
+    controller içerisindeki metotlara action deriz. bunların view kısmında bir karşılığı olur.
+    
+baseurl//controller//index ile sayfa görüntülenmesi sağlarız.
+baseurl//home//privacy
+//https://www.mysite.com bu bizim baseurl. localdeki baseurl ise //https://localhost:7098/ gibi bir yapıdır.
+
+? ile valuetype'ı nullable yapabiliriz c#'ta.
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+razor view engine.
+yazılım motorudur. view dosyasındaki html css js kodlarını html dosyalarına çevirir.  
+view içindeki index.cshtml dosyalarında hem c# hemde html dilleri aynı anda bulunabilir.
+                   uzantılar cshtml tarayıcılar c# kodlarını anlayamaz ama razor view engine onları html kodlarına çevirir.
+
+razor syntax'ı şudur @{ c# } kodları olarak oluştururuz. ve razor view engine deriz ki bir c# kodu var sen bunu html koduna çevir.
+
+@{
+    ViewData["Title"] = "Home Page";
+} // gibi razor view engine bunları c# koduna çevirir.
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+controller sınıfı oluşturmak. controller katmanı request'i ilk karşılayan yer. eğer istek model katmanı ile işlem yapacaksa model katmanında veriyi alır ve sayfayı görüntülemek için gelen request'i view'e göndererek bir arayüz alır onu tarayıcıya yollar.
+
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using turkcell1.Web.Models;
+
+        namespace turkcell1.Web.Controllers
+        {
+            public class HomeController : Controller // default olarak gelen HomeController sınıfı.
+            {                             // Controller sınıfı framework'ten gelir ve controller claslları bu sınıftan türerler çok yararlı metotları vardır.
+
+                private readonly ILogger<HomeController> _logger;
+
+                public HomeController(ILogger<HomeController> logger)
+                {
+                    _logger = logger;
+                }
+
+                public IActionResult Index() // bir metotun view tarafında bir karşılığı varsa action metot olarak adlandırırız. 
+                {
+                    return View();
+                }
+
+                public IActionResult Privacy()
+                {
+                    return View();
+                }
+
+
+                [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+                public IActionResult Error() // Error sayfası.
+                {
+                    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                }
+            }
+        }
+
+Controller sınıflarının içeriisnde hep Action metot kullanmaya devam etmek lazım. diğerleride olabilir ama temiz tutma açısından daha iyidir. lazımda farklı sınıflarla çağırmak daha mantıklıdır.
+
+action class'ı üzerine gelir sağ tık add view diyerek bir sayfa oluşturabiliriz.
+OrnekController diye bir sınıf oluşturduk ve view klasöründe Ornek diye bir klasör oluştu altında da sayfası oluştu.
+            https://localhost:44374/Ornek/Index  sonra baseurl/klasör/sayfası şeklinde bir yapı istenen sayfaya giriş yapabildik.
+
+
+...............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Action results. action metotların döndüreceği veri tipleri. view dönebilir , ContentResult, JsonResult,EmptyResult,ActionResult olabilir ve dahası var.
+
+        using Microsoft.AspNetCore.Mvc;
+
+        namespace turkcell1.Web.Controllers
+        {
+            public class OrnekController : Controller
+            {
+
+                public IActionResult Index()
+                {
+
+
+                    return View();
+
+
+                }
+
+                public IActionResult ContentResult()
+                { // bu metotu ekledik . https://localhost:44374/Ornek/ContentResult dersek eğer içerisindeki Stringi sayfaya basacak bunu dönecek bize.
+
+                    return Content("ContentResultDönüyor");
+
+
+                }
+
+                public IActionResult JsonResult()
+                { 
+                    // https://localhost:44374/Ornek/JsonResult dersek dönüşü görürüz...
+                       return Json(new { Id = 1, name = "kalem",price = 100 });
+
+                }
+
+        public IActionResult EmptyResult()
+        {
+            return new EmptyResult();
+
+        } // bununlada boş bir şey dönebiliriz. içeriksiz bir dönüş sağlar bize.
+
+            }
+
+        } 
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+RedirectoAction Method. Action Method'lardan farklı bir action methoda nasıl yönlendirme yapılacağı anlatılmaktadır.
+
+bir action metottan başka bir action metota geçiş yapmamızı sağlayacak.
+        using Microsoft.AspNetCore.Mvc;
+
+        namespace turkcell1.Web.Controllers
+        {
+            public class OrnekController : Controller
+            {
+
+
+                public IActionResult Index2()
+                {
+                    return RedirectToAction("Index","Ornek"); // burada hangi sayfaya dönmek istiyorum bunu belirletebiliriz.
+                    // Ornek conttolerindeki index sayfasına yönlendir dedik
+                    //return View();
+                }
+
+/index2 dersek index sayfasına gönderir bunun sebebi Program.cs kısmında default olarak bir action belirtmezsek default olarak index sayfasını gösterirmiş.
+
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Action Method Parametre Tanımlama.
+
+default olarak id kullanabiliriz daha fazlasını eklemek için yeni bir route kullanmak lazım.
+id? olarak kullanırız Program.cs'te ama id olrak kullanırsak id göndermemiz zorunlu hale gelir. bunu istemeyiz.
+
+
+        using Microsoft.AspNetCore.Mvc;
+
+        namespace turkcell1.Web.Controllers
+        {
+            public class OrnekController : Controller
+            {
+
+                public IActionResult ParametreView(int id) // id Program.cs'teki id ile aynı isimde olmalı.
+                {
+
+                    return RedirectToAction("JsonResultParametre","Ornek",new {id = id});
+                    
+                }
+
+                public IActionResult JsonResultParametre(int id)
+                {
+                    return Json(new { Id  = id });
+
+                }
+
+Action Method Parametre Tanımlama. böyle action metotlar parametre alır oldu. 
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");  
+Program.cs'te id kısmı var.  biz mesela baseurl/Ornek/ParametreView/1 dersek bu ParametreView action metotu 1 alır parametre olarak. ve ona göre işlem yapar.
+
+https://localhost:44374/Ornek/JsonResultParametre/2   bize {"id":2} getirdi.
+kodlar: 
+
+                    using Microsoft.AspNetCore.Mvc;
+
+                    namespace turkcell1.Web.Controllers
+                    {
+                        public class OrnekController : Controller
+                        {
+
+                            public IActionResult ParametreView(int id) // id Program.cs'teki id ile aynı isimde olmalı.
+                            {
+
+                                return RedirectToAction("JsonResultParametre","Ornek",new {id = id});
+                                
+                            }
+
+                            public IActionResult JsonResultParametre(int id)
+                            {
+                                return Json(new { Id  = id });
+
+                            }
+
+                            public IActionResult JsonResult()
+                            {
+                                return Json(new { Id = 1, name = "kalem", price = 100 });
+
+                            }
+
+                            public IActionResult Index2()
+                            {
+                                return RedirectToAction("Index","Ornek"); // burada hangi sayfaya dönmek istiyorum bunu belirletebiliriz.
+                                // Ornek conttolerindeki index sayfasına yönlendir dedik
+                                //return View();
+                            }
+
+                            public IActionResult Index()
+                            {
+
+
+                                return View();
+
+
+                            }
+
+                            public IActionResult ContentResult()
+                            {
+
+                                return Content("ContentResultDönüyor");
+
+
+                            }
+
+
+
+                            public IActionResult EmptyResult()
+                            {
+                                return new EmptyResult();
+
+                            }
+
+
+
+
+
+
+                        }
+                    }
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Veri Taşıma Yöntemleri-Viewbag (controller - view)
+controllerden viewlere veri taşıma yöntemleri. controllerden aldığımız dataları viewe göndererek kullanıcıya gösterebiliriz.
+
+data taşıma yöntemleri ViewBag-ViewData-TempData-ViewModel olarak sıralayabiliriz.
+
+ViewBag ile taşıma.
+
+        public IActionResult Index()
+        {
+            ViewBag.name = "Asp.Net core"; // bir isim verdik mesela
+
+
+            return View();
+
+
+        }
+        // sonra Ornek klasorundeki index.cshtml'e gidiyoruz. bu ismi yazdırmak için @ViewBag.name olarak kullanıyoruz ki razor syntax'ı c# kodunu htmle çevirsin.
+
+
+@{
+    var name = ViewBag.name;
+    <p>@name</p>
+
+} // birden fazla razor kodu için kullanırız.
+
+basit datalar için ViewBag kullanırız hacimli datalar için ViewModel kullanırız genelde.
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Veri Taşıma Yöntemleri-ViewData... mamtık ViewBag ile aynı tanımlama farklı.
+
+        public IActionResult Index()
+        {
+            ViewBag.name = "Asp.Net Core";
+            ViewData["age"] = 30;
+            return View();
+
+
+        }
+
+// buda Ornek klasorundeki Index.cshtml kısmı.
+        @{
+            ViewData["Title"] = "Index";
+        }
+
+        <h1>Index</h1>
+
+        <p>@ViewBag.name</p> 
+
+        @{
+            var name = ViewBag.name;
+            <p>@name</p>
+
+        }
+
+        <p>@ViewData["age"]</p>
+
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace turkcell1.Web.Controllers
+{
+    public class OrnekController : Controller
+    {
+
+
+        public IActionResult Index()
+        {
+            ViewData["age"] = 30;
+            ViewData["names"] = new List<String>() { "ahmet", "mehmet", "hasan" };
+            return View();
+
+
+        }
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>@ViewBag.name</p> 
+
+@{
+    var name = ViewBag.name;
+    <p>@name</p>
+
+}
+
+<p>@ViewData["age"]</p>
+
+@foreach(var item in ViewData["names"] as List<String>){  // as List<String> dedik tipini belirttik tipinden veriyi çıkarırsa String yapacak beceremezse Null yapacak.
+
+    <p>@item</p>
+
+} // foreach ile biz verileri yazdırabilir olduk.
+
+
+
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace turkcell1.Web.Controllers
+{
+    public class OrnekController : Controller
+    {
+
+
+        public IActionResult Index()
+        {
+            ViewData["age"] = 30;
+            ViewData["names"] = new List<String>() { "ahmet", "mehmet", "hasan" };
+            ViewBag.person = new {Id = 1,Name = "ahmet",Age = 23 }; // new ile default Objectten parametre adı,tipi ve verisi belli olan bir nesne ürettik.
+            return View();
+
+
+        }
+
+// Ornek klasorundeki İndex sayfayı.
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>@ViewBag.name</p> 
+
+@{
+    var name = ViewBag.name;
+    <p>@name</p>
+
+}
+
+<p>@ViewData["age"]</p>
+
+@foreach(var item in ViewData["names"] as List<String>){
+
+    <p>@item</p>
+
+}
+
+<p>@ViewBag.person.Id - @ViewBag.person.Name</p>
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+TempData. Controller'dan view'lere temdata ile nasıl data taşınacağını anlatılmaktadır.
+bir sayfadan diğer bir sayfaya veri taşımak için ViewBag ve ViewData bir sayfanın action metotuna veri verir.
+TempData ise Bir Action Metottan bir Action metota data taşıyabiliriz.
+
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace turkcell1.Web.Controllers
+{
+    public class OrnekController : Controller
+    {
+
+
+        public IActionResult Index()
+        {
+
+            TempData["Surname"] = "yıldız";
+
+
+            return View();
+
+
+        }
+
+// tanımlamayı Index sayfasında yaptık ama veriyi Index2 sayfasında yazdırabildik TempData sayesinde.
+https://localhost:44374/Ornek/Index2 ile normalde Index actionundaki olan veriyi başka bir sayfaya taşıyabildik.
+@{
+    ViewData["Title"] = "Index2";
+}
+
+<h1>Index2</h1>
+
+<p>@TempData["surname"]</p>
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Veri Taşıma Yöntemleri-ViewModel. Controller'dan view'lere view model ile nasıl data taşınacağını anlatılmaktadır.
+ViewModel'i daha çok hacmi büyük verileri için kullanırız.
+
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace turkcell1.Web.Controllers
+{
+    public class OrnekController : Controller
+    {
+
+        public class Product
+        {
+            public int Id { get; set; }
+            public  String Name { get; set; }
+
+        }
+
+        public IActionResult Index()
+        {
+            var productList = new List<Product>() {
+
+                new Product(){Id = 1,Name = "Kalem"},
+
+                new Product(){Id = 2,Name = "Kitap"},
+
+                new Product(){Id = 3,Name = "Defter"},
+
+
+            };
+
+            TempData["Surname"] = "yıldız";
+
+
+            return View(productList);
+
+
+        }
+
+@using turkcell1.Web.Controllers
+@model List<Product>
+
+@foreach(var item in model)
+{
+    <p>@item.Id - @item.Name</p>
+}
+
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+View'e giriş... 
+Bölüm içerik :
+• Razor Syntax
+• Layout
+• Partial View
+• Javascript
+• css
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Razor Syntax..
+cshtml uzantılı dosyalar içerisinde bir c#kodu yazacaksak eğer o zaman @ ile yazarız.
+
+<span>
+    @DateTime.Now.ToShortDateString()
+</span>
+
+@{
+    var datetime = @DateTime.Now.ToShortDateString();
+    var message = "merhaba";
+    
+    <text>bugunun tarihi: @datetime </text> 
+
+    <span>
+        mesaj: @message
+    </span>
+
+}
+
+
+        @{
+            ViewData["Title"] = "Home Page";
+            var alert = "Bu bir uyarıdır";
+        }
+
+        <div class="text-center">
+            <h1 class="display-4">Welcome</h1>
+            <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+        </div>
+
+        <span>
+            @DateTime.Now.ToShortDateString()
+        </span>
+
+        @{
+            var datetime = @DateTime.Now.ToShortDateString();
+            var message = "merhaba";
+
+
+            <span>
+                mesaj: @message
+            </span>
+
+        }
+
+        @if (1 == 1)
+        {
+            <p>doğru</p>
+
+        }
+        else if(DateTime.IsLeapYear(DateTime.Now.Year))
+        {
+            <p>artık yıl.</p>
+
+        }
+        else
+        {
+            <p>yanlış</p>
+        }
+
+        @for(var i = 0; i < 10;i++)
+        {
+            <p>@i</p>
+        }
+
+        @foreach (var item in Enumerable.Range(1,10).ToList())
+        {
+            <p>@item</p>
+        }
+
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Layout. bir web sayfasında genelde yapı aynıdır ortaktır tüm sayfalarda. Content denen kısım sayfadan sayfaya değişir bu sistem normelde.
+Hazır olarak Menu header footer alanı genelde ortak olup content kısmı sayfadan sayfaya değişir normalde.
+Layout özelleştirilmiş cshtml dosyasıdır.
+
+ama bu özelleştirilebilir mesela header olmasın diyebiliriz.
+view klasöründe Shared klasöründe _Layout.cshtml var mesela.
+
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <title>@ViewData["Title"] - turkcell1.Web</title>
+                <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+                <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+                <link rel="stylesheet" href="~/turkcell1.Web.styles.css" asp-append-version="true" />
+            </head>
+            <body>
+                <header>
+                    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                        <div class="container-fluid">
+                            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">turkcell1.Web</a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                                    aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                                <ul class="navbar-nav flex-grow-1">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                </header>
+                <div class="container">
+                    <main role="main" class="pb-3">
+                        @RenderBody()
+                    </main>
+                </div>
+
+                <footer class="border-top footer text-muted">
+                    <div class="container">
+                        &copy; 2024 - turkcell1.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </div>
+                </footer>
+                <script src="~/lib/jquery/dist/jquery.min.js"></script>
+                <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+                <script src="~/js/site.js" asp-append-version="true"></script>
+                @await RenderSectionAsync("Scripts", required: false)
+            </body>
+            </html>
+
+// _Layout.cshtml içinde body içinde header footer content vs vs gibi alanlar var.
+
+@RenderBody()   bu html kodunun içinde mesela index.cshtml içinde kodların bu metota eklendiği bilinir. 
+
+    @{
+        Layout = "_Layout"; // _ViewStart.cshtml içinde default olarak kullanılacak olan Layout'u belirleyebiliriz.
+    }
+
+wwwroot içinde js klasöründe site.js dosyasına hazır olarak kullanacağımız javascript kodlarını yazabiliriz.
+    css içerisinde ise site.css varda default olarak gelen css kodları vardır.
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Layout Sayfaları Oluşturmak.
+views klasörundeki Shared klasorunde add new view ile boş bir  view ekledik.
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>@ViewData["Title"] - turkcell1.Web</title>
+            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+            <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+            <link rel="stylesheet" href="~/turkcell1.Web.styles.css" asp-append-version="true" />
+        </head>
+        <body>
+            <header>
+
+            </header>
+
+            <div class="container">
+                <main role="main" class="pb-3">
+                    @RenderBody() 
+                </main>
+            </div>
+
+            <footer>
+                <div>footer</div>
+            </footer>
+        </body>
+        </html>
+
+// Layout'tan alıp düzenleme yaptık.
+
+@{
+    ViewData["Title"] = "ExampleController Index";
+    Layout = "ExampleLayout"; // burada hangi Layout'u kullanacağını belirttik yoksa default olarak Layout kullanır. _Layout'u kullanır.
+}
+
+<div>Bu sayfa Example Controller > Index sayfası</div>
+
+
+@{
+    Layout = null;
+} // Layout yoksa böyle kullanılır... html dosyasını kendimiz yazarız ister elle yazar ya da hazır şablonu kullanabiliriz.
+
+
+        @{
+            Layout = null;
+        }
+
+
+        <!DOCTYPE html>
+
+        <html>
+        <head>
+            <meta name="viewport" content="width=device-width" />
+            <title>NoLayout</title>
+        </head>
+        <body>
+        </body>
+        </html>
+// Layout'suz olduğu için kendi html yapısı var.
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Render Section Nedir ? Nasıl Tanımlanır ?
+
+
+
+
+
+
+................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+
 
 
 
