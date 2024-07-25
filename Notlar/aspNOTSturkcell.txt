@@ -2126,13 +2126,714 @@ namespace turkcell1.Web.Controllers
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 Kullanıcıdan Veri Alma Yöntemi (Model Binding) Method Parametre ile. Kullanıcıdan form aracılığı ile method parametresi üzerinden veri alma yöntemi anlatılmaktadır.
 
+using Microsoft.AspNetCore.Mvc;
+using turkcell1.Web.Models;
+
+namespace turkcell1.Web.Controllers
+{
+    public class ProductsController : Controller
+    {
 
 
+        private readonly ProductRepository _productRepository;
+        private AppDbContext _context; 
+
+
+        public ProductsController(AppDbContext context)
+        {
+            // DI container.
+            _productRepository = new ProductRepository();
+            // Dependies injection pattern bir design patterndir.
+
+            _context = context; // uygulama ayağa kalktığında c# eğer bir constructorda AppDbContext görürse o zaman bundan bir tane nesne örneği üretir ve bize verir. AppDbcontext nesnemizi aldık.
+
+            /*
+            if (!_context.Products.Any()) // herhangi bir kayıt yoksa bunları ekle demektir bu.
+            {
+                _context.Add(new Product() { Name = "Kalem1", Price = 100, Stock = 100,Color = "Red" });
+                _context.Add(new Product() { Name = "Kalem2", Price = 100, Stock = 200, Color = "Red" });
+                _context.Add(new Product() { Name = "Kalem3", Price = 100, Stock = 300, Color = "Red"});
+                // 3 tane data kaydettik.
+                _context.SaveChanges(); // değişiklikler veritabanına yansısın istersek eğer o zaman bunu kullanırık. SaveChanges()  denene  kadar ram'de tutulur. sonra veritabanına yansıtılır yansıtılınca ramden silinirler.
+            }
+            */
+
+
+
+
+        }
+
+        public IActionResult Index()
+        {
+            var products = _context.Products.ToList(); // veritabanındaki tüm dataları almış oluruz böylece.
+
+            return View(products);
+
+        }
+
+        public IActionResult Remove(int id)
+        {
+            var product = _context.Products.Find(id); // nesneyi bul.
+            _context.Products.Remove(product); // nesneyi sil komutu komut bellekte işlenmesi için SaveChanges lazım.
+            _context.SaveChanges(); // değişiklikleri kaydet.
+
+
+            return RedirectToAction("Index");
+        }
+
+        // aslında metotun üstende default olarak bir [HttpGet] var
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View();
+        }
+
+        [HttpPost] // dataları request'in bodysinde alacağı için tip belirttik.
+        // bir request var bunun bir head ve body kısmı var HttpPost'u seçersek eğer veriler bu requestin bodysinde gelir şifrelenerek gelir servera geldiğinde açılır güvenli bir şekilde alır.
+        // get metotu vardır datalar url ile taşınır ama güvenli değildir.
+
+        public IActionResult Add(string Name,decimal Price,int Stock,string Color) { // bu parametrelerin ismi form nesnesindeki taglarla aynı olmalıdır.
+            // kullanıcıdan aldığımız dataları bir metotun parametreleri üzerinden nasıl alırız. asp form'daki tagları(frontend'deki tagları) metota parametre olarak geçersek otomatik olarak verileri alır parametrelere koyar.
+
+
+            Product newProduct = new Product() { Name = Name,Price = Price,Stock = Stock,Color = Color};
+
+            _context.Products.Add(newProduct);
+            _context.SaveChanges();
+
+
+
+            return RedirectToAction("Index");
+
+        }
+
+
+        public IActionResult Update(int id)
+        {
+
+            return View();
+
+        }
+
+
+
+    }
+}
+
+// bu yöntem veri almak için daha fazla kullanılan daha mantıklı yöntemdir.
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Kullanıcıdan Veri Alma Yöntemi (Model Binding) Class(Sınıf) ile. Kullanıcıdan form aracılığı ile sınıf parametresi üzerinden veri alma yöntemi anlatılmaktadır.
+
+
+@{
+    ViewData["Title"] = "Add";
+}
+@model Product 
+
+<h1>EKLEME</h1>
+
+<form asp-controller="Products" asp-action="Add" method="post">
+
+    <label>Ürün İsmi</label>
+    <input type = "text" asp-for = "Name"/>
+    <br />    <label>Ürün Fiyat</label>
+
+    <input type="text" asp-for="Price" />
+    <br />    <label>Ürün Stok</label>
+
+    <input type="text" asp-for="Stock" />
+    <br />     <label>Ürün Renk</label>
+
+    <input type="text" asp-for="Color" />
+    <br />
+
+    <button type = "submit">Ürün Kaydet</button>
+
+
+
+  
+</form>
+// butona bastığım zaman @model Product ile bir Product üretilecek ve asp-for ile verileri doldurulacak sonra ise Add IActionResult'a parametre olarak gelecek nesne.
+
+.................. // burada bir nesne olarak olarak alacak ve asp-for tagı kullanarak nesnenin attributetelerine gelecek verileri belirleriz.
+
+        public IActionResult Add(Product newProduct) { // gelecek olan nesne model tagı sayesinde buraya parametre olarak gelecek. tip güvenli olarak kullanabileceğiz.
+
+
+            _context.Products.Add(newProduct);
+            _context.SaveChanges();
+
+
+
+            return RedirectToAction("Index");
+
+        }
+
+// böylece tip güvenli bir şekilde verileri alabiliriz.         
+// güvenli olan verileri requestlerin body'sinde taşımaktır.
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Kullanıcıdan Veri Alma Yöntemi (Model Binding) HttpGet
+Post değilde Get ile alacağız. En uygun yöntem Post ile almaktır Nesne olarak almaktır alınacak veriyi. 
+Get ile almak çok sağlıklı değildir.
+Get ile alırsak request'in stringinde gelir veriler çok güvenli değildir.
+
+urlde Query string olarak taşınacak veriler. mesela tc vs vs var o zaman çok sağlıksız ve güvensiz olarak gelir. ssl ile siteler yayınlansansa bile sorun olur iyi bir yöntem değildir. ve taşınabilecek data miktarı sınırlıdır.
+
+
+
+@{
+    ViewData["Title"] = "Add";
+}
+@model Product
+
+<h1>EKLEME</h1>
+
+<form asp-controller="Products" asp-action="SaveProduct" method="get"> @*get yaptık metotu ve actionu belirledik.*@
+
+    <label>Ürün İsmi</label>
+    <input type = "text" asp-for = "Name"/>
+    <br />    <label>Ürün Fiyat</label>
+
+    <input type="text" asp-for="Price" />
+    <br />    <label>Ürün Stok</label>
+
+    <input type="text" asp-for="Stock" />
+    <br />     <label>Ürün Renk</label>
+
+    <input type="text" asp-for="Color" />
+    <br />
+
+    <button type = "submit">Ürün Kaydet</button>
+
+
+
+  
+</form>
+............................
+
+        [HttpGet]  // Get ile alacağımız için belirleme yaptık.
+        public IActionResult SaveProduct(Product newProduct) {
+
+
+            _context.Products.Add(newProduct);
+            _context.SaveChanges();
+
+
+
+            return View();
+
+        }
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Kullanıcıdan Veri Alma Yöntemi (Model Binding) Update.cshtml. Ürün güncelleme sayfasının kodlanması anlatılmaktadır.
+
+
+@{
+    ViewData["Title"] = "Update";
+}
+
+
+@model Product
+
+<h1>Ürün Güncelleme</h1>
+
+<form asp-controller="Products" asp-action="Update" method="post">
+
+
+    <input type="hidden" asp-for="Id" /> @*Id'yi hidden olarak gönderdik ki asp bunu görebilsin buna göre bir güncelleme yapsın.*@ 
+
+
+    <label>Ürün İsmi</label>
+    <input type="text" asp-for="Name" />
+    <br />    <label>Ürün Fiyat</label>
+
+    <input type="text" asp-for="Price" />
+    <br />    <label>Ürün Stok</label>
+
+    <input type="text" asp-for="Stock" />
+    <br />     <label>Ürün Renk</label>
+
+    <input type="text" asp-for="Color" />
+    <br />
+
+    <button type="submit">Ürün Güncelle</button>
+
+</form>
+
+// views product update sayfası.
+.......................... // ve iki tane IActionResult doldurduk.
+
+
+using Microsoft.AspNetCore.Mvc;
+using turkcell1.Web.Models;
+
+namespace turkcell1.Web.Controllers
+{
+    public class ProductsController : Controller
+    {
+
+
+        private readonly ProductRepository _productRepository;
+        private AppDbContext _context; 
+
+
+        public ProductsController(AppDbContext context)
+        {
+            // DI container.
+            _productRepository = new ProductRepository();
+            // Dependies injection pattern bir design patterndir.
+
+            _context = context; // uygulama ayağa kalktığında c# eğer bir constructorda AppDbContext görürse o zaman bundan bir tane nesne örneği üretir ve bize verir. AppDbcontext nesnemizi aldık.
+
+            /*
+            if (!_context.Products.Any()) // herhangi bir kayıt yoksa bunları ekle demektir bu.
+            {
+                _context.Add(new Product() { Name = "Kalem1", Price = 100, Stock = 100,Color = "Red" });
+                _context.Add(new Product() { Name = "Kalem2", Price = 100, Stock = 200, Color = "Red" });
+                _context.Add(new Product() { Name = "Kalem3", Price = 100, Stock = 300, Color = "Red"});
+                // 3 tane data kaydettik.
+                _context.SaveChanges(); // değişiklikler veritabanına yansısın istersek eğer o zaman bunu kullanırık. SaveChanges()  denene  kadar ram'de tutulur. sonra veritabanına yansıtılır yansıtılınca ramden silinirler.
+            }
+            */
+
+
+
+
+        }
+
+        public IActionResult Index()
+        {
+            var products = _context.Products.ToList(); // veritabanındaki tüm dataları almış oluruz böylece.
+
+            return View(products);
+
+        }
+
+        public IActionResult Remove(int id)
+        {
+            var product = _context.Products.Find(id); // nesneyi bul.
+            _context.Products.Remove(product); // nesneyi sil komutu komut bellekte işlenmesi için SaveChanges lazım.
+            _context.SaveChanges(); // değişiklikleri kaydet.
+
+
+            return RedirectToAction("Index");
+        }
+
+        // aslında metotun üstende default olarak bir [HttpGet] var
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View();
+        }
+
+        [HttpPost] 
+        public IActionResult Add(Product newProduct) {
+
+
+            _context.Products.Add(newProduct);
+            _context.SaveChanges();
+
+
+
+            return RedirectToAction("Index");
+
+        }
+
+
+
+        [HttpGet]
+        public IActionResult Update(int id)
+        {
+
+            var product = _context.Products.Find(id);
+
+            return View(product); // bu sayfaya gittiği zaman sayfadaki @model Product nesneyi alacak ve textleri dolduracak.. 
+
+        }
+
+        [HttpPost]
+        public IActionResult Update(Product updateProduct)
+        {
+
+
+            _context.Products.Update(updateProduct);
+            _context.SaveChanges(); // değişiklikleri kaydederiz.
+
+
+            return RedirectToAction("Index");
+
+        }
+
+
+
+
+
+    }
+}
+
+// hidden olarak bizim Id'yi göndermemiz lazım ki primary key'i görsün ef core.
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+Kullanıcıdan Veri Alma Yöntemi (Model Binding) Ekleme ve Güncelleme Mesajı Göstermek. Ürün güncelleme ve ekleme işlemlerini sonrasında listeleme sayfasında mesaj gösterme konusu anlatılmaktadır.
+bir viewden bir viewe temp data ile taşıma yapacağız.
+TempData ile bir veri taşıyınca sayfaya o zaman içi boşalır ve null olur.
+
+@{
+    ViewData["Title"] = "Index";
+}
+@model List<Product>
+<h1>Ürünler</h1>
+
+@if(TempData["status"] != null) @*TempData'nın içi boş mu değil mi bakacağız.*@
+{
+    <div class="alert alert-primary" role="alert">
+        @TempData["status"] @*TempData bir kere görüntülenecek sonra içindeki veri null olacak.*@
+
+    </div>
+
+}
+
+
+<a asp-controller="products" asp-action="Add">Ürün ekle</a>
+<table class="table">
+
+    <thead>
+        <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>PRICE</th>
+            <th>STOCK</th>
+         <th>İŞLEM</th>
+            <th>RENK</th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+    @foreach(var item in Model){
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+            <td>@item.Price</td>
+            <td>@item.Stock</td>
+            <td>@item.Color</td>
+
+                <td><a asp-controller="products" asp-action="Remove" asp-route-id="@item.Id">SİL</a>
+
+                    <a asp-controller="products" asp-action="Update" asp-route-id="@item.Id">GÜNCELLE</a>
+                
+       
+                    
+
+
+                </td>
+
+        </tr>
+    }
+    </tbody>
+
+
+</table>
+...................
+using Microsoft.AspNetCore.Mvc;
+using turkcell1.Web.Models;
+
+namespace turkcell1.Web.Controllers
+{
+    public class ProductsController : Controller
+    {
+
+
+        private readonly ProductRepository _productRepository;
+        private AppDbContext _context; 
+
+
+        public ProductsController(AppDbContext context)
+        {
+            // DI container.
+            _productRepository = new ProductRepository();
+            // Dependies injection pattern bir design patterndir.
+
+            _context = context; // uygulama ayağa kalktığında c# eğer bir constructorda AppDbContext görürse o zaman bundan bir tane nesne örneği üretir ve bize verir. AppDbcontext nesnemizi aldık.
+
+            /*
+            if (!_context.Products.Any()) // herhangi bir kayıt yoksa bunları ekle demektir bu.
+            {
+                _context.Add(new Product() { Name = "Kalem1", Price = 100, Stock = 100,Color = "Red" });
+                _context.Add(new Product() { Name = "Kalem2", Price = 100, Stock = 200, Color = "Red" });
+                _context.Add(new Product() { Name = "Kalem3", Price = 100, Stock = 300, Color = "Red"});
+                // 3 tane data kaydettik.
+                _context.SaveChanges(); // değişiklikler veritabanına yansısın istersek eğer o zaman bunu kullanırık. SaveChanges()  denene  kadar ram'de tutulur. sonra veritabanına yansıtılır yansıtılınca ramden silinirler.
+            }
+            */
+
+
+
+
+        }
+
+        public IActionResult Index()
+        {
+            var products = _context.Products.ToList(); // veritabanındaki tüm dataları almış oluruz böylece.
+
+            return View(products);
+
+        }
+
+        public IActionResult Remove(int id)
+        {
+            var product = _context.Products.Find(id); // nesneyi bul.
+            _context.Products.Remove(product); // nesneyi sil komutu komut bellekte işlenmesi için SaveChanges lazım.
+            _context.SaveChanges(); // değişiklikleri kaydet.
+
+
+            return RedirectToAction("Index");
+        }
+
+        // aslında metotun üstende default olarak bir [HttpGet] var
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View();
+        }
+
+        [HttpPost] 
+        public IActionResult Add(Product newProduct) {
+
+
+            _context.Products.Add(newProduct);
+            _context.SaveChanges();
+
+            TempData["status"] = "Ürün başarı ile eklendi.";
+
+
+            return RedirectToAction("Index");
+
+        }
+
+
+        [HttpGet]
+        public IActionResult Update(int id)
+        {
+
+            var product = _context.Products.Find(id);
+
+
+            return View(product); // bu sayfaya gittiği zaman sayfadaki @model Product nesneyi alacak ve textleri dolduracak.. 
+
+        }
+
+        [HttpPost]
+        public IActionResult Update(Product updateProduct)
+        {
+
+
+            _context.Products.Update(updateProduct);
+            _context.SaveChanges(); // değişiklikleri kaydederiz.
+            TempData["status"] = "Ürün başarı ile güncellendi."; // TempData ile veri taşıması yapacağız.
+
+
+            return RedirectToAction("Index");
+
+        }
+
+
+
+
+
+    }
+}
+// TempData'da cookie ile taşınır. işini yaptıktan sonra içi boşalır.
+// Requestler arası data taşımayı cookieler üzerinden yaparız okuma olunca silinir. tarayıcının cookie özelliği kapalı ise taşıma yapamayız.
+//tarayıcının cookie özelliği kapalı ise taşıma yapamayız.
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Kullanıcıdan Veri Alma Yöntemi (Model Binding) Hyprid Model. Kullanıcıdan form aracılığı ile hem query string'den hemde body'den veri alma yöntemi anlatılmaktadır.
+
+
+
+@{
+    ViewData["Title"] = "Update";
+}
+
+
+@model Product
+
+<h1>Ürün Güncelleme</h1>
+
+<form asp-controller="Products" asp-action="Update" asp-route-productId ="@Model.Id" asp-route-type ="type1" accept-charset=" " method="post"> @*asp-route-parametre ismi  yapısı ile metotun parametresi ne değer alacak belirleyebiliriz.*@
+
+    <label>Ürün İsmi</label>
+    <input type="text" asp-for="Name" />
+    <br />    <label>Ürün Fiyat</label>
+
+    <input type="text" asp-for="Price" />
+    <br />    <label>Ürün Stok</label>
+
+    <input type="text" asp-for="Stock" />
+    <br />     <label>Ürün Renk</label>
+
+    <input type="text" asp-for="Color" />
+    <br />
+
+    <button type="submit">Ürün Güncelle</button>
+
+</form>
+
+.....................
+
+   [HttpPost]
+   public IActionResult Update(Product updateProduct,int productId,string type)
+   { // int float gibi değeler requst'in string'inde bekler Product gibi nesneler ise request'in body'sinde taşınırlar bu yapı ile hibrit bir çözüm ürettik.
+     // Post ile gelsede query stringde gelir int float decimal gibi değerler query'nin body'sinde gelsin istersek o zaman Product nesnesine entegre edebiliriz.
+
+       updateProduct.Id = productId;
+       _context.Products.Update(updateProduct);
+       _context.SaveChanges(); // değişiklikleri kaydederiz.
+       TempData["status"] = "Ürün başarı ile güncellendi.";
+
+
+       return RedirectToAction("Index");
+
+   }
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Dependency Injection.
+    Bölüm içerik :
+            Dependency Injection Design Pattern
+            Inversion Of Control principle
+            Dependency Inversion principle
+            DI Contoiner
+            Singleton/Scope/Transient
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Dependency Injection nedir ?. Dependency Injection Design Pattern konusu anlatılmaktadır.
+bir design pattern(DI)dır. bir yazılımın ihtiyaç duyduğu bağımlılıkların dışarıdan eklenmesidir.     
+bir implementasyondur. 
+
+        Inversion Of Control principle(IOC)
+        Dependency Inversion principle
+        // iki prensibi var. 
+
+Inversion Of Control principle: mesela a ve b classlarımız var. bu a class'ının görevini yerine getirebilmesi için b class'ına ihtiyacı var. bu prensip şunu der a class'ı içinde b class'ı olmasın, b class'ı dışarıdan a'nın içerisine gelsin. b class'ı dışarıdan gelirse tüm süreç dışarıda olucak. a class'ı b class'ının yaşam döngüsüne karışmıyor sorumluğu almıyor daha sorunsuz bir süreç oluyor.
+        taksiye binip bir yere gitmek gibi tüm sorumluluk takside.  ama kendi arabamız olsaydı lastiği benzini her şeyiyle biz uğraşıcaktık. değişim yaptığımız zaman çok fazla uğraşmamız lazımdı ama taksiden inip başka taksiye binmek kolaydır. tüm süreci dışarıdan yönetmek daha sürdürülebilir bir işlev kuracaktır bize.
+
+Dependency Inversion principle: iki tane class olsun. a class'ının b class'ına ihtiyacı olursa iki class birbirinden habersiz olsun. ve bir interface veya abstract class ile bağlansın. birbirinden soyutlansın sınıflar. kesinlikle birbirlerini direkt olarak bilmesinler. parçalar birbirini ne kadar az bilirlerseler o kadar sürdürülebilir kod yazmış oluruz. yeni featureler geldiğinde daha kolay olacak.
+   a class'ı ile b class arasında interface ya da abstract olacak birbirinden soyutlanacaklar direkt olarak birbirlerini bilmeyecekler. parçaların birbirlerini az bilmesi o kadar sürdürülebilir büyütülebilir bir uygulama elde ederiz.
+
+bu iki prensibe sadık olmak lazım. daha güvenli ve güncellenebilir bir sistem yazabiliriz.
+
+bağımlılıkları dışarıdan enjekte etme olayı budur.
+sıkı bağlı değil gevşek uygulamar yazmamız lazım. ki daha sürdürülebilir olsun kodlarımız. 
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+Asp.Net Core (IOC/DI) Container. Asp.Net Core (IOC/DI) Container konusu anlatılmaktadır.
+asp.net core framework hazır DI/IOC altyapısı ile gelir. 
+
+a ve b controllerlerinin görevini yerine getirmek için DAL class'ına ihtiyaçları olsun bunun anlamı a ve b DAL'a bağımlıdır demektir. DAL bağımlılık objesidir(Dependency object). spyutlama ile enjekte edeceğiz.
+DAL sınıfımız olsun mesela IDAL interface ile a ve b controllerlerine enjekte edeceğiz. 
+uygulamanın genelini ilgilendiren DbContext gibi nesneleri new ile üretmek yerine dışardan entegre edeceğiz.
+
+Singleton-Scoped-Transient bunlar ise bağımlılık objelerinin mesela dal class'ı gibi ne kadar olacağını belirlemek için kullanılan yapılardır.
+
+
+interface ile enjekte etmek mantıklıdır. DI prensibi.
+iki yapıyı birbirinden soyutlarken interfaceyi daha fazla kullanırız. abstract yapısıda kullanılabilir ama interface daha fazla.
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Singleton-1. Asp.Net Core DI Conteiner ile Singleton yaşam döngüsü anlatılmaktadır.
+Tek bir nesne üretmek için. bir tane nesne oluşturulacak ve sadece o nesne kullanılacak. uygulama ayağa kalktığında uygulama açık kaldığı sürece hep aynı nesne olacak ve tek başına olacak.
+
+db ile ilgili işlemlerde Singleton metotlar kullanmak mantıklı değildir.
+
+
+        private IHelper _helper;
+
+        public ProductsController(AppDbContext context,IHelper helper)
+        {
+            // DI container.
+            _productRepository = new ProductRepository();
+            // Dependies injection pattern bir design patterndir.
+            _helper = helper;
+            _context = context; 
+
+        }
+// bu yapı ile kullanmak lazım new kullanmadan direkt olarak bir nesne alacak constructor ve prop'u constructor içinde dolduracağız. böylece Products controller nesnesi Ihelperla ilgilenmeyecek dışarıda bir değişim yapı değişikliği olsa bile ProductsController'da bir değişim olmayacak.
+
+// Program.cs class'ına geldik ve var app'ten önce aşağıdaki satırı ekleriz.
+// Programın bu nesnenin yaşam döngüsünü bilmesi için. deriz ki Singleton nesne ekle ve bir class'ın constructorunda Ihelper adında bir nesne görürsen eğer o zaman Helper class'ından bir nesne üret ve getir demektir.
+builder.Services.AddSingleton<IHelper,Helper>();
+
+var app = builder.Build();
+............................
+namespace turkcell1.Web.Helpers
+{
+
+    public class Helper : IHelper
+    {
+        public string Upper(string text)
+        {
+
+            return text.ToUpper();
+
+
+        }
+
+
+    }
+
+
+}
+......................................
+namespace turkcell1.Web.Helpers
+{
+    public interface IHelper
+    {
+        string Upper(string text);
+
+
+
+    }
+
+}
+
+........................................
+builder.Services.AddSingleton<IHelper,Helper>(); // AddSingleton dediğimiz için Singleton olarak belleğe yerleşecek Helper nesnesi.
+// bu satır sayesinde. Ihelper parametresi olan class'lara Helper class'ından nesne üretilip getirilecek.
+
+private IHelper _helper;
+public ProductsController(AppDbContext context,IHelper helper)
+
+bu yapıya biz constructor injection denir.
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Singleton-2.
+
+// ProductsController'deki bir metota enjekte ettik illa constructor ile enjekte edeceğiz diye bir şey yok metot parametresi ilede enjekte edebiliriz. ama metot içerisinde [FromServices] etiketi ile belirtmemiz lazımdır.
+
+        public IActionResult Index([FromServices]IHelper helper2)
+        { // [FromServices] demek bunun DI container ile geleceğini belirtir.
+            // buda metot enjekte etmeye yarar.
+            var status = _helper.Equals(helper2); // true gelecek yani ikiside aynı nesnedir bir tane üretilir ve containter ile gelir ikiside.
+            // ikiside bellekteki aynı nesnedir aslında.
+
+            var text = "Asp.net";
+            var uppertext = _helper.Upper(text);
+
+
+            var products = _context.Products.ToList(); // veritabanındaki tüm dataları almış oluruz böylece.
+
+            return View(products);
+
+        }
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
+
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
 
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
