@@ -2827,7 +2827,1074 @@ Singleton-2.
         }
 
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Scoped. Asp.Net Core DI Conteiner ile Scoped yaşam döngüsü anlatılmaktadır.
+nesnelerin yaşam döngüsüne müdahale edebilen metotlardır Singleton-Scoped-Transient.
 
+Scope'de enjekte ettiğimiz sınıfın yaşam döngüsü request responseye dönüşünceye kadardır. mesela bir request geldi kullanıcı butona bastı. ve service1,service2,Acontroller nesneleri üretiliyor ve bu nesneler Ihelper'ı implemente etmiş. önce Ihelper bellekte var mı yok bunu kontrol eder eğer yoksa oluşturur ve belleğe koyar. ve bir daha Ihelper görürse sıfırdan üretmez aynı Helper'ı gönderir. Ama Response olduğunda ise Helper nesnesi bellekten uçar. Singleton'da ise bir kere üretilir sonra tüm requestlerde aynı nesne kullanılır ama bunda Response olunca request nesne uçar.
+bunu servis ve veritabanı gibi şeyler için Scoped olarak kullanırız. web ve api'da daha çok scoped kullanırız.
+mesela veritabanı için kullanıcak DbContext gibi nesneleri Scoped olarak kullanırız.
+
+builder.Services.AddScoped<IHelper,Helper>(); // bunu ekledik var app üzerine. Bunun anlamaı Ihelper gördüğü constructor parametrelerine veya metot parametrelerine Helper class'ından nesne üretip getirecek demektir. 
+request response olunca Helper'den üretilen nesne bellekten uçurulacak.
+
+
+
+        Helper _helper; 
+
+        private readonly ILogger<HomeController> _logger;
+
+        public HomeController(ILogger<HomeController> logger,Helper helper)
+        {
+
+            _helper = helper;
+            _logger = logger;
+        }
+// mesela bir prensibi ihlal edip interface ile değilde nesne olarak çağırdık o zaman 
+builder.Services.AddScoped<Helper>(); // bunu eklememiz lazım Helper gördüğü yere Helperden nesne üretip getirecek. ama bun yöntem çok kullanılmamalıdır.
+
+
+builder.Services.AddScoped<Helper>(sp => new Helper()); // bu yapıyı kullanırsak eğer o zaman üretilen nesneni constructoruna istenen bir veriyi gönderedebiliriz. sp => new Helper("sdfbdfsb"); yapabiliriz mesela.
+
+DbContext'in yaşam döngüsü default olarak scoped'dir. her request'te veritabanına gider ve bir connection string ile gider bağlantı açar ve sorguları halleder.
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Transient. Asp.Net Core DI Conteiner ile Transient yaşam döngüsü anlatılmaktadır.
+
+Tüm bu yaşam döngüsü üretme işlemlerini DI container halleder.
+
+bunda DI container ise her karşılaşmada sıfırdan bir nesne üretir ve belleğe koyar.  response olunca tüm nesneler bellekten silinir.
+
+builder.Services.AddTransient<IHelper,Helper>(); // bu metotu ekledik var app üzerinde. metot ya da constructorda parametre olarak Ihelper görürse helper class'ından bir nesne üretecek.
+referancelere göre karşılaştırma yapacak bellekte nesne yoksa oluşturacak. her karşılaşmada yeni nesne üretilecek IHelper ile karşılaşmada.. response olunca request belleği sıfırlayacak.
+
+bir class içerisinde bir constructor oluşturursak(parametre alan bir constructor) default olan constructor yok olur.
+..................................
+// Program.cs'in içerisi.
+builder.Services.AddTransient<IHelper,Helper>(sp =>
+{
+    return new Helper(true);
+
+});
+
+
+var app = builder.Build();
+....................................
+namespace turkcell1.Web.Helpers
+{
+
+    public class Helper : IHelper
+    {
+
+        private bool _isConfiguration;
+        public Helper(bool isConfiguration)
+        {
+                
+            _isConfiguration = isConfiguration;
+
+        }
+
+        public string Upper(string text)
+        {
+
+
+            return text.ToUpper();
+
+        }
+
+    }
+
+}
+...............................................
+..............................................
+
+using turkcell1.Web.Models;
+
+namespace turkcell1.Web.Helpers
+{
+
+    public class Helper : IHelper
+    {
+
+
+        private readonly AppDbContext _context;
+
+        public Helper(AppContext context)
+        {
+            _context = context;
+
+        }
+
+        public string Upper(string text)
+        {
+
+
+            return text.ToUpper();
+
+
+        }
+
+
+    }
+
+
+} // burada kullanılan AppDbContext'i parametre olarak Program.cs'de göndermeye gerek yok çünkü zaten DI container bunu tanıyor bundan dolayı gerek yok. zaten servis olarak eklenmiş durumda.
+
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+[FromService] ile metot injection yapabiliriz. ve toplam 3 tane injection tipi var.
+migrationları veritabanına yaansıtmak için update-database deriz. veritabanını güncelleriz.
+
+............
+Action method'larda route'dan data almak için kullanılan doğru attribute [FromRoute]'tur.
+
+İşte diğer attribute'ların işlevleri:
+
+[FromQuery]: Query string'den veri almak için kullanılır.
+[FromRoute]: Route verilerinden veri almak için kullanılır.
+[Route]: Route tanımlamak için kullanılır.
+[FromBody]: İstek gövdesinden veri almak için kullanılır.
+[FromHeader]: HTTP header'lardan veri almak için kullanılır.
+Özetle, route'dan data almak için doğru attribute [FromRoute]'tur.
+
+DbContext veritabanı DbSet ise tabloyu taklit eder.
+...........
+DbContext ve DbSet ikilisi Entity Framework Core'da veritabanı ile etkileşim kurmak için kullanılır. Aşağıda bu terimlerin ne anlama geldiğini ve karşılık geldiği kavramları bulabilirsiniz:
+
+DbContext: Veritabanı bağlantısını yöneten ve veritabanı işlemlerini (CRUD işlemleri gibi) gerçekleştiren ana sınıftır.
+DbSet: Belirli bir veritabanı tablosunu temsil eden ve bu tablo üzerinde CRUD işlemleri yapmanızı sağlayan bir koleksiyon sınıfıdır.
+Bu ikili, Object-Relational Mapping (ORM) araçlarında genellikle aşağıdaki ikililere karşılık gelir:
+
+Session/Transaction - Query Object: ORM araçlarında oturum (session) ve işlem (transaction) yönetimi yapan ve veritabanı sorguları gerçekleştiren yapı.
+EntityManager - Entity: Veritabanı yönetimini ve etkileşimleri yöneten yapı (EntityManager) ve belirli veritabanı tablolarını temsil eden varlıklar (Entity).
+Repository - Model: Veri erişim katmanını sağlayan yapı (Repository) ve işlenebilir veri modelleri (Model).
+Entity Framework Core bağlamında en çok benzeyen kavram çifti:
+
+DbContext - DbSet: Veritabanı bağlantısını ve işlemlerini yöneten yapı (DbContext) ve belirli veritabanı tablolarını temsil eden koleksiyon (DbSet).
+Yukarıdaki ikililer arasında doğrudan birebir eşleşen kavramlar bulunmamakla birlikte, Entity Framework Core'daki DbContext ve DbSet kavramlarının EntityManager ve Entity kavramlarına oldukça benzer olduğunu söyleyebiliriz.
+
+Özetle:
+
+DbContext ≈ EntityManager
+DbSet ≈ Entity
+Bu ikililer, ORM sistemlerinde veritabanı işlemlerini ve veritabanı tablolarını temsil eder.
+.................
+Migration kodlarının SQL script'ini almak için Entity Framework Core'da Script-Migration komutunu kullanabilirsiniz. Bu komut, migration'ların oluşturduğu SQL komutlarını bir dosya olarak almanızı sağlar
+.................
+Action method’lara parametre olarak geçilen complex type’rın default model binding tipi Form ya da request'in bodysidir.? - kesin değil bu bilgi.
+.................
+AddSingleton ile nesne üretirsek hep aynı nesne ile işlem olur program kapanana kadar.
+....................,
+Request’in Header’ından data almak için [FromHeader] attribute'u kullanılır.
+
+Örnek olarak, bir action method'un header'dan veri alması şu şekilde yapılabilir:
+
+public IActionResult MyAction([FromHeader] string myHeaderValue)
+{
+    // myHeaderValue, request header'ından alınan değeri içerir
+    return View();
+}
+Bu şekilde, myHeaderValue parametresi HTTP request header'ından gelen değeri alır..
+.........................................
+Ef core ilişkisel veritabanları ile çalışır.
+............................................
+ASP.NET Core'da model binding için kullanılan çeşitli attribute'lar bulunmaktadır. İşte yaygın olarak kullanılan model binding attribute'ları ve işlevleri:
+
+[FromQuery]: Query string'den veri almak için kullanılır.
+[FromRoute]: Route verilerinden veri almak için kullanılır.
+[FromBody]: HTTP request gövdesinden veri almak için kullanılır.
+[FromHeader]: HTTP request header'ından veri almak için kullanılır.
+[FromForm]: Form verilerinden veri almak için kullanılır.
+[FromServices]: Dependency Injection ile servisten veri almak için kullanılır.
+Bu attribute'lar, ASP.NET Core'da model binding için kullanılır ve her biri belirli bir kaynaktan veri almayı sağlar. Toplamda 6 tane yaygın olarak kullanılan model binding attribute'u vardır.
+..................................................
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+.............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+ASP MVC 301.
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Form elements: bölüm içerikleri:
+    Text
+    Radio
+    Checkbox
+    Select
+    Label
+    Datetime
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Text(Form elements):  Form Elements Input-Css. Form elemanlarından input ve input taglarına css eklemek için bootstrap konusu anlatılmaktadır.
+
+
+        @{
+            ViewData["Title"] = "Add";
+        }
+        @model Product
+
+        <h1>EKLEME</h1>
+
+        <form asp-controller="Products" asp-action="Add" method="post">
+
+
+            <div class="mb-3">
+                <label for="Name" class="form-label">Ürün ismi:</label>
+                <input class="form-control" asp-for="Name">
+                
+            </div>
+
+                <div class="mb-3">
+                <label for="Name" class="form-label">Ürün fiyat:</label>
+                <input class="form-control" asp-for="Price">
+                
+            </div>
+
+            <div class="mb-3">
+                <label for="Name" class="form-label">Ürün Stok:</label>
+                <input class="form-control" asp-for="Stock">
+
+            </div>
+
+
+            <div class="mb-3">
+                <label for="Name" class="form-label">Ürün Renk:</label>
+                <input class="form-control" asp-for="Color">
+
+            </div>
+
+
+            <button type = "submit">Ürün Kaydet</button>
+
+        </form>
+
+bootstrapten parçalar alarak bir sistem inşa ettik.
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Form Elements Input-Checkbox. Form elemanlarından input checkbox tipi anlatılmaktadır.
+
+
+                @{
+                    ViewData["Title"] = "Add";
+                }
+                @model Product
+
+                <h1>EKLEME</h1>
+
+                <form asp-controller="Products" asp-action="Add" method="post">
+
+
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Ürün ismi:</label>
+                        <input class="form-control" asp-for="Name">
+                        
+                    </div>
+
+                        <div class="mb-3">
+                        <label for="Name" class="form-label">Ürün fiyat:</label>
+                        <input class="form-control" asp-for="Price"> @*asp-for gibi tag helperlere verdiğimiz verilere göre zaten asp kendisi tipini belirliyor. eksrta olarka tip belirtmemize gerek yok ama bazen default olarak gelen tipi ezmemiz gerekebilir. o zaman type = "text" gibi ezmemiz lazım.*@
+                        
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Ürün Stok:</label>
+                        <input type ="" class="form-control" asp-for="Stock">
+
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Ürün Renk:</label>
+                        <input class="form-control" asp-for="Color">
+
+                    </div>
+
+
+                    <div class="form-check">
+                        <input class="form-check-input" asp-for="IsPublish">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Yayınlansın mı?
+                        </label>
+                    </div> @*asp-for ile nereye gideceğine karar verdik ve bootstraptan aldığımız checksleri yerleştirdik. asp-for ile bir veri girişi belirlersek o zaten typeını otomatik belirliyor. boolean tip olduğunu bilecek. 
+                    *@
+
+
+
+                    <button type="submit" class="btn btn-primary">Ürün Kaydet</button> @*class="btn btn-primary" bunu bootstrap sitesinden aldık mesela ve bunu ekleyerek butona bir tip ekledik.*@
+
+                </form>
+
+
+        ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+        Form Elements Input-Radio. Form elemanlarından input radio tipi anlatılmaktadır.
+
+
+        @{
+            ViewData["Title"] = "Add";
+        }
+        @model Product
+
+        <h1>EKLEME</h1>
+
+        <form asp-controller="Products" asp-action="Add" method="post">
+
+
+            <div class="mb-3">
+                <label for="Name" class="form-label">Ürün ismi:</label>
+                <input class="form-control" asp-for="Name">
+                
+            </div>
+
+                <div class="mb-3">
+                <label for="Name" class="form-label">Ürün fiyat:</label>
+                <input class="form-control" asp-for="Price"> @*asp-for gibi tag helperlere verdiğimiz verilere göre zaten asp kendisi tipini belirliyor. eksrta olarka tip belirtmemize gerek yok ama bazen default olarak gelen tipi ezmemiz gerekebilir. o zaman type = "text" gibi ezmemiz lazım.*@
+                
+            </div>
+
+            <div class="mb-3">
+                <label for="Name" class="form-label">Ürün Stok:</label>
+                <input type ="" class="form-control" asp-for="Stock">
+
+            </div>
+
+
+            <div class="mb-3">
+                <label for="Name" class="form-label">Ürün Renk:</label>
+                <input class="form-control" asp-for="Color">
+
+            </div>
+
+
+            <div class="form-check">
+                <input class="form-check-input" asp-for="IsPublish">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Yayınlansın mı?
+                </label>
+            </div> @*asp-for ile nereye gideceğine karar verdik ve bootstraptan aldığımız checksleri yerleştirdik. asp-for ile bir veri girişi belirlersek o zaten typeını otomatik belirliyor. boolean tip olduğunu bilecek. 
+            *@
+
+
+
+
+            @foreach (var item in ViewBag.Expire as List<string>)
+            { @*as List<string> ile tipini tam olarak belirtmemiz lazım.*@
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" asp-for="Expire" value="@item"> @*Value değerini ekledik.*@
+                    <label class="form-check-label" for="flexRadioDefault1">
+                    @item
+                    </label>
+                </div>
+
+            }
+
+
+            <button type="submit" class="btn btn-primary">Ürün Kaydet</button> @*class="btn btn-primary" bunu bootstrap sitesinden aldık mesela ve bunu ekleyerek butona bir tip ekledik.*@
+
+        </form>
+
+................................
+
+
+
+            @{
+                ViewData["Title"] = "Add";
+            }
+            @model Product
+
+            <h1>EKLEME</h1>
+
+            <form asp-controller="Products" asp-action="Add" method="post">
+
+
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Ürün ismi:</label>
+                    <input class="form-control" asp-for="Name">
+                    
+                </div>
+
+                    <div class="mb-3">
+                    <label for="Name" class="form-label">Ürün fiyat:</label>
+                    <input class="form-control" asp-for="Price"> @*asp-for gibi tag helperlere verdiğimiz verilere göre zaten asp kendisi tipini belirliyor. eksrta olarka tip belirtmemize gerek yok ama bazen default olarak gelen tipi ezmemiz gerekebilir. o zaman type = "text" gibi ezmemiz lazım.*@
+                    
+                </div>
+
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Ürün Stok:</label>
+                    <input type ="" class="form-control" asp-for="Stock">
+
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="Name" class="form-label">Ürün Renk:</label>
+                    <input class="form-control" asp-for="Color">
+
+                </div>
+
+
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="IsPublish">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Yayınlansın mı?
+                    </label>
+                </div> @*asp-for ile nereye gideceğine karar verdik ve bootstraptan aldığımız checksleri yerleştirdik. asp-for ile bir veri girişi belirlersek o zaten typeını otomatik belirliyor. boolean tip olduğunu bilecek. 
+                *@
+
+
+
+                <div class="mb-3 mt-3"> @*mt-3 ekledik 3 tab boşluk bırakır.*@
+                    <span>Ürün kaç ay satışta kalacak ?</span>
+                @foreach (var item in ViewBag.Expire as Dictionary<string,int>)
+                { 
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" asp-for="Expire" value="@item.Value"> @*Value değerini ekledik.*@
+                        <label class="form-check-label" for="flexRadioDefault1">
+                        @item.Key
+                        </label>
+                    </div>
+
+                }
+                </div>
+
+                <button type="submit" class="btn btn-primary">Ürün Kaydet</button> @*class="btn btn-primary" bunu bootstrap sitesinden aldık mesela ve bunu ekleyerek butona bir tip ekledik.*@
+
+            </form>
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Form Elements Label. Form elemanlarından input label tipi anlatılmaktadır.
+
+mesela illa kutucuğa değilde yazıya tıklayınca seçili olsun istersek...
+
+
+
+
+@{
+    ViewData["Title"] = "Add";
+}
+@model Product
+
+<h1>EKLEME</h1>
+
+<form asp-controller="Products" asp-action="Add" method="post">
+
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Ürün ismi:</label>
+        <input class="form-control" asp-for="Name">
+        
+    </div>
+
+
+        <div class="mb-3">
+        <label asp-for="Price" class="form-label">Ürün fiyat:</label>
+        <input class="form-control" asp-for="Price"> @*asp-for gibi tag helperlere verdiğimiz verilere göre zaten asp kendisi tipini belirliyor. eksrta olarka tip belirtmemize gerek yok ama bazen default olarak gelen tipi ezmemiz gerekebilir. o zaman type = "text" gibi ezmemiz lazım.*@
+        
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Stock" class="form-label">Ürün Stok:</label>
+        <input type ="" class="form-control" asp-for="Stock">
+
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="Color" class="form-label">Ürün Renk:</label>
+        <input class="form-control" asp-for="Color">
+
+    </div>
+
+
+    <div class="form-check">
+        <input class="form-check-input" asp-for="IsPublish">
+        <label class="form-check-label" asp-for="IsPublish">
+            Yayınlansın mı?
+        </label>
+    </div> @*asp-for ile nereye gideceğine karar verdik ve bootstraptan aldığımız checksleri yerleştirdik. asp-for ile bir veri girişi belirlersek o zaten typeını otomatik belirliyor. boolean tip olduğunu bilecek. 
+    *@
+
+
+
+    <div class="mb-3 mt-3"> @*mt-3 ekledik 3 tab boşluk bırakır.*@
+        <span>Ürün kaç ay satışta kalacak ?</span>
+    @foreach (var item in ViewBag.Expire as Dictionary<string,int>)
+    { 
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" id ="@(item.Value)Expire" asp-for="Expire" value="@item.Value"> @*Value değerini ekledik.*@
+                <label class="form-check-label" asp-for="Expire" for="@(item.Value)Expire">
+               @item.Key
+            </label>
+        </div>
+
+    }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Ürün Kaydet</button> @*class="btn btn-primary" bunu bootstrap sitesinden aldık mesela ve bunu ekleyerek butona bir tip ekledik.*@
+
+</form>
+
+
+forları değiştirdik ve asp-for ile değiştirdik böylece yazıya tıklasak bile seçim yapabileceğiz.
+
+.............................................
+
+@{
+    ViewData["Title"] = "Index";
+}
+@model List<Product>
+<h1>Ürünler</h1>
+
+@if(TempData["status"] != null)
+{
+    <div class="alert alert-primary" role="alert">
+        @TempData["status"] @*TempData bir kere görüntülenecek sonra içindeki veri null olacak.*@
+
+    </div>
+
+}
+
+
+
+
+
+
+
+<a asp-controller="products" asp-action="Add">Ürün ekle</a>
+<table class="table">
+
+    <thead>
+        <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>PRICE</th>
+            <th>STOCK</th>
+         <th>RENK</th>
+            <th>YATINLANSIN MI</th>
+            <th>YAYINDA KALMA SÜRESİ</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+    @foreach(var item in Model){
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+            <td>@item.Price</td>
+            <td>@item.Stock</td>
+            <td>@item.Color</td>
+                <td>
+
+                    @if(@item.IsPublish){
+                        <text>EVET</text>
+                    }
+                    else
+                    {
+                        <text>HAYIR</text>
+
+                    }
+
+
+                </td>
+
+                <td>@item.Expire</td>
+
+
+                <td><a asp-controller="products" asp-action="Remove" asp-route-id="@item.Id">SİL</a>
+
+                    <a asp-controller="products" asp-action="Update" asp-route-id="@item.Id">GÜNCELLE</a>
+                
+       
+                    
+
+
+                </td>
+
+        </tr>
+    }
+    </tbody>
+
+
+</table>
+
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Form Elements Textarea. Form elemanlarından input textarea tipi anlatılmaktadır.
+
+kullanıcıdan birden fazla satırda veri almak istersek kullanacağımız form elemanı.
+
+
+
+@{
+    ViewData["Title"] = "Add";
+}
+@model Product
+
+<h1>EKLEME</h1>
+
+<form asp-controller="Products" asp-action="Add" method="post">
+
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Ürün ismi:</label>
+        <input class="form-control" asp-for="Name">
+        
+    </div>
+
+
+        <div class="mb-3">
+        <label asp-for="Price" class="form-label">Ürün fiyat:</label>
+        <input class="form-control" asp-for="Price"> @*asp-for gibi tag helperlere verdiğimiz verilere göre zaten asp kendisi tipini belirliyor. eksrta olarka tip belirtmemize gerek yok ama bazen default olarak gelen tipi ezmemiz gerekebilir. o zaman type = "text" gibi ezmemiz lazım.*@
+        
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Stock" class="form-label">Ürün Stok:</label>
+        <input type ="" class="form-control" asp-for="Stock">
+
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="Color" class="form-label">Ürün Renk:</label>
+        <input class="form-control" asp-for="Color">
+
+    </div>
+
+
+    <div class="form-check">
+        <input class="form-check-input" asp-for="IsPublish">
+        <label class="form-check-label" asp-for="IsPublish">
+            Yayınlansın mı?
+        </label>
+    </div> @*asp-for ile nereye gideceğine karar verdik ve bootstraptan aldığımız checksleri yerleştirdik. asp-for ile bir veri girişi belirlersek o zaten typeını otomatik belirliyor. boolean tip olduğunu bilecek. 
+    *@
+
+
+
+    <div class="mb-3 mt-3"> @*mt-3 ekledik 3 tab boşluk bırakır.*@
+        <span>Ürün kaç ay satışta kalacak ?</span>
+    @foreach (var item in ViewBag.Expire as Dictionary<string,int>)
+    { 
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" id ="@(item.Value)Expire" asp-for="Expire" value="@item.Value"> @*Value değerini ekledik.*@
+                <label class="form-check-label" asp-for="Expire" for="@(item.Value)Expire">
+               @item.Key
+            </label>
+        </div>
+
+    }
+    </div>
+
+    <div class="form-floating mb-3">
+        <textarea asp-for = "Description" class="form-control" placeholder="Ürün açıklama" style="height: 100px"></textarea>
+        <label asp-for="Description">Ürün açıklama</label>
+    </div>
+
+
+
+    <button type="submit" class="btn btn-primary">Ürün Kaydet</button> @*class="btn btn-primary" bunu bootstrap sitesinden aldık mesela ve bunu ekleyerek butona bir tip ekledik.*@
+
+</form>
+.................................
+                <td>
+                    @if(@item.Description.Length > 20){
+                        @item.Description.Substring(0,20)<text>...</text>
+                    }
+                    else
+                    {
+                        @item.Description
+                    }
+
+
+                </td>
+@*if bloğu kullanabiliriz böylece... ve substring metotunuda kullanabiliriz...*@                
+................................
+@{
+    ViewData["Title"] = "Index";
+}
+@model List<Product>
+<h1>Ürünler</h1>
+
+@if(TempData["status"] != null)
+{
+    <div class="alert alert-primary" role="alert">
+        @TempData["status"] @*TempData bir kere görüntülenecek sonra içindeki veri null olacak.*@
+
+    </div>
+
+}
+
+
+<a asp-controller="products" asp-action="Add">Ürün ekle</a>
+<table class="table">
+
+    <thead>
+        <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>PRICE</th>
+            <th>STOCK</th>
+         <th>RENK</th>
+            <th>YATINLANSIN MI</th>
+            <th>YAYINDA KALMA SÜRESİ(AY)</th>
+            <th>AÇIKLAMA</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+    @foreach(var item in Model){
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+            <td>@item.Price</td>
+            <td>@item.Stock</td>
+            <td>@item.Color</td>
+                <td>
+
+                    @if(@item.IsPublish){
+                        <text>EVET</text>
+                    }
+                    else
+                    {
+                        <text>HAYIR</text>
+
+                    }
+
+
+                </td>
+
+                <td>@item.Expire</td>
+                <td>
+                    @if(@item.Description.Length > 20){
+                        @item.Description.Substring(0,20)<text>...</text>
+                    }
+                    else
+                    {
+                        @item.Description
+                    }
+
+
+                </td>
+
+
+                <td><a asp-controller="products" asp-action="Remove" asp-route-id="@item.Id">SİL</a>
+
+                    <a asp-controller="products" asp-action="Update" asp-route-id="@item.Id">GÜNCELLE</a>
+                
+       
+                    
+
+
+                </td>
+
+        </tr>
+    }
+    </tbody>
+
+
+</table>
+
+.........................................................................
+Form Elements Select-1. Form elemanlarından input select tipi anlatılmaktadır.
+
+select yani comboBoxtan seçim yapmamızı sağlayacak.
+
+     // aslında metotun üstende default olarak bir [HttpGet] var
+     [HttpGet]
+     public IActionResult Add()
+     {
+
+         Dictionary<string, int> Expire = new Dictionary<string, int>()
+         {
+             { "1 Ay",1},
+             { "3 Ay",3},
+             { "6 Ay",6},
+             { "12 Ay",12}
+
+         };
+         ViewBag.Expire = Expire;
+
+
+
+
+        ViewBag.ColorsSelect = new SelectList(new List<ColorSelectList>()
+        {
+            new () {Data = "Mavi",Value = "Mavi" },
+            new () {Data = "Kırmızı",Value = "Kırmızı" },
+            new () {Data = "Sarı",Value = "Sarı" }
+
+        },"Value","Data"); // bu sistemi ekledik.
+
+
+
+         return View();
+     }
+
+........................................... html tarafta gösterme.
+
+
+@{
+    ViewData["Title"] = "Add";
+}
+@model Product
+
+<h1>EKLEME</h1>
+
+<form asp-controller="Products" asp-action="Add" method="post">
+
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Ürün ismi:</label>
+        <input class="form-control" asp-for="Name">
+        
+    </div>
+
+
+        <div class="mb-3">
+        <label asp-for="Price" class="form-label">Ürün fiyat:</label>
+        <input class="form-control" asp-for="Price"> @*asp-for gibi tag helperlere verdiğimiz verilere göre zaten asp kendisi tipini belirliyor. eksrta olarka tip belirtmemize gerek yok ama bazen default olarak gelen tipi ezmemiz gerekebilir. o zaman type = "text" gibi ezmemiz lazım.*@
+        
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="Stock" class="form-label">Ürün Stok:</label>
+        <input type ="" class="form-control" asp-for="Stock">
+
+    </div>
+
+
+    <div class="mb-3">
+     
+        @*<label asp-for="Color" class="form-label">Ürün Renk:</label>
+        <input class="form-control" asp-for="Color">
+        *@
+
+        <select class="form-select" asp-for="Color" asp-items="@ViewBag.ColorSelect">
+
+            <option value="">Renk seçiniz</option>
+
+        </select>
+        
+
+    </div>
+
+
+    <div class="form-check">
+        <input class="form-check-input" asp-for="IsPublish">
+        <label class="form-check-label" asp-for="IsPublish">
+            Yayınlansın mı?
+        </label>
+    </div> @*asp-for ile nereye gideceğine karar verdik ve bootstraptan aldığımız checksleri yerleştirdik. asp-for ile bir veri girişi belirlersek o zaten typeını otomatik belirliyor. boolean tip olduğunu bilecek. 
+    *@
+
+
+
+    <div class="mb-3 mt-3"> @*mt-3 ekledik 3 tab boşluk bırakır.*@
+        <span>Ürün kaç ay satışta kalacak ?</span>
+    @foreach (var item in ViewBag.Expire as Dictionary<string,int>)
+    { 
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" id ="@(item.Value)Expire" asp-for="Expire" value="@item.Value"> @*Value değerini ekledik.*@
+                <label class="form-check-label" asp-for="Expire" for="@(item.Value)Expire">
+               @item.Key
+            </label>
+        </div>
+
+    }
+    </div>
+
+    <div class="form-floating mb-3">
+        <textarea asp-for = "Description" class="form-control" placeholder="Ürün açıklama" style="height: 100px"></textarea>
+        <label asp-for="Description">Ürün açıklama</label>
+    </div>
+
+
+
+    <button type="submit" class="btn btn-primary">Ürün Kaydet</button> @*class="btn btn-primary" bunu bootstrap sitesinden aldık mesela ve bunu ekleyerek butona bir tip ekledik.*@
+
+</form>
+
+..........................
+
+  <div class="mb-3">
+     
+        @*<label asp-for="Color" class="form-label">Ürün Renk:</label>
+        <input class="form-control" asp-for="Color">
+        *@
+
+        <select class="form-select" asp-for="Color" asp-items="@ViewBag.ColorSelect">
+
+            <option value="">Renk seçiniz</option>
+
+        </select>
+        
+
+    </div>
+
+@*bunula yaptık aslında comboBox eklemeyi.*@
+
+.......................................................
+Form Elements Datetime. Form elemanlarından input datetime tipi anlatılmaktadır.
+
+Date ile sadece tarihte tutabilirdik.
+
+    <div class="mb-3">
+        <label asp-for="PublishDate" class="form-label">Ürün Yayınlanma zamanı:</label>
+        <input class="form-control" asp-for="PublishDate">
+    </div>
+
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+Form Elements Update.cshtml. Ürün güncelleme sayfsının yeni form elemanlarına göre tekrar kodlanması anlatılmaktadır.
+
+
+
+        [HttpGet]
+        public IActionResult Update(int id)
+        {
+
+            var product = _context.Products.Find(id);
+            ViewBag.ExpireValue = product.Expire;
+            Dictionary<string, int> Expire = new Dictionary<string, int>()
+            {
+                { "1 Ay",1},
+                { "3 Ay",3},
+                { "6 Ay",6},
+                { "12 Ay",12}
+
+            };
+            ViewBag.Expire = Expire;
+
+
+
+
+            ViewBag.ColorsSelect = new SelectList(new List<ColorSelectList>()
+           {
+               new () {Data = "Mavi",Value = "Mavi" },
+               new () {Data = "Kırmızı",Value = "Kırmızı" },
+               new () {Data = "Sarı",Value = "Sarı" }
+
+           }, "Value", "Data",product.Color); // seçili olanı getirecek.
+
+
+
+
+
+            return View(product); // bu sayfaya gittiği zaman sayfadaki @model Product nesneyi alacak ve textleri dolduracak.. 
+
+        }
+......................................................Update sayfası.
+
+
+
+@{
+    ViewData["Title"] = "Update";
+}
+
+@model Product
+
+<h1>Ürün Güncelleme</h1>
+
+<form asp-controller="Products" asp-action="Add" method="post">
+
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Ürün ismi:</label>
+        <input class="form-control" asp-for="Name">
+
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label">Ürün fiyat:</label>
+        <input class="form-control" asp-for="Price"> 
+
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="Stock" class="form-label">Ürün Stok:</label>
+        <input type="" class="form-control" asp-for="Stock">
+
+    </div>
+
+
+    <div class="mb-3">
+
+        <select class="form-select" asp-for="Color" asp-items="@ViewBag.ColorSelect">
+
+            <option value="">Renk seçiniz</option>
+
+        </select>
+
+    </div>
+
+
+    <div class="form-check">
+        <input class="form-check-input" asp-for="IsPublish">
+        <label class="form-check-label" asp-for="IsPublish">
+            Yayınlansın mı?
+        </label>
+    </div> 
+
+
+
+    <div class="mb-3 mt-3">
+        
+        <span>Ürün kaç ay satışta kalacak ?</span>
+        @foreach (var item in ViewBag.Expire as Dictionary<string, int>)
+        {
+            <div class="form-check">
+
+
+            @if (item.Value == ViewBag.ExpireValue)
+            {
+                    <input checked = "checked" class="form-check-input" type="radio" id="@(item.Value)Expire" asp-for="Expire" value="@item.Value">
+                }
+                else
+                {
+                    <input class="form-check-input" type="radio" id="@(item.Value)Expire" asp-for="Expire" value="@item.Value">
+                }
+
+                <label class="form-check-label" asp-for="Expire" for="@(item.Value)Expire">
+                    @item.Key
+                </label>
+
+            </div>
+
+
+                
+                
+
+        }
+    </div>
+
+    <div class="form-floating mb-3">
+        <textarea asp-for="Description" class="form-control" placeholder="Ürün açıklama" style="height: 100px"></textarea>
+        <label asp-for="Description">Ürün açıklama</label>
+    </div>
+
+
+
+    <div class="mb-3">
+        <label asp-for="PublishDate" class="form-label">Ürün Yayınlanma zamanı:</label>
+        <input class="form-control" asp-for="PublishDate">
+
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Ürün Kaydet</button> 
+
+</form>
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
@@ -2837,4 +3904,6 @@ Singleton-2.
 
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
+
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+

@@ -1,3 +1,21 @@
+https://bunifuframework.com/    modern masaüstü uygulama geliştirme nugeti iyi windows formlar yapabilirsin.
+........................................................................................................................................................................................................................................................................................................................................................................................................................
+windows + v ile geçmişte kopyalanan şeyleri görebiliriz.
+........................................................................................................................................................................................................................................................................................................................................................................................................................
+SQL Server'da tüm veritabanlarının dosya yollarını görmek için aşağıdaki SQL sorgusunu kullanabilirsiniz:
+
+SELECT
+    d.name AS DatabaseName,
+    mf.physical_name AS FilePath
+FROM
+    sys.master_files mf
+    INNER JOIN sys.databases d ON mf.database_id = d.database_id
+ORDER BY
+    d.name,
+    mf.physical_name;
+    
+Bu sorgu, her veritabanı için dosya yollarını ve ilgili veritabanı adlarını listeler. sys.master_files görünümü, SQL Server'daki tüm veritabanı dosyalarının bilgilerini içerirken, sys.databases görünümü tüm veritabanlarının bilgilerini içerir. Bu iki görünümü birleştirerek veritabanı adlarını ve dosya yollarını alabilirsiniz.
+........................................................................................................................................................................................................................................................................................................................................................................................................................
 python yorumlayıcısı olan bir dildir. kütüphaneleri çok geniştir. bilgisayarlar sadece makine dilini kullanır. sadece 0101011 gibi bir dilden anlarlar.
 pythonda satırlar c java gibi ; ile bölünmediği için hangi hizada olduğu önemlidir kodların. 
 mesela class emre(): yapınca sınıfın içindeki her şeyin belirlenebilmesi için sana verilen hiza içerisinde kodları yazmak lazı. 
@@ -224,6 +242,15 @@ Güçlü şifreler oluşturun.
 Bitti gitti.....
 ..................................................................................................................................................................................................................................................................................................................................................................................................................................................
 Debug yaptığımızda solda kırmızı top olacak şekilde bir breakpoint belirler ve debug yaparsak eğer o zaman oraya gelene kadar çalışır sistem orada durur.
+..................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Bir NAS (Network Attached Storage), ağ üzerinde veri depolama ve paylaşma işlevi gören bir cihazdır. NAS, genellikle bir ev veya ofis ağında merkezi bir depolama birimi olarak kullanılır ve kullanıcıların dosyalarını depolamalarına, paylaşmalarına ve yedeklemelerine olanak tanır.
+
+NAS Sunucusunun Temel Özellikleri:
+Ağ Üzerinden Erişim: NAS cihazları, ağ üzerinden erişilebilir, bu da farklı cihazların (bilgisayarlar, tabletler, akıllı telefonlar vb.) NAS'a bağlanarak dosya okuma ve yazma işlemleri yapabilmesini sağlar.
+Veri Yedekleme: NAS, verilerin yedeklenmesi için kullanılır, bu sayede veri kaybı riskini minimize eder.
+Ortak Depolama: Farklı kullanıcıların aynı dosyalara erişebilmesi ve paylaşabilmesi için merkezi bir depolama alanı sunar.
+Medya Sunucusu: Bazı NAS cihazları, medya dosyalarını (video, müzik, fotoğraf) saklamak ve ağ üzerinden yayınlamak için kullanılabilir.
+Güvenlik: NAS cihazları genellikle veri şifreleme ve kullanıcı yetkilendirme gibi güvenlik özellikleri sunar.
 ..................................................................................................................................................................................................................................................................................................................................................................................................................................................
 ctrl basılı önce k sonra c yorum satırına alır seçili olanı... ctrl basılı önce k sonra u ise seçili olanı yorum satırından çıkarır...
 .......................................................................................................................
