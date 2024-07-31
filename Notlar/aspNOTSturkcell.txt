@@ -1,6 +1,35 @@
 ASP İLE İLGİLİ BİLGİLER...
+.............................................................................................
+_ViewModelImports.cshtml içerisine istenen namespaceleri eklersek eğer o zaman her yerden erişilebilir olur o namespace içindekiler.
+
+@using turkcell1.Web.ProductViewModel 
+@using turkcell1.Web
+@using turkcell1.Web.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@*böylece bu namespace içindekiler her yerden erişilebilir olacak.*@
+
+........................................................................................................................................................................................................................................................................................................................................................
+ASP.NET Core Authentication ve Authorization, web uygulamalarında güvenliği sağlamak için kullanılan iki temel kavramdır. İşte bu kavramların ne anlama geldiği ve nasıl çalıştıkları hakkında daha fazla bilgi:
+
+Authentication (Kimlik Doğrulama)
+Kimlik doğrulama, bir kullanıcının kim olduğunu belirlemek için kullanılan süreçtir. Bu süreç, kullanıcıların uygulamaya giriş yapmaları ve kimliklerini doğrulamaları için kullanılır. ASP.NET Core, çeşitli kimlik doğrulama yöntemlerini destekler:
+
+Cookie-based Authentication (Çerez Tabanlı Kimlik Doğrulama): Kullanıcı adı ve şifre ile oturum açmayı ve oturum bilgilerini çerezler aracılığıyla saklamayı içerir.
+JWT Bearer Tokens (JWT Taşıyıcı Jetonlar): JSON Web Token (JWT) kullanarak kullanıcıları doğrulayan bir yöntemdir. Özellikle API'lerde yaygın olarak kullanılır.
+OAuth/OIDC (OAuth ve OpenID Connect): Üçüncü taraf kimlik sağlayıcıları (Google, Facebook, Microsoft) kullanarak kimlik doğrulaması yapar.
+API Keys (API Anahtarları): API'lara erişim sağlamak için kullanılan bir kimlik doğrulama yöntemidir.
+External Providers (Dış Sağlayıcılar): Üçüncü taraf kimlik doğrulama sağlayıcıları kullanarak kimlik doğrulama yapar.
+Authorization (Yetkilendirme)
+Yetkilendirme, kimliği doğrulanan bir kullanıcının hangi kaynaklara ve işlemlere erişebileceğini belirleyen süreçtir. ASP.NET Core'da yetkilendirme, genellikle aşağıdaki yöntemlerle uygulanır:
+
+Role-based Authorization (Rol Tabanlı Yetkilendirme): Kullanıcıların belirli rollere atanması ve bu rollere göre yetkilerin verilmesi.
+Policy-based Authorization (Politika Tabanlı Yetkilendirme): Daha esnek ve detaylı yetkilendirme senaryoları için politikaların tanımlanması ve kullanılması.
+Claims-based Authorization (Hak Tabanlı Yetkilendirme): Kullanıcıların belirli haklara (claims) sahip olmalarına ve bu haklara göre yetkilerin verilmesi.
+....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 SQL Server şifreniz çalıntı şifrelerden birini içeriyor mu?
 10 milyon şifre içinde sizin SQL Server kullanıcı şifrenizin olup olmadığını gösteren sorgu.
+
 
 #Hergüne1SQLBilgisi
 Teşekkürler Eitan Blumin. 🙏 
@@ -3893,17 +3922,476 @@ Form Elements Update.cshtml. Ürün güncelleme sayfsının yeni form elemanlar�
 </form>
 
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Bölüm içerik :
+        Server side validation
+        Required
+        Range
+        StringLength
+        EmaiIAddress
+        Remote
+        ReqularExpression
+        Client side validation (arayüzde denetim yapacak böylece veritabanını yormayacak).
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+ViewModel. View sayfalarında kullanılacak ViewModel yapısı anlatılmaktadır.
+
+ViewModel Viewler için Model oluşturmadır. entityler yerine entitylere karşılık gelecek viewmodel yapacağız ve entityleri kirletmeyeceğiz. ve entity'nin içini açmak istemeyebiliriz ve viewmodelde onu sileriz kimsenin görmesini istemediğimiz bir yapı olabilir.
+tam olarak cshtml'in ihtiyacı olan verileri dönebiliriz boşu boşuna kullanılmayacak dataları taşıma işlemi yapmayız.
+
+ hep ViewModel'lerle çalışacağız genel olarak.
+
+ProductViewModel adında bir klasör oluşturduk. sonra ProductViewModel adında bir class oluşturduk. sonra göstermek istediğimiz propertyleri alıp Product class'ından bu class'a ekledik.
+            namespace turkcell1.Web.ProductViewModel
+            {
+
+                public class ProductViewModel
+                {
+
+                    public int Id { get; set; }
+                    public string Name { get; set; }
+
+                    public decimal Price { get; set; }
+
+                    public int Stock { get; set; }
+
+                    public string Description { get; set; }
+                    public string? Color
+                    {
+                        get;
+                        set;
+                    }
+
+                    public DateTime? PublishDate { get; set; } // null olabilir seçeneği veririz ? ile var olan veriler içinde null verecek.
+
+                    public bool IsPublish { get; set; }
+
+                    public int Expire { get; set; }
+
+
+                }
+            }
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Automapper ile entityleri otomatik olarak ViewModel'lere çeviren bir kütüphane kullanacağız. Entity ile ViewModel sınıflarını otomatik map'leme işlevini gerçekleştirecek automapper kütüphanesinin kullanılması anlatılmaktadır.
+bizim entityleri viewmodellere otomatik olarak mapleyecek. bir bir entity listesi verdiğimde bir viewmodel listesi verecek bize.
+entityde propları viewmodel'e aktarır. new ile oluşturmamıza gerek yok automapper otomatik olarak yapar.
+
+kurulum: dependies sağ tık. manage nuget packagesi seçiyoruz. oradan automapperi aratıp yüklüyoruz. AutoMapper.Extensions.Microsoft.DependencyInjection bunu indirdik. asp net core için.
+sonra Program.cs'e 
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());  bunu ekledik.
+sonra projemize mapping adında klasör ekledik. sonra ViewModelMapping.cs adında bir class ekledik bu klasöre ve class :Profile ile Profile'den kalıtım aldı.
+
+
+
+
+using AutoMapper;
+using turkcell1.Web.Models;
+using turkcell1.Web.ViewModels;
+
+namespace turkcell1.Web.Mapping
+{
+    public class ViewModelMapping:Profile
+    {
+        public ViewModelMapping()
+        {
+            CreateMap<Product, ProductViewModel>().ReverseMap(); // ReverseMap ile ters maplemede yapabiliriz.
+             
+
+
+
+        }
+    }
+}
+
+
+..........................
+// Products controllerde         private readonly IMapper _mapper; bunu ekledik sonra constructor içeriisne ekleme yaptık.
+
+        private readonly IMapper _mapper;
+
+        public ProductsController(AppDbContext context, IHelper helper, IMapper mapper)
+        {
+            // DI container.
+            _productRepository = new ProductRepository();
+            // Dependies injection pattern bir design patterndir.
+            _context = context;
+            _mapper = mapper;
+        }
+
+............................. sonra prodcutcontrollerdeki index IActionResult'undaki return View(_products) 'ı değiştirdik.;
+
+        public IActionResult Index()
+        { 
+
+            var products = _context.Products.ToList(); // veritabanındaki tüm dataları almış oluruz böylece.
+
+            return View(_mapper.Map<List<ProductViewModel>>(products));
+
+
+        }
+
+....................................
+
+ASP.NET'te bir mapper kullanmak, nesneler arasında veri dönüşümünü kolaylaştıran bir araç veya kütüphane anlamına gelir. Özellikle, veritabanı varlıkları (entities) ve veri transfer nesneleri (DTO'lar) gibi farklı veri yapıları arasında veri taşımak için kullanılır. Mapper kullanmanın bazı ana nedenleri şunlardır:
+
+1. Kod Tekrarını Azaltmak
+Nesneler arasında veri taşımak, genellikle çok sayıda benzer kod satırı gerektirir. Mapper kullanmak, bu dönüşüm işlemlerini otomatikleştirerek kod tekrarını azaltır.
+
+2. Kod Bakımını Kolaylaştırmak
+Mapper kullanmak, veri dönüşüm mantığını merkezi bir yerde tutar. Bu, veri dönüşüm kurallarını değiştirmek gerektiğinde kodun diğer kısımlarını güncelleme ihtiyacını azaltır.
+
+3. Performans İyileştirmesi
+Otomatik dönüşümler manuel dönüşümlere göre daha hızlı olabilir. Ayrıca, iyi optimize edilmiş bir mapper kütüphanesi, performans sorunlarını minimumda tutabilir.
+
+4. Kodun Anlaşılabilirliğini Artırmak
+Mapper kullanmak, veri dönüşüm mantığını netleştirir ve kodun genel yapısını daha anlaşılabilir hale getirir. Bu, özellikle büyük projelerde ve ekip çalışmalarında önemlidir.
+
+5. Model-View-Controller (MVC) Yapısını Desteklemek
+ASP.NET Core gibi MVC tabanlı frameworklerde, veritabanı modelleri ve görünüm modelleri arasında veri taşımak yaygındır. Mapper kullanmak, bu veri taşımayı standartlaştırır ve kolaylaştırır.
+
+Popüler Mapper Kütüphaneleri
+AutoMapper
+ASP.NET projelerinde en yaygın kullanılan mapper kütüphanelerinden biri AutoMapper'dir. AutoMapper, nesneler arasında veri taşımayı kolaylaştıran ve konfigurasyonunu kolayca yapabileceğiniz bir kütüphanedir.
+
+AutoMapper Kullanımına Bir Örnek
+Adım 1: AutoMapper'i Kurun
+AutoMapper'i NuGet üzerinden projenize ekleyin:
+
+
+Install-Package AutoMapper
+Adım 2: Mapper Konfigürasyonunu Yapın
+Örnek olarak, User ve UserDto sınıflarını kullanarak AutoMapper konfigürasyonunu gösterelim:
+
+
+using AutoMapper;
+
+// Modeller
+public class User
+{
+    public int Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+}
+
+public class UserDto
+{
+    public int Id { get; set; }
+    public string FullName { get; set; }
+}
+
+// AutoMapper Profili
+public class UserProfile : Profile
+{
+    public UserProfile()
+    {
+        CreateMap<User, UserDto>()
+            .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
+    }
+}
+
+Adım 3: AutoMapper'i Başlatın
+ASP.NET Core uygulamanızın Startup dosyasında AutoMapper'i başlatın:
+
+
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddAutoMapper(typeof(Startup));
+}
+
+Adım 4: Mapper Kullanımı
+Bir kontrolörde veya hizmette (service) AutoMapper'i kullanarak veri dönüşümü gerçekleştirin:
+
+public class UserService
+{
+    private readonly IMapper _mapper;
+
+    public UserService(IMapper mapper)
+    {
+        _mapper = mapper;
+    }
+
+    public UserDto GetUserDto(User user)
+    {
+        return _mapper.Map<UserDto>(user);
+    }
+}
+Sonuç
+Mapper kullanmak, ASP.NET projelerinde veri dönüşümlerini daha temiz, bakımı daha kolay ve performans açısından daha verimli hale getirir. AutoMapper gibi kütüphaneler, bu dönüşümleri basitleştirir ve standartlaştırır, böylece geliştiricilerin daha az hata yapmasını ve kodlarının daha okunabilir olmasını sağlar.
+
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Model/Form Validation Required. Form Validation işlemlerinde kullanılacak Required attribute konusu anlatılmaktadır.
+Validation kullanıcıdan aldığımız bilgileri kontrol etmemizi sağlar. asp.net ile otomatik olarak gelir validation özelliği.
+validationları attributesler olarak kullanırız. model veya form validation denir. kullanıcıdan alınan datayı valide edebiliriz yani kontrol edebiliriz.
+validationın hem client hem server kısmı var.
+server olanda önce veriler servera gelir sonra kontrol edilir. clientta ise servera gelmeden arayüzde kontrol edilir.
+.....................
+required alan bir verinin girilme zorunluluğu olduğu alandır.
+
+using System.ComponentModel.DataAnnotations;
+
+namespace turkcell1.Web.ViewModels
+{
+    public class ProductViewModel
+    {
+
+        public int Id { get; set; }
+
+        [Required] // doldurulması zorunlu alan olarak belirleriz.
+
+        public string Name { get; set; }
+
+        public decimal Price { get; set; }
+
+        public int Stock { get; set; }
+
+        public string Description { get; set; }
+        public string? Color
+        {
+            get;
+            set;
+        }
+
+        public DateTime? PublishDate { get; set; } // null olabilir seçeneği veririz ? ile var olan veriler içinde null verecek.
+
+        public bool IsPublish { get; set; }
+
+        public int Expire { get; set; }
+
+
+    }
+}
+
+............................
+
+@{
+    ViewData["Title"] = "Add";
+}
+@model ProductViewModel
+
+<h1>EKLEME</h1>
+
+<form asp-controller="Products" asp-action="Add" method="post">
+
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Ürün ismi:</label>
+        <input class="form-control" asp-for="Name">
+        <span class = "text-danger" asp-validation-for="Name"></span>
+        @*Name ile ilgili bir validation problem olduğunda burada hata olduğunu belirten bir yapı olacak.*@
+       @* class = "text-danger" ile uyarı mesajı gözükecek.*@
+    </div>
+
+...............................Products controllerdeki metot.
+
+
+        [HttpPost] 
+        public IActionResult Add(ProductViewModel newProduct) {
+
+
+            if (ModelState.IsValid) // eğer validationdan geçmiş bir değer ise o zaman kaydet sistemi kurabiliriz.
+            {
+                _context.Products.Add(_mapper.Map<Product>(newProduct));
+
+                _context.SaveChanges();
+
+
+                TempData["status"] = "Ürün başarı ile eklendi.";
+
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                            Dictionary<string, int> Expire = new Dictionary<string, int>()
+            {
+                { "1 Ay",1},
+                { "3 Ay",3},
+                { "6 Ay",6},
+                { "12 Ay",12}
+
+            };
+            ViewBag.Expire = Expire;
+
+
+
+
+           ViewBag.ColorsSelect = new SelectList(new List<ColorSelectList>()
+           {
+               new () {Data = "Mavi",Value = "Mavi" },
+               new () {Data = "Kırmızı",Value = "Kırmızı" },
+               new () {Data = "Sarı",Value = "Sarı" }
+
+           },"Value","Data");
+
+                return View();
+            }
+
+
+
+        }
+
+........................................
+
+        [Required(ErrorMessage ="İsim alanı boş olamaz.")] // doldurulması zorunlu alan olarak belirleriz.
+
+        public string Name { get; set; }
+
+// böyle yaparsak eğer o zaman istediğimiz error messageyi kullanabiliriz.
+// ÖNEMLİ... [Required] kullanacaksak eğer bir properity ve o properity value type ise int,decimal gibi o zaman nullable yapmamız lazım. mesela boolean default tipi False'dir o yüzden bunları boolean? ile nullable yapmamız lazım. ama string için vs gerekli değil.
+
+using System.ComponentModel.DataAnnotations;
+
+namespace turkcell1.Web.ViewModels
+{
+    public class ProductViewModel
+    {
+
+        public int Id { get; set; }
+
+        [Required(ErrorMessage ="İsim alanı boş olamaz.")] // doldurulması zorunlu alan olarak belirleriz.
+
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Fiyat alanı boş olamaz.")] // doldurulması zorunlu alan olarak belirleriz.
+        public decimal? Price { get; set; }
+
+        [Required(ErrorMessage = "Stok alana boş olamaz.")] // doldurulması zorunlu alan olarak belirleriz.
+        public int? Stock { get; set; }
+        [Required(ErrorMessage = "Açıklama boş olamaz.")] // doldurulması zorunlu alan olarak belirleriz.
+        public string Description { get; set; }
+
+        public string? Color
+        {
+            get;
+            set;
+        }
+
+
+        public DateTime? PublishDate { get; set; } // null olabilir seçeneği veririz ? ile var olan veriler içinde null verecek.
+
+        public bool IsPublish { get; set; }
+
+        public int Expire { get; set; }
+
+
+    }
+}
+
+.............................Sonra Products Add.cshtml'de span taglarını ekledik uyarın gözükmesini istediğimiz yerlerde.
+
+
+@{
+    ViewData["Title"] = "Add";
+}
+@model ProductViewModel
+
+<h1>EKLEME</h1>
+
+<form asp-controller="Products" asp-action="Add" method="post">
+
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Ürün ismi:</label>
+        <input class="form-control" asp-for="Name">
+        <span class = "text-danger" asp-validation-for="Name"></span>
+    </div>
+
+
+
+        <div class="mb-3">
+        <label asp-for="Price" class="form-label">Ürün fiyat:</label>
+        <input class="form-control" asp-for="Price"> @*asp-for gibi tag helperlere verdiğimiz verilere göre zaten asp kendisi tipini belirliyor. eksrta olarka tip belirtmemize gerek yok ama bazen default olarak gelen tipi ezmemiz gerekebilir. o zaman type = "text" gibi ezmemiz lazım.*@
+        <span class="text-danger" asp-validation-for="Price"></span>
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="Stock" class="form-label">Ürün Stok:</label>
+        <input type ="" class="form-control" asp-for="Stock">
+        <span class="text-danger" asp-validation-for="Stock"></span>
+    </div>
+
+
+    <div class="mb-3">
+     
+        @*<label asp-for="Color" class="form-label">Ürün Renk:</label>
+        <input class="form-control" asp-for="Color">
+        *@
+
+        <select class="form-select" asp-for="Color" asp-items="@ViewBag.ColorSelect">
+
+            <option value="">Renk seçiniz</option>
+
+        </select>
+        
+
+    </div>
+
+
+    <div class="form-check">
+        <input class="form-check-input" asp-for="IsPublish">
+        <label class="form-check-label" asp-for="IsPublish">
+            Yayınlansın mı?
+        </label>
+    </div> @*asp-for ile nereye gideceğine karar verdik ve bootstraptan aldığımız checksleri yerleştirdik. asp-for ile bir veri girişi belirlersek o zaten typeını otomatik belirliyor. boolean tip olduğunu bilecek. 
+    *@
+
+
+
+    <div class="mb-3 mt-3"> @*mt-3 ekledik 3 tab boşluk bırakır.*@
+        <span>Ürün kaç ay satışta kalacak ?</span>
+    @foreach (var item in ViewBag.Expire as Dictionary<string,int>)
+    { 
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" id ="@(item.Value)Expire" asp-for="Expire" value="@item.Value"> @*Value değerini ekledik.*@
+                <label class="form-check-label" asp-for="Expire" for="@(item.Value)Expire">
+               @item.Key
+            </label>
+        </div>
+
+    }
+    </div>
+
+    <div class="form-floating mb-3">
+        <textarea asp-for = "Description" class="form-control" placeholder="Ürün açıklama" style="height: 100px"></textarea>
+        <label asp-for="Description">Ürün açıklama</label>
+        <span class="text-danger" asp-validation-for="Description"></span>
+    </div>
+
+
+
+    <div class="mb-3">
+        <label asp-for="PublishDate" class="form-label">Ürün Yayınlanma zamanı:</label>
+        <input class="form-control" asp-for="PublishDate">
+
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Ürün Kaydet</button> @*class="btn btn-primary" bunu bootstrap sitesinden aldık mesela ve bunu ekleyerek butona bir tip ekledik.*@
+
+</form>
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Model/Form Validation Range. Form Validation işlemlerinde kullanılacak Range attribute konusu anlatılmaktadır.
+
+
 
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
-..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 
-..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
+
+
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................

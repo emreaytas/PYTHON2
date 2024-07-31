@@ -13,7 +13,7 @@ FROM
 ORDER BY
     d.name,
     mf.physical_name;
-    
+
 Bu sorgu, her veritabanı için dosya yollarını ve ilgili veritabanı adlarını listeler. sys.master_files görünümü, SQL Server'daki tüm veritabanı dosyalarının bilgilerini içerirken, sys.databases görünümü tüm veritabanlarının bilgilerini içerir. Bu iki görünümü birleştirerek veritabanı adlarını ve dosya yollarını alabilirsiniz.
 ........................................................................................................................................................................................................................................................................................................................................................................................................................
 python yorumlayıcısı olan bir dildir. kütüphaneleri çok geniştir. bilgisayarlar sadece makine dilini kullanır. sadece 0101011 gibi bir dilden anlarlar.
@@ -99,7 +99,11 @@ python çok fazla kütüphaneye sahiptir. çok farklı alanlarda işlem yapmaya 
 
 envormioent ile istenen paketleri kurabilir projemizi on kısmından istenen envormioent ile açabiliriz. gerekli kütüphaneleri yükler gereksizleri aradan çıkarırız. kendimize envormioent oluşturabiliriz istediğimi paketleri vs ekleyebiliriz.
 
-.....................................................................................................................
+...............................................................................................................................................................................................................................................................................................................................................................
+nas. ağa bağlı depolama cihazıdır. ortak noktada herkesin erişebileceği bir veri depolama sistemi. sisteme çok fazla depolama aygıtı takmak istersek ona göre işletim sistemi kullanırız. Truenas işletim sistemi kullanabiliriz. iyi bir internet kartı takarak daha hızlı işlemler yapabiliriz.   Truenas önceki freenas olan bir işletim sistemi. linux ve bsd tabanlı işletim sistemi. openzfs sistemi kullanır dosya kayıplarını engeller. Truenas ile nas kurarsak tüm işletim sistemleri ile bu sisteme erişebiliriz. tüm işletim sistemi protokollerini destekler. 
+kurulum için TrueNas iso dosyası. bir usb en az 4gb. ve isoyu usbye yazmak için rufus'a ihtiyacımız var.
+kurulum için ssd seçmek daha hızlı çalışmamızı sağlar.  
+...............................................................................................................................................................................................................................................................................................................................................................
 
 python dosyasını .exe yapma:
     python dosyasını executable yapabilmek için indirmek gereken paket var... 
