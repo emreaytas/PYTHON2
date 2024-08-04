@@ -17,7 +17,6 @@ ShowDialog metodu, ilgili form kapatılana kadar kontrolü ele geçirir. Bu nede
 
 c#'da from uygulaması showDialog ile açıldıktan sonra o panel açık olduğu sürece alt satıra geçmez programın okuma imleci orada takılı kalır taki kapanana kadar...
 
-
 ************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
 C# dilini daha ileri seviyede öğrenmek için aşağıdaki konulara odaklanabilirsiniz. Bu konular, C# programlamadaki ileri seviye konseptlere ve geliştirme tekniklerine odaklanmaktadır:
 

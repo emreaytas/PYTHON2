@@ -103,8 +103,81 @@ envormioent ile istenen paketleri kurabilir projemizi on kısmından istenen env
 nas. ağa bağlı depolama cihazıdır. ortak noktada herkesin erişebileceği bir veri depolama sistemi. sisteme çok fazla depolama aygıtı takmak istersek ona göre işletim sistemi kullanırız. Truenas işletim sistemi kullanabiliriz. iyi bir internet kartı takarak daha hızlı işlemler yapabiliriz.   Truenas önceki freenas olan bir işletim sistemi. linux ve bsd tabanlı işletim sistemi. openzfs sistemi kullanır dosya kayıplarını engeller. Truenas ile nas kurarsak tüm işletim sistemleri ile bu sisteme erişebiliriz. tüm işletim sistemi protokollerini destekler. 
 kurulum için TrueNas iso dosyası. bir usb en az 4gb. ve isoyu usbye yazmak için rufus'a ihtiyacımız var.
 kurulum için ssd seçmek daha hızlı çalışmamızı sağlar.  
-...............................................................................................................................................................................................................................................................................................................................................................
+....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+https://www.youtube.com/watch?v=m-i2JBtG4FE
+...............................................................................................................................................................................................................
+1- VPN, Tor ve oldu da Snowflake kullanırken sorun yaşadık, güçlü bir sansüre uğradılar. Peki internetten kopmamak için ne yapacağız? Gelin en basit alternatifleri birlikte öğrenelim:
 
+2- İlk aklımıza gelecek olan Proxy Sunucular. Proxy sunucularının birçok farklı türü var. Örneğin Web Proxy, HTTP Proxy, SOCKS Proxy, SSL/TLS Proxy, Reverse Proxy vb. gibi. Bunların hepsi VPN gibi gizlilik sağlamaz. Ancak bizim amacımız burada gizlilik değil, internete erişim.
+
+3- VPN, Tor ve Snowflake sansürlenirse alternatif Proxy yolları:
+
+Web Proxy: Tarayıcı üzerinden erişilebilen proxy sunucular. Örneğin: KProxy, ProxySite vb.
+
+HTTP Proxy Sunucuları: HTTP protokolünü kullanarak internet trafiğini yönlendirir. Örn: Squid, Apache HTTP Server vb.
+
+
+4- VPN, Tor ve Snowflake olur da sansürlenirse alternatif proxy yolları:
+
+SOCKS Proxy: TCP/IP tabanlı bağlantıları destekler. Örn: Shadowsocks, Dante, Tor SOCKS Proxy
+
+SSL/TLS Proxy: Güvenli iletişim için kullanılan SSL veya TLS protokollerini kullanır. Örn: Squid, Nginx, HAProxy
+
+
+5- Proxy konusunu anlamayanlar için en basit çözüm DNS değiştirme.
+
+DNS değiştirin. Örnek DNS adresleri şöyle:
+
+Open DNS:
+208.67.222.222
+208.67.220.220
+
+Norton DNS: 
+198.153.192.1
+198.153.194.1
+
+Comodo Secure DNS:
+8.26.56.26
+8.20.247.20
+
+Safe DNS:
+195.46.39.39
+195.46.39.40
+
+
+6- VPN, Tor ve Snowflake engellenir ve floodun başındaki örneklerde olan mevcut Proxy konusunu çözemezseniz alternatif DNS yolları:
+
+Cloudflare DNS:
+1.1.1.1
+1.0.0.1
+
+Quad9 DNS:
+9.9.9.9
+149.112.112.112
+
+DNSWatch:
+84.200.69.80
+84.200.70.40
+
+...............................................................................................................................................................................................................................................................................................................................................................
+1- VPN hizmetlerinin hepsi engellenir ve Tor kısıtlanırsa Snowflake’e yönelin dedik. Peki nedir bu Snowflake? Ne işe yarar? Bunu nasıl kurarız? Gelin bu önemli içeriğe birlikte göz atalım:
+
+2- Farklı ülkelerden gelen destekler sayesinde Tor’un SnowFlake ürününü kullanarak daha hızlı bir internete erişebilmemiz [Bant genişliği daraltılmış internette] ve bunun yanında sansürü/engellemeleri aşabilmemiz mümkün. Bu sayede VPN hizmetine ihtiyacımız yok.
+
+3- Tor’un #Snowflake eklentisini Chrome, Edge veya Firefox’a da kurmanız mümkün (http://snowflake.torproject.org) Unutmayın geçtiğimiz yıl İran’daki #Mahsa_Amini eylemlerinde İran hükümetinin interneti kısıtlamasının ardından İran’daki insanlar internete bu sayede erişim sağladı.
+
+4- Tor’un son sürümünü indirin. Son sürümün güncellemesini yapamıyorsanız frontdesk[at]torproject[dot]org ile iletişime geçin, durumu anlatın. İndirmek için Telegram üzerinden GetTor_bot ile de iletişim kurabilirsiniz. Snowflake'i her cihazda kullanabilir, sansürü aşabilirsiniz.
+
+5- Bilgisayarda Snowflake:
+Başlangıç ekranından ‘Bağlantıyı yapılandır’ > Köprüler > Hazır köprülerden seçilsin > Snowflake yolunu izleyin.
+
+- iOS kullanıyorsanız (iPhone, iPad), Onion Browser uygulamasını indirin. App Store'da Mike Tigas ismini görürsünüz, o doğru uygulama.
+
+6- Android için Snowflake: Ayarlar > Bir köprü yapılandırmak için ‘Bir Tor köprüsü yapılandır’ > “Hazır köprülerden seçilsin” >“Snowflake” yolunu izleyin.
+
+7- Sadece Instagram engellemesi - sansürü için değil. Her zaman işe yarayacak olan bu bilgiyi duyurursanız oldukça faydalı olacaktır. Aşağıdaki tweeti paylaşabilirsiniz. Sevgiler.
+
+.............................................................................................................................................................................................................................................................................................................................................................................
 python dosyasını .exe yapma:
     python dosyasını executable yapabilmek için indirmek gereken paket var... 
     pip install pyinstaller    
