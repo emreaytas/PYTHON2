@@ -105,6 +105,33 @@ kurulum için TrueNas iso dosyası. bir usb en az 4gb. ve isoyu usbye yazmak iç
 kurulum için ssd seçmek daha hızlı çalışmamızı sağlar.  
 ....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 https://www.youtube.com/watch?v=m-i2JBtG4FE
+........................................................................................................................................................................................................................................................................................................................................................................
+API nedir?
+- uygulama programlama ara birimidir. iki farklı uygulamanın birbiri ile haberleşmesini sağlar. sadece iki uygulama için değil örnek olarak bir api yazdık hem mobil uygulama ile hem internet sitesi ile hemde masaüstü uygulamar ile çalışabilir. bunu yayınlarız örnek olarak ve uygualamar ile haberleşmesini sağlayabiliriz. 
+- en basit hali ile uygulamalar arasında okuma yazma işlemleri sağlayabilir. 
+- programların illa internet olacak diye bir şey yok uygualamar arasında konuşmayı sağlar. mesela word ile excelin kendi bilgisayarımzda internet olmadan konuşması. ya da java kodu yazdık ve bir framework ile o kodun aynı pakette internet olmadan haberleşmesi.
+
+
+API (Application Programming Interface), bir yazılımın başka bir yazılımla iletişim kurmasını sağlayan bir dizi kural ve protokoldür. API'ler, iki farklı yazılım sisteminin veri alışverişi yapmasına ve birbirleriyle etkileşimde bulunmasına olanak tanır.
+
+API'ler çeşitli şekillerde kullanılabilir:
+
+Web API'ler: Web üzerinden erişilebilen API'lerdir. Örneğin, bir hava durumu uygulaması, hava durumu verilerini almak için bir hava durumu servisi API'sini kullanabilir.
+
+RESTful API'ler: REST (Representational State Transfer) mimarisine dayanan API'lerdir. HTTP protokolü kullanılarak çalışır ve genellikle JSON veya XML formatında veri döner.
+
+SOAP API'ler: Simple Object Access Protocol (SOAP) protokolüne dayanan API'lerdir. XML formatında veri gönderir ve alır.
+
+Kütüphane API'leri: Bir programlama dilinde kullanılan kütüphaneler veya framework'ler tarafından sağlanan API'lerdir. Örneğin, .NET framework'ü içindeki sınıflar ve metodlar, programcıların .NET uygulamaları yazarken kullanabileceği API'lerdir.
+
+API'lerin avantajları:
+
+Yeniden Kullanılabilirlik: Aynı API, birden fazla uygulama tarafından kullanılabilir.
+Modülerlik: API'ler, büyük sistemlerin daha küçük ve yönetilebilir parçalara ayrılmasını sağlar.
+Güvenlik: API'ler, sistemler arasında güvenli veri alışverişi sağlar.
+Entegrasyon: Farklı yazılım sistemlerinin birbiriyle entegre olmasına olanak tanır.
+Bir API örneği olarak, senin de üzerinde çalıştığın ASP.NET Core Web API'yi ele alabiliriz. Bu tür API'ler, HTTP istekleri (GET, POST, PUT, DELETE vb.) aracılığıyla çeşitli kaynaklara erişim sağlar ve bu kaynakları yönetir.
+
 ...............................................................................................................................................................................................................
 1- VPN, Tor ve oldu da Snowflake kullanırken sorun yaşadık, güçlü bir sansüre uğradılar. Peki internetten kopmamak için ne yapacağız? Gelin en basit alternatifleri birlikte öğrenelim:
 
@@ -116,13 +143,11 @@ Web Proxy: Tarayıcı üzerinden erişilebilen proxy sunucular. Örneğin: KProx
 
 HTTP Proxy Sunucuları: HTTP protokolünü kullanarak internet trafiğini yönlendirir. Örn: Squid, Apache HTTP Server vb.
 
-
 4- VPN, Tor ve Snowflake olur da sansürlenirse alternatif proxy yolları:
 
 SOCKS Proxy: TCP/IP tabanlı bağlantıları destekler. Örn: Shadowsocks, Dante, Tor SOCKS Proxy
 
 SSL/TLS Proxy: Güvenli iletişim için kullanılan SSL veya TLS protokollerini kullanır. Örn: Squid, Nginx, HAProxy
-
 
 5- Proxy konusunu anlamayanlar için en basit çözüm DNS değiştirme.
 
