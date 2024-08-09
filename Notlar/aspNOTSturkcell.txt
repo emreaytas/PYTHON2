@@ -4377,20 +4377,388 @@ namespace turkcell1.Web.ViewModels
 
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 Model/Form Validation Range. Form Validation işlemlerinde kullanılacak Range attribute konusu anlatılmaktadır.
+Range attributesi bir sayısal değerin belli bir değer aralığında olup olmadığını belirleyebiliriz...
+
+
+        [Required(ErrorMessage = "Stok alana boş olamaz.")] // doldurulması zorunlu alan olarak belirleriz.
+        [Range(1,200,ErrorMessage = "Stok belli alanda olmalı..")] // belli bir aralıkta olmasını sağlarız başlangıç ve bitiş. ve bu şartlar sağlnazmasa o zaman gelecek hata mesajını belirleriz.
+        public int? Stock { get; set; }
+        // ProductViewModel class'ı içerisi...
+
+    <div class="mb-3">
+        <label asp-for="Stock" class="form-label">Ürün Stok:</label>
+        <input type ="number" class="form-control" asp-for="Stock">
+        <span class="text-danger" asp-validation-for="Stock"></span>
+    </div>
+    @*add.cshtml içerisi type = "number olarak belirledik."*@
+
+........
+
+
+        [Required(ErrorMessage = "Fiyat alanı boş olamaz.")] // doldurulması zorunlu alan olarak belirleriz.
+        [Range(1,1000,ErrorMessage = "Fiyat alanı belli aralıkta olmalı.")]
+        public decimal? Price { get; set; }
+ 
+
+        <div class="mb-3">
+        <label asp-for="Price" class="form-label">Ürün fiyat:</label>
+        <input class="form-control" asp-for="Price">
+        <span class="text-danger" asp-validation-for="Price"></span>
+    </div>
+    @*decimal olduğu için biz bunu type = "number" yapamayız yoksa ondalıklı sayı giremeyiz.*@
+
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Model/Form Validation StringLength. Form Validation işlemlerinde kullanılacak StringLength attribute konusu anlatılmaktadır.
+bir yazının uzunluğu için kullanırız...
+
+
+        [Required(ErrorMessage ="İsim alanı boş olamaz.")] // doldurulması zorunlu alan olarak belirleriz.
+        [StringLength(50,ErrorMessage ="İsim alanı en fazla 50 karakter olur...")]
+        public string Name { get; set; }
+
+...min uzunluk için ise 
+
+        [Required(ErrorMessage ="İsim alanı boş olamaz.")] // doldurulması zorunlu alan olarak belirleriz.
+        [StringLength(50,MinimumLength =1,ErrorMessage ="İsim alanı en fazla 50 karakter olur...")]
+        public string Name { get; set; }
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Ürün ismi:</label>
+        <input class="form-control" asp-for="Name">
+        <span class = "text-danger" asp-validation-for="Name"></span>
+    </div>
+    @*aynen kullandık. bir değişim yapmadık.*@ 
+
+...............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Model/Form Validation EmailAddress. Form Validation işlemlerinde kullanılacak EmailAddress attribute konusu anlatılmaktadır.
+email adresi için gerekli kısıtlamaları göreceğiz... email doğrulama için kullanırız.
+
+        [EmailAddress(ErrorMessage ="Email geçersiz.")]
+        public string EmailAdress { get; set; }
+        //ProductViewModel...
+
+   <div class="mb-3">
+       <label asp-for="EmailAdress" class="form-label">Email adresi:</label>
+       <input type = "text" class="form-control" asp-for="EmailAdress">
+       <span class="text-danger" asp-validation-for="EmailAdress"></span>
+   </div>
+   @*Products-Add.cshtml*@
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Model/Form Validation ReqularExpression. Form Validation işlemlerinde kullanılacak ReqularExpression attribute konusu anlatılmaktadır.
+ReqularExpression herhangi bir değeri karşılaştırmamızı sağlar.
+
+hello ---	contains {hello}
+gray|grey ---	contains {gray, grey}
+gr(a|e)y ---	contains {gray, grey}
+gr[ae]y ---	contains {gray, grey}
+b[aeiou]bble ---	contains {babble, bebble, bibble, bobble, bubble}
+[b-chm-pP]at|ot ---	contains {bat, cat, hat, mat, nat, oat, pat, Pat, ot}
+colou?r	contains --- {color, colour}
+rege(x(es)?|xps?) ---	contains {regex, regexes, regexp, regexps}
+go*gle ---	contains {ggle, gogle, google, gooogle, goooogle, ...}
+go+gle --- contains {gogle, google, gooogle, goooogle, ...}
+g(oog)+le ---	contains {google, googoogle, googoogoogle, googoogoogoogle, ...}
+z{3} ---	contains {zzz}
+z{3,6} ---	contains {zzz, zzzz, zzzzz, zzzzzz}
+z{3,} ---	contains {zzz, zzzz, zzzzz, ...}
+[Bb]rainf\*\*k ---	contains {Brainf**k, brainf**k}
+\d	--- contains {0,1,2,3,4,5,6,7,8,9}
+\d{5}(-\d{4})? ---	contains a United States zip code
+1\d{10}	--- contains an 11-digit string starting with a 1
+[2-9]|[12]\d|3[0-6] ---	contains an integer in the range 2..36 inclusive
+Hello\nworld	--- contains Hello followed by a newline followed by world
+mi.....ft	--- contains a nine-character (sub)string beginning with mi and ending with ft (Note: depending on context, the dot stands either for “any character at all” or “any character except a newline”.) Each dot is allowed to match a different character, so both microsoft and minecraft will match.
+\d+(\.\d\d)?	--- contains a positive integer or a floating point number with exactly two characters after the decimal point.
+[^i*&2@]	--- contains any character other than an i, asterisk, ampersand, 2, or at-sign.
+//[^\r\n]*[\r\n]	--- contains a Java or C# slash-slash comment
+^dog	--- begins with "dog"
+dog$	--- ends with "dog"
+^dog$	--- is exactly "dog"
+
+// içerik sorgulamak için kullanılan sistem...
+// içereni bulursa true döner yoksa false
+
+        [RegularExpression(@"^[0-9]+(\.[0-9]{{1,2})",ErrorMessage ="Hata alındı...")] // @ koyarak \ gibi ifadelerin stringi bozmasını engelledik.
+        public decimal? Price { get; set; }
+        // noktadan sonra maks 2 basamak girilebilir yapar.
+
+...........
+
+
+        <div class="mb-3">
+        <label asp-for="Price" class="form-label">Ürün fiyat:</label>
+        <input class="form-control" asp-for="Price">
+        <span class="text-danger" asp-validation-for="Price"></span>
+        </div>
+  
+
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Model/Form Validation ValidationSummary. Form Validation işlemlerinde kullanılacak ValidationSummary attribute konusu anlatılmaktadır.
+validation mesajlarını gösterirken toplu bir şekilde nasıl gösterebiliriz. hepsinin tek tek altında oluyor ama biz hepsini toplu gösterebiliriz error mesajları.
+
+
+@{
+    ViewData["Title"] = "Add";
+}
+@model ProductViewModel
+
+<h1>EKLEME</h1>
+<div asp-validation-summary="All"> @*tüm hata mesajları burada gözükecek. ama css'siz bunu kendimiz eklememiz gerekebilir.*@
+
+</div>
+@*products add.cshtmlde*@
+
+.........................//ProductsController içerisi.
+
+asp-validation-summary="ModelOnly" yaparsak bunu herhangi bir textboxa ait olmayan hata mesajı göstermek istemezsek eğer o zaman kullanırız.
+
+[HttpPost] 
+public IActionResult Add(ProductViewModel newProduct) {
+
+
+                if (!string.IsNullOrEmpty(newProduct.Name) && newProduct.Name.StartsWith("A"))
+                {
+        ModelState.AddModelError(string.Empty,"Ürün ismi A harfi ile başlayamaz..."); // string.Empyt dersek eğer hata mesajı herhangi bir text boxta değil toplu gösterim alanında göster demek
+                                 //string.Empty yerine  "Name" vs dersek o zaman Name'in text boxunda hatayı gösterebilirdik. 
+                }
+
+    ............
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Model/Form Validation Custom Hata Mesajı. Form Validation işlemlerinde custom hata mesajlarının nasıl gösterileceği anlatılmaktadır.
+hata mesajı göstereceğiz ve herhangi bir texboxın validationı değil uygulamanın geneli ile alakalı bir hata olabilir.
+
+
+
+                try
+                {
+
+                    _context.Products.Add(_mapper.Map<Product>(newProduct));
+
+                    _context.SaveChanges();
+
+
+                    TempData["status"] = "Ürün başarı ile eklendi.";
+
+
+                    return RedirectToAction("Index");
+
+                }
+                catch (Exception)
+                {
+
+                    ModelState.AddModelError(string.Empty,"Ürün kaydedilirken hata oldu");
+                    // ModelState kısmına hata mesajı ve hatanın nerede gösterileceğini yazarız.
+                }
+
+
+
+
+@{
+    ViewData["Title"] = "Add";
+}
+@model ProductViewModel
+
+<h1>EKLEME</h1>
+<div asp-validation-summary="All"> @*tüm hata mesajları burada gözükecek.*@
+
+
+</div>
+
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Model/Form Validation Client-Side Validation. Form Validation işlemlerinde Client Side validation işleminin nasıl gerçekleştirileceği anlatılmaktadır.
+client side olursa veriler daha sunucuya gitmeden doğrulama yapılacak...
+her değer için her işlem için serverı yormak mantıklı değildir. javascript ve html5'in gücüyle bunu servera gitmeden değerleri kontrol edebiliriz.
+shared klasöründe _ValidationScriptsPartial.cshtml dosyası var.   içinde <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script> <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>  içinde iki tane script dosyası var.
+
+Add.cshtml'in en altına şunu ekledik.
+
+
+</form> @*en sona veya en başa _ValidationScriptsPartial.cshtml içindekileri aşağıya aşağıdaki biçimde yerleştirdik.*@
+
+@section Scripts{
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+}
+
+...........
+using System.ComponentModel.DataAnnotations;
+
+namespace turkcell1.Web.ViewModels
+{
+    public class ProductViewModel
+    {
+
+        public int Id { get; set; }
+
+        [Required(ErrorMessage ="İsim alanı boş olamaz.")] // doldurulması zorunlu alan olarak belirleriz.
+        [StringLength(50,MinimumLength =1,ErrorMessage ="İsim alanı en fazla 50 karakter olur...")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Fiyat alanı boş olamaz.")] // doldurulması zorunlu alan olarak belirleriz.
+        [Range(1,1000,ErrorMessage = "Fiyat alanı belli aralıkta olmalı.")]
+        [RegularExpression(@"^[0-9]+(\.[0-9]{{1,2})",ErrorMessage ="Hata alındı...")] // @ koyarak \ gibi ifadelerin stringi bozmasını engelledik.
+        public decimal? Price { get; set; }
+
+
+        [Required(ErrorMessage = "Stok alana boş olamaz.")] // doldurulması zorunlu alan olarak belirleriz.
+        [Range(1,200,ErrorMessage = "Stok alana boş olamaz.")] // belli bir aralıkta olmasını sağlarız başlangıç ve bitiş. ve bu şartlar sağlnazmasa o zaman gelecek hata mesajını belirleriz.
+        public int? Stock { get; set; }
+        [Required(ErrorMessage = "Açıklama boş olamaz.")] // doldurulması zorunlu alan olarak belirleriz.
+        [StringLength(300,MinimumLength =1,ErrorMessage = "Açıklama alanı istenen aralıkta değil...")]
+        public string Description { get; set; }
+        [Required(ErrorMessage = "Renk seçimi boş olamaz.")]
+        public string? Color
+        {
+            get;
+            set;
+        }
+
+        [Required(ErrorMessage = "Yayınlanma tarihi boş olamaz.")]
+        public DateTime? PublishDate { get; set; } // null olabilir seçeneği veririz ? ile var olan veriler içinde null verecek.
+
+        public bool IsPublish { get; set; }
+
+        [Required(ErrorMessage = "yayınlanma süresi boş olamaz.")]
+        public int? Expire { get; set; }
+
+
+        [EmailAddress(ErrorMessage ="Email geçersiz.")]
+        public string EmailAdress { get; set; }
+
+    }
+}
+..............
+
+@{
+    ViewData["Title"] = "Add";
+}
+@model ProductViewModel
+
+<h1>EKLEME</h1>
+<div asp-validation-summary="All"> @*tüm hata mesajları burada gözükecek.*@
+
+
+</div>
+
+
+<form asp-controller="Products" asp-action="Add" method="post">
+
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Ürün ismi:</label>
+        <input class="form-control" asp-for="Name">
+        <span class = "text-danger" asp-validation-for="Name"></span>
+    </div>
+
+
+
+        <div class="mb-3">
+        <label asp-for="Price" class="form-label">Ürün fiyat:</label>
+        <input class="form-control" asp-for="Price">
+        <span class="text-danger" asp-validation-for="Price"></span>
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="Stock" class="form-label">Ürün Stok:</label>
+        <input type ="number" class="form-control" asp-for="Stock">
+        <span class="text-danger" asp-validation-for="Stock"></span>
+    </div>
+
+
+    <div class="mb-3">
+     
+        @*<label asp-for="Color" class="form-label">Ürün Renk:</label>
+        <input class="form-control" asp-for="Color">
+        *@
+
+        <select class="form-select" asp-for="Color" asp-items="@ViewBag.ColorSelect">
+
+            <option value="">Renk seçiniz</option>
+
+        </select>
+        <span class="text-danger" asp-validation-for="Color"></span>
+
+    </div>
+
+
+    <div class="form-check">
+        <input class="form-check-input" asp-for="IsPublish">
+        <label class="form-check-label" asp-for="IsPublish">
+            Yayınlansın mı?
+        </label>
+    </div> @*asp-for ile nereye gideceğine karar verdik ve bootstraptan aldığımız checksleri yerleştirdik. asp-for ile bir veri girişi belirlersek o zaten typeını otomatik belirliyor. boolean tip olduğunu bilecek. 
+    *@
+
+
+
+    <div class="mb-3 mt-3"> @*mt-3 ekledik 3 tab boşluk bırakır.*@
+        <span>Ürün kaç ay satışta kalacak ?</span>
+    @foreach (var item in ViewBag.Expire as Dictionary<string,int>)
+    { 
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" id ="@(item.Value)Expire" asp-for="Expire" value="@item.Value"> @*Value değerini ekledik.*@
+                <label class="form-check-label" asp-for="Expire" for="@(item.Value)Expire">
+               @item.Key
+            </label>
+        </div>
+
+    }
+        <span class="text-danger" asp-validation-for="Expire"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <textarea asp-for = "Description" class="form-control" placeholder="Ürün açıklama" style="height: 100px"></textarea>
+        <label asp-for="Description">Ürün açıklama</label>
+        <span class="text-danger" asp-validation-for="Description"></span>
+    </div>
+
+
+
+    <div class="mb-3">
+        <label asp-for="PublishDate" class="form-label">Ürün Yayınlanma zamanı:</label>
+        <input class="form-control" asp-for="PublishDate">
+        <span class="text-danger" asp-validation-for="PublishDate"></span>
+    </div>
+
+    @*
+    <div class="mb-3">
+        <label asp-for="EmailAdress" class="form-label">Email adresi:</label>
+        <input class="form-control" asp-for="EmailAdress">
+        <span class="text-danger" asp-validation-for="EmailAdress"></span>
+    </div>
+    *@
+
+
+    <button type="submit" class="btn btn-primary">Ürün Kaydet</button> @*class="btn btn-primary" bunu bootstrap sitesinden aldık mesela ve bunu ekleyerek butona bir tip ekledik.*@
+
+</form>
+
+@section Scripts{
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+}
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Model/Form Validation Remote.Form Validation işlemlerinde kullanılacak Remute attribute konusu anlatılmaktadır.
+Remote ekstra bir metot çalıştırmak istersek eğer o zaman kullandığımız yapı. mesela bir tc alanında bu tcnin olup olmadığını kontrol eden bir yapı. mesela tc girdik sonra isim girerken o sırada veritabanı ile haberleşip o sırada bir uyarı mesajı gösterebilir... client tarafta gerçekleştirir ve o sırada veritabanı ile haberleşilir buna ajax teknolojisi denir. 
+
+
+
 
 
 
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-
-
-
-..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
 
 
 
