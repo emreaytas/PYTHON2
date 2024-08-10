@@ -112,6 +112,7 @@ API nedir?
 - programların illa internet olacak diye bir şey yok uygualamar arasında konuşmayı sağlar. mesela word ile excelin kendi bilgisayarımzda internet olmadan konuşması. ya da java kodu yazdık ve bir framework ile o kodun aynı pakette internet olmadan haberleşmesi.
 
 
+
 API (Application Programming Interface), bir yazılımın başka bir yazılımla iletişim kurmasını sağlayan bir dizi kural ve protokoldür. API'ler, iki farklı yazılım sisteminin veri alışverişi yapmasına ve birbirleriyle etkileşimde bulunmasına olanak tanır.
 
 API'ler çeşitli şekillerde kullanılabilir:

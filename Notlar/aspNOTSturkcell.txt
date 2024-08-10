@@ -4752,8 +4752,645 @@ namespace turkcell1.Web.ViewModels
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 Model/Form Validation Remote.Form Validation işlemlerinde kullanılacak Remute attribute konusu anlatılmaktadır.
 Remote ekstra bir metot çalıştırmak istersek eğer o zaman kullandığımız yapı. mesela bir tc alanında bu tcnin olup olmadığını kontrol eden bir yapı. mesela tc girdik sonra isim girerken o sırada veritabanı ile haberleşip o sırada bir uyarı mesajı gösterebilir... client tarafta gerçekleştirir ve o sırada veritabanı ile haberleşilir buna ajax teknolojisi denir. 
+backende yaparsak sayfa yenilenecek vs remoto bunu ajax teknolojisi ile client tafaındayken biz veritabanı ile haberleşerek halleder.
+
+       [AcceptVerbs("GET","POST")] // hem [HttpGet] hem [HttpPost ] olabilir demektir.
+       public IActionResult HasProductName(string name)
+       {
+           var anyProduct = _context.Products.Any(x=> x.Name.ToLower() == name.ToLower()); // .Any() true ya da false döner.
+           if (anyProduct)
+           {
+               return Json("Kaydetmeye çalıştığınız ürün adı veritabanında vardır.");
+           }
+           else
+           {
+               return Json(true);
+           }
+
+       }
+// bu metotu ekledik ProductsController'a.
+
+sonra ProductViewModel'e geçeriz.
+        [Remote(action:"HasProductName",controller:"ProductsController")]
+        public string Name { get; set; }
+// böylece client tarafta iken haberleşme yapabilecek.
 
 
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Model/Form Validation Update.cshtml .. Ürün Güncelleme sayfasının validation ile tekrardan düzenlenmesi anlatılmaktadır.
+
+//prodcutcontrollerdeki değişimler.
+
+        [HttpGet]
+        public IActionResult Update(int id)
+        {
+
+            var product = _context.Products.Find(id);
+            ViewBag.ExpireValue = product.Expire;
+            Dictionary<string, int> Expire = new Dictionary<string, int>()
+            {
+                { "1 Ay",1},
+                { "3 Ay",3},
+                { "6 Ay",6},
+                { "12 Ay",12}
+
+            };
+            ViewBag.Expire = Expire;
+
+
+
+
+            ViewBag.ColorsSelect = new SelectList(new List<ColorSelectList>()
+           {
+               new () {Data = "Mavi",Value = "Mavi" },
+               new () {Data = "Kırmızı",Value = "Kırmızı" },
+               new () {Data = "Sarı",Value = "Sarı" }
+
+           }, "Value", "Data",product.Color); // seçili olanı getirecek.
+
+
+
+
+
+            return View(_mapper.Map<ProductViewModel>(product));    
+
+        }
+
+        [HttpPost]
+        public IActionResult Update(ProductViewModel updateProduct)
+        {
+            if (ModelState.IsValid)
+            {
+
+
+                ViewBag.ExpireValue = updateProduct.Expire;
+                Dictionary<string, int> Expire = new Dictionary<string, int>()
+            
+            {
+            
+                { "1 Ay",1},
+                { "3 Ay",3},
+                { "6 Ay",6},
+                { "12 Ay",12}
+
+            };
+                ViewBag.Expire = Expire;
+
+
+
+
+                ViewBag.ColorsSelect = new SelectList(new List<ColorSelectList>()
+           {
+               new () {Data = "Mavi",Value = "Mavi" },
+               new () {Data = "Kırmızı",Value = "Kırmızı" },
+               new () {Data = "Sarı",Value = "Sarı" }
+
+           }, "Value", "Data", updateProduct.Color); // seçili olanı getirecek.
+
+                return View();
+            }
+
+            _context.Products.Update(_mapper.Map<Product>(updateProduct));
+            _context.SaveChanges(); 
+            TempData["status"] = "Ürün başarı ile güncellendi.";
+
+
+            return RedirectToAction("Index");
+
+        }
+
+.............Products add.cshtml
+
+
+@{
+    ViewData["Title"] = "Update";
+}
+
+@model ProductViewModel
+
+<h1>Ürün Güncelleme</h1>
+
+<form asp-controller="Products" asp-action="update" method="post">
+
+    <input type="hidden" asp-for="Id"/> @*hidden ile gönderdik ki id alanıda dolsun yoksa hata alırız hangi id'de ürünü güncelleyeceğiz bilemeyeiz.*@
+
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Ürün ismi:</label>
+        <input class="form-control" asp-for="Name">
+        <span class = "text-danger"asp-validation-for="Name"></span>
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label">Ürün fiyat:</label>
+        <input class="form-control" asp-for="Price"> 
+        <span class="text-danger" asp-validation-for="Price"></span>
+
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="Stock" class="form-label">Ürün Stok:</label>
+        <input type="" class="form-control" asp-for="Stock">
+        <span class="text-danger" asp-validation-for="Stock"></span>
+
+    </div>
+
+
+    <div class="mb-3">
+
+        <select class="form-select" asp-for="Color" asp-items="@ViewBag.ColorSelect">
+
+            <option value="">Renk seçiniz</option>
+
+        </select>
+        <span class="text-danger" asp-validation-for="Color"></span>
+
+    </div>
+
+
+    <div class="form-check">
+        <input class="form-check-input" asp-for="IsPublish">
+        <label class="form-check-label" asp-for="IsPublish">
+            Yayınlansın mı?
+        </label>
+    </div> 
+
+
+
+    <div class="mb-3 mt-3">
+        
+        <span>Ürün kaç ay satışta kalacak ?</span>
+        @foreach (var item in ViewBag.Expire as Dictionary<string, int>)
+        {
+            <div class="form-check">
+
+
+            @if (item.Value == ViewBag.ExpireValue)
+            {
+                    <input checked = "checked" class="form-check-input" type="radio" id="@(item.Value)Expire" asp-for="Expire" value="@item.Value">
+                }
+                else
+                {
+                    <input class="form-check-input" type="radio" id="@(item.Value)Expire" asp-for="Expire" value="@item.Value">
+                }
+
+                <label class="form-check-label" asp-for="Expire" for="@(item.Value)Expire">
+                    @item.Key
+                </label>
+
+            </div>
+
+
+                
+                
+
+        }
+        <span class="text-danger" asp-validation-for="Expire"></span>
+
+    </div>
+
+    <div class="form-floating mb-3">
+        <textarea asp-for="Description" class="form-control" placeholder="Ürün açıklama" style="height: 100px"></textarea>
+        <label asp-for="Description">Ürün açıklama</label>
+    </div>
+
+
+
+    <div class="mb-3">
+        <label asp-for="PublishDate" class="form-label">Ürün Yayınlanma zamanı:</label>
+        <input class="form-control" asp-for="PublishDate">
+        <span class="text-danger" asp-validation-for="PublishDate"></span>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Ürün Güncelle</button> 
+
+
+</form>
+
+@section Scripts{
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+}
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Partial View /View Component.
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Partial View Model Binding 1.Aşama. Partial View'lere model binding işleminin nasıl yapılacağı anlatılmaktadır...
+partial viewler birer cshtml dosyasıdır... bir layout kullanmazlar. bir uygulamamızın bir çok yerinden kullanıdığımız şeyleri tekrarlamamızı önler. 
+
+partial viewler için ayrı dosya açtık partialViews adında.
+
+biz şimdi tüm verileri alıp gösteren bir partialView tablosu yapacağız verileri içeren bir tablo olacak.
+
+
+// bir class oluşturduk... PartialViews klasöründe.
+using System;
+
+namespace turkcell1.Web.PartialViews
+{
+    public class ProductListPartialViewModel
+    {
+        public List<ProductPartialViewModel> Products { get; set; } // bir sınıf ile wrapladım. sonradan başka şeyler ekleyebiliriz.
+
+
+    }
+    public class ProductPartialViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public int Stock { get; set;}
+
+
+
+    }
+
+
+}
+
+
+.......// _ProductListPartialView.cshtml içerisi.
+@using turkcell1.Web.PartialViews
+@model ProductListPartialViewModel
+
+<table class="table table-success table-striped">
+
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>İSİM</th>
+            <th>FİYAT</th>
+            <th>STOK</th>
+
+
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @foreach(var item in Model.Products)
+        {
+            
+            <tr>
+
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+                <td>@item.Stock</td>
+
+            </tr>
+
+        }
+
+
+
+    </tbody>
+
+
+</table>
+........... şimdi listeleme işi yapacağız.
+
+    public class HomeController : Controller
+    {
+
+
+        private readonly AppDbContext _context;
+        private readonly ILogger<HomeController> _logger;
+
+        public HomeController(ILogger<HomeController> logger, AppDbContext appDbContext)
+        {
+
+            _logger = logger;
+            _context = appDbContext;
+        
+        }
+
+        public IActionResult Index()
+        {
+            var products = _context.Products.OrderByDescending(x=>x.Id).Select(x=>new ProductPartialViewModel(){
+
+                Id = x.Id,
+                Name = x.Name,
+                Price = x.Price,
+                Stock = x.Stock,
+
+
+            });
+            ViewBag.productListPartialViewModel = new ProductListPartialViewModel()
+            {
+                Products = products.ToList(),
+            };
+            return View();
+        }
+
+// Home controllere ekleme yaptık.
+
+HomeController'ın index.cshtml'i...
+
+<partial name="~~/PartialViews/_ProductListPartialView.cshtml" model="@ViewBag" /> @*~~ kök klasördür.*@
+@*bunu ekledik shared içinde olmadığı için ~~ ve yol olarak verdik. Ve model ViewBag ile taşıdık onu veririz.*@
+
+.............
+<div class="row">
+    <div class="col-md-4">
+
+<partial name="~~/PartialViews/_ProductListPartialView.cshtml" model="@ViewBag" /> @*~~ kök klasördür.*@
+
+    </div>
+
+
+</div>
+bootstrap default olarak bir sayfayı 12 bölgeye ayırır. yatay olarak 12 tane çizgi ile 12 parçaya bölünmüştür. biz col-md-4 ile 4 parçasını kullanır olduk.
+
+ 
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+View Component.
+yapı itibarı ile partialView ile aynıdır neredeyse. tekrar tekrar kod yazmaktan kurtarır bizi. sayfaları merkezi bir yerde toplar.
+partialViewlere ihtiyaç duydukları dataları dışarıdan veririz.
+view componentlerin kendi classları var kendi cs. dosyaları var verileri kendi içindeki class'tan gelecek.
+partialView'den farkı yok sadece ihtiyaç duyacağı datayı kendi class'ından alır.
+
+Shared klasorunde ViewComponents adında bir klasör oluşturduk. bunun içinde classlarımız olacak.
+sonra ise shared içerisinde Components adında bir klasor oluşturduk. bunun içinde ise cshtml dosyaları olacak.
+bu sistemin sayesinde controllerler içerisinde bussiness kod yazmamıza gerek kalmayacak.
+..........
+
+ViewComponents klasorunde ProductListViewComponent isminde bir class oluşturduk ViewComponent ile bitmesi şart çağırırken ProductList olarak çağırıcaz. ViewComponent asp tarafından silinecek ve ona göre işlem yapacak.
+            // sadece isim ve açıklama istiyorum. onun için ViewModel klasöründe bir class oluştururuz.
+ namespace turkcell1.Web.ViewModels
+{
+
+    public class ProductListComponentViewModel
+    {
+        public string Name {  get; set; } 
+        public string Description { get; set; }
+
+    }
+}
+.........
+using Microsoft.AspNetCore.Mvc;
+using turkcell1.Web.Models;
+using turkcell1.Web.ViewModels;
+
+namespace turkcell1.Web.Views.Shared.ViewComponents
+{
+    public class ProductListViewComponent:ViewComponent
+    {
+
+        private readonly AppDbContext _context;
+
+        public ProductListViewComponent(AppDbContext context)
+        {
+            _context = context;
+            
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            // sadece isim ve açıklama istiyorum.
+            var viewmodes = _context.Products.Select(x=>new ProductListComponentViewModel()
+            {
+
+                Name = x.Name,
+                Description = x.Description,
+
+            }).ToList();
+
+            return View(viewmodes);
+
+
+        }
+
+
+
+
+
+
+    }
+}
+................cs.html kısmını kodlama.
+Components klasoru içerisinde bir klasör daha oluşturduk. ProductList isminde. ProductListViewComponent ismindeki class'a göre yaptık bu isimlendirmeyi. ViewComponent'i atarak isimlendirdik.
+ProductList klasöründe add view dedik razor viewi seçtik dosyanın adını Default.cshmtl koyduk ve create as Partial View şıkkını işaretledik.
+
+.............
+@model List<ProductListComponentViewModel>
+
+
+
+<table class="table table-success table-striped">
+
+
+    <thead>
+        <tr>
+            <th>İSİM</th>
+            <th>AÇIKLAMA</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @foreach(var item in Model)
+        {
+            
+            <tr>
+
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+
+
+            </tr>
+
+        }
+
+    </tbody>
+
+
+</table>
+
+..............Home klasörü index sayfası..
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+
+@section Css{
+
+
+    <style>
+
+    </style>
+}
+
+
+@section Scripts{
+
+
+
+    0
+}
+<div class="row">
+    <div class="col-md-4">
+
+<partial name="~~/PartialViews/_ProductListPartialView.cshtml" model="@ViewBag" /> @*~~ kök klasördür.*@
+
+    </div>
+
+    <div class="col-md-4">
+        @await  Component.InvokeAsync("ProductList") @*asenkron metot olduğu için.  içerideki isim ViewComponent atılmış hali olmalı. EKLEME BURADA YAPILDI tablonun yanına tablo ekledik.*@ 
+    </div>
+</div>
+
+.....................View Component'leri sayfalarda tag helper yardımı ile nasıl ekleneceği anlatılmaktadır.
+Shared-components-productList klasörü içine type2 adında bir cshtl ekledik new item razor page ile ekledik.
+
+@model List<ProductListComponentViewModel>
+
+
+<a class = "btn btn-outline-primary" asp-controller="products" asp-action="index">ÜRÜNLERE GİT</a> @*bir tag helper ile bir sayfaya yönlerdirme yapabildik.*@
+<table class="table table-success table-striped">
+
+
+    <thead>
+        <tr>
+            <th>İSİM</th>
+            <th>AÇIKLAMA</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+
+            <tr>
+
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+
+
+            </tr>
+
+        }
+
+    </tbody>
+
+
+</table>
+......... sonra ise ProductListViewComponent classını değiştirdik.
+
+using Microsoft.AspNetCore.Mvc;
+using turkcell1.Web.Models;
+using turkcell1.Web.ViewModels;
+
+namespace turkcell1.Web.Views.Shared.ViewComponents
+{
+    public class ProductListViewComponent:ViewComponent
+    {
+
+        private readonly AppDbContext _context;
+
+        public ProductListViewComponent(AppDbContext context)
+        {
+            _context = context;
+            
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync(int type = 1) // default değer 1
+        {
+
+            // sadece isim ve açıklama istiyorum.
+            var viewmodels = _context.Products.Select(x=>new ProductListComponentViewModel()
+            {
+
+                Name = x.Name,
+                Description = x.Description,
+
+            }).ToList();
+
+            if (type == 1)
+            {
+                return View("Default",viewmodels);
+
+            }
+            else
+            {
+                return View("Type2", viewmodels);    
+            }
+
+
+        }
+
+
+
+
+
+
+    }
+}
+.......... sonra ise Home'de ki index sayfasında değişim yaptık.
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+
+@section Css{
+
+
+    <style>
+
+    </style>
+}
+
+
+@section Scripts{
+
+
+
+    0
+}
+<div class="row">
+    <div class="col-md-4">
+
+<partial name="~~/PartialViews/_ProductListPartialView.cshtml" model="@ViewBag" /> @*~~ kök klasördür.*@
+
+    </div>
+
+    <div class="col-md-4">
+        @await  Component.InvokeAsync("ProductList",new {Type = 1}) @*asenkron metot olduğu için.  içerideki isim ViewComponent atılmış hali olmalı. *@ 
+    </div>
+</div>
+.................
+ViewComponent istenen verileri gönderirsek onları kullanabiliriz. PartialViewden ayrılan kısmı odur genel olarak.
+.............
+
+
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 
 
