@@ -436,6 +436,13 @@ mikroservis nedir =
     dezavantaj olarak ise karmaşıklık olabilir.
     mikroservisler eventbus ise mikroservislerin birbiri ile iletişim sağlaması için kullanılır.
 
+iki farklı mimari var monotlitic mimari ve mikroservis mimarisi vardır. 
+monotlitic bir pakettir mvc gibi. mikroservis ise web api gibi.
+session oturumdur.
+mikroservis mimarisinde uygulamamızı kodlara sunuculara veritabanlarına vs vs bölebiliriz. bunları genel olarak api ile yaparız.
+
+sql veritabanları daha çok static veriler için kullanılır ama dinamik sürekli değişen bir yapı için mesela hepsiburada alışveriş sepeti sürekli bir değişim var ozaman nosql kullanmak daha mantıklıdır redis gibi.
+ 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 REST (Representational State Transfer), web tabanlı iletişimde kullanılan bir yazılım mimarisidir. Bu mimari, uygulama programlama arayüzü (API) tasarımı için kullanılır ve HTTP protokolünü temel alır. RESTful API'lar, istemcilerin sunucudaki kaynaklarla (veri, hizmet veya işlevsellik) etkileşimde bulunmasını sağlar.
