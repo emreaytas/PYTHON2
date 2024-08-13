@@ -5816,14 +5816,170 @@ app.MapControllerRoute(
 </div>
 
 ................ //Products/GetById/17 ile çağırınca 17.idye sahip ürünün özellikleri bu sayfa ile geldi.
-................
 
+................GetById Sayfası İçin Link Oluşturmak.
+products index sayfasına bunu ekledik bir link ekledik.  route ve action belirttik ve id verdik.
+                                <a asp-route="product" asp-action="getbyid"   asp-route-productid=@item.Id>Ürün sayfasına git</a>
 
-
+................şimdi get by id sayfasına link ekleriz product'ın ana sayfasına gidebilsin diye.
+<a class="btn btn-primary mb-2" asp-controller="products" asp-action="index">Ürünler sayfasına git</a>
+@*mb-2 ile boşluk bırakırız alttan. controller ile hangi controller çalışacak ve hangi sayfası çalışacak belirleriz.*@ 
 
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
+Conventional Routing Oluşturmak 1.Adım.
+
+//app.MapControllerRoute(
+//    name: "getbyid",
+//    pattern: "{controller}/{action}/{productid}");
+Program.cs'e bunu eklersek Conventional bir routing oluştururuz o metot ve alacağı id için.
+
+
+.......... ProductsController'e pages IActionResult'ı ekledik.
+
+
+        //[HttpGet("{page}/{pageSize}")]
+        [Route("[controller]/[action]/{page}/{pageSize}",Name ="productpage")]
+        public IActionResult  Pages(int page,int pageSize)
+        {
+
+            // page=1 pagesize=3 => ilk 3 kayıt
+            // page=2 pagesize=3 => ikinci 3 kayıt
+            // page=3 pagesize=3 => üçüncü 3 kayıt
+
+            var products = _context.Products.Skip((page - 1) * pageSize).Take(pageSize).ToList(); // Take(sayı) demek şartı sağlayan sayı kadar veri al demektir. ToList() ile listeler öyle alırıız.
+
+            ViewBag.page = page; // değerleri viewbag ile taşıyacağız.
+            ViewBag.pageSize = pageSize;
+
+
+            return View(_mapper.Map<List<ProductViewModel>>(products)); // mapleyerek göndermedir. ProductViewModel ile mapleyerek yaptık.
+        }
+
+
+Program.cs'teki routing'i.
+
+//app.MapControllerRoute(
+//    name: "pages",
+//    pattern: "{controller}/{action}/{page}/{pagesize}");
+
+............. Products index'e en alta bu linkleri ekledik.
+
+<a asp-route="productpage"  asp-route-page=1 asp-route-pagesize=3>1 sayfadan 3 ürün ver</a>
+<a asp-route="productpage" asp-route-page=2 asp-route-pagesize=3>2 sayfadan 3 ürün ver</a>
+
+.................... ve metotun sayfası.
+
+@{
+    ViewData["Title"] = "Pages";
+}
+@model List<ProductViewModel>
+<h1>Pages</h1>
+<h2>page : @ViewBag.page</h2>
+<h2>pageSize : @ViewBag.pageSize</h2>
+
+
+<table class="table">
+    <thead>
+        <tr>
+        <th>Id</th>
+        <th>İsim</th>
+        <th>Fiyat</th>
+        <th>Stok</th>
+        <th>Renk</th>
+         <th>Yayınlansın mı ?</th>
+            <th>Süre(Ay)</th>
+            <th>Açıklama</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+              <td>@item.Name</td>
+                <td>@item.Price</td>
+                  <td>@item.Stock</td>
+                  <td>@item.Color</td>
+                  <td>
+                   @(item.IsPublish ? "Evet" : "Hayır")
+
+                  </td>
+                  <td>@item.Expire</td>
+                  <td>@if(item.Description.Length>20)
+                    {
+                        
+                        @item.Description.Substring(0,20)<text>...</text>
+
+                    }
+                    else
+                    {
+                       @item.Description
+                    }
+                </td>
+                  <td>
+                      <a asp-controller="products" asp-action="remove" asp-route-id="@item.Id">Sil</a>
+                      
+                                <a asp-controller="products" asp-action="update" asp-route-id="@item.Id">Güncelle</a>   
+                                
+
+                                <a asp-controller="products"  asp-action="getbyid" asp-route-productid=@item.Id>Ürün sayfasına git</a>
+
+
+
+                  </td>
+        </tr>
+    }
+    </tbody>
+
+
+</table>
+
+.................... Conventional Routing Oluşturmak 2.Adım.
+
+her action metot bir routing kullanıyorsa Program.cs'de routing yapısını belirlemek lazım.
+query string olarak değilde daha şık bir şekilde kullanır yapıyı böylece.
+
+//app.MapControllerRoute(
+//    name: "pages",
+//    pattern: "{controller}/{action}/{page}/{pagesize}");
+
+..............Conventional Routing Oluşturmak 3.Adım
+
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Conventional Routing Oluşturmak Asterisk Karakteri. bazen url belirtirken url'e geçeceğimiz verilerin dinamik olmasını isteriz. //blog/<artical-name> gibi olabilir blog controllerden sonra dinamik olmasını isteyebiliriz.
+dinamik yapabilmek için asterisk karakteri kullanırız.
+
+//blog/abc => blog controller > article action method çalışsın
+//blog/ddd =>blog controller > article action method çalışsın
+//app.MapControllerRoute(
+//    name: "pages",
+//    pattern: "blog/{*article}", 
+//    defaults:new { controller="Blog", action ="Article"});
+
+...........Yeni bir controller ekledik.
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace MyAspNetCoreApp.Web.Controllers
+{
+
+    //blog/article/makele-ismi/id
+    public class BlogController : Controller // Controllerden miras aldı bu önemlidir.
+    {
+        public IActionResult Article(string name, int id)
+        {
+          //  var routes = Request.RouteValues["article"]; 
+          
+            return View();
+        }
+
+    }
+}
+...............
+
+
 
 
 ..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
