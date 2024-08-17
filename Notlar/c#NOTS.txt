@@ -4602,17 +4602,742 @@ pipeline = iş hattı. bir istek geldi mesela sunucu bunu hata yönetim mekanizm
 iş hattının nasıl konfigüre edileceği kritik bir konudur.
 requestlerin ve responselerin nasıl üretileceğine geliştirici karar verir .net mimarisi ile.
 .....................
+kestrel default olarak gelir sunucu olarak. iss'de kullanabiliriz aspde.
+mvcde razor pagesler kullanacağız.
+SingalR ve gRPC servislerdir.  daha az maliyetli web socket programları yapabiliriz. canlı sohbet gibi sürekli işlem gerektiren bir iş için kullanabiliriz. 
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+ASP.NET Core'da middleware (ara katman yazılımı), HTTP isteklerinin işlenmesinde önemli bir rol oynar. Middleware bileşenleri, gelen istekleri incelemek, üzerinde değişiklik yapmak ve nihayetinde bir yanıt üretmek için kullanılır. ASP.NET Core uygulamalarında, middleware'ler genellikle bir pipeline (boru hattı) şeklinde sıralanır, bu sayede her bir middleware bir sonraki middleware'e isteği iletebilir ya da yanıt üretebilir.
+
+Middleware'in Çalışma Prensibi
+İstek alındığında: Gelen HTTP isteği, pipeline'daki ilk middleware'den başlayarak son middleware'e kadar sıralı olarak geçer.
+Yanıt dönerken: Yanıt üretildikten sonra middleware'ler sıralı olarak tersten geçilir ve nihayetinde yanıt istemciye gönderilir.
+Basit Bir Middleware Yazma
+Kendi middleware'inizi yazmak için genellikle bir sınıf oluşturursunuz ve bu sınıf Invoke ya da InvokeAsync metoduna sahip olur.
+
+Örnek olarak, gelen isteğin URI'sini log'layan basit bir middleware yazalım:
+
+public class RequestLoggingMiddleware
+{
+    private readonly RequestDelegate _next;
+
+    public RequestLoggingMiddleware(RequestDelegate next)
+    {
+        _next = next;
+    }
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        // İstek bilgilerini logla
+        Console.WriteLine($"Request URL: {context.Request.Path}");
+        
+        // Sıradaki middleware'e devam et
+        await _next(context);
+    }
+}
+Middleware'i Pipeline'a Ekleme
+Middleware'i kullanmak için Startup.cs dosyasındaki Configure metoduna eklemelisiniz:
+
+
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+{
+    // Diğer middleware'lerden önce yerleştirilebilir
+    app.UseMiddleware<RequestLoggingMiddleware>();
+
+    app.UseRouting();
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers();
+    });
+}
+Hazır Middleware'ler
+ASP.NET Core, yaygın işlemler için birçok hazır middleware ile birlikte gelir. Bunlardan bazıları:
+
+UseRouting: Uygulamanın rota bilgilerini işler.
+UseAuthentication: Kimlik doğrulama middleware'ini ekler.
+UseAuthorization: Kimlik doğrulama ve yetkilendirme kontrollerini yapar.
+UseStaticFiles: Statik dosya sunumunu sağlar.
+Bu middleware'leri sırayla ekleyerek HTTP isteklerinin nasıl işlendiğini kontrol edebilirsiniz.
+
+Middleware yapısı, esnek ve genişletilebilir bir yapı sunduğu için ASP.NET Core projelerinde önemli bir yer tutar.
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+komut seti: 
+bir klasör(istersek git dosyalarıda ekleyebiliriz.) oluşturdum belgelerde sonra içine sağ tık terminalde aç dedik. sonra ise dotnet yazıp enter dedik.
+dotnet --version diyerek terminalde biz dotnet sürümünü görebiliriz.
+dotnet --list-sdks diyerek ilgili sdkleri görebiliriz.
+dotnet --list-runtimes ile hangi runtime versiyonları var görebiliriz.
+
+proje oluşturma.
+dotnet new --help ile bilgileri alabiliriz.
+dotnet new list diyerek tüm proje şablonlarını görebiliriz
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+çalışma ortmanının düzenlenmesi...
+vs code üzerinde çalışıcaz bu yapıda.
+
+seçtiğimiz klasorde terminalde aç diyeceğiz.
+sonra ise code --version ile versiyonu görebiliriz.
+
+code . diyerek ise ilgili klasörde kodu açacaktır.
+sol altta çarkta profiller ile profil belirleyebiliriz.
+extentionsolara @installed yazarak neler kurulu bunu görebiliriz.
+
+vs code üzerinde bir terminal açabiliriz veya zaten var olan terminalden de yapabiliriz amaç o klasörün path'inde olmalıyız orası önemli.
+dotnet new --list dedik ve proje şablonlarını görebildik.
+dotnet new mvc -h   ile neler yapabiliriz görürüz. 
+dotnet new mvc -f net6.0 -o Basics  (-f net6.0 bu kısım olmasa da olurdu framework seçimi yaptık sadece) (-o Basics olmassa da olurdu nerede konumlanacak proje bunu belirledik.)
+
+projeyi çalıştırmak için.  cd Basics diyeceğiz.ve o path'e yerleşeceğiz.
+projeyi çalıştırmak için dotnet build diyerek projeyi derleriz. Basics.dll dosyası gelir elimize. projeyi güncelleyerebilir dlleleri ekleyebilir.zaman
+
+dotnet run diyerek ise projemizi çalıştırabiliriz.
+
+dotnet watch diyerek projemizi ayağa kaldırabilir ve yaptığımız değişikleri direkt olarak çalışan projeye yansıtır bu komut.
+
+mvc tasarım modeli demek. model view controllerdir.
+model ifadesi problemizi tanımlar mesela Product nesnemiz varsa burada olur. Model controller ve viewDen bağımsız ama controller ve view model'e bağlı çalışır. görünüm ile ilgili işleri viewde hallederiz çözümleri contrellerde vsss.
+mvc bir mimari desendir.
+
+// bunun anlamı bu metot çalışırsa bir görünüm dönecek demektir.
+    controller class'ları :Controller ile Controllerden miras alır.
+
+    public IActionResult Index()
+        {
+            return View();
+        }
+
+Mesela Product nesnesi varsa Models'te o zaman ProductController olmalı ismi controllerin.
+Controllerlerin Viewleri olur onlarında views altında klasörü olur mesela ProductController'ın Product klasörü olur viewde ve cshtml sayfaları olur o Controllerin.
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Endpoint yapısı:
+// Program.cs içerisindeki kod parçacısı
+// Burada default controller Home Controller. default metot Index Metotu ve burada id? ile id gelebilirde gelmeyebilirde diye bir yapı belirlemişiz.
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+3 tane segment var default olarak  controller/action/id olarak. id? ile id'yi opsiyonel yaparız.
+
+............................
+    https://www.btkakademi.com.tr/portal/course/algoritmaveprogramlama
+(protokol)          (domain name).                  (path = /portal/course/algoritmaveprogramlama)
+bunun tamamı ise url/endpoint/URI ne dersen.
+............................
+controller view döner tarayıcıya html css js döndürür.
+
+controllerdeki IActionResult'lara view ekleyerek sayfa üretebiliriz.
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+HTML rendering:
+
+
+using Microsoft.AspNetCore.Mvc; // bunu çağırmamız lazım Controllerden kalıtım alabilmek için.
+
+namespace Basics.Controllers // Basics klasörünün Controllers klasörü.
+{
+    public class EmployeeController : Controller // Controllerden miras alması lazım.
+    {
+
+    public string Index(){ // bir View değil bir string döner bize.
+        return "HELLO WORLD";
+    }
+    
+
+    }
+
+}
+....Views altında Employee klasörü oluşturduk içine ise Index.cshtml ekledik.
+
+asp önce sayfayı arar views altında yoksa shared içerisinde arar.
+
+
+public ViewResult Index2(){ // bir ViewResult sonucu dönecek bu yapı bize.
+    return View("Index"); // Bununla hangi Sayfaya gitmesi gerektiğini belirttik.  eğer boş bırakırsak Index2 sayfasını arar önce(kendi isminde arar.) Employee klasöründe yoksa shared içerisinde arama yapar.
+}
+
+..
+
+public IActionResult Index3(){ // genel olarak IActionResult kullanırız en kapsayıcı metot budur view ViewResult vs hepsini dönebilir content'te dönebilir.
+    return Content("Empoloyee");
+}
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+@model direktifi:   sayfa görümü ile alakalı bir yapıdır.
+
+public IActionResult Index1(){ // bir ViewResult sonucu dönecek bu yapı bize.
+    string message = $"Hello world {DateTime.Now.ToString()}";
+    return View("Index1",message);
+    // Index1'i sayfa olarak kabul edecek. diğer parametre ise göndermek istediğimizdir. tek message dersek message sayfası arar olmaz o yüzden.
+}
+
+@*bu sayfa bir string ile çalışacak demektir.*@
+@model string 
+
+@*@Model aslında bizim sayafaya gönderdiğimiz yapıdır.*@
+<div class="lead">
+    @Model
+</div>
+
+@*bir String[] gelecek dedik modeli.*@
+.............
+
+@model String[]
+<div class="display-6">
+
+<h3>
+    Index2
+    </h3>
+<div class="lead">
+    @Model 
+</div>
+
+</div>
+
+...Bu sayfanın Controlleri.
+        public ViewResult Index2(){ // bir ViewResult sonucu dönecek bu yapı bize.
+            
+            var names = new string[]
+            {
+                "Emre", "Bmw", "Ford"
+            };
+            return View("Index2",names);
+
+        }
+
+....verileri controllerden view'e gönderebiliriz.
+cshtml içeriisnde hem html bende c# kodları olur razor engine bunu html koduna çevirir komple.
+
+.....Employee modeli oluşturduk.
+
+namespace Basics.Models
+{
+
+public class Employee{
+
+public int Id { get; set; }
+public string FirstName { get; set; }
+public string LastName { get; set; }
+public string FullName => $"{FirstName} {LastName.ToUpper()}";
+
+public int age{get;set;}
+
+
+}
+
+
+}
+........EmployeeController'da IActionResult oluşturduk.
+
+
+public IActionResult Index3(){
+    var list = new List<Employee>{
+      new Employee(){Id = 1,FirstName = "Ahmet",LastName = "Can",Age = 20},
+            new Employee(){Id = 2,FirstName = "Can",LastName = "Dağ", Age = 25},
+            new Employee(){Id = 3,FirstName = "Demir",LastName = "Güneş",Age = 37}
+    };
+
+    return View("Index3",list);
+}
+...... şimdi Viewde sıra. Views klasorundeli Employee klasöründe Index3.cshtml sayfası oluşturduk ve gelen verileri controllerden gelen verileri @model List<Employee> ile karşıladık...
+
+@model List<Employee>
+
+<div class="display-3">
+Index 3
+</div>
+
+@foreach (var emp in Model){
+    <div class="lead">
+   <h6>@emp.FullName</h6>
+   <p>@emp.Id</p>
+  <p><strong>Age:</strong>@emp.Age</p>
+<hr/>
+</div>
+}
+
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Yine klasorde sağ tık terminalde aç dedik ve
+cd btkakademi diyerek klasörümüzün içine gireriz. sonra code . ile vs code'u açabiliriz proje ile.
+
+dotnet new gitignore ile .gitignore dosyası oluşturabiliriz.
+
+model hem view hemde controllerden bağımsız olarak oluşturulur.
+
+Models klasöründe Candidate oluşturduk...
+
+        namespace BtkAkademi.Models
+        {
+
+        public class Candidate{
+
+        public String? Email{get;set;} = String.Empty; // Null değer olabilir ? demektir. String.Empty ile ise direkt olarak Empty olucak.
+
+        public String? FirstName{get;set;} = String.Empty;
+
+        public String? LastName{get;set;} = String.Empty;
+
+        public String? FullName => $"{FirstName} {LastName?.ToUpper()}";  // LastName?.ToUpper()   Bunun anlamı LastName Null değilse Empty değilse büyüt yoksa atla demektir. 
+
+        public int? Age{get;set;}
+
+        public String? SelectedCourse{get;set;}
+
+        public DateTime ApplyAt {get;set;}
+
+
+        public Candidate()
+        {
+
+            ApplyAt = DateTime.Now;
+
+        }
+
+....Bir Controller oluşturursak eğer o zaman Views altında o Controllerın acitonlarının sayfaları için views altında o controllera ait bir klasör oluştururuz ve ona sayfaları ekleriz.
+
+
+    <p>
+        <a class="btn btn-primary"  href="/course">APPLY</a>
+    </p>
+    @*bu etiket ile biz Course üzerine yönlendiricez kullanıcıyı. href bizi bulunduğumuz yerden /course ekleyerek oraya götürecek...*@ 
+
+
+...........
+bir alanı imlece alırsak seçili alan yaparsak ve shift + alt + yukarı ok tuşu ile aynısını kopyalayabiliriz.
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+elimiz alt tuşuna basılı şekilde iken birden fazla imleç çıkarabiliriz ve istediğimiz kadar aynı yazıdan istediğimiz yere üretebiliriz.
+mesela imleç bir yerde yanıp sönüyor alt'a basılı tuttum yazmak istediğim yazının aynısını başka nereye yazmak istersem bunu belirtebilirim.
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+.......CourseController oluşturduk. sonra içierisine Index IActionResult'ı ekledik onunda sayfası olsun diye Views altına Course diye bir klasör oluşturduk onun içine ise Index.cshtml ekledik böylece o metotun bir sayfası oldu.     
+
+    
+    @model Candidate
+    @*hangi yapı ile çalışacağız bunu belirledik.*@
+
+
+    @*en baştaki yazı bir öenmi yok çok fazla.*@
+    <div class="display-6">
+    APPLY
+    </div>
+
+
+@*post ifadesi kullanırız veriler buraya gidecek. post ile bir veri gönderimi sağlayacağız yani. *@
+@*action ile ise gideceği yeri belirledik.*@
+<form method="post" action="/course/apply">
+        
+
+        @*isim soyisim email gibi verileri bu yapı ile aldık. ve gidecekleri Model Candidate ile belirlediğimiz Candidate nesnesinin hangi propuna gidecek bu veriler bunu belirledik.*@
+        <div class="form-group  my-2">
+        <label>Email</label>
+        <input name = "Email" class="form-control" />
+        </div>
+
+        <div class="form-group my-2">
+        <label>FirstName</label>
+        <input name = "FirstName" class="form-control" />
+        </div>
+        @*Hangi veri hangi prop'a yerleşecek belirledik. @model Candidate ile belirledik aslında.*@    
+        <div class="form-group my-2">
+        <label>LastName</label>
+        <input name = "LastName" class="form-control" />
+        </div>
+        
+    <div class="form-group my-2">
+        <label>Age</label>
+        <select class = "form-control" name="Age">
+
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+
+        </select>
+        </div>
+
+
+    @*radio button*@
+    <fieldset>
+    <legend>Select one course</legend>
+        <p> 
+            <input id="mvc" type="radio" name="SelectedCourse" value="ASP.NET core MVC">
+            <label>ASP.NET core MVC</label>
+        </p>
+            <p> 
+            <input id="api" type="radio" name="SelectedCourse" value="ASP.NET core API">
+            <label>ASP.NET core API</label>
+        </p>
+            <p> 
+            <input id="blazor" type="radio" name="SelectedCourse" value="Blazor">
+            <label>Blazor</label>
+        </p>
+
+    </fieldset>
+
+
+        <div>
+            <button class ="btn btn-primary" type="submit">Apply</button>
+            <a class="btn btn-warning" href="/">HOME</a>
+            @*anasayfaya götüren buton buda*@
+            </div>
+            @*Butona basınca kaydetme gibi işlemleri yapacak.*@
+
+    </form>
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Client sunucuya get isteği gönderirse server mesela sayfayı bize getirir. bizde doldurur post ile yollarız servera oda bu bilgileri database'ye yükler. bu işlemler http protoklü ile olur.
+server post ile Client'ten gelen veriyi alır işler gerekli görürse database'ye yükler. ve isterse Client'ı bilgilendiren bir mesaj gönderebilir.
+
+public IActionResult Apply(){
+
+
+    return View();
+    
+} // bu get metotu çünkü default olarak [HttpGet] olarka belirler Controller.
+// bu metot serverden client'e sayfayı getirecektir.
+
+
+[HttpPost]
+[ValidateAntiForgeryToken] // hangi tarayıcı ile iletişim kuruluyor doğrula demektir bu sistemi kötü niyetlilere karşı korur.
+public IActionResult Apply([FromForm]Candidate model){ // model binding yani verilrti doldurma sayfa içerisinde @model Candidate dedik ve doldurulacak alanları form içerisinde belirledik böyle oldu. Candidate bir parametre gelen verinin nereden geldiğini belirtebiliriz. [FromForm] ile mesela başka bir şekilde de gelebilir ama biz Form'dan geldiği için Form olarak belirledik.
+
+    return View();
+    
+
+} // buda client'ten veri gönderir servera. Post ile göndeririz. ve bize bir nesne gelecek gelen sayfadan orada @model Candidate diye belirttik onu biz Candidate model parametresi ile yakalarız ve metot içerisine alırız.
+// [HttpPost] ile giden veriyi biz bu metotta yakalayabiliriz.
+// Candidate model ile gelen verileri istersek eğer alır ve database'ye kaydedebiliriz.
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+TAG HELPERS:
+_ViewImports.cshtml dosyası razor pagelerde kullanılacak olan sınıfların, veri tiplerinin tanımlandığı yapıdır .
+
+        <a class="btn btn-primary"  asp-controller="Course" asp-action="Apply">APPLY</a>
+        @*hANGİ controllere ve hangi metotuna gidip onu çalıştıracağız bunu belirleyebiliriz.*@ 
+
+action="/course/apply" yerine .. asp-action="apply" dedik. eğer sayfa get ile geliyorsa zaten o contrıoller ile gelir asp-controller belirtmemize gerek yok.
+
+....tag helperlar kullanarak Course'nin apply sayfasını modifiye ettik.
+        @model Candidate
+        @*hangi yapı ile çalışacağız bunu belirledik.*@
+
+
+        <div class="display-6">
+        APPLY
+        </div>
+
+
+        <form method="post" asp-action="apply">
+
+            <div class="form-group  my-2">
+            <label asp-for="Email">E-Mail</label>
+            <input asp-for="Email" class="form-control" />
+            </div>
+
+            <div class="form-group my-2">
+            <label asp-for="FirstName"></label>
+            <input asp-for="FirstName" class="form-control" />
+            </div>
+            @*Hangi veri hangi prop'a yerleşecek belirledik. @model Candidate ile belirledik aslında.*@    
+            <div class="form-group my-2">
+            <label asp-for="LastName"></label>
+            <input asp-for = "LastName" class="form-control" />
+            </div>
+            
+        <div class="form-group my-2">
+            <label asp-for="Age"></label>
+            <select class = "form-control" asp-for ="Age">
+
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+
+            </select>
+            </div>
+
+
+        @*radio button*@
+        <fieldset>
+        <legend>Select one course</legend>
+            <p> 
+                <input id="mvc" type="radio" asp-for ="SelectedCourse" value="ASP.NET core MVC">
+                <label>ASP.NET core MVC</label>
+            </p>
+                <p> 
+                <input id="api" type="radio"  asp-for ="SelectedCourse" value="ASP.NET core API">
+                <label>ASP.NET core API</label>
+            </p>
+                <p> 
+                <input id="blazor" type="radio"  asp-for ="SelectedCourse" value="Blazor">
+                <label>Blazor</label>
+            </p>
+
+        </fieldset>
+
+
+
+            <div>
+                <button class ="btn btn-primary" type="submit">Apply</button>
+                <a class="btn btn-warning" asp-action="Index" asp-controller="Home">HOME</a>
+                @*anasayfaya götüren buton buda*@
+                </div>
+                @*Butona basınca kaydetme gibi işlemleri yapacak.*@
+
+        </form>
+
+.............
+@{
+    Layout = "_Layout";
+}
+@*bunun anlamı kullanılan ana şablonu belirtir. shared içerisinde tanımlanır*@
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Repository tanımı.
+
+    namespace Basics.Models
+    {
+
+    public static class Repository{ // static olan direkt olarak bellekte var olur program çalıştığı anda bellekte hazır olarak var olur.
+        
+        private static List<Candidate> applications = new List<Candidate>();  // Liste oluşturduk içerisinde Candidate nesneleri olacak.
+        
+        public static IEnumerable<Candidate> Applications => applications; // static ve bize listeyi dönen bir interface üzerinde dönme vs yapabiliriz böyle.
+        // => ile ne dönecek belirledik...
+        
+
+        public static void Add(Candidate candidate){
+            applications.Add(candidate);
+        }
+        // static class'ın metotları static olur... 
+
+
+    }
+
+    }
+
+.................
+[HttpPost]
+[ValidateAntiForgeryToken] // hangi tarayıcı ile iletişim kuruluyor doğrula demektir bu sistemi kötü niyetlilere karşı korur.
+public IActionResult Apply([FromForm]Candidate model){
+
+ Repository.Add(model); // kullanıcı kaydetme işlemi yaptık. 
+
+
+    return Redirect("/"); // köke yönlendirme yaptık home index kök olduğu için program.cs'te oaraya gidecek.
+    
+}
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+sayfa bir actiona bağlı olmayacak şimdi. bir view olacak ve model'e bağlı olacak.
+views course klasorunde Feedback.cshtml oluşturduk.
+
+@model Candidate
+
+<div>
+
+<h3 class="display-4">Congratulations @Model.FullName</h3>
+<p class="lead">Your application has been  <mark>Accepted</mark> </p>
+<p class="lead">Many thanks for your interest.</p>
+<hr/>
+
+<blockquote class="blockquote">
+You have enrolled to @Model.SelectedCourse course.
+</blockquote>
+
+<p class="text-muted">You applied at @Model.ApplyAt</p>
+
+<div class="btn-group">
+    <a class="btn btn-outline-success" href="#" >APPLICATIONS</a>
+    <a class="btn btn-success" asp-action="Index" asp-controller="Home" >HOME</a>
+
+</div>
+
+............Bu sayfayı oluşturduktan sonra ise CourseController'daki Apply(post olan clientten giden veriyi yakalayan metot.) metotunu değiştiririz. 
+
+[HttpPost]
+[ValidateAntiForgeryToken] // hangi tarayıcı ile iletişim kuruluyor doğrula demektir bu sistemi kötü niyetlilere karşı korur.
+public IActionResult Apply([FromForm]Candidate model){
+
+ Repository.Add(model); // kullanıcı kaydetme işlemi yaptık. 
+
+
+    return View("Feedback",model); // Course view klasöründeki Feedback'e yollayacağız ve paramatre olarka ise model yollayacağiz Feedback.cshtml içeriisnde ise @model Candidate olarka gelen veriyi karşılayacağız...
+    // "~/Views/Course/Feedback.cshtml"    buda olabilir çalışmazsa...    
+}
+
+// BİLGİLENDİRME SAYFALARI İÇİN HARİKA BİR YAPIDIR...
+post yapılı metota parametreye gelen nesneyi View ile göndeririz bir view'e ve @model class ile karşılarız ve kullanırız.
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Receiving data:
+
+using static Basics.Models.Repository; // static metotu kullanabilmek için gereken using kullanımı.
+
+public IActionResult Index(){
+    
+
+    var model = Repository.Applications;
+    return View(model);
+    
+}
+.........Şimdi ise index.cshtml'i yapacağız. 
+@*gelen veriyi @model ile karşıladık veri var mı yopk mu kontrol ettik. *@
+
+        @model IEnumerable<Candidate>
+
+        @if(Model.Count() > 0){
+
+        <h6 class="display-6"> 
+        APPLICATIONS
+        </h6>
+
+        <table class="table table-hover table table-striped">
+
+        <thead>
+        <tr>
+
+                <th>EMAIL</th>
+                <th>FULL NAME</th>
+                <th>APPLY AT</th>
+                <th>COURSE</th>
+                    
+            </tr>
+
+
+
+        </thead>
+
+
+        <tbody>
+
+        @foreach(Candidate candidate in Model){
+
+        <tr>
+
+            <td>@candidate.Email</td>
+            <td>@candidate.FullName</td>
+            <td>@candidate.ApplyAt</td>
+            <td>@candidate.SelectedCourse</td>
+                    
+            </tr>
+
+
+        
+        }
+
+        </tbody>
+
+
+
+        </table> 
+
+
+        }else{
+
+        <div class="alert alert-info">
+
+        There is no information. Please click here to 
+
+            <a class="alert-link" asp-action="Apply" asp-controller="Course" >APPLY</a>
+
+        </div>
+
+
+        }
+
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Model Validation..
+
+_Layout içerisindeki  @RenderBody aslında yazdığımız sayfa kodlarıdır.   
+<div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+........Boş başvuru vs olmaması için yapılması gerekenler. veri tutarlığı için...
+
+using System.ComponentModel.DataAnnotations;
+
+namespace Basics.Models
+{
+
+public class Candidate{
+
+
+[Required(ErrorMessage = "Email is required")]
+public String? Email{get;set;} = String.Empty; // Null değer olabilir ? demektir. String.Empty ile ise direkt olarak Empty olucak.
+[Required(ErrorMessage = "FirstName is required")]
+public String? FirstName{get;set;} = String.Empty;
+[Required(ErrorMessage = "LastName is required")]
+public String? LastName{get;set;} = String.Empty;
+
+public String? FullName => $"{FirstName} {LastName?.ToUpper()}";  // LastName?.ToUpper()   Bunun anlamı LastName Null değilse Empty değilse büyüt yoksa atla demektir. 
+
+public int? Age{get;set;}
+
+public String? SelectedCourse{get;set;} = String.Empty;
+
+public DateTime ApplyAt {get;set;}
+
+
+ public Candidate()
+{
+
+    ApplyAt = DateTime.Now;
+
+}
+
+
+
+}
+
+    
+}
+
+.......Mesajları göstermesi için.
+
+
+    <div class="text-danger" asp-validation-summary="All"></div>
+    @*bunu ekledik Apply.cshtml'e*@
+
+.....IsValid mi değil mi kontrol ederiz...
+
+[HttpPost]
+[ValidateAntiForgeryToken] // hangi tarayıcı ile iletişim kuruluyor doğrula demektir bu sistemi kötü niyetlilere karşı korur.
+public IActionResult Apply([FromForm]Candidate model){
+
+
+    if(Repository.Applications.Any(c => c.Email.Equals(model.Email))){
+ModelState.AddModelError("","There is already an application for you");
+    } // eğer bu email varsa o zaman ModelState'ye bir hata yükle o hatanında ismini ekle.
+
+
+    if(ModelState.IsValid){
+ Repository.Add(model); // kullanıcı kaydetme işlemi yaptık. 
+
+
+    return View("~/Views/Course/Feedback.cshtml",model); // Course view klasöründeki Feedback'e yollayacağız ve paramatre olarka ise model yollayacağiz Feedback.cshtml içeriisnde ise @model Candidate olarka gelen veriyi karşılayacağız...
+
+    } 
+    return View();
+
+}
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
+
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
