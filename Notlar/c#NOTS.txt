@@ -4686,6 +4686,16 @@ dotnet new --list dedik ve proje şablonlarını görebildik.
 dotnet new mvc -h   ile neler yapabiliriz görürüz. 
 dotnet new mvc -f net6.0 -o Basics  (-f net6.0 bu kısım olmasa da olurdu framework seçimi yaptık sadece) (-o Basics olmassa da olurdu nerede konumlanacak proje bunu belirledik.)
 
+dotnet new mvc -f net6.0 'de yapabiliriz... o zaman default adı alır proje.
+.........
+dotnet new sln -o Store .. bir solution oluşturduk ve Store adında bir dosyaya çıakrdık. 
+
+dotnet new web -f net6.0 -o .\Store\StoreApp  .. boş bir web şablonu oluşturduk .\Store\StoreApp diyerek ise Store klasöründe StoreApp diye bir uygulama oluşturduk.
+
+dotnet sln .\Store\ add .\Store\StoreApp\   .. önce solutionun olduğu yolu gösterdik sonra o solutiona eklemek istediğimiz projenin yolunu verdik. Solutionlar projeleri barındıran bir kaptır proje ekleyip çıkarabiliriz...
+
+dotnet sln .\Store.sln list   .. bununla yolunu gösterdiğimiz sln içeriisnde hangi projeler var görebiliriz.
+...........
 projeyi çalıştırmak için.  cd Basics diyeceğiz.ve o path'e yerleşeceğiz.
 projeyi çalıştırmak için dotnet build diyerek projeyi derleriz. Basics.dll dosyası gelir elimize. projeyi güncelleyerebilir dlleleri ekleyebilir.zaman
 
@@ -5329,6 +5339,48 @@ ModelState.AddModelError("","There is already an application for you");
 }
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+boş bir web şablonu oluşturduk. 
+Program.cs içeriisnde
+app.MapGet("/", () => "Hello World!");
+app.MapGet("/emre", () => "Hello Emre!");   metotları var bunun anlamı get isteği olursa dönecekleri şeyleri belli edebiliriz.
+.......
+her request bir endpoint ile son bulur bu sunucu ile clinet arasındaki bir dil gibidir. requestler sunucu ile konuşurken hangi kurallar dahilinde konuşacak hangi hata yönetimi veri işleme vs kullanılacak pipeline içerisinde belirlenirler.
+.......
+
+var app = builder.Build(); // bir web app var elimizde.
+
+app.UseHttpsRedirection(); // Https yapısı kullan.
+app.UseRouting(); // routing mekanizmasını kullan dedik.
+app.MapControllerRoute(
+
+name: "default",
+pattern: "{controller = Home}/{action=Index}/{id?} "  // default olan controller default o controllerın acitonı ve id'yi opsiyonel yaptık.
+
+);
+
+.................
+
+
+    public class HomeController:Controller{
+
+
+          public String Index(){
+            return "Hello Store app";
+          }
+      
+    } // anaurl/Home/Index çalışırssa String olarak Hello Store App yazısı dönecek bize...
+   
+   Views içerisinde Home klasörü oluşturmak lazım. 
+
+...............
+
+
+
+
+
+
+
 
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
