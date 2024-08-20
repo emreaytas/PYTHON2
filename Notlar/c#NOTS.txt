@@ -5438,7 +5438,7 @@ appsetting.json dosyası. uygulamanın ayarları sayfası. temel proje düzeni s
   },
   "AllowedHosts": "*",
   "ConnectionStrings": {
-    "sqlconnection":"Data Source = C:\\Users\\emrea\\Documents\\ASP3\\Store\\StoreApp\\ProductDb.md"
+    "sqlconnection":"Data Source = C:\\Users\\emrea\\Documents\\ASP3\\Store\\StoreApp\\ProductDb.db"
   }
 }
 ............. sonra RepositoryContext'e geldik.
@@ -5492,6 +5492,63 @@ dotnet ef  .. ef core'un bilgilerini görebiliriz komut sisteminde.
 
 ...Migrations.....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
+konsol üzerinen kullanabiliriz Migrations komutları verebiliriz.
+
+Migrations'lar ile biz modellerimizi veritabanına iletebiliriz.
+bağlantı dizisi appsettings.json içerisinde ve ona bir takma ad verdik Program.cs içerisinde ise kullan dedğimizi zaman o takma adı verdik ve asp o uzantıya ulaştı.
+
+migrations ile projemizin o anki sınıf yapısının bir snapshot'ını alırız aslında.
+
+dotnet ef migrations add init   ..  ile init adında bir migrations ekledik.
+
+Migrations içeriisnde temelde up ve down metotlarına sahiptirler.
+up tablo oluşturma down ise tablo silme kısımlarıdır.
+
+dotnet ef database update .. ile migrationsların bağlı olan veritabanına işlemesini sağlarız.
+
+...................
+
+using Microsoft.EntityFrameworkCore;
+
+namespace STOREAPP.Models
+{
+    
+    public class RepositoryContext:DbContext
+    { 
+
+public DbSet<Product> Products { get; set; }
+
+
+ public RepositoryContext(DbContextOptions<RepositoryContext> options):base(options) // bunun anlamı yeni bir constructor tanımladık default olan devreden çıkmıştır artık biz bunu farklı bir yapıya çevirdik.
+{ // yani bu parametresi olmayan çağırma kabul olmayacak.
+// base DbContext'tir. bağlantı ifadesini ona vermiş olacağız aslında.
+
+    
+
+}         
+        // protected erişim belirleyicisi, bir sınıfın üyelerine (özellikler, metodlar, vs.) yalnızca o sınıfın kendisi, o sınıftan türetilen (miras alınan) alt sınıflar ve aynı pakette bulunan diğer sınıflar tarafından erişilmesine izin verir. 
+                   
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Product>().HasData(
+        new Product(){Id = 1,ProductName = "Computer",Price = 17_000},
+        new Product(){Id = 2,ProductName = "Keyboard",Price = 1_000},
+        new Product(){Id = 3,ProductName = "Mouse",Price = 500},
+        new Product(){Id = 4,ProductName = "Monitor",Price = 7_000},
+        new Product(){Id = 5,ProductName = "Deck",Price = 1_500}
+
+
+            );
+        } // eğer veri varsa dokunmayacak ama eğer veri yoksa o tabloda bu verileri ekleyecektir.
+
+
+    }
+}
+
+.......................dotnet ef migrations add ProductSeedData    şimdi DbContext'i güncelleme zamanı bununla.
+dotnet ef database update  .. ile güncelleme.
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
