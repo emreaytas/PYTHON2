@@ -445,7 +445,46 @@ sql veritabanları daha çok static veriler için kullanılır ama dinamik süre
 //////////////////////////////////////////////////////////////////////////////7///////////////////////////////////////7///////////////////////////////////////7///////////////////////////////////////7///////////////////////////////////////7///////////////////////////////////////7///////////////////////////////////////7///////////////////////////////////////7///////////////////////////////////////7///////////////////////////////////////7///////////////////////////////////////7///////////////////////////////////////7///////////////////////////////////////7///////////////////////////////////////7///////////////////////////////////////7
 .system dir .. gibi komutlar ile sistemin komutlarını kullanabiliriz eğer bir iş içerisindeysek ve sistem komutlarını kullanmak istiyorsak eğer.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+selamlar,
 
+teknoloji, bilişim, yazılım ve programlama gibi birçok alanda* ücretsiz kitap ve kaynak edinmek isteyenler aşağıdaki bağlantılara göz atabilir. bu siteler, eğitim, iş hayatı ve kişisel gelişim için gayet uygundur.
+
+freecomputerbooks
+
+bilgisayar bilimi, yazılım geliştirme ve diğer teknoloji konularında geniş bir e-kitap koleksiyonu sunar.
+
+github
+
+çeşitli programlama dilleri, algoritmalar ve yazılım geliştirme konularında ücretsiz e-kitap ve kaynaklar sunar.
+
+opencourseware
+
+massachusetts ınstitute of technology tarafından sağlanan, yazılım geliştirme ve bilişim konularında ücretsiz ders materyalleri ve kitaplar barındırır.
+
+open textbox
+
+üniversite düzeyinde bilgisayar bilimi ve yazılım konularında ücretsiz ders kitapları sunar.
+
+gutenberg
+
+bazı eski bilgisayar bilimi ve teknoloji kitaplarına erişim sağlar.
+
+bookboon
+
+teknoloji, bilişim ve yazılım konularında ücretsiz e-kitaplar sunar ve ağırlıkla iş dünyası ve akademik konulara odaklanır.
+
+digilibraries
+
+teknoloji ve bilgisayar bilimi konularında çeşitli ücretsiz e-kitaplar sunar.
+
+w3schools
+
+web geliştirme ve programlama konularında kapsamlı ücretsiz öğreticiler ve kılavuzlar sunar.
+
+geeksforgeeks
+
+bilgisayar bilimi ve yazılım geliştirme üzerine geniş bir yazılı içerik ve öğretici koleksiyonu sunar.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 REST (Representational State Transfer), web tabanlı iletişimde kullanılan bir yazılım mimarisidir. Bu mimari, uygulama programlama arayüzü (API) tasarımı için kullanılır ve HTTP protokolünü temel alır. RESTful API'lar, istemcilerin sunucudaki kaynaklarla (veri, hizmet veya işlevsellik) etkileşimde bulunmasını sağlar.
 
 Temel prensipleri şunlardır:
@@ -630,6 +669,7 @@ WinSPR>
 <GamingScore>9.9</GamingScore>
 <DiskScore>8.95</DiskScore> 
 
+                // bir ifade readonly olursa eğer değeri ya constructor'da ya da direkt olduğu yerde atama olabilir başka yerde olamaz. 
 
 
 
