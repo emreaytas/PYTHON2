@@ -7117,9 +7117,106 @@ collectionlar ile her türlü metotlarımızı çalıştırabiliriz. bir bölge 
 
 https://localhost:7176  bunu set as a new variable olarak atarsak eğer baseurl'i global değişken olarak belirlersek eğer {{baseurl}}/api/books olarak kullanabiliriz yarın öbürgün baseurl'in değeri değişirse her yerde değişim yapmamıza gerek kalmaz böylece tek bir yerden anaurl'imizi belirleyebiliriz. 
 
+Tests bölümünde (Collection altında belirlediğimiz metotların özelliklerinden birisi.) : pm postman kısaltması. test için kullanılacak parametredir.
+pm.test("Status is 200",function(){
+    pm.response.to.have.status(200) // 200le mi döndü bunu kontrol edebiliriz.
+}) // testname ve spec function vereceğiz.
 
+pm.test("Status is 200 or 404",() => {
+  pm.expect(pm.response.code).to.be.OneOf([200,404,400])
+})
+
+Run collection diyerek yöntemlerimizi görebiliriz. seçili olanları kaç kere çalıştırabileceğimizi belirleyebiliriz. herbiri hangi kodlarla dönecek belirleyebiliriz.
+
+{{$}} ile metotları kullanabiliriz {{$randomInt}} diyerek random sayılar alabiliriz. {{$randomWords}} ile mesela random kelimeler alabiliriz   {{$}} ile hangi metotları kullanabiliriz görürüz.
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+...EF core....orm aracıdır nesneleri maplememizi sağlar ayrıca automapper var oda maplemek için......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace WebApi.Controllers
+{
+    [Route("api/books")] // analink/tensonra gelecek olan neyse bu controller gelecek demektir. analink/api/books yazılırsa bu controller çalışacak demektir bu
+    [ApiController]
+    public class BookController : ControllerBase
+    {
+
+    }
+}
+
+................ appsetting.json'a bağlantı dizesi ekledik
+
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+
+    "sqlConnection": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=model;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"
+
+  }
+}
+................. RepositoryContext
+
+using Microsoft.EntityFrameworkCore;
+using WebApi.Models;
+
+namespace WebApi.Repositories
+{
+    public class RepositoryContext :DbContext // DbContext'ten kalıtım almamız lazım burası önemlidir.
+    { // DbContext veritabanı olarak görülebilir. DbSet ise tablo.
+
+        // veritabanının bir bağlantı dizesine sahip olması için 
+
+        public RepositoryContext(DbContextOptions options):base(options) // bu options ile bağlantı dizesi kuracağız.
+        {
+            
+        }
+
+        public DbSet<Book> Books { get; set; } // DbSet tablo yerine geçecek onu taklit edecek.
+          
+    }
+}
+..................Program.cs'te yapılandırma olacak bağlantı için.
+
+using Microsoft.EntityFrameworkCore;
+using WebApi.Repositories;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
+// RepositoryContext bizim DbContext'ten kalıtım alan class'ımızdır.
+builder.Services.AddDbContext<RepositoryContext>(
+    options => 
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("sqlConnection") // appsettings içerisindeki bağlantıyı buraya getirmiş olacak direkt olarak'ta yazabilirdik ama güvenli olmaz.
+        )
+    );
+
+var app = builder.Build();
+
+......................... Ioc register Resolve ve dispose kacrarlarını üstlenir.
+
+.........................Migrations. ve RepositoryContext'i Controllerlar üzerinde DI ile entegre etme sırası.
+Migrationsları kullanmak için. Microsoft.EntityFrameworkCore.Tools kurulumu yapmak lazım.
+Microsoft.EntityFrameworkCore.Design 'da kullanmak lazım.
+Add-Migration name .. ile name adında migration scripti olur up ve down metotları olur.
+Update-Database ile migrationsları veritabanına yansıtırız.
+
+
 
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
