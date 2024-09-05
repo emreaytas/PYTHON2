@@ -5373,24 +5373,40 @@ ModelState.AddModelError("","There is already an application for you");
 }
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+dotnet new sln -o Store .. Store klasörünün içine bir sln oluşturup koyacak.
+dotnet new web -f net6.0 -o .\Store\StoreApp   .. boş bir web şablonu oluşacak bununla ve Store klasörünün içinde StoreApp adında olacak -f net6.0 ile ise sürümü belirledik.
+dotnet new web -f net6.0 -o .\Store\StoreApp  .. ilgili projeyi solutiona ekledik böylece.
+dotnet sln .\Store.sln list .. solutiondaki projeleri görebilirim.
 
+app.MapGet("/", () => "Hello World!"); // bu kök klasörü ifade eder. "/" aslında analink demektir.
+app.MapGet("/emre", () => "Hello Emre!");  // analink/emre olursa bize Hello emre! dönecektir. 
+.........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 boş bir web şablonu oluşturduk. 
 Program.cs içeriisnde
 app.MapGet("/", () => "Hello World!");
 app.MapGet("/emre", () => "Hello Emre!");   metotları var bunun anlamı get isteği olursa dönecekleri şeyleri belli edebiliriz.
 .......
-her request bir endpoint ile son bulur bu sunucu ile clinet arasındaki bir dil gibidir. requestler sunucu ile konuşurken hangi kurallar dahilinde konuşacak hangi hata yönetimi veri işleme vs kullanılacak pipeline içerisinde belirlenirler.
+her request bir endpoint ile son bulur.bu sunucu ile clinet arasındaki bir dil gibidir. requestler sunucu ile konuşurken hangi kurallar dahilinde konuşacak hangi hata yönetimi veri işleme vs kullanılacak pipeline içerisinde belirlenirler.
 .......
-
+var builder = WebApplication.CreateBuilder(args); // yapıcı konteyner budur.
+builder.Services.AddControllersWithViews();  // Controllerlar ve Viewleri ekle konteynıra. boş web şablonu olduğu için klasörlerini biz oluşturduk.
 var app = builder.Build(); // bir web app var elimizde.
 
 app.UseHttpsRedirection(); // Https yapısı kullan.
 app.UseRouting(); // routing mekanizmasını kullan dedik.
-app.MapControllerRoute(
+
+app.MapControllerRoute( // Routing mekanizmasını modifiye ediyoruz.
 
 name: "default",
 pattern: "{controller = Home}/{action=Index}/{id?} "  // default olan controller default o controllerın acitonı ve id'yi opsiyonel yaptık.
 
+);
+
+......................
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}"
 );
 
 .................
@@ -5419,8 +5435,7 @@ dotnet add package Microsoft.EntityFrameworkCore.Sqlite --version 6.0.0  ..  bun
 
 dotnet list package .. ile projeye dahil olan paketleri görebiliriz...
 dotnet add package Microsoft.EntityFrameworkCore --version 6.0.0  .. ile entity Framework kurabiliriz.
-
-dotnet add package Microsoft.EntityFrameworkCore.Design --version 6.0.0  .. bununda kurulumunu  yapalım.
+dotnet add package Microsoft.EntityFrameworkCore.Design --version 6.0.0  .. bununda kurulumunu  yapalım.  
 
 ......  paketler .csproj içerisinde böyle tutulurlar.
 
@@ -5433,24 +5448,28 @@ dotnet add package Microsoft.EntityFrameworkCore.Design --version 6.0.0  .. bunu
 
 DbContext database'yi temsil edecek DbSet'ler ise tabloları temsil edecekler.
 ........... Models klasorunde veritabanını temsil edecek olan Bir class oluşturduk ve DbContext'ten kalıtım almasını sağladık...
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore; // DbContext bundan gelecek böylece veritabanı işlemlerini yapabileceğiz.
 
 namespace STOREAPP.Models
 {
     
-    public class RepositoryContext:DbContext
+    public class RepositoryContext:DbContext // DbContext'ten kalıtım aldık. bu class'ı artık veritabanı gibi kullanacağız.
     { // bu class'ı veritabanı olarak göreceğiz.
 
 public DbSet<Product> Products { get; set; }
 //buda tabloyu temsil edecek. Product nesnesine göre bir tablo şeması oluşacak ve bu ürünleri tutan tabloya Products isimlendirmesi verdik.
+// başka başka tablolar ekleyebiliriz burada.
+
 
     }
 }
 
 ............
 
+
 ....connectionString.....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-appsetting.json dosyası. uygulamanın ayarları sayfası. temel proje düzeni sağlayan dosyası.
+appsetting.json dosyası. uygulamanın ayarları sayfası. temel proje düzeni sağlayan dosyası. appsettings.Development.json  Development modu için geçerli ayarlar.  ama her mod için geçerli ayarlar olsun istenirse eğer o zaman appsettings.json dosyasını kullanırız.
+
 
 .......appsetting.json içerisine connection string ekledik eğer veritabanı yoksa oluşturacak.
 {
@@ -5462,10 +5481,10 @@ appsetting.json dosyası. uygulamanın ayarları sayfası. temel proje düzeni s
   },
   "AllowedHosts": "*",
   "ConnectionStrings": {
-    "sqlconnection":"Data Source = C:\\Users\\emrea\\Documents\\ASP3\\Store\\StoreApp\\ProductDb.db"
+    "sqlconnection":"Data Source = C:\\Users\\emrea\\Documents\\AspFord11\\Store\\StoreApp\\ProductDb.db"
   }
 }
-............. sonra RepositoryContext'e geldik.
+............. sonra RepositoryContext'e geldik. yani veritabanını taklit eden class'a geldik. 
 
 using Microsoft.EntityFrameworkCore;
 
@@ -5482,9 +5501,7 @@ public DbSet<Product> Products { get; set; }
 { // yani bu parametresi olmayan çağırma kabul olmayacak.
 // base DbContext'tir. bağlantı ifadesini ona vermiş olacağız aslında.
 
-    
-    
-}
+} // bu yapıyı ekledik ctor'u özelleştirdik. bağlantıyı bu ifade ile gerçekleştirdik.
 
     }
 }
@@ -5500,22 +5517,60 @@ builder.Services.AddControllersWithViews(); // Controllers ve Views ekledik bura
 
 builder.Services.AddDbContext<RepositoryContext>(
     options => {
-        options.UseSqlite(builder.Configuration.GetConnectionString("sqlconnection"));
+
+        options.UseSqlite(builder.Configuration.GetConnectionString("sqlconnection")); // appsettings.json'daki anahtar değeri vererek o değere denk gelen bağlantı linkini girebiliriz.
+
      //sqlconnection appsettings.json içerisinde adres yoluna taktığımız isimdir aslında oaradan o stringi alacak.
     }
 );
 
-
 var app = builder.Build(); // bir web app var elimizde.
 
-..........
+................
 
 dotnet tool -h  .. ile tool'ların ne işe yaradığını görebiliriz.
 
 dotnet ef  .. ef core'un bilgilerini görebiliriz komut sisteminde.
 
+
+
 ...Migrations.....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
+        Yeni Migration Ekleme
+        Yeni bir migration eklemek için kullanılır:
+
+        dotnet ef migrations add <MigrationName>
+        Örnek:
+
+        dotnet ef migrations add InitialCreate
+        Veritabanını Güncelleme
+        Modelde yapılan değişiklikleri veritabanına uygulamak için kullanılır:
+
+        dotnet ef database update
+        Belirli bir migration'a güncellemek için:
+
+        dotnet ef database update <MigrationName>
+        Örnek:
+
+        dotnet ef database update InitialCreate
+        Migration Kaldırma
+        Son eklenen migration'ı geri almak (silmek) için kullanılır:
+
+        dotnet ef migrations remove
+        Migration'ları Listeleme
+        Oluşturulmuş olan migration'ların listesini görmek için kullanılır:
+
+        dotnet ef migrations list
+        Veritabanını Silme
+        Veritabanını silmek ve tüm verileri kaldırmak için kullanılır:
+
+        dotnet ef database drop
+        Not: Bu komutları çalıştırmadan önce EF Core CLI araçlarının yüklü olduğundan emin olun:
+
+        dotnet tool install --global dotnet-ef
+        Ayrıca, komutları çalıştırırken projenizin kök dizininde (csproj dosyasının bulunduğu dizin) olmanız gerektiğini unutmayın.
+
+...........................................
 konsol üzerinen kullanabiliriz Migrations komutları verebiliriz.
 
 Migrations'lar ile biz modellerimizi veritabanına iletebiliriz.
@@ -5523,14 +5578,14 @@ bağlantı dizisi appsettings.json içerisinde ve ona bir takma ad verdik Progra
 
 migrations ile projemizin o anki sınıf yapısının bir snapshot'ını alırız aslında.
 
-dotnet ef migrations add init   ..  ile init adında bir migrations ekledik.
+dotnet ef migrations add init   ..  ile init adında bir migrations ekledik. eğer klasör yoksa Migrations klasörü oluşacak veritabanına yansısın istersek eğer o zaman update-database yapacaksın.
 
 Migrations içeriisnde temelde up ve down metotlarına sahiptirler.
 up tablo oluşturma down ise tablo silme kısımlarıdır.
 
 dotnet ef database update .. ile migrationsların bağlı olan veritabanına işlemesini sağlarız.
 
-...................
+................... eğer veri yoksa tabloda hazır olarak verileri ekleyecek bir metot oluşturduk.
 
 using Microsoft.EntityFrameworkCore;
 
@@ -5547,13 +5602,14 @@ public DbSet<Product> Products { get; set; }
 { // yani bu parametresi olmayan çağırma kabul olmayacak.
 // base DbContext'tir. bağlantı ifadesini ona vermiş olacağız aslında.
 
-    
 
 }         
+
         // protected erişim belirleyicisi, bir sınıfın üyelerine (özellikler, metodlar, vs.) yalnızca o sınıfın kendisi, o sınıftan türetilen (miras alınan) alt sınıflar ve aynı pakette bulunan diğer sınıflar tarafından erişilmesine izin verir. 
                    
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Product>().HasData(
@@ -5574,6 +5630,7 @@ public DbSet<Product> Products { get; set; }
 .......................dotnet ef migrations add ProductSeedData    şimdi DbContext'i güncelleme zamanı bununla.
 dotnet ef database update  .. ile güncelleme.
 
+......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 ...Dependency injection (bağımlılıkları yani gereklilikleri enjekte etme).....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 DI bir pattern'dir. birr tasarım modelidir. daha güncellenebilir programlar yazmamızı sağlarlar.
 olabildiğince new kalıbından çıkmak ve bağımlılıkları dışarıdan eklemek daha güncellenebilir  bir sistem kurabiliriz.  constructor ve metot DI ile bu bağımlılıkarı ekleyebiliriz.
@@ -5601,9 +5658,9 @@ using STOREAPP.Models;
 
 namespace STOREAPP.Controllers
 {
-   public class ProductController:Controller{
+   public class ProductController:Controller{ // bir class'ın controller olabilmesi için Controller sınıfından kalıtım alması gerekmektedir.
      
-    
+
     private readonly RepositoryContext _context;
 
 public ProductController(RepositoryContext context) // burada dışarıdan RepositoryContext'i eklemiş olacağız böylece orada bir güncelleme olsa da burada bir değişim vs yapmayacağız...
@@ -5612,7 +5669,7 @@ public ProductController(RepositoryContext context) // burada dışarıdan Repos
 
 }
 
-     public IEnumerable<Product> Index(){ 
+     public IEnumerable<Product> Index(){ // Product nesnelerini üzerlerinde gezilebilir bir halde getirecek.
   
 return _context.Products; // direkt olarak RepositoryContext'ten verileri alabiliriz. 
 
@@ -5624,18 +5681,54 @@ return _context.Products; // direkt olarak RepositoryContext'ten verileri alabil
 
 
 }
+................................ Program.cs içerisindeki bu yapı sayesinde konteynera yapıyı ekleriz böylece new'lenmeden kullanabiliriz DI çerçevesinde RepositoryContext class'ını. newlemek gereken ifadeleri servis kendisi hallediyor.
 
-........................ProductController'de metot oluşturduk veritabanından verileri aldık ve View'e yolladık View'de @model List<Product> olarak karşılayıp Model ile veya @Model ile kullanacağız...
+builder.Services.AddDbContext<RepositoryContext>(
+    options => {
+        options.UseSqlite(builder.Configuration.GetConnectionString("sqlconnection")); // appsettings.json'daki anahtar değeri vererek o değere denk gelen bağlantı linkini girebiliriz.
+     //sqlconnection appsettings.json içerisinde adres yoluna taktığımız isimdir aslında oaradan o stringi alacak.
+    }
+);
+
+
+........................ProductController'de metot oluşturduk veritabanından verileri aldık ve View'e yolladık View'de @model List<Product> olarak karşılayıp Model ile veya @Model ile kullanacağız... Product modeline karşılık ProductController olmalıdır. buna karşılıkta Views klasöründe Product klasörü olmalıdır. ProductController'in metotlarına karşı ise Views.Product klasöründe sayfalar olmalıdır.
 
      public IActionResult Index(){
 
 var model = _context.Products.ToList();
-return View(model); // verileri View'e taşıdık.
+return View(model); // verileri View'e taşıdık. o sayfa açılınca verileri kullanarak gösterim yapabileceğiz.
 
      }
    
+........................... Burada da controller Index metotunda gönderdiğimiz verileri  Views klasorundeki product klasörü içindeki İndex sayfasında göstereceğiz.
+    
+    @model List<STOREAPP.Models.Product>
+        
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+        </head>
+        <body>
+            
+            @foreach(STOREAPP.Models.Product prd in @Model){
+
+            <div>
+        <h3>@prd.ProductName</h3>
+        <p>@prd.Price</p>
+        </div>
+
+
+            }
+
+
+    </body>
+        </html>
 
 ...Inversion of Control (IOC).....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+IOC nesneyi çözer. register ıoc'ye nesnenin kaydedilmesidir. Resolve çözülmesidir nesneden kaç tane üretilecek vs karar vermek. Dispose ise free'lemektir.
 pipeline içerisinde çok fazla middleware yapısı olabilir.  request işlenirken middleware'lerde servisler kullanılır ve bunların çözümlenmesi gerekir.
 önce kayıt olmalıdır. Dispose ve Resolve gibi kararları vardır. nesne kullanılmadığı anda Dispose edilmesi gibi. IOC bu çerçevenin yönetilmesini sağlar.
 servise ait bağımlılığın çözülmesi için o zaman ioc kaydı yapılması lazım. veya mesela birden fazla context olur hangisini kullanacağını da söyleriz.
@@ -5651,13 +5744,14 @@ return View(product);
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
 LAYOUT. görselleştirme işine gireceğiz.
 mesela arama alanı menu alanı renderBody() alanı footer alanı gibi şeyler Bir Layout olarak sunulur.
 sayfanın render body harici kısmı sabit kalarak sayfalar arasında geçiş yapabiliriz böylece görünüşü çok fazla bozmamış oluruz.
 
 Views altında shared klasörü oluşturduk. Sonra içeriisne ise _Layout.cshtml koyduk.
 
-.......içini ise kendimiz doldurduk..
+.......içini ise kendimiz doldurduk.. böylece Her sayfa eğer farklı bir yapı belirtmemiş olursak renderBody hariç kısmı her sayfada aynı olacak.
 
     <!DOCTYPE html>
     <html lang="en">
@@ -5674,7 +5768,7 @@ Views altında shared klasörü oluşturduk. Sonra içeriisne ise _Layout.cshtml
 
     <main>
     @RenderBody()
-    @*sayfadan sayfaya değişecek olan alandır.*@ 
+    @*sayfadan sayfaya değişecek olan alandır. örnek olarak Index.cshtml içerisinde olan her şey buraya gelecek ve _Layout.cshtml eklenerek çalışacak o sayfa.*@ 
     </main>
 
     <footer>
@@ -5687,7 +5781,7 @@ Views altında shared klasörü oluşturduk. Sonra içeriisne ise _Layout.cshtml
 
 ...................
 
-Layout'u uygulamak için ise 
+Layout'u uygulamak için ise ilgili sayfada bunu ekleriz.
 
 @{
     Layout = "_Layout";
@@ -5696,6 +5790,7 @@ Layout'u uygulamak için ise
 // Layout'u belirlemiş oluruz ve bütün html kodlarını RenderBody kısmına yollar.
 
 ...............örnek olarak...
+
 @{
   Layout = "_Layout";
 } 
@@ -5704,23 +5799,21 @@ Layout'u uygulamak için ise
 
 @model STOREAPP.Models.Product
 
-
-
 <h3>@Model.ProductName </h3>
 <h3>@Model.Price </h3>
 
 <a href="/Product">Products</a>
-
+@*Buradaki tüm kodlar renderBody alanına gidecek ve _Layout.cshtml ile birleşmiş hali her bir sayfa için çalışacak.*@
 ....................................
     <header>
         STORE APP : Header
-        @RenderSection("Top",false)  
+        @RenderSection("Top",false)    @*Bu asenkron olmayan yapı.*@
         @*true false ile zorunlu mu yoksa opsiyonel mi olacak belirleriz. false olursa opsiyonel*@ 
-        @**@
+        @*@section Top{} ile ise bunu doldurup bu alana diğer sayfaya yazdığımız kodları ekleyebiliriz.*@
     </header>
 ........................
 
-    @*eğer scriptlerimiz olursa asenkron bir şekilde tanımlayabiliriz.*@ 
+    @*eğer scriptlerimiz olursa asenkron bir şekilde tanımlayabiliriz. RenderSectionAsync bununla asenkron çalışmasını sağlayabiliriz.*@ 
     @await RenderSectionAsync("Scripts", required: false) 
  
 .......................... şimdi ise RenderSection kullanımı. biz tanımlamı false ile opsinel olarak belirledik
@@ -5731,8 +5824,8 @@ Layout'u uygulamak için ise
 
 @model List<STOREAPP.Models.Product>
 
-@*Bir         @RenderSection("Footer",false)     tanımlaması yapmıştık ve bunu biz sayfamıza böyle ttanımlarsak o alana _Layout içindeki o alana bu tanımlana { } arasındaki kodlar yerleşecek. *@
-@section Footer{
+@*Bir         @RenderSection("Footer",false)     tanımlaması yapmıştık ve bunu biz sayfamıza böyle ttanımlarsak o alana _Layout içindeki o alana bu tanımlana { } arasındaki kodlar yerleşecek. *@ 
+@section Footer{ @*sectionun nerede olduğunun bir önemi yok ismi neyse Layout içerisinde isim karşılığı nerdeyse oraya yerleşecek ve sayfa ile beraber gelecek.*@
   <div>
 Only for Index Footer.
     </div>
@@ -5740,11 +5833,13 @@ Only for Index Footer.
 
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-Views klasorunde _ViewStart.cshtml tanımladık. bunun anlamı tüm cshtml'ler içerisine önce bu _ViewStart.cshtml içerisindeki kodlar eklenecek demektir.
+Views klasorunde _ViewStart.cshtml tanımladık. bunun anlamı tüm cshtml'ler içerisine önce bu _ViewStart.cshtml içerisindeki kodlar eklenecek demektir. böylece her sayfanın default kodları yazılabilir.
 
 mesela 
 @{
-    Layout = "_Layout";
+    Layout = "_Layout"; 
+    @*Birden fazla Layout kullanıp bu yapı ile istenen sayfada istenen Layout'u kullanabiliriz.     Layout = "_Layout2"; deriz mesela _Layout2de Shared klasöründe olmak koşulu ile.  *@
+    @*Bu _Layout.cshtml sayfası Shared klasöründe olmalı.*@
 }
 @*Bunu ekleyerek tüm sayfaların Layout'unu belirlemiş oluruz eğer içine emre yazarsak tüm sayfalarda Emre yazar..*@
 
@@ -5774,10 +5869,10 @@ shared klasoründe _Navbar.cshtml dosyası oluşturduk.
 
 </ul>
 ............sonra bu kodu istediğimiz yere taşımak istersek orada <partial name = "Navbar" />  diyerek oraya taşıyabiliriz bu dosyanın içeriğini.
-ama _Navbar her yerden erişebilsin diye _ViewImports.cshtml içerisine @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers satırını ekledik.
-
+ama _Navbar her yerden erişebilsin diye _ViewImports.cshtml içerisine @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers satırını ekledik. böylece taghelperları kullanabilir olduk.
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers   bunu eklememiz lazım asp'nin tag helperlarını kullanmak için.
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-Vies klasorundeki Product klasorunde _ProductCard.cshtml dosyası oluşturduk.
+Views klasorundeki Product klasorunde _ProductCard.cshtml dosyası oluşturduk.
 
 ........içerik...
 @model Product
@@ -5785,11 +5880,14 @@ Vies klasorundeki Product klasorunde _ProductCard.cshtml dosyası oluşturduk.
 <div>
 
 <h2>@Model.ProductName</h2>
-<h2>@Model.Price</h2>
-<a asp-action="Get" asp-route-id="@Model.Id"></a>
+<p>@Model.Price.ToString("c")</p> 
+@*Tl'nin sembolunu ekledik.*@
 
+<a asp-action = "Get" asp-route-id = "@Model.ProductID">GET DETAILS</a>
+<hr/>
 </div>
-......................
+
+...................... asp-route-id ise metotun parametresini vermek için kullanılır.
 .....................
 .....................BÖyle olan yapıyı biz bunun sayesinde.
 
@@ -5819,10 +5917,10 @@ Vies klasorundeki Product klasorunde _ProductCard.cshtml dosyası oluşturduk.
 @foreach (STOREAPP.Models.Product prd in Model)
 {
 <partial name = "_ProductCard" model = "@prd"/>
+@*Böylece parametresini gönderdiğimiz _ProductCard kodlarını burada kullanabiliriz.*@
 }
 
 .......................
-
 
 ...Libman.....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
@@ -6271,6 +6369,150 @@ _manager = manager;
 
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -7215,7 +7457,342 @@ Migrationsları kullanmak için. Microsoft.EntityFrameworkCore.Tools kurulumu ya
 Microsoft.EntityFrameworkCore.Design 'da kullanmak lazım.
 Add-Migration name .. ile name adında migration scripti olur up ve down metotları olur.
 Update-Database ile migrationsları veritabanına yansıtırız.
+Remove-migration ile son migrationu silip bir öncekini getirebiliriz.
 
+...............register yani RepositoryContext'i Program.cs'te kaydettik.
+builder.Services.AddDbContext<RepositoryContext>(options =>
+{
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("sqlConnection"),
+        b => b.MigrationsAssembly("WebApi") // Burada migration'ların bulunduğu projenin adı 'WebApi' olarak belirtilmiştir
+    );
+});
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Repositories klasörünün altına biz bir klasör ekledik Config adında içine ise BookConfig adında bir class ekledik.
+
+using WebApi.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+
+namespace WebApi.Repositories.Config
+{
+
+    public class BookConfig : IEntityTypeConfiguration<Book>  // kalıtım aldık.
+    {
+        public void Configure(EntityTypeBuilder<Book> builder)
+        {
+            builder.HasData(
+                new Book {Id = 1,Title= "A",Price = 100 },
+                                new Book { Id = 2, Title = "B", Price = 110 },
+                                                new Book { Id = 3, Title = "C", Price = 120 }
+
+                ); // eğer veri yoksa migrations aldığımızda. çekirdek veri ekleyecek.
+               
+
+        }
+
+    }
+
+}
+
+...................................... tip konfigurasyonunu belirtmek için... RepositoryContext klasörüne gelicez.
+
+using Microsoft.EntityFrameworkCore;
+using WebApi.Models;
+using WebApi.Repositories.Config;
+
+namespace WebApi.Repositories
+{
+    public class RepositoryContext :DbContext // DbContext'ten kalıtım almamız lazım burası önemlidir.
+    { // DbContext veritabanı olarak görülebilir. DbSet ise tablo.
+
+        // veritabanının bir bağlantı dizesine sahip olması için 
+
+        public RepositoryContext(DbContextOptions options):base(options) // bu options ile bağlantı dizesi kuracağız.
+        {
+            
+        }
+
+        public DbSet<Book> Books { get; set; } // DbSet tablo yerine geçecek onu taklit edecek.
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+           modelBuilder.ApplyConfiguration(new BookConfig()); // bu konfigürasyonu RepositoryContext'e eklemiş olduk burada. 
+
+        }
+
+    }
+}
+
+..IOC Inversion of control......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+bunun bir controller ile yapmamız gerekecek. Controller klasörüne api controller ekleyeceğiz.
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using WebApi.Repositories;
+
+namespace WebApi.Controllers
+{
+    [Route("api/books")]
+    [ApiController]
+    public class BooksController : ControllerBase
+    {
+        private readonly RepositoryContext _context;
+
+        public BooksController(RepositoryContext context)
+        {
+            _context = context;
+
+        }
+
+        [HttpGet]
+
+        public IActionResult GetAllBooks() { 
+        
+            var books = _context.Books.ToList();
+            return Ok(books); // 200'le dön demektir.
+            
+        } // bu metotile BookConfig'ten gelen verileri alabileceğiz.
+
+    }
+}
+
+.............DI çerçevesi çok önemlidir.
+
+    public class BooksController : ControllerBase
+    {
+        private readonly RepositoryContext _context;
+
+        public BooksController(RepositoryContext context)
+        {
+            _context = context;
+
+        }
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
+using WebApi.Repositories;
+
+namespace WebApi.Controllers
+{
+    [Route("api/books")]
+    [ApiController]
+    public class BooksController : ControllerBase
+    {
+        private readonly RepositoryContext _context;
+
+        public BooksController(RepositoryContext context)
+        {
+            _context = context;
+
+        }
+
+        [HttpGet]
+
+        public IActionResult GetAllBooks()
+        {
+
+            var books = _context.Books.ToList();
+            return Ok(books); // 200'le dön demektir.
+
+        }
+
+        [HttpGet("{id:int}")] // GEt metotu ve gelecek olan parametrenin hangi türden olduğu daha güvenilir olur böylece.
+        public IActionResult GetOneBook([FromRoute(Name = "id")] int id)
+        {
+
+            try
+            {
+
+                var book = _context.Books.SingleOrDefault(
+                x => x.Id == id);
+
+                if (book is null)
+                {
+                    return NotFound();
+                }
+                return Ok(book);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpPost]
+
+        public IActionResult createOneBook([FromBody] Book book)
+        {
+            try
+            {
+                if (book is null)
+                {
+                    return BadRequest();
+                }
+
+                _context.Books.Add(book);
+                _context.SaveChanges(); // kaydetme işlemi.
+                return StatusCode(201, book);
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+
+        [HttpPut("{id:int}")]
+        public IActionResult UpdateOneBook([FromRoute(Name = "id")] int id, [FromBody] Book book)
+
+        {
+
+            try
+            {
+                var entity = _context.Books.SingleOrDefault(x => x.Id == id);  // güncellenmek istenen kitabı olacağız.
+
+                if (entity is null)
+                {
+                    return NotFound();
+                } // kitap var mı yok mu bakacağız eğer yoksa bulunamadı response'si döneceğiz.
+
+                if (id != book.Id)
+                {
+                    return BadRequest();
+                } // eğer id elde olan kitabın id'sine eşit değilse kötü sonuç dön işlem karmaşası olmuştur.
+
+                entity.Title = book.Title; // veritabanındaki title'yi elde olan titleye eşitle ve altta ücretide güncelle.
+                entity.Price = book.Price;
+                _context.SaveChanges(); // veritabanına yansıt demektir buda.
+
+                return Ok(book);
+
+            }
+
+            catch (Exception ex)
+            {
+            
+                return BadRequest(ex.Message);
+            
+            }
+
+        }
+
+        [HttpDelete("{id:int}")]
+        public IActionResult DeleteOneBook([FromRoute] int id)
+        {
+
+            try
+            {
+                var entity = _context.Books.SingleOrDefault(x => x.Id == id);  // güncellenmek istenen kitabı olacağız.
+
+                if (entity is null)
+                {
+                    return NotFound(
+                        new
+                        {
+statusCode = 404,
+message = $"{id}'li kitap yok..."
+                        }// anonim nesne tanımıdır default class'tan türer new ile.
+                        );
+                }
+
+                _context.Books.Remove(entity);
+                _context.SaveChanges();
+                return NoContent();
+
+
+            }
+            catch(Exception ex)
+            { 
+            return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteAllBooks()
+        {
+            try
+            {
+                var allBooks = _context.Books.ToList();  // Tüm kitapları alıyoruz.
+
+                if (allBooks.Count == 0)
+                {
+                    return NotFound(new
+                    {
+                        statusCode = 404,
+                        message = "Veritabanında silinecek kitap yok."
+                    });
+                }
+
+                _context.Books.RemoveRange(allBooks);  // Tüm kitapları siliyoruz.
+                _context.SaveChanges();  // Değişiklikleri kaydediyoruz.
+
+                return NoContent();  // Başarılı silme işlemi için 204 No Content döndürüyoruz.
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);  // Hata durumunda 400 Bad Request döndürüyoruz.
+            }
+        
+        }
+
+        [HttpPatch("{id:int}")]
+        public IActionResult PartialUpdateOneBook([FromRoute(Name = "id")]int id, [FromBody] JsonPatchDocument<Book> bookPatch) // verilerin nereden geleceğini belirterek daha güvenli kod yazabiliriz. 
+                                                                                                                                // Book nesnesini JsonPatchDocument<Book> ile sarmaladık.
+        {
+
+            var entity = _context.Books.Find(x => x.Id.Equals(id));
+
+            if (entity is null)
+            {
+                return NotFound(
+                   new
+                   {
+                       statusCode = 404,
+                       message = $"{id}'li kitap yok."
+                   }
+                    ); // 404 status kod.
+
+            }
+
+            bookPatch.ApplyTo(entity);
+            _context.SaveChanges();
+            /*  [{
+ "path": "title" ,    
+ "op": "replace" , // "replace" yerine 2 yazabilirdik.  Add 0, Copy 4, Invalid 6, Move  3, Remove 1, Replace 2,Test 5  bunlar Operation type enum'dur.
+ "value": "Mesneviden Hikayeler2"
+            }]
+
+             bu yapı ile kısmi güncelleme yapacağız. */
+            return NoContent(); // 204 gövdesiz başarılı.
+
+        }
+
+    }
+}
+
+
+..KATMANLI MİMARİ......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 
 
@@ -7224,6 +7801,11 @@ Update-Database ile migrationsları veritabanına yansıtırız.
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 
 
