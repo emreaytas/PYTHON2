@@ -5930,6 +5930,9 @@ static dosyalar vs. için wwwroot klasörünü kullanırız. ve klasörü ekledi
 //Program.cs içerisine bunu eklemek lazım.
 app.UseStaticFiles(); // bunu ekledik böylece static dosyaları kullanabilir olduk.
 
+wwwroot proje içerisinde klasörü oluşturduk içerisinde ise html klasörü oluşturduk. onunda içine Error.html sayfası koyduk.
+     analink/html/Error.html ile erişebilir olduk bu sayfaya. çalışır halde ise artık sistemde static dosyaları kullanabilir hale gelmişizdir demektir.
+
 dotnet tool -h .. ile bilgi alırız toollar hakkında.
 istemci taraflı işler için libman kullanabiliriz.
 
@@ -5938,7 +5941,7 @@ dotnet tool install -g Microsoft.Web.LibraryManager.Cli   .. ile kurulum yapabil
 .........
 bootstrap'ı kuracağız şimdi. bunu stillendirme için kullanacağız.
 
-libman init -p cdnjs  .. bununla Libman.json gelecek.
+libman init -p cdnjs  .. bununla Libman.json gelecek. clint side kütüphanelerin dağıtıldığı yerdir aslında.
 
 libman install bootstrap -d wwwroot/lib/bootstrap  .. ile bootstrap'i wwwroot klasörüne ekleriz.
 // wwwroot altında lib klasörü oluşturacak ve onun içinde de bootstrap klasörü olacak bootstrap oraya yüklenecek.
@@ -5947,9 +5950,34 @@ libman install font-awesome -d wwwroot/lib/font-awesome
 // -d gideceği yeri belirlemek için kullanılır.
 
 libman install jquery -d wwwroot/lib/jquery  .. jquery kurulumu yaptık wwwroot altında.
+
+-d ifadesi destination demektir gideceği kurulacağı yeri vs belirtiriz böylece.
+
+...........libman.json içerisi yüklemeleri yaptıktan sonra
+
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "bootstrap@5.3.3",
+      "destination": "wwwroot/lib/bootstrap"
+    },
+    {
+      "library": "font-awesome@6.6.0",
+      "destination": "wwwroot/lib/font-awesome"
+    },
+    {
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/lib/jquery"
+    }
+  ]
+}
+
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
-_Layout.cshtml dosyasında bir ekleme yaptık.       <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min">   bunu ekledik.
+_Layout.cshtml dosyasında bir ekleme yaptık.      
+ <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min">   bunu ekledik.
  
 
 <head>
@@ -5963,8 +5991,11 @@ _Layout.cshtml dosyasında bir ekleme yaptık.       <link rel="stylesheet" href
 
 </head>
 
-
+.........
+wwwroot altına css klasörü oluşturduk içerisine site.css koyduk. ufak custom ettiğimiz stiller için böyle bir dosya koyduk.
+    <link rel="stylesheet" href="~/css/site.css">   bununla site.css'i refere edebiliriz.
 ..........
+......... _Layout.cshtml içerisi böyle oldu. 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6012,13 +6043,15 @@ _Layout.cshtml dosyasında bir ekleme yaptık.       <link rel="stylesheet" href
 </body>
 
 </html>
-
-
+.......................
+wwwroot içerisinde js klasörü oluşturup site.js koyduk içerisine.
+    <script src="~/js/site.js"></script> ve böyle refere ettik.
+ 
 .......................
 
-bootstrap kodlarını taglara ekleyerek sitemize biçim kazandırabiliriz. bootstrap'in sayfasından istediğimiz tasarım stillerini görebiliriz.
+bootstrap kodlarını taglara ekleyerek sitemize biçim kazandırabiliriz. bootstrap'in sayfasından istediğimiz tasarım stillerini görebiliriz. class içeriisne istediğimizi ekleyerek görsellik katabiliriz.
 
-_Navbar.cshtml dosyası.....
+_Navbar.cshtml dosyası..... bunu biz kendimiz bootstrap'tan aldık. içerisine ise taglarımızı ekledik.
 
  
 
@@ -6100,6 +6133,13 @@ _Navbar.cshtml dosyası.....
 
 </html>
 
+............................. main'e role="main" class="pb-3" ekledik. 
+    <div class = "container">   @*ve div içerisine aldık. sayfa daha ortalandı ve bir konteyner haline geldi modifiye edeceğimiz sayfalar.*@
+    <main role="main" class="pb-3">
+        @RenderBody()
+        @*sayfadan sayfaya değişecek olan alandır.*@
+    </main>
+</div>
 .......................
 
 eğer icon vs eklemek istersek eğer o zaman font-awesome kütüphanesi işimize yarar.
@@ -6137,13 +6177,32 @@ bu şekil ekleyebiliriz...
 
 resimleri eklemek için wwwroot altına images adında bir klasör ooluştururuz.
 
-...............
+................................ Product index sayfası. div içeriisnde class'ı row olarak belirledik. böylece belli bir düzende prodcutCard boyutuna göre Productindex sayfası çalışacak.
+
+@{
+    Layout = "_Layout";
+}
+
+@model List<STOREAPP.Models.Product>
+
+<div class="row my-3">
+
+@foreach (STOREAPP.Models.Product prd in @Model)
+{
+
+<partial name = "_ProductCard" model = "@prd" />
+
+}
+
+</div>
+
+............... ProductCard sayfası. bunu Productindex içerisinde çalıştırırız bir div içeriismnde böylece dinamik bir yerleşme elde ederiz.
 
 @model Product
 
 @*col-sm-12 ile bir tane ürün gösterecek.  col-lg-3 ile 4 ürün gösterecek 12 tane grid var default olarak.*@
 
-<div class="col-sm-12  col-md-4 my-3 col-lg-3">
+<div class="col-sm-12  col-md-4 my-3 col-lg-3"> @*bölge bölge ayırma için kullanılır bu yapı.*@
 
 <div class="card" style="width: 18rem;">
   <img src="/images/foto.jpeg" class="card-img-top" alt="...">
@@ -6164,201 +6223,754 @@ resimleri eklemek için wwwroot altına images adında bir klasör ooluştururuz
 
 @*bootstrap ile ekran genişliğine göre elemanlar nasıl yerleşecek belirleyebiliriz.*@
 <div class="col-sm-12  col-md-4 my-3 col-lg-3">  burada olduğu gibi.
+col-sm-12 demek şudur ekran küçülürse 12 olsun yani tek ürün göster.    lg ise en büyük boyutta 3 ol yani 4 ürün göster.   md ise 3 tane ürün gösterecek.  böylece responsive bir yapı elde etmiş olacağız.
+12 tane var mesela yatay 4 dedik 3 tane ürün görebiliriz 3 dersek yan yana 4 tane ürün görebiliriz.
 
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+....Repositories....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 Entities.
 Repoları daha güncellenebilir ve genişletilebilir bir uygulama yapacağız.
 
-dotnet new classlib -f net6.0  ile classlib eklemesi yaptık.
-dotnet new classlib -f net6.0 -o .\STORE\Entities
+veritabanı ile direkt olarak haberleşmeden araya başka katmanlar koyarak haberleşme sağlayacağız. küçük uygulamalarda uygulama direkt olarak DbContext ile bağlanabilir ama repolar ile çalışırsak daha genişletilebilir ve daha soyut bir yapı ortaya koyabiliriz.
+varlıklar projesi modellere karşılık gelecek şekilde oluşturacağız mesela. 
 
-PS C:\Users\emrea\Documents\ASP3\Store> dotnet sln .\STORE.sln add .\Entities   .. projeyi solutiona ekledik...
+
+kök klasörde olduğumuzdan emin olup yapmak lazım. Store burada.
+        dotnet new classlib -f net6.0  ile classlib eklemesi yaptık.
+        dotnet new classlib -f net6.0 -o .\STORE\Entities
+
+projemizin yanına classlib ekledik aslında.
+PS C:\Users\emrea\Documents\ASP3\Store> dotnet sln .\STORE.sln add .\Entities   .. projeyi solutiona ekledik... refere ettik demektir.
 
 iki projeyi birbiriyle haberleştirmek için.
-    dotnet  add .\STOREAPP\ reference .\Entities\     birbirine referanslarız...
-
-proje referansını vermiş olacağız.
+    dotnet  add .\STOREAPP\ reference .\Entities\     birbirine referanslarız...  proje referansını vermiş olacağız. haberleşmelerini sağlarız StoreApp' Entities'i verdik.
 
 ayrı ayrı projelere bölersek eğer o zaman tekrar tekrar başka yerlerde kullanabiliriz.
 
 bu sistem ile Entities üzerinde tanımlanmış olan Modelleri vs direkt olarak kendi projemize dahil edebileceğiz.
 
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+.....................
+Entities altında Product.cs dosyası oluşturduk ve içine ekleme yaptık.
 
-dotnet remove  .\Store\StoreApp\ package Microsoft.EntityFrameworkCore
-// Projeye dahil ettiğimiz bir paketi bu yolla silebiliriz...
+namespace Entities;
+public class Product
+{
+       public int ProductID { get; set; }
 
-builder.Services.AddDbContext<RepositoryContext>(
-    options => {
-        options.UseSqlite(builder.Configuration.GetConnectionString("sqlconnection"), 
-        b => b.MigrationsAssembly("StoreApp")); //  bunun sayesinde migrationslar birden fazla proje olsa bile StoreApp projesinde oluşuacak Migrations klasörü StoreAppte oluşacak.
-        // sqlconnection appsettings.json içerisindeki bağlantı dizesidir
-    }
-);
+        public string? ProductName { get; set; }
 
-sqlite3 .\ProductDb.db   .. ile istersek o veritabanına bağlanıp sql sorguları çalıştırabiliriz.
-
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-RepositoryPattern kullanmamızın sebebi Controller ile veritabanı arasında katmanlar kurmak için daha denetlenebilir daha genişletilebilir bir yapı kuracağız böylece...
-repoyu soyutlamak için önemlidir. 
- 
-namespace Repositories.Contracts{
-
-  public interface IRepositoryBase<T>{
-     
-      IQueryable<T> FindAll(bool trackChanges);
-      
-
-  }
-
+        public decimal Price { get; set; }
 
 }
+// Models içerisindeki Product class'ını silebiliriz.
 
-.............. Temel amaç soyutlamak içindir.
+.........................
+Entities classlibinde Models adında bir klasör açtık. Product'ıda oraya taşıdık Modelleri Emtities içeriisndeki Models içerisinde tutacağız.
 
-    namespace Repositories
+................... StoreApp'in StoreApp.csproj içerisinde de reference'leri görebiliriz.
+
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Entities\Entities.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
+............................
+using Entities.Models; ekleriz her yere Product nesnesini buraya aldığımız için.
+
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+RepositoryContext'i ayrı bir sınıf altında toparlamaya başlayacağız. her bir nesne için ayrı ayrı repo tanımlamaları yapacağız.  Ayrı bir Entities classlib'inde kullanırsak eğer başka başka projelerde kullanabiliriz parça parça olur proje.
+dotnet new classlib -f net6.0 .\Store\Repositories   oluşturduk. şimdi ise ilişkilendirmek gerekecek. solution'a ekleyeceğiz.. dotnet sln .\Store\ add .\Store\Repositories\   ile solution'a classlib'i ekledik. şimdi ise reference vereceğiz. dotnet add .\Store\StoreApp\ referance .\Store\Repositories  .. böylecee Repositories ve Entities'in reference'lerini StoreApp'e vermiş olduk. StoreApp ikisi ile de haberleşebilecek.
+
+StoreApp'te olan iki kütüphaneyi Repositories'e taşıyacağız.
+dotnet add .\Store\Repositories package Microsoft.EntityFrameworkCore --version 6.0.0   .. ile Repositories'te kurulum yaptık demektir. 
+dotnet add .\Store\Repositories package Microsoft.EntityFrameworkCore.Sqlite --version 6.0.0  
+      .\Store\Repositories   burası paketin ekleneceği yerdir.
+
+şimdi ise StoreApp'ten bu eklenenleri kaldıracağız. böylece Repositories'te çalışacak bu yapılar refere ettiğimiz için StoreApp içerisinde de çalışacak sistem. dotnet list .\Store\Repositories\ package   bununla Repositories içerisindeki kütüphaneleri görebildik.
+
+dotnet remove package .\Store\StoreApp\ Microsoft.EntityFrameworkCore .. böyle kaldırma yapacağız.
+dotnet remove package .\Store\StoreApp\ Microsoft.EntityFrameworkCore.Sqlite .. böylede son kalan kütüphaneyi kaldırdık StoreApp'ten. Repositories'te çalışacak istenen şeyler.
+
+............şimdi. RepositoryContext'i Repositories altına alacağız. komple class'ı alıp Repositories bölümüne aktaracağız.
+using System.Reflection;
+using Entities.Models; // reference ile geldi.    dotnet add .\Repositories\ reference .\Entities\  
+using Microsoft.AspNetCore.Identity; 
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Repositories.Config;
+
+namespace Repositories
+{
+    public class RepositoryContext : IdentityDbContext<IdentityUser>
     {
-
-        public abstract class RepositoryBase<T> : IRepositoryBase<T>
-        where T : class, new() // Tipi kısıtlayıcı tanımlardır bunlar.
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        
+        public RepositoryContext(DbContextOptions<RepositoryContext> options)
+        : base(options)
         {
-
-            // Devraldığımız classlarda context kullanmamız gerekir diye private değil protected yaptık.
-            protected readonly RepositoryContext _context;
-
-            protected RepositoryBase(RepositoryContext context)
-            {
-                _context = context;
-
-            }
-
-            public IQueryable<T> FindAll(bool trackChanges)
-            {
-
-
-                return trackChanges
-                ? _context.Set<T>() : _context.Set().AsNoTracking();
-
-
-            }
-
 
         }
 
-    }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            
+            // modelBuilder.ApplyConfiguration(new ProductConfig());
+            // modelBuilder.ApplyConfiguration(new CategoryConfig());
 
-...............................
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
+    }
+}
+
+// Böylece Repositories'te Entities'le konuşarak Models'den modelleri alarak çalışacak.  
+........................... şimdi ise Repositories ile Entities'i haberleştireceğiz referance ile..
+Store path'inde     dotnet add .\Repositories\ reference .\Entities\    ile refere edeceğiz.
+............................. controllerlardaki usingleri ayarlamak lazım RepositoryContext başka yerden gelecek using Repositories kullanmak lazım örnek olarak. gereksiz importları usingleri vs kaldırırız. gereken yerleri düzenleriz.
+
+...........migrationslar için hedef yeri seçmemiz lazım Program.cs içerisinde. 
+builder.Services.AddDbContext<RepositoryContext>(
+    options => 
+    options.UseSqlite(builder.Configuration.GetConnectionString("sqlconnection"),
+   b => b.MigrationsAssembly("StoreApp")
+));
+// Bununla migrationslar StoreApp içerisinde oluşacak. RepositoryContext başka bir projede olsa da.
+// Migration alıp update database ile işlemleri geçerli kılabiliriz.
+
+
+....................... 
+..Repository base......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+base Repository oluşturucaz. controller normalde DbContext ile veritabanına bağlıydı şimdi ise arada katmanlar olacak. IRepositoryBase olacak RepositoryManager olacak vs vs. her nesneye ilişin (sayısı değişebilir) ilgili interface tanımlarını yaparız ve ayrı ayrı repolar oluştururuz her nesne için. 
+repoyu soyutlamak test yazma konuusnda çok yardımcı olur.
+
+Database --- (DbContext-IRepositoryBase-(sayısı değişebilir) ilgili interface tanımlamaları-IRepositoryManager)---Controller    bu sıra ile bağlantı olur veritabanına.
+                               ARA KATMAN  
+
+................Repositories altında Contracts klasörü oluşturduk. içine ise IRepositoryBase.cs koyduk.   Contractları bu klasorde barındıracağız.
+using System.Linq.Expressions;
 
 namespace Repositories.Contracts
 {
-    
-    public interface IProductRepository : IRepositoryBase <Product>{
-           
-           // IQueryable ile sorgulanabilir bir yapı kuruyoruz aslında. 
-           IQueryable<Product> GetAllProducts(bool trackChanges);
-      
-
+    public interface IRepositoryBase<T> // Generic bir yapı.
+    {
+        IQueryable<T> FindAll(bool trackChanges); // IQueryable sorgulanabilir demektir.
+  T? FindByCondition(Expression<Func<T,bool>> expression, bool trackChanges); // T generic demek ? ise null olabilir demektir. Expression Linq'ten gelicek.  Expression<Func<T,bool>> expression   true ya da false dönecek demektir. bool trackChanges kayıtları izleyecekmiyiz izlemeyecek miyiz belirler.
+        void Create(T entity);
+        void Remove(T entity);
+        void Update(T entity);
     }
+       
 
 }
-
-......................
+...............
+...............Repositories altında RepositoryBase.cs dosyası oluşturduk. Direkt olarak Repositories altında oluşturduk başka veritabanı sistemkleri kullanacak olursak klasörlemek lazım.   
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+using Repositories.Contracts;
 
 namespace Repositories
 {
-    public class ProductRepository : RepositoryBase<Product> , IProductRepository
+    public abstract class RepositoryBase<T> : IRepositoryBase<T> // IRepositoryBase'i imzalaması lazım. 
+    where T : class, new() // temel sınıfların newlenmesini istemiyoruz. Base class'ı devralan newlenebilecek Base direkt olarak newlenmeyecek.
     {
-        
-        public class ProductRepository(RepositoryContext context) :base(context){
 
+        // protected olarak tanımladık çünkü miras alan classlarda da kullanmak istiyoruz.  
+        protected readonly RepositoryContext _context; // readonly demek ya direkt = ile atama alacak ya da constructor içerisinde atama alacak başka yerde yasak.
+
+        protected RepositoryBase(RepositoryContext context)
+        {
+            _context = context; // bunu IOC çözecek.
         }
 
-        public IQueryable<T> FindAll(bool trackChanges) => FindAll(trackChanges);  
-                                                           // base'den gelen FindAll'ı kullanabiliriz.                
+
+        public IQueryable<T> FindAll(bool trackChanges)
+        {
+            return trackChanges
+                ? _context.Set<T>() // doğruysa 
+                : _context.Set<T>().AsNoTracking(); // yanlışsa.
+        }
+
+        public T? FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges)
+        { // ilgili tipe Set ol demek Set.  
+            return trackChanges
+                ? _context.Set<T>().Where(expression).SingleOrDefault() // trackChanges true ise.
+                : _context.Set<T>().Where(expression).AsNoTracking().SingleOrDefault(); // false ise.
+        } // interfacenin imzası olan bir metottur bu. 
+
+        public void Remove(T entity)
+        {
+            _context.Set<T>().Remove(entity);
+        }
+
+        public void Update(T entity)
+        {
+            _context.Set<T>().Update(entity);
+        }
+
     }
-
-
 }
 
-...........................
+...................... Repositories Contracts içerisinde IProductRepository oluşturduk.
 
+using Entities.Models;
+using Entities.RequestParameters;
+
+namespace Repositories.Contracts
+{
+    public interface IProductRepository : IRepositoryBase<Product> // Product nesnesi ile çalışacağımızı belirledik.
+    {
+
+        IQueryable<Product> GetAllProducts(bool trackChanges); // bool trackChanges değişiklikleri bir parametreye bağlarız.
+        IQueryable<Product> GetAllProductsWithDetails(ProductRequestParameters p);
+        IQueryable<Product> GetShowcaseProducts(bool trackChanges);
+        Product? GetOneProduct(int id, bool trackChanges);
+        void CreateOneProduct(Product product);
+        void DeleteOneProduct(Product product);
+        void UpdateOneProduct(Product entity);
+   
+    }
+}
+.......................... şimdi ise ProductRepository.cs ekleriz.
+
+using Entities.Models;
+using Entities.RequestParameters;
+using Microsoft.EntityFrameworkCore;
+using Repositories.Contracts;
+using Repositories.Extensions;
 
 namespace Repositories
 {
+
+    public sealed class ProductRepository : RepositoryBase<Product>, IProductRepository
+    {
+        public ProductRepository(RepositoryContext context) : base(context) // context ifadesini base class'a yani RepositoryBase'i göndereceğiz böylece DI çerçevesi içerisinde işlenecek sistem.
+        { 
+         
+        }
+
+        public void CreateOneProduct(Product product) => Create(product);
+
+        public void DeleteOneProduct(Product product) => Remove(product);
+
+        public IQueryable<Product> GetAllProducts(bool trackChanges) => FindAll(trackChanges); // ilgili metotu çağırırken kullanacağız. 
+
+        public IQueryable<Product> GetAllProductsWithDetails(ProductRequestParameters p)
+        {
+            return _context
+                .Products
+                .FilteredByCategoryId(p.CategoryId)
+                .FilteredBySearchTerm(p.SearchTerm)
+                .FilteredByPrice(p.MinPrice, p.MaxPrice, p.IsValidPrice)
+                .ToPaginate(p.PageNumber, p.PageSize);
+        }
+
+        // Interface
+        public Product? GetOneProduct(int id, bool trackChanges)
+        {
+              return FindByCondition(p => p.ProductId.Equals(id),trackChanges);  
+        }
+
+        public IQueryable<Product> GetShowcaseProducts(bool trackChanges)
+        {
+            return FindAll(trackChanges)
+                .Where(p => p.ShowCase.Equals(true));
+        }
+
+        public void UpdateOneProduct(Product entity) => Update(entity);
+       
+    }
+}
+
+...................................
+..RepositoryManager......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+repoları yönetecek olan RepositoryManagerdir. 
+
+...........Repositories projesine yeni bir interface ekleriz Contractslar içerisine IRepositoryManager.cs ekledik.
+
+namespace Repositories.Contracts
+{
+    public interface IRepositoryManager
+    {
+        IProductRepository Product {get; } // repoları sadece get için kullanırız. 
+        ICategoryRepository Category {get;}
+        IOrderRepository Order {get;}
+        void Save(); // kayıtları kaydetmek için kullanırız.
+    }
+}
+
+............... Repositories altında RepositoryManager.cs oluşturduk.
+using Repositories.Contracts;
+
+namespace Repositories
+{
+    public class RepositoryManager : IRepositoryManager
+    {
+        private readonly RepositoryContext _context;
+        private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IOrderRepository _orderRepository;
+
+        public RepositoryManager(IProductRepository productRepository,
+        RepositoryContext context,
+        ICategoryRepository categoryRepository,
+        IOrderRepository orderRepository)
+        {  
+            _context = context;
+            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
+            _orderRepository = orderRepository;
+        } // Tüm bağlantılar bu class içerisine almış olduk readonly olan bağlantı nesnelerinin atamasını ise constructor içerisinde yaptık.
+
+        public IProductRepository Product => _productRepository; // Bu kod parçası, bir sınıfta IProductRepository türünde bir özelliği (Property) tanımlar. Product özelliği çağrıldığında _productRepository nesnesini döndürür. Bu, genellikle bir Repository deseni uygulandığında kullanılır.
+
+        public ICategoryRepository Category => _categoryRepository; // sınıf örneğinden erişilmek istenirse ilgili yerin dönmesi sağlanacak.
+
+        public IOrderRepository Order => _orderRepository;
+
+        public void Save()
+        {
+            _context.SaveChanges();
+        } // contenxt üzerinde saveleme yaparız. 
+
+    }
+}
+
+................
+Repolar üzerinde işlemler yapılır. RepositoryManager ile tüm repolara erişmek isteriz bağımlılıkları IOC çözecek. bir değişim olursa RepositoryManagerDeki save tüm her şeyi saveleyecek.
+
+.............Register kısmı.
+IOC'de bir kayıt işlemi lazım StoreAppteki Program.cs' geliriz. 
+builder.Services.AddScoped<IProductRepository,ProductRepository>();
+builder.Services.AddScoped<IRepositoryManager,RepositoryManager>(); bunu ekledik.
+.............resolve kısmı. ProductController içerisi.
+ 
+namespace StoreApp.Controllers
+{
+    public class ProductController : Controller
+    {
+        private readonly IRepositoryManager _manager;
+
+
+        public ProductController( IRepositoryManager manager)
+        {
+            _manager = manager;
+        }
+................. nesneleri ise nasıl göreceğiz.
+
+
+        public IActionResult Index()
+        {
+            var models = _manager.Product.GetAllProducts(false).ToList();
+            return View(model); 
+        }
+        // bu yapı ile controller içerisinde veritabanındaki verilere erişebiliriz.
+
+....................
+..Interfaces......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+        public Product? GetOneProduct(int id, bool trackChanges){
+
+              return FindbyCondition(p => p.ProductId.Equals(id) , trackChanges);
+        } 
+............. yukarıdaki metotun kullandığı yapı.
+
+        public T? FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges)
+        { // ilgili tipe Set ol demek Set.  
+            return trackChanges
+                ? _context.Set<T>().Where(expression).SingleOrDefault() // trackChanges true ise.
+                : _context.Set<T>().Where(expression).AsNoTracking().SingleOrDefault(); // false ise.
+        } // interfacenin imzası olan bir metottur bu. 
+
+// interfaceler aslında metotu çağırma zorunluluğu sağlar bize.
+
+......................
+...Category.....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+modeller ayrı repolar ayrı projede.
+
+
+...........Entities Models Altına Category.cs ekleyeceğiz....
+
+namespace Entities.Models
+{
+    public class Category
+    {
+        
+        public int CategoryId { get; set; }
     
-    public class RepositoryManager : IRepositoryManager {
+        public String? CategoryName { get; set; } = String.Empty; // ilk olarak boş bir string değeri vereceğiz başlangıç değeri olarak.
+        
+        // Collection navigation property
+        public ICollection<Product> Products { get; set; }  
+    
 
-           private readonly RepositoryContext _context;
-            private readonly IProductRepository _productRepository;
+    }
 
-                public RepositoryManager(IRepositoryManager productRepository,RepositoryContext context)
+}
+
+................. ICategoryRepository oluşturucaz.  Repositories'te tanımlamaları yapacağız.  Contracts içerisine  ICategoryRepository eklemesi yaptık.
+using Entities.Models;
+
+namespace Repositories.Contracts
+{
+    public interface ICategoryRepository : IRepositoryBase<Category>
+    {
+        // IRepositoryBase'dekileri kullanacağız zaten o yüzden ek bir zorunlu metot eklemesi yapmadık.  
+    }
+}
+// IRepositoryManager'e ICategoryRepository eklemesi yaptık.
+......................... şimdi ise CategoryRepository.cs oluşturacağız Repositories içerisinde.
+using Entities.Models;
+using Repositories.Contracts;
+
+namespace Repositories
+{
+    public class CategoryRepository : RepositoryBase<Category>, ICategoryRepository
+    {
+        public CategoryRepository(RepositoryContext context) : base(context) // context'i base class'a göndererek DI çerçevesini tamamlamasını sağlarız.
+        {
+            //  RepositoryBase'deki yapıyı kullanacağımız için fazladan bir şey yazmadık.
+        }
+    }
+}
+//IRepositoryManager'e ekleme yaptık private readonly ICategoryRepository _categoryRepository;  ve constructorda atama olacak şekilde oraya ekledik.
+
+......................... IOC kaydı. Program.cs'e geleceğiz builder.Services.AddScoped<ICategoryRepository,CategoryRepository>(); yaparak IOC kaydı yaparız.
+...................... CategoryController ekledik Controllers klasörüne.
+
+using Entities.Models;
+using Microsoft.AspNetCore.Mvc;
+using Repositories.Contracts;
+
+namespace StoreApp.Controllers
+{
+    public class CategoryController : Controller
+    {
+        private IRepositoryManager _manager; // _manager üzerinden nesnelere erişim sağlayacağız.
+
+        public CategoryController(IRepositoryManager manager)
+        {
+            _manager = manager;
+        }
+
+        public IActionResult Index()
+        {
+            var model =  _manager.Category.FindAll(false); // false demek burada izleme olsun mu olmasın mı olmasın dedik.
+            return View(model);
+        } // buna karşılık Views altında Category adında bir klasör onunda içinde Index.cshtml eklememiz lazım.
+         
+
+
+
+    }
+} 
+
+..................buna karşılık Views altında Category adında bir klasör onunda içinde Index.cshtml eklememiz lazım.   buda bunun karşılığı.
+
+@model IEnumerable<Category>
+
+<div class="text-center my-3">
+    <h6 class="display-6">
+        KATEGORİLER
+    </h6>
+</div>
+
+<ul class="list-group my-3">
+    @foreach (var cat in Model)
+    {
+        <li class="list-group-item">@cat.CategoryName</li>
+    }
+</ul>
+
+................................. ÇEkirdek datalar için RepositoriesTeki RepositoryContext'e gideceğiz.
+
+
+              protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+           
+            modelBuilder.Entity<Category>.HasData(
+                new Category() { CategoryId = 1, CategoryName = "Book" },
+                new Category() { CategoryId = 2, CategoryName = "Electronic" }
+            ); // eğer veri yoksa oluşturacak. ama bunu Config ile de yapabiliriz en iyisi.
+
+
+        } // bu metot içerisinde yaparız bunları.
+
+
+
+
+
+........................... Migrations ekleyerek ve veritabanına yansıtarak update ile çekirdek dataları ekleyebiliriz veritabanına.
+...Services.....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+bir iş aklı varsa eğer temel yapıyı servisler ile inşa edeceğiz. uygulamanın genel mantığını servis katmanında tanımları.
+ProductServices gibi CategoryServices gibi bir yapı kuracağız.  
+
+Bu yapıyı       Database --- (DbContext-IRepositoryBase-(sayısı değişebilir) ilgili interface tanımlamaları-IRepositoryManager)---Controller    bu sıra ile bağlantı olur veritabanına.
+Buna çeviricez Servisler ile = Database --- (DbContext-IRepositoryBase-(sayısı değişebilir) ilgili interface tanımlamaları-IRepositoryManager)-(IProducService vs gibi modellere ilişkin servisler - IServiceManager)---Controller    bu sıra ile bağlantı olur veritabanına.
+böylece Repositories yapısı ile controller arasına bir katman daha koyarız Services katmanı olacak bu. database-RepositoryManager-serviceManager-controller olacak şimdi ise.
+servisi controllerlara entegre edeceğiz. her uygulamada tutarlı çalışmasını sağlayacağız.
+ 
+.........bir proje ekleyeceğiz. classlib olacak bu. 
+StoreApp Repositories Entities ile aynı hizada olacak olan bir classlib ekleyeceğiz. 
+dotnet new classlib -f net6.0 -o Services  .. ile ekleyeceğiz.
+ilgili projeyi solutiona eklemek lazım dotnet sln .\Store.sln add .\Services\     ile solutina ekleriz classlib'i.
+dotnet add .\Services\ reference .\Entities\ .. path önemli ama.
+dotnet add .\Services\ reference .\Repositories\ .. path öenmli.
+dotnet add .\StoreApp\ reference .\Services\
+
+..............ProductServices yazacağız..
+......Services projesinde Contracts klasörü oluştururuz. içerisine IProducService.cs koyduk.
+using Entities.Dtos;
+using Entities.Models;
+using Entities.RequestParameters;
+
+namespace Services.Contracts
+{
+    public interface IProductService
+    {
+        IEnumerable<Product> GetAllProducts(bool trackChanges);
+        IEnumerable<Product> GetLastestProducts(int n, bool trackChanges);
+        IEnumerable<Product> GetAllProductsWithDetails(ProductRequestParameters p);
+        IEnumerable<Product> GetShowcaseProducts(bool trackChanges);
+        Product? GetOneProduct(int id, bool trackChanges);
+        void CreateProduct(ProductDtoForInsertion productDto);
+        void UpdateOneProduct(ProductDtoForUpdate productDto);
+        void DeleteOneProduct(int id);
+        ProductDtoForUpdate GetOneProductForUpdate(int id, bool trackChanges);
+    }
+}
+......................şimdi ise Services classlib'i altında ProductManager.cs ekleyeceğiz.
+
+        using AutoMapper;
+        using Entities.Dtos;
+        using Entities.Models;
+        using Entities.RequestParameters;
+        using Repositories.Contracts;
+        using Services.Contracts;
+
+        namespace Services
+        {
+            public class ProductManager : IProductService // IProducService'in metotlarını dolduracağız burada.
+            {
+
+                private readonly IRepositoryManager _manager; // Repoları kullanabilmek için bunu enjekte ederiz.
+                private readonly IMapper _mapper;
+
+                public ProductManager(IRepositoryManager manager,
+                IMapper mapper)
                 {
-_productRepository = productRepository;
-_context = context
+                    _manager = manager;
+                    _mapper = mapper;
                 }
 
-public IProductRepository Product => _productRepository;
+                public void CreateProduct(ProductDtoForInsertion productDto)
+                {
+                    Product product = _mapper.Map<Product>(productDto);
+                    _manager.Product.Create(product);
+                    _manager.Save();
+                }
 
-public void Save(){
+                public void DeleteOneProduct(int id)
+                {
+                    Product product = GetOneProduct(id, false);
+                    if (product is not null)
+                    {
+                        _manager.Product.DeleteOneProduct(product);
+                        _manager.Save();
+                    }
+                }
 
-_context.SaveChanges();
+                public IEnumerable<Product> GetAllProducts(bool trackChanges)
+                {
+                    return _manager.Product.GetAllProducts(trackChanges);
+                }
 
+                public IEnumerable<Product> GetAllProductsWithDetails(ProductRequestParameters p)
+                {
+                    return _manager.Product.GetAllProductsWithDetails(p);
+                }
+
+                public IEnumerable<Product> GetLastestProducts(int n, bool trackChanges)
+                {
+                    return _manager
+                        .Product
+                        .FindAll(trackChanges)
+                        .OrderByDescending(prd => prd.ProductId)
+                        .Take(n);
+                }
+
+                public Product? GetOneProduct(int id, bool trackChanges)
+                {
+                    var product = _manager.Product.GetOneProduct(id, trackChanges);
+                    if (product is null)
+                        throw new Exception("Product not found!");
+                    return product;
+                }
+
+                public ProductDtoForUpdate GetOneProductForUpdate(int id, bool trakcChanges)
+                {
+                    var product = GetOneProduct(id, trakcChanges);
+                    var productDto = _mapper.Map<ProductDtoForUpdate>(product);
+                    return productDto;
+                }
+
+                public IEnumerable<Product> GetShowcaseProducts(bool trackChanges)
+                {
+                    var products = _manager.Product.GetShowcaseProducts(trackChanges);
+                    return products;
+                }
+
+                public void UpdateOneProduct(ProductDtoForUpdate productDto)
+                {
+                    // var entity = _manager.Product.GetOneProduct(productDto.ProductId, true);
+                    // entity.ProductName = productDto.ProductName;
+                    // entity.Price = productDto.Price;
+                    // entity.CategoryId = productDto.CategoryId;
+                    var entity = _mapper.Map<Product>(productDto);
+                    _manager.Product.UpdateOneProduct(entity);
+                    _manager.Save();
+                }
+            }
+        }
+
+................................ şimdi ise ICategoryService.cs koyacağız Servicesin Contracts klasörüne.
+
+using Entities.Models;
+
+namespace Services.Contracts
+{
+    public interface ICategoryService
+    {
+        IEnumerable<Category> GetAllCategories(bool trackChanges); 
+    }
 }
 
+................................. şimdi ise Services classlib'i altında CategoryManager.cs kurarız.
 
-    } 
+using Entities.Models;
+using Repositories.Contracts;
+using Services.Contracts;
 
+namespace Services
+{
+    public class CategoryManager : ICategoryService
+    {
+        // 
+        private readonly IRepositoryManager _manager;
+
+        public CategoryManager(IRepositoryManager manager)
+        {
+            _manager = manager;
+        }
+        // Üstteki // ile alttaki // arası DI çerçevesidir.
+
+        public IEnumerable<Category> GetAllCategories(bool trackChanges)
+        {
+            return _manager.Category.FindAll(trackChanges);
+        }
+    }
 }
-......................
+
+............................. IServiceManager ekledik Servicesin Contracts alanına.
+namespace Services.Contracts
+{
+    public interface IServiceManager // merkezi olarak servisleri yönettiğimiz yerlerden birisi.s
+    {
+        IProductService ProductService {get;}
+        ICategoryService CategoryService {get;}
+        IOrderService OrderService {get;}
+        IAuthService AuthService {get; }
+    }
+}
+........................... şimdi ise serviceManager ekleriz.
+using Services.Contracts;
+
+namespace Services
+{
+    public class ServiceManager : IServiceManager // burada hepsi enjekte edilecek bunları kullanması zorunlu olacak. IServiceManager içindekileri implemente etmek zorunda kalacak. 
+    {
+
+        private readonly IProductService _productService;
+        private readonly ICategoryService _categoryService;
+        private readonly IOrderService _orderService;
+        private readonly IAuthService _authService;
+
+        public ServiceManager(IProductService productService,
+        ICategoryService categoryService,
+        IOrderService orderService,
+        IAuthService authService)
+        {
+            _productService = productService;
+            _categoryService = categoryService;
+            _orderService = orderService;
+            _authService = authService;
+        } // buda bir DI çerçevesidir bağımlılıklar dışarıdan enjekte edilir. 
 
 
-builder.Services.AddScoped<IRepositoryManager,RepositoryManager>();
-builder.Services.AddScoped<IProductManager,ProductRepository>();
+        public IProductService ProductService => _productService;  // burada direkt olarak get metotu aslında _productService dönecek bize.
 
-..........................
+        public ICategoryService CategoryService => _categoryService;
 
+        public IOrderService OrderService => _orderService;
+
+        public IAuthService AuthService => _authService;
+    }
+}
+
+.......................................Configuration adımı. Bunları IOC'ye kaydetmemiz lazım. StoreApp'teki Program.cs'e geleceğiz.
+builder.Services.AddScoped<IServiceManager,ServiceManager>();
+builder.Services.AddScoped<IProductService,ProductManager>();
+builder.Services.AddScoped<ICategoryService,CategoryManager>();
+
+ama bu yapıyı değiştirebiliriz. StoreApp altında Infrastructure klasörü koyup içerisine tüm gerekenleri koyup bu sistemi oradan Program.cs'e enjekte edebiliriz.
+
+................................ Şimdi ise Controllerlarda IServiceManager kullanacağız. 
+
+using Entities.RequestParameters;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using STOREAPP.Entities.Models;
-using STOREAPP.Repositories;
+using Services.Contracts;
+using StoreApp.Models;
 
-
-namespace STOREAPP.Controllers
+namespace StoreApp.Controllers
 {
-   public class ProductController:Controller{
-     
-    
-    private readonly IRepositoryManager _manager;
-    
-public ProductController(IRepositoryManager manager)
-{
-_manager = manager;
+    public class ProductController : Controller
+    {
+        
+        private readonly IServiceManager _manager;
 
-}
+        public ProductController(IServiceManager manager)
+        {
+            _manager = manager;
+        } // Buda bir DI çerçevesi.
 
-     public IActionResult Index(){
-   var products = _manager.Product.GetAllProducts(false);
-    return View(products);
-     }
-   
-     public IActionResult Get(int id){
+        public IActionResult Index(ProductRequestParameters p)
+        {
+            var products = _manager.ProductService.GetAllProductsWithDetails(p);  // _manager.ProductService. ile metotları kullanıyor olabiliriz artık.
+            var pagination = new Pagination()
+            {
+                CurrenPage = p.PageNumber,
+                ItemsPerPage = p.PageSize,
+                TotalItems = _manager.ProductService.GetAllProducts(false).Count()
+            };
+            return View(new ProductListViewModel()
+            {
+                Products = products,
+                Pagination = pagination
+            });
+        }
 
- throw new Exception("asada");
-
-     }    
-
-   }
-
-}
-
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-
-
-
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
+.....................................
+...View Components.....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 
 
@@ -6367,29 +6979,14 @@ _manager = manager;
 
 
 
-
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 
 
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
 
 
