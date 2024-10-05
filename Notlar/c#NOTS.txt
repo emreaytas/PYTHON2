@@ -8179,7 +8179,7 @@ builder.Services.AddSwaggerGen();
 
 // RepositoryContext bizim DbContext'ten kalıtım alan class'ımızdır.
 builder.Services.AddDbContext<RepositoryContext>(
-    options => 
+    options => // bu options RepositoryContext içerisindeki base'ye giden opitons bu parametre oradan DbContext'in içerisine gidiyor ve bağlantı ayarları sağlanmış oluyor.
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("sqlConnection") // appsettings içerisindeki bağlantıyı buraya getirmiş olacak direkt olarak'ta yazabilirdik ama güvenli olmaz.
         )
@@ -8226,7 +8226,7 @@ namespace WebApi.Repositories.Config
 
     public class BookConfig : IEntityTypeConfiguration<Book>  // kalıtım aldık.
     {
-        public void Configure(EntityTypeBuilder<Book> builder)
+        public void Configure(EntityTypeBuilder<Book> builder) // Bize bir tip inşa edecek bu yapı.
         {
             builder.HasData(
                 new Book {Id = 1,Title= "A",Price = 100 },
@@ -8256,19 +8256,28 @@ namespace WebApi.Repositories
         // veritabanının bir bağlantı dizesine sahip olması için 
 
         public RepositoryContext(DbContextOptions options):base(options) // bu options ile bağlantı dizesi kuracağız.
-        {
-            
+        { // base(options) demek aslında en alttaki kalıtım veren sınıfın içerisine optionsları göndererek onun üstüne kurulan sınıflarıda options'tan yaralanmasını sağlamaktır.
+          // DbContextOptions EntityFrameworkCore ile alakalıdır. options'ta öyledir.  
         }
 
         public DbSet<Book> Books { get; set; } // DbSet tablo yerine geçecek onu taklit edecek.
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder) // default olan bir metotu biz override ederiz burada.
         {
-           modelBuilder.ApplyConfiguration(new BookConfig()); // bu konfigürasyonu RepositoryContext'e eklemiş olduk burada. 
-
-        }
-
+            modelBuilder.ApplyConfiguration(new BookConfig()); // bu konfigürasyonu RepositoryContext'e eklemiş olduk burada. 
+            // model oluşturulurken bu Config ifadesi umursanacak  
+        } // modelBuilder ile biz veritabanını kontrol edeceğiz ve eğer veri yoksa içeride veri ekleyeceğiz. konfigurasyon yapacak aslında.
+       
     }
+}
+
+.................................... Program.cs içerisindeki bu yapı ile swagger gibi test araçları aslında sadece eğer development modda çalışacak bu sayede.
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment()) // eğer development modda değilse swagger çalışmayacak direkt ayağa kalkacak.
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 ..IOC Inversion of control......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
@@ -8281,6 +8290,7 @@ using WebApi.Repositories;
 
 namespace WebApi.Controllers
 {
+
     [Route("api/books")]
     [ApiController]
     public class BooksController : ControllerBase
@@ -8303,19 +8313,21 @@ namespace WebApi.Controllers
         } // bu metotile BookConfig'ten gelen verileri alabileceğiz.
 
     }
+
 }
 
 .............DI çerçevesi çok önemlidir.
 
     public class BooksController : ControllerBase
     {
-        private readonly RepositoryContext _context;
+        private readonly RepositoryContext _context; // readonly demek sadece direkt ve constructor içerisinde atama alabilir demektir. bunu ayarlar.
 
         public BooksController(RepositoryContext context)
         {
             _context = context;
 
         }
+
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
@@ -8533,67 +8545,1218 @@ message = $"{id}'li kitap yok..."
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 ..KATMANLI MİMARİ......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+N-tier kullanacağız buradaki sistemde. 
+Presentation yapısı sunum için olacak içerisinde Controllerlar vs olacak böyle kullanacağız. 
+Entities classlib'i oluştururuz.Bir sınıf kütüphanesi olarak kullanacağız bu sistemi. class library proje ile aynı sürümde olması önemli. içerisine Models klasörü ekleyeceğiz. Modelleri bu klasöre ekleyeceğiz.
+
+// aşağıdaki biçimde Modelleri bu klasör içerisinde tanımlayacağız. 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Entities.Models
+{
+    public class Book
+    {
+        public int Id { get; set; }
+        public String Title { get; set; }
+        public decimal Price { get; set; }
+        
+        // Ref: navigation property
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
+
+    }
+}
+
+...............................................
+classlib ve proje arasında bir reference alışverişi oluşturmak lazım. WebApi projesine referance verdik Entities ile böylece haberleşebilir oldular.
+bunlara ait namespace yapılarını düzgün ayarlamak lazım. yoksa hata alabiliriz kodlar birbirini görmeyebilir. 
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Repositories adında bir classlib ekleriz. aynı sürümde olmasına dikkat edersek iyi olur. Repolarımız olacak. soyutlama yapacağız aslında yani uygulama detayları ile ilgilenmeyiz hangi metotların vs olacağını belirleriz bu sistemde.
+Repositories projesi içerisinde Contracts adında bir klasör ekleriz. içerisine interfaceler ekleriz.
+
+// mesela Repositories'teki Contracts klasörüne eklediğimiz bir interface
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Repositories.Contracts
+{
+    public interface IRepositoryBase<T>
+    {
+        // CRUD
+        IQueryable<T> FindAll(bool trackChanges);
+        IQueryable<T> FindByCondition(Expression<Func<T,bool>> expression, bool trackChanges);
+        void Create(T entity);
+        void Update(T entity);
+        void Delete(T entity);
+
+    }
+}
+
+................................... Sonra EfCore adında bir klasör oluşturduk Repositories class'libi altında. ve interfaceyi implement eden yapıyı buraya ekleriz. bu klasör altında kullanırız.
+
+using Microsoft.EntityFrameworkCore;
+using Repositories.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Repositories.EFCore
+{
+
+    public abstract class RepositoryBase<T> : IRepositoryBase<T>        // burada implemet edilen metotları yazarız ve onları doldururz çalışır hale getiririz.
+        where T : class // where T : class generic türler için bir kısıtlamadır ve sadece referans türlerinin (class veya interface) kullanılabilmesini sağlar. Bu kısıtlama ile değer türleri (int, struct vb.) kullanılamaz.                          Generic bir yapının (örneğin, sınıfın veya metodun) yalnızca class türlerinde kullanılabilmesini sağlar. Başka bir deyişle, where T : class kısıtlamasıyla, T'nin yalnızca referans tipleri (örneğin, sınıflar, diziler, delegeler, vs.) olabileceği belirtilir.
+    { 
+
+        protected readonly RepositoryContext _context;
+        public RepositoryBase(RepositoryContext context)
+        {
+            _context = context;
+        }
+
+        public void Create(T entity) => _context.Set<T>().Add(entity); // bu bir lambda yapıdır. => ile metot çalıştığında ne olacak bunu belirleyebiliriz.
+        
+        public void Delete(T entity) => _context.Set<T>().Remove(entity);
+
+        public IQueryable<T> FindAll(bool trackChanges) =>
+            !trackChanges ?
+            _context.Set<T>().AsNoTracking() :
+            _context.Set<T>();
+
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression,
+            bool trackChanges) =>
+            !trackChanges ?
+            _context.Set<T>().Where(expression).AsNoTracking() :
+            _context.Set<T>().Where(expression);
+
+        public void Update(T entity) => _context.Set<T>().Update(entity);   
+       
+    }
+}
+
+.......................................................
+EntityFrameworkCore'u Repositories içerisine kurduk.
+Repositories altında iki klasor var birisi EFCore birisi Contracts.
+EFCore altında ise Config ve Extensions adında iki klasör var. ve direkt olarak altında eklediğimiz classlar var.
+mesela Contractslara IRepositoryBase ekledik. EFCore altına ise RepositoryBase.cs ekleriz onu implemente eden metot olacaktır.
+...................................................... Repositories altındaki EFCore klasörünün içine bir RepositoryContext ekleyeceğiz.
+
+using Entities.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Repositories.EFCore.Config;
+using System.Reflection;
+
+namespace Repositories.EFCore
+{
+    public class RepositoryContext : IdentityDbContext<User>
+    {
+
+        public RepositoryContext(DbContextOptions options) :
+            base(options)
+        {
+
+        }
+
+        public DbSet<Book> Books { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            //modelBuilder.ApplyConfiguration(new BookConfig());
+            //modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
+    }
+}
+
+..........................................................................Config klasörü var EFCore klasörü altında. bunun içine bir BookConfig ekleyeceğiz. çalışmada veritabanı o konfigurasyona uyacak böylece. mesela bu yapıda modelBuilder ile eğer veri yoksa ekle dedik.
+using Entities.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Repositories.EFCore.Config
+{
+    public class BookConfig : IEntityTypeConfiguration<Book> // Configuration yapmamıza olanak sağlayan interface. 
+    {
+        public void Configure(EntityTypeBuilder<Book> builder)  
+        {
+            builder.HasData(
+                new Book { Id = 1, CategoryId = 1, Title = "Karagöz ve Hacivat", Price = 75 },
+                new Book { Id = 2, CategoryId = 2, Title = "Mesnevi", Price = 175 },
+                new Book { Id = 3, CategoryId = 1, Title = "Devlet", Price = 375 }
+            );
+        }
+    }
+} 
+// bu yapı ile Configuration yapabiliriz. 
+.............................................................................. RepositoryContext'i Başka bir class'libe taşıdığımız için bunu Program.cs içerisinde beliritieiz.
+
+.............................................................................. IBookRepository oluşturduk ve RepositoryBase'i implemente ettik böylece onun tüm imzalarını alacak ve istersek daha fazlasını ekleyebileceğiz.
+using Entities.Models;
+using Entities.RequestFeatures;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Repositories.Contracts
+{
+
+    public interface IBookRepository : IRepositoryBase<Book> // IRepositoryBase'in tüm özelliklerini aktarmak zorunda kalırız ve istersek o zaman daha fazla zorunluluk ekleyebiliriz.
+    {
+        Task<PagedList<Book>> GetAllBooksAsync(BookParameters bookParameters,
+            bool trackChanges);
+        Task<List<Book>> GetAllBooksAsync(bool trackChanges);
+        Task<Book> GetOneBookByIdAsync(int id, bool trackChanges);
+        void CreateOneBook(Book book);
+        void UpdateOneBook(Book book);
+        void DeleteOneBook(Book book);
+
+        Task<IEnumerable<Book>> GetAllBooksWithDetailsAsync(bool trackChanges);
+        
+    }
+
+
+}
+.............................................................................. EFCore altında BookReposiyory.cs oluştururuz. 
+using Entities.Models;
+using Entities.RequestFeatures;
+using Microsoft.EntityFrameworkCore;
+using Repositories.Contracts;
+using Repositories.EFCore.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Repositories.EFCore
+{
+    public sealed class BookRepository : RepositoryBase<Book>, IBookRepository // birden fazla interfaceyi implemente edebiliriz.
+    {
+        public BookRepository(RepositoryContext context) : base(context)
+        { // RepositoryContext'te ana yapıya context göndeririz.
+            
+        }
+
+        public void CreateOneBook(Book book) => Create(book);
+        public void DeleteOneBook(Book book) => Delete(book);
+        public async Task<PagedList<Book>> GetAllBooksAsync(BookParameters bookParameters,
+            bool trackChanges)
+        {
+            var books = await FindAll(trackChanges)
+                .FilterBooks(bookParameters.MinPrice, bookParameters.MaxPrice)
+                .Search(bookParameters.SearchTerm)
+                .Sort(bookParameters.OrderBy)
+                .ToListAsync();
+
+            return PagedList<Book>
+                .ToPagedList(books, 
+                bookParameters.PageNumber, 
+                bookParameters.PageSize);
+        }
+
+        public async Task<List<Book>> GetAllBooksAsync(bool trackChanges)
+        {
+            return await FindAll(trackChanges)
+                .OrderBy(b => b.Id)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Book>> GetAllBooksWithDetailsAsync(bool trackChanges)
+        {
+            return await _context
+                .Books
+                .Include(b => b.Category)
+                .OrderBy(b => b.Id)
+                .ToListAsync();
+        }
+
+        public async Task<Book> GetOneBookByIdAsync(int id, bool trackChanges) =>
+            await FindByCondition(b => b.Id.Equals(id), trackChanges)
+            .SingleOrDefaultAsync();
+        public void UpdateOneBook(Book book) => Update(book);
+    }
+}
+
+.....................................................Contracts içerisine IRepositoryManager.cs ekleriz. bir interface olacak. 
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Repositories.Contracts
+{
+    public interface IRepositoryManager
+    {
+        ICategoryRepository Category { get; } // sadece get olarak çalışacak bize category'i getirecek aslında.
+        IBookRepository Book { get; }
+        Task SaveAsync(); // kayıt işlemini yapabileceğiz böylece.
+    }
+}
+
+............................................................ şimdi ise EFCore altında RepositoryManager ekleyeceğiz.
+
+using Repositories.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Repositories.EFCore
+{
+    public class RepositoryManager : IRepositoryManager // IRepositoryManager'i implement'e ettik böylece istenen repoları getirmek zorunda kalacağız.
+    {
+       //DI'ları burada tanımladık aslında.    
+        private readonly RepositoryContext _context;
+        private readonly IBookRepository _bookRepository;
+        private readonly ICategoryRepository _categoryRepository;
+
+        public RepositoryManager(RepositoryContext context, 
+            IBookRepository bookRepository, 
+            ICategoryRepository categoryRepository)
+        { // DI çerçevesini burada tamamlamış oluruz.  
+            _context = context;
+            _bookRepository = bookRepository;
+            _categoryRepository = categoryRepository;
+        }
+
+        public IBookRepository Book => _bookRepository; // bağlantıyı bize getirecek bu sistem. RepositoryManager.Book diyince bağlanabileceğiz veritabanına. 
+
+        public ICategoryRepository Category => _categoryRepository;
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();  // komple veritabanı üzerinde bir değişiklikleri kaydet deriz.
+        }
+    }
+}
+
+..............................Lazy loading, uygulama için bir yer tutarız ama ne zaman ona ihtiyaç olur o zaman o nesneyi üretiriz böylece daha az kaynak kullanmış oluruz..bazen bir nesneye ve nesyeyle alakalı her şeyi yüklemek isteriz buna eager loading denir. 
+yani doğrudan newleme kullanmayacağız.   public IBookRepository Book => _bookRepository; bu yapıda kullanacağız. referans açık olacak ama gerekli yerlerde kullanılacak böylece daha az yorulur sistem. nesne ancak çağrılırsa newlenecek.
+  public IBookRepository Book => new BookRepository(_context);  bu ise eager loadingtir çok kaynak tüketebilir ve DI çerçevesine uygun değildir.
+...........................................................
+...........................................................api projemize yeni bir klasör ekleriz wepapi olan üzerinde mavi dünya olana wep api'ye. Extensions klasörü ekleriz. yeri gelirse Extensions metotlar yazmak için kullanırız. yapılandırma ifadelerini buraya eklersek iyi olacak. 
+//ServicesExtensions.cs ekleyeceğiz bu klasör altına. ve bu class static olacak. 
+using AspNetCoreRateLimit;
+using AutoMapper;
+using Entities.DataTransferObjects;
+using Entities.Models;
+using Marvin.Cache.Headers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Presentation.ActionFilters;
+using Presentation.Controllers;
+using Repositories.Contracts;
+using Repositories.EFCore;
+using Services;
+using Services.Contracts;
+using System.Text;
+
+namespace WebApi.Extensions
+{
+    // static class içerisine static metotlar yapacağız ve bunlar çalışacak. 
+    public static class ServicesExtensions // service yapısının özelliklerini burada tanımlarız doğruı düzgün.
+    {
+        // bu metot ile bağlantıyı sağlayabiliriz. çok güvenli bir sistemdir bu. 
+        public static void ConfigureSqlContext(this IServiceCollection services,
+            IConfiguration configuration) => services.AddDbContext<RepositoryContext>(options =>
+                    options.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
+        
+        // kaydı yapılacak olan ifade her kullanıcya özel olarak üretilecek nesneyi tanımladık burada. 
+        public static void ConfigureRepositoryManager(this IServiceCollection services) => 
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
+        // IOC kaydını burada yaparız aslında. interface seviyesinde bir bağımlılık söz konusu aslında. biraz daha zayıf bağlı bir sistem haline gelir yapı burada.
+        public static void ConfigureServiceManager(this IServiceCollection services) =>
+            services.AddScoped<IServiceManager, ServiceManager>();
+
+        public static void ConfigureLoggerService(this IServiceCollection services) => 
+            services.AddSingleton<ILoggerService, LoggerManager>();
+
+
+        public static void ConfigureActionFilters(this IServiceCollection services)
+        {
+            services.AddScoped<ValidationFilterAttribute>();
+            services.AddSingleton<LogFilterAttribute>();
+            services.AddScoped<ValidateMediaTypeAttribute>();
+        } 
+
+        public static void ConfigureCors(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder => 
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithExposedHeaders("X-Pagination")
+                );
+            });
+        }
+
+        public static void ConfigureDataShaper(this IServiceCollection services)
+        {
+            services.AddScoped<IDataShaper<BookDto>, DataShaper<BookDto>>();
+        }
+
+        public static void AddCustomMediaTypes(this IServiceCollection services)
+        {
+            services.Configure<MvcOptions>(config =>
+            {
+                var systemTextJsonOutputFormatter = config
+                .OutputFormatters
+                .OfType<SystemTextJsonOutputFormatter>()?.FirstOrDefault();
+
+                if (systemTextJsonOutputFormatter != null)
+                {
+                    systemTextJsonOutputFormatter.SupportedMediaTypes
+                    .Add("application/vnd.btkakademi.hateoas+json");
+
+                    systemTextJsonOutputFormatter.SupportedMediaTypes
+                    .Add("application/vnd.btkakademi.apiroot+json");
+                }
+
+                var xmlOutputFormatter = config
+                .OutputFormatters
+                .OfType<XmlDataContractSerializerOutputFormatter>()?.FirstOrDefault();
+
+                if (xmlOutputFormatter is not null)
+                {
+                    xmlOutputFormatter.SupportedMediaTypes
+                    .Add("application/vnd.btkakademi.hateoas+xml");
+
+                    xmlOutputFormatter.SupportedMediaTypes
+                    .Add("application/vnd.btkakademi.apiroot+xml");
+                }
+            });
+        }
+       
+        public static void ConfigureVersioning(this IServiceCollection services)
+        {
+            services.AddApiVersioning(opt =>
+            {
+                opt.ReportApiVersions = true;
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
+                
+                opt.Conventions.Controller<BooksController>()
+                    .HasApiVersion(new ApiVersion(1, 0));
+
+                opt.Conventions.Controller<BooksV2Controller>()
+                    .HasDeprecatedApiVersion(new ApiVersion(2, 0));
+            }); 
+        }
+
+        public static void ConfigureResponseCaching(this IServiceCollection services) =>
+            services.AddResponseCaching();
+
+        public static void ConfigureHttpCacheHeaders(this IServiceCollection services) => 
+            services.AddHttpCacheHeaders(expirationOpt =>
+            {
+                expirationOpt.MaxAge = 90;
+                expirationOpt.CacheLocation = CacheLocation.Public;
+            },
+            validationOpt =>
+            {
+                validationOpt.MustRevalidate = false;
+            });
+
+        public static void ConfigureRateLimitingOptions(this IServiceCollection services)
+        {
+            var rateLimitRules = new List<RateLimitRule>() 
+            {
+                new RateLimitRule()
+                {
+                    Endpoint = "*",
+                    Limit = 60,
+                    Period = "1m"
+                }
+            };
+
+            services.Configure<IpRateLimitOptions>(opt =>
+            {
+                opt.GeneralRules = rateLimitRules;
+            });
+
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+        }
+
+        public static void ConfigureIdentity(this IServiceCollection services)
+        {
+            var builder = services.AddIdentity<User, IdentityRole>(opts =>
+            {
+                opts.Password.RequireDigit = true;
+                opts.Password.RequireLowercase = false;
+                opts.Password.RequireUppercase = false;
+                opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequiredLength = 6;
+
+                opts.User.RequireUniqueEmail = true;
+            })
+                .AddEntityFrameworkStores<RepositoryContext>()
+                .AddDefaultTokenProviders();
+        }
+
+        public static void ConfigureJWT(this IServiceCollection services, 
+            IConfiguration configuration)
+        {
+            var jwtSettings = configuration.GetSection("JwtSettings");
+            var secretKey = jwtSettings["secretKey"];
+
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options => 
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true, 
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings["validIssuer"],
+                    ValidAudience = jwtSettings["validAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                }
+            );
+        }
+
+        public static void ConfigureSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(s =>
+            {
+                s.SwaggerDoc("v1", 
+                    new OpenApiInfo 
+                    { 
+                        Title = "BTK Akademi", 
+                        Version = "v1",
+                        Description = "BTK Akademi ASP.NET Core Web API",
+                        TermsOfService = new Uri("https://www.btkakademi.gov.tr/"),
+                        Contact = new OpenApiContact
+                        {
+                            Name = "Zafer CÖMERT",
+                            Email = "comertzafer@gmail.com",
+                            Url = new Uri("https://www.zafercomert.com")
+                        }
+                    });
+                
+                s.SwaggerDoc("v2", new OpenApiInfo { Title = "BTK Akademi", Version = "v2" });
+
+                s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Place to add JWT with Bearer",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme="Bearer"
+                });
+
+                s.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            },
+                            Name = "Bearer"
+                        },
+                        new List<string>()
+                    }
+                });
+            });
+        }
+
+        public static void RegisterRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+        }
+
+        public static void RegisterServices(this IServiceCollection services)
+        {
+            services.AddScoped<IBookService, BookManager>();
+            services.AddScoped<ICategoryService, CategoryManager>();
+            services.AddScoped<IAuthenticationService, AuthenticationManager>();
+        }
+
+    }
+}
+
+............................................ En son halde controller'a veritabanı bağlaması böyle olacak. IServiceManager _manager olarak veri tabanına bağlanacağz. bunun kullanımının bir örneği mesela  return Ok(await _manager.BookService.GetAllBooksWithDetailsAsync(false)); 
+    
+    //[ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1")]
+    [ServiceFilter(typeof(LogFilterAttribute))]
+    [ApiController]
+    [Route("api/books")]
+    //[ResponseCache(CacheProfileName ="5mins")]
+    //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 80)]
+    public class BooksController : ControllerBase
+    {
+        private readonly IServiceManager _manager;
+        public BooksController(IServiceManager manager)
+        {
+            _manager = manager;
+        }
+
+...............................................
+...........................................................Service katmanı. şimdi ise Services classlibi ekleriz sistemimize. içerisinde Contracts klasörü olacak ve interfaceleri buraya ekleyeceğiz. ve direkt Services altına ise interfaceleri implemente eden metotları ekleriz. dilersek farklı da yapabiliriz ama böylesi uygundur.
+// mesela IBookService ekleriz Contacts içerisine. kullanacağımız metotları burada tanımlarız 
+using Entities.DataTransferObjects;
+using Entities.LinkModels;
+using Entities.Models;
+using Entities.RequestFeatures;
+using System;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Services.Contracts
+{
+    public interface IBookService
+    {
+        Task<(LinkResponse linkResponse, MetaData metaData)> GetAllBooksAsync(LinkParameters linkParameters,
+            bool trackChanges);
+        Task<BookDto> GetOneBookByIdAsync(int id, bool trackChanges);
+        Task<BookDto> CreateOneBookAsync(BookDtoForInsertion book);
+        Task UpdateOneBookAsync(int id, BookDtoForUpdate bookDto, bool trackChanges);
+        Task DeleteOneBookAsync(int id, bool trackChanges);
+
+        Task<(BookDtoForUpdate bookDtoForUpdate, Book book)> GetOneBookForPatchAsync(int id, bool trackChanges);
+
+        Task SaveChangesForPatchAsync(BookDtoForUpdate bookDtoForUpdate, Book book);
+        Task<List<Book>> GetAllBooksAsync(bool trackChanges);
+
+        Task<IEnumerable<Book>> GetAllBooksWithDetailsAsync(bool trackChanges);
+    }
+}
+..................................................IBookService'i kullanacak class'ı yani BookManager'i ekleriz.
+using AutoMapper;
+using Entities.DataTransferObjects;
+using Entities.Exceptions;
+using Entities.LinkModels;
+using Entities.Models;
+using Entities.RequestFeatures;
+using Repositories.Contracts;
+using Services.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Services
+{
+    public class BookManager : IBookService // implemente ettik ve metotların içerisini doldurduk burada.
+    {
+        private readonly ICategoryService _categoryService;
+        private readonly IRepositoryManager _manager; // her şey manager üzerinde dönecek. 
+        private readonly ILoggerService _logger;
+        private readonly IMapper _mapper;
+        private readonly IBookLinks _bookLinks;
+
+        public BookManager(IRepositoryManager manager,
+            ILoggerService logger,
+            IMapper mapper,
+            IBookLinks bookLinks,
+            ICategoryService categoryService)
+        {
+            _manager = manager;
+            _logger = logger;
+            _mapper = mapper;
+            _bookLinks = bookLinks;
+            _categoryService = categoryService;
+        }
+
+        public async Task<BookDto> CreateOneBookAsync(BookDtoForInsertion bookDto)
+        {
+            var category = await _categoryService
+                .GetOneCategoryByIdAsync(bookDto.CategoryId, false);
+
+            var entity = _mapper.Map<Book>(bookDto);
+            _manager.Book.CreateOneBook(entity);
+            await _manager.SaveAsync();
+            return _mapper.Map<BookDto>(entity);
+        }
+
+        public async Task DeleteOneBookAsync(int id, bool trackChanges)
+        {
+            var entity = await GetOneBookByIdAndCheckExists(id, trackChanges);
+            _manager.Book.DeleteOneBook(entity);
+            await _manager.SaveAsync();
+        }
+
+        public async Task<(LinkResponse linkResponse, MetaData metaData)> 
+            GetAllBooksAsync(LinkParameters linkParameters,
+            bool trackChanges)
+        {
+            if(!linkParameters.BookParameters.ValidPriceRange)
+                throw new PriceOutofRangeBadRequestException();
+
+            var booksWithMetaData = await _manager
+                .Book
+                .GetAllBooksAsync(linkParameters.BookParameters, trackChanges);
+             
+            var booksDto = _mapper.Map<IEnumerable<BookDto>>(booksWithMetaData);
+            var links = _bookLinks.TryGenerateLinks(booksDto,
+                linkParameters.BookParameters.Fields,
+                linkParameters.HttpContext);
+            
+            return (linkResponse: links, metaData : booksWithMetaData.MetaData);
+        }
+
+        public async Task<List<Book>> GetAllBooksAsync(bool trackChanges)
+        {
+            var books = await _manager.Book.GetAllBooksAsync(trackChanges);
+            return books;
+        }
+
+        public async Task<IEnumerable<Book>> GetAllBooksWithDetailsAsync(bool trackChanges)
+        {
+            return await _manager
+                .Book
+                .GetAllBooksWithDetailsAsync(trackChanges);
+        }
+
+        public async Task<BookDto> GetOneBookByIdAsync(int id, bool trackChanges)
+        {
+            var book =  await GetOneBookByIdAndCheckExists(id,trackChanges);
+            return _mapper.Map<BookDto>(book);
+        }
+
+        public async Task<(BookDtoForUpdate bookDtoForUpdate, Book book)> 
+            GetOneBookForPatchAsync(int id, bool trackChanges)
+        {
+            var book = await GetOneBookByIdAndCheckExists(id, trackChanges);
+            var bookDtoForUpdate = _mapper.Map<BookDtoForUpdate>(book);
+            return (bookDtoForUpdate, book);
+        }
+
+        public async Task SaveChangesForPatchAsync(BookDtoForUpdate bookDtoForUpdate, Book book)
+        {
+            _mapper.Map(bookDtoForUpdate, book);
+            await _manager.SaveAsync();
+        }
+
+        public async Task UpdateOneBookAsync(int id, 
+            BookDtoForUpdate bookDto, 
+            bool trackChanges)
+        {
+            var entity = await GetOneBookByIdAndCheckExists(id, trackChanges);
+            entity = _mapper.Map<Book>(bookDto);
+            _manager.Book.Update(entity);
+            await _manager.SaveAsync();
+        }
+
+        private async Task<Book> GetOneBookByIdAndCheckExists(int id, bool trackChanges)
+        {
+            // check entity 
+            var entity = await _manager.Book.GetOneBookByIdAsync(id, trackChanges);
+
+            if (entity is null)
+                throw new BookNotFoundException(id);
+
+            return entity;
+        }
+    }
+}
+..................................................IServiceManager.cs ekleriz bu bir interface olacak. Sonra bunu implemete eden ServiceManager.cs'i de ekleyevceğiz. IServiceManager'i Services classlibinin Contracts klasöründe yazdık.
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Services.Contracts
+{
+    public interface IServiceManager
+    {
+        IBookService BookService { get; } // gerekli yapıları get eden sistem. 
+        ICategoryService CategoryService { get; }
+        IAuthenticationService AuthenticationService { get; }
+
+    }
+}
+...........................................ServiceManager.cs ise bu projede Services classlib'i altında.
+using AutoMapper;
+using Entities.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Repositories.Contracts;
+using Services.Contracts;
+
+
+namespace Services
+{
+    public class ServiceManager : IServiceManager
+    {
+        private readonly IBookService _bookService;
+        private readonly ICategoryService _categoryService;
+        private readonly IAuthenticationService _authencationService;
+
+        public ServiceManager(IBookService bookService, 
+            ICategoryService categoryService, 
+            IAuthenticationService authencationService)
+        {
+            _bookService = bookService;
+            _categoryService = categoryService;
+            _authencationService = authencationService;
+        }
+
+        public IBookService BookService => _bookService;
+
+        public IAuthenticationService AuthenticationService => _authencationService;
+
+        public ICategoryService CategoryService => _categoryService;
+    }
+}
+.........................................................ServiceMaganager IOC kaydı. çözümleyiciye eklememiz lazım bu sistemi. Web api projesinin altındaki Extensions altındaki ServicesExtensions.cs içerisine bunu ekleriz. 
+
+        public static void ConfigureServiceManager(this IServiceCollection services) =>
+            services.AddScoped<IServiceManager, ServiceManager>();
+// Program.cs'e eklemeside yapılmalıdır. 
+........................................................... Service katmanını bağlama işi. ServiceManager kullanımı.         
+        private readonly IServiceManager _manager;
+        public BooksController(IServiceManager manager) // bu yapı ile Controllera ekleriz burada önemli nokta interfaceler onları implement eden class'lara referans olabilir illaki interfacelerin içi dolu olacak diye bir durum yok bu yüzden. buna dikkat etmek lazım.
+        {
+            _manager = manager;
+        }
+        // kullanım olayı ise aşağıdaki metot gibi olacaktır. _manager.ServiceName.metot olarak çalışacak bu sistem.
+                [Authorize]
+        [HttpGet("details")]
+        public async Task<IActionResult> GetAllBooksWithDetailsAsync()
+        {
+            return Ok(await _manager
+                .BookService
+                .GetAllBooksWithDetailsAsync(false));
+        }
+        [Authorize(Roles = "Editor, Admin")] // Yetkilendirme özelliği. 
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [HttpPut("{id:int}")] // hangi özellik adı ile gidecek ve tipi ne olacak.
+        public async Task<IActionResult> UpdateOneBookAsync([FromRoute(Name = "id")] int id, // [FromRoute(Name = "id")] int id u yapı daha güvenli bir kullanım yapmamızı sağlar burada.
+            [FromBody] BookDtoForUpdate bookDto)
+        {
+            await _manager.BookService.UpdateOneBookAsync(id, bookDto, false);
+            return NoContent(); // 204
+        }
+
+.........................................................
+.........................................................Presentation katmanı. solutiona yeni bir classlib ekledik Presentation adında. altında iki klasör(ActionFilters ve Controllers) ve bir class var(AssemblyReference.cs) . artık Controllersları web api içerisinde tutmayacağız....   Mvc.Core bir sınıda bir class'a controller olma özelliği kazandırabiliriz.  Reflection demek çalışma zamanında çözülmek demektir. 
+// içerisine Microsoft.AspNetCore.Mvc.Core ekleriz. Apileri vs bu yapıda kullanabilmek için indiririz. 
+// Jsonpatch, NewtonsoftJson, MArvin.Cache.Headers, Mvc.Versioning    . bunlarıda yükleriz.
+// örnek bir Controller mesela 
+using Microsoft.AspNetCore.Mvc;
+using Services.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Presentation.Controllers
+{
+    
+    //[ApiVersion("2.0", Deprecated = true)]
+    [ApiController]
+    [Route("api/books")]
+    [ApiExplorerSettings(GroupName ="v2")]
+    public class BooksV2Controller : ControllerBase
+    {
+        private readonly IServiceManager _manager;
+
+        public BooksV2Controller(IServiceManager manager)
+        {
+            _manager = manager;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllBooksAsync()
+        {
+            var books = await _manager.BookService.GetAllBooksAsync(false);
+            var booksV2 = books.Select(b => new
+            {
+                Title = b.Title,
+                Id = b.Id
+            });
+            return Ok(booksV2);
+        }
+    }
+}
+.........................................................Controller yapısınıda ayrı bir katmana çıkarmış olduk. Program.cs içerisine aşağıdaki kodu ekledik. 
+builder.Services.AddControllers(config =>
+{
+    config.RespectBrowserAcceptHeader = true;
+    config.ReturnHttpNotAcceptable = true;
+    config.CacheProfiles.Add("5mins", new CacheProfile() { Duration = 300 });
+})
+.AddXmlDataContractSerializerFormatters()
+.AddCustomCsvFormatter()
+.AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)
+.AddNewtonsoftJson(opt => 
+    opt.SerializerSettings.ReferenceLoopHandling = 
+    Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
+
+// gerekli usingleri vermek gerekir. 
+.................................. Presentation içindeki AssemblyReference.cs dosyası
+namespace Presentation
+{
+    public class AssemblyReference
+    {
+         // içi boş ama çok gerekli değil.
+    }
+}
+............................................... web api projemize bir klasör ekledik ContextFactory adında. içerisine ise RepositoryContextFactory.cs ekledik. 
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Repositories.EFCore;
+
+namespace WebApi.ContextFactory
+{
+    public class RepositoryContextFactory
+        : IDesignTimeDbContextFactory<RepositoryContext> // using Microsoft.EntityFrameworkCore.Design; bu yapı ile gelecek bu interface.
+    {
+        public RepositoryContext CreateDbContext(string[] args) // 
+        {
+            // configurationBuilder
+            var configuration = new ConfigurationBuilder() // appsettings.json'daki verilerle configuration yapacak.
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json") // json dosyasını ekle. appsettings.json. 
+                .Build(); // build et.
+            
+            // DbContextOptionsBuilder
+            // yukarıda oluşan configuration'ı aşağıda configuration.GetConnectionString'de kullandık. önce o parametreyi tamamlayıp sonra burada işlem yaptık.
+            var builder = new DbContextOptionsBuilder<RepositoryContext>()
+                .UseSqlServer(configuration.GetConnectionString("sqlConnection"), // sqlConnection appsettings içerisindeki isimle aynı olmalıdır. o parametrenin string url değerini alacak çünkü.
+                prj => prj.MigrationsAssembly("WebApi")); // Projeadını vereceğiz burada. MigrationsAssembly içeriisne wep api projemizin adını koyarız. 
+                // yani Migrationların nerede oluşacağını belirleriz. burada web api içerisinde olsun diye WebApi diyerek anaprojemizin adını verdik migrations klasörü burada oıluşacak otomatik olarak.
+                
+            return new RepositoryContext(builder.Options); RepositoryContext içerisine optionsları göndeririz oradan da base class'a gider bu optionslar.
+        }
+    }
+}
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+NLOG........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+NLOG........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+NLOG........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+NLOG........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+NLOG........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+NLOG........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+3.parti bir kütüphane olan nlogu mimarimize ekleyeceğiz. Nlog.Extensions.Logging ekleyeceğiz. Bir Logger service yazacağız.  Logger manager ekleyeceğiz. Servis kaydı yapacağız IOC'ye. 
+üst sınıflar alt sınıflara bağımlı olmamalı. bağlantı olacaksa interfaceler ile halledilmelidir bu sistem.
+Services üzerinde sağ tık open in terminal dedik.bir paket yüklemesi gerekir .. dotnet add package Nlog.Extensions.Logging .. bu yüklemeyi yaptık.  manage nuget packageden de yapabiliriz. 
+Services class'libinde Contacts klasöründe ILoggerService ekledik. 
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Services.Contracts
+{
+    public interface ILoggerService
+    {
+        void LogInfo(string message);
+        void LogWarning(string message);
+        void LogError(string message);
+        void LogDebug(string message);
+    }
+}
+.............................. LoggerManager.cs ekleyeceğiz şimdi de Services classlib'i altında.
+
+using NLog; // Nlog eklemesi yaptık. 
+using Services.Contracts;
+
+
+namespace Services
+{
+    public class LoggerManager : ILoggerService
+    {
+        private static ILogger logger = LogManager.GetCurrentClassLogger(); // static bir tanım yapabiliriz veya DI ile yapabiliriz. Looger bir kere üretilince her yerde aynı logger kullanılabilsin diye static yaptık. 
+        public void LogDebug(string message) => logger.Debug(message); // Debug ile işlem yapıyorsan log üzerine yaz.
+
+        public void LogError(string message) => logger.Error(message); // logger burda ise error ifasesini mesajı ile yaz.
+
+        public void LogInfo(string message) => logger.Info(message); // ınfo varsa loglamaya ekle mantığı var.
+
+        public void LogWarning(string message) => logger.Warn(message);
+       
+    }
+}
+.......................................... mlog.config adında bir dosya oluşturduk wep api altında. web configuration file olacak. Loglama çalıştığında hangi şablon ile çalışacak bunu belirleriz aslında. 
+<?xml version="1.0" encoding="utf-8" ?>
+<nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+      autoReload="true" 
+      internalLogLevel="Info"
+      internalLogFile=".\internal_logs\internallog.txt">
+
+	<targets>
+		<target name="logfile" xsi:type="File"
+				fileName=".\logs\${shortdate}_logfile.txt"
+				layout="${longdate} ${level:uppercase=true} ${message}"/>
+	</targets>
+
+	<rules>
+		<logger name="*" minlevel="Debug" writeTo="logfile" />
+	</rules>
+</nlog>
+.....................................Wep api'ye bir klasör ekledik internal_logs adında bir klasör oluşturduk. içine ise internallog.txt olacak. içeriisnde alttaki gibi veriler olacak. 
+2022-11-06 16:00:19.9252 Info Message Template Auto Format enabled
+2022-11-06 16:00:20.1354 Info Adding target FileTarget(Name=logfile)
+2022-11-06 16:00:20.1686 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=F:\Courses\AspDotnetCoreWebApi\Applications\bsStoreApp\WebApi\nlog.config 
+........................................................... Program.cs içerisinde bunu eklememiz lazım. 
+
+LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(),"/nlog.config")); // birleştir demek Concat. Nerde çalışıyorsa al ve o pathi getirmiş ol bu path'e nlog.config'i ekle dedik wep api'ye eklediğimiz nlog.config'i buraya ekledik.
+
+............................................... Extensions klasöründeki ServicesExtensions'a ekleme yapacağız. 
+        public static void ConfigureLoggerService(this IServiceCollection services) => 
+            services.AddSingleton<ILoggerService, LoggerManager>(); // AddScoped AddSingleton AddTransient kullanabiliriz. IOc'ye nasıl kaydolacak belirlyebiliriz. tek bir defa oluşacak Singleton yapısı ile.
+............................................................. şimdi tekrar Program.cs'e ekleme. 
+builder.Services.ConfigureLoggerService(); 
+.............................................................Nlog mimaride kullanımı. Logger ifadesini kullanacağız. mesela BookManager.cs'e loglama yapacaksak bunu ekleriz. 
+       private readonly ICategoryService _categoryService;
+       private readonly IRepositoryManager _manager;
+       private readonly ILoggerService _logger; // ILoggerService'yi ekleriz.
+       private readonly IMapper _mapper;
+       private readonly IBookLinks _bookLinks;
+
+       public BookManager(IRepositoryManager manager,
+           ILoggerService logger,
+           IMapper mapper,
+           IBookLinks bookLinks,
+           ICategoryService categoryService)
+       {
+           _manager = manager;
+           _logger = logger;
+           _mapper = mapper;
+           _bookLinks = bookLinks;
+           _categoryService = categoryService;
+       }
+
+ 
+        public async Task UpdateOneBookAsync(int id, 
+            BookDtoForUpdate bookDto, 
+            bool trackChanges)
+        {
+            var entity = await GetOneBookByIdAndCheckExists(id, trackChanges);
+            if(entity is null){
+                string msg = $""{id} not found;
+                _logger.LogInfo(msg);
+                throw new Exception(msg);
+            }
+            entity = _mapper.Map<Book>(bookDto);
+            _manager.Book.Update(entity);
+            await _manager.SaveAsync();
+        }
+
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+GLOBAL HATA YÖNETİMİ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+GLOBAL HATA YÖNETİMİ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+GLOBAL HATA YÖNETİMİ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+GLOBAL HATA YÖNETİMİ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+GLOBAL HATA YÖNETİMİ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+GLOBAL HATA YÖNETİMİ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
 .GÜVENLİK.......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 .GÜVENLİK.......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 .GÜVENLİK.......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 .GÜVENLİK.......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 .GÜVENLİK.......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-Identity çerçevesi kullanılabilir. IdentityUser ve IdentityRole.  IdentityDbContext kullanacağız.
-Json Web Token(JWT) kullanırız. JWT Configuration ederiz ve api endpointlerini korumaya çalışırız.
-
+Identity çerçevesi kullanılabilir asp.net sunar bu çerçeveyi. IdentityUser ve IdentityRole.  IdentityDbContext kullanacağız.
+Json Web Token(JWT) kullanırız. JWT Configuration ederiz ve api endpointlerini korumaya çalışırız. böylece yetkisiz kişiler giriş yapamaz. 
+  
 bir tarafta client bir tarafta sunucu olsun. client giriş için istek atsın kullanıcı doğrulaması yapılsın o zaman server bir response dönecek.   
-sunucu kullanıcıyı doğrularsa o zaman bir token dönecek(JWT). kullanıcı ismi, subject , user roles, geçerlilik süresi vs gibi bilgiler olacak.
-JWT bir şifreli yapı değildir.  bu yüzden hassas bilgiler token içerisine yerleştirilmez şifre gibi. 
+sunucu kullanıcıyı doğrularsa o zaman bir token dönecek(JWT). kullanıcı ismi, subject , user roles, geçerlilik süresi vs gibi bilgiler olacak(claimsler). şifre vs burada olmayacak.
+JWT bir şifreli yapı değildir.  bu yüzden hassas bilgiler token içerisine yerleştirilmez şifre gibi. şifrelenmesi lazım önemli yerlerin tam olarak.
+
+jwt encode edilebilir şifrelenmiş yapı değildir. hassas bilgiler token içerisine yerleştirilmez.
+
+stateless kavramı vardır. bu durumu yerine getirebilmek için token'e ihtiyacımız var jwt yani.
 
 kullanıcının bir tokeni olsun. header içerisinde authentication kısmı olur.
-tokenli istek başarılı olursa bir response dönecek sunucu. eğer giriş başarılı olmazsa 403 veya 404 döneceğiz.
+tokenli istek başarılı olursa bir response dönecek sunucu. eğer giriş başarılı olmazsa 403 veya 401 döneceğiz.
 
-..Oturum açma ve yetkilendirme......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+token verdiğimizde o tokeni header'in authentication bölümünde gönderir ve böylece korumalı kaynakları dönebiliriz. 
+
+................................. Identity çerçevesi ekleme.
+Microsoft.AspNetCore.Identity.EntityFrameworkCore; ekleriz. bunu Entities'e ekleriz. Entities classlib'ine eklenir.
+
+.................................Entities içerisindeki Models içerisine User.cs class'ı ekleriz.
+
+using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Entities.Models
+{
+    public class User : IdentityUser // IdentityUser'ı biz Identity paketinden aldık. pek çok özellik hali hazırda burada vardır. 
+    { // User aslında IdentityUser'dir. 
+        public String? FirstName { get; set; }  // Propları gerekli şekilde düzenleyebiliriz. 
+        public String? LastName { get; set; }
+        public String? RefreshToken { get; set; } 
+        public DateTime RefreshTokenExpiryTime { get; set; } // tokenin geçerlilik süresi olsun. 
+    
+    }
+
+}
+......................................................RepositoryContext'te değişim yapacağız. 
+
+namespace Repositories.EFCore
+{
+    public class RepositoryContext : IdentityDbContext<User> // artık IdentityDbContext'i kullanacağız. 
+    {                                                 // user aslında IdentityUser'dir.  
+        public RepositoryContext(DbContextOptions options) :
+            base(options)
+        {
+
+        }
+                public DbSet<Book> Books { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+        
+            base.OnModelCreating(modelBuilder); // bu önemlidir bunu kullanmamız lazım ilgili tablolar oluşacak böylece. Migrationslar gerekitiği gibi olur bu sistem ile. 
+            //modelBuilder.ApplyConfiguration(new BookConfig());
+            //modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        
+        }
+
+...............................................ServicesExtensions.cs içerisine gideceğiz 
+
+        public static void ConfigureIdentity(this IServiceCollection services)
+        {
+            var builder = services.AddIdentity<User, IdentityRole>(opts =>
+            {
+                opts.Password.RequireDigit = true; // rakam istiyor muyuz mesela şifrede 
+                opts.Password.RequireLowercase = false; // küçük harf istiyor muyuz veya
+                opts.Password.RequireUppercase = false; // büyük harf olsun mu 
+                opts.Password.RequireNonAlphanumeric = false; // 
+                opts.User.RequireUniqueEmail = true; // unique bir email olsun diyor.
+            })
+                .AddEntityFrameworkStores<RepositoryContext>() // IdentityDbContext'i implemente edeni buraya getiririz. 
+                .AddDefaultTokenProviders(); 
+        }
+// opts.User.RequireUniqueEmail = true; bu tür yapıları değiştirebiliriz burada bir sorun olmaz.       
+// bu eklemeyi uygun bir biçimde yapacağız. 
+............................................... Program.cs içerisi. ekleme yapacağız. 
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
+
+ve 
+
+app.UseAuthentication();
+app.UseAuthorization();
+// sırası önemli şekilde eklenmelidir. 
+......................................................
 
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-
-
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
-
-
-
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
