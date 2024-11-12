@@ -10202,6 +10202,431 @@ namespace Presentation.Controllers
 .JWT.........................................................................JWT.........................................................................JWT.........................................................................JWT.........................................................................JWT........................................................................
 .JWT.........................................................................JWT.........................................................................JWT........................................................................
 .JWT.........................................................................JWT.........................................................................JWT.........................................................................JWT.........................................................................JWT........................................................................
+istemci kullanıcı adı ve şifre gönderir endpoint noktasından. request'in body'sine kullanıcı adı ve şifre koyar. sunucu stateless'tir. bunu yorumlar ve bir yanıt döner. ilgili yetkiye bağlı olarak bir token döner. 
+rest gereği sunucu stateless olmalıdır durumsuz yani. sunucu istemcilerin taleplerini tutmaz.   
+token içerisinde UserName subject user roles useful information vs bulunur. kullanıcı bu tokeni alır ve yeni isteklerinde kullanır header tag'ına authentication:Bearer token ekler. netice olarak authentication olacak. sunucu ilgili tokeni alıp yorumlayacak ve geçerl mi doğru mu bakacak ve ona göre bir response dönecek  ok veya BadRequest(401,403).     
+
+token 3 parçadan oluşur. header,payload,signature. header açık olan bilgiler algoritmanın hangi algoritma olduğu sha256 vs burada bir şifreleme yoktur encode'dir çözülebilir ve typ:JWT gibi bir alan vardır. payload ise kullanıcı için hassas olmayan bilgiler şifrelenmiş bir yapı değildir encode'dir decode edilebilir tokenin geçerlilik tarihi vs hassas bilgiler buradadır. signature kısmı = bir tokenin bu sunucu tarafından oluşturulup oluşturulmadığını burada kontrol ederiz.    
+
+......................................................appsettings.json. değişken tanımlarını içeren yer wep api içerisindeki yer.  
+
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+
+    "sqlConnection": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=modelDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"
+
+  },
+
+  "JwtSettings": { // Proje üzerinde değil appsettingste tutmak en güvenlisidir.
+    "validIssuer": "bsstoreapi", // bu anahatarı üreten taraftır. onu ifade eder.  
+    "validAudience": "http://localhost:3000", // bu anahtarı kimler kullanıyor bunu belirleriz. hangi porttan kontrol edilecek.  
+    "secretKey": "s`9&Paw&i6?G~t+XB&e<QUPv}7j4LKsUYcAPXiV$-f,^c(4`tmueS/ziCcTxFf_y", // kriptoloji için secretkey üretiriz.
+    "expires": 60 // dakika mı saniye mi bunu belirleyebiriz. tokenin geçerlikij süresi için kullanılan sistem. 
+    //Issuer tokeni üreten audience ise tüketen taraftır.   
+  }
+   
+}
+
+..................................................................ConfigureJWT. ServicesExtensions.cs'e ekleme yapacağız.
+ public static void ConfigureJWT(this IServiceCollection services, 
+     IConfiguration configuration)
+ {
+     var jwtSettings = configuration.GetSection("JwtSettings"); // jwtSettings alanını alırız appsettings.json'dan. 
+     var secretKey = jwtSettings["secretKey"]; // jwtSettings'ten secretkey'i alırız.
+
+     services.AddAuthentication(opt =>  
+     {
+         opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // Authentication şeması burada Bearer'i kullandık. Microsoft.AspNetCore.Authentication.JwtBearer indiririz.
+         opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; // 
+     }).AddJwtBearer(options => 
+         options.TokenValidationParameters = new TokenValidationParameters
+         {
+             ValidateIssuer = true, // keyi kim üretti doğrulamak istiyorum.
+             ValidateAudience = true, // geçerli bir tüketici,alıcı mı kontrol et.
+             ValidateLifetime = true, // geçerlilik süresi kontrol et.
+             ValidateIssuerSigningKey = true, // anahtar için doğrulama
+             ValidIssuer = jwtSettings["validIssuer"], // geçerli üretici belirtiriz.
+             ValidAudience = jwtSettings["validAudience"], // geçerli çözücü belirleriz.
+             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)) // secretkeyi belirtiriz.
+         }
+     );
+ }
+
+// şimdi ise Program.cs'e ekleme yapacağız   builder.Services.ConfigureJWT(builder.Configuration);   bunu ekleriz.
+ 
+..........................................Endpointlerin korunması. metotların üzerine [Authorize] yazarsak koruma altına almış oluruz. ama Controller'ın üzerine eklersek bütün metotları koruma altına almış oluruz. eğer geçerli token yoksa o zaman bize 401 döner yani giriş izni bakma izni vermez sistem.
+
+        [Authorize] // metotu koruma altına aldığımızı belli eder. Controllar'ın üstüne ekleseydik o zaman tüm metotları koruma altına alırdı.
+        [HttpHead]
+        [HttpGet(Name = "GetAllBooksAsync")]
+        [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
+        //[ResponseCache(Duration = 60)]
+        public async Task<IActionResult> GetAllBooksAsync([FromQuery] BookParameters bookParameters)
+        {
+            var linkParameters = new LinkParameters()
+            {
+                BookParameters = bookParameters,
+                HttpContext = HttpContext
+            };
+
+            var result = await _manager
+                .BookService
+                .GetAllBooksAsync(linkParameters, false);
+
+            Response.Headers.Add("X-Pagination", 
+                JsonSerializer.Serialize(result.metaData));
+
+            return result.linkResponse.HasLinks ?
+                Ok(result.linkResponse.LinkedEntities) :
+                Ok(result.linkResponse.ShapedEntities);
+        }
+
+............................................. User For Authentication. DataTransferObjects klasöründe UserForAuthenticationDto.cs oluştururuz. 
+// Login olurken kullanacağız aslında. kullanıcı adı ve şifreyi kullanıcıdan almak içinn kullanırız.  
+using System.ComponentModel.DataAnnotations;
+
+namespace Entities.DataTransferObjects
+{
+    public record UserForAuthenticationDto // record olacak class olmayacak. 
+    {
+        [Required(ErrorMessage = "Username is required.")]
+        public string? UserName { get; init; } // record olduğu için init olmalı veri taşıyacak bir değişim yapamayacak bu sistem ile çünkü bir DTO.
+        
+        [Required(ErrorMessage = "Password is required.")]
+        public string? Password { get; init; }
+    }
+}
+
+.............................................. Validate User. kontrol etmek için kullanılacak sistem. 
+// Services katmanındaki IAuthenticationService.cs'e imza eklemesi yapacağız.
+
+using Entities.DataTransferObjects;
+using Microsoft.AspNetCore.Identity;
+
+
+namespace Services.Contracts
+{
+    public interface IAuthenticationService
+    {
+        Task<IdentityResult> RegisterUser(UserForRegistrationDto userForRegistrationDto); // Task ile async olmasını sağlarız.
+        Task<bool> ValidateUser(UserForAuthenticationDto userForAuthDto); ValidateUser metotu. 
+        Task<TokenDto> CreateToken(bool populateExp); // Token oluşturan metot imzası.
+        Task<TokenDto> RefreshToken(TokenDto tokenDto);
+       
+    }
+}
+................................................ AuthenticationManager.cs içerisi.
+
+using AutoMapper;
+using Entities.DataTransferObjects;
+using Entities.Exceptions;
+using Entities.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Services.Contracts;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace Services
+{
+    public class AuthenticationManager : IAuthenticationService
+    {
+        private readonly ILoggerService _logger;
+        private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
+        private readonly IConfiguration _configuration;
+
+        private User? _user; // User'e ait bilgileri içerecek ve sadece sınıf içerisinde kullanabileceğiz bunu.
+
+        public AuthenticationManager(ILoggerService logger, 
+            IMapper mapper, 
+            UserManager<User> userManager, 
+            IConfiguration configuration)
+        {
+            _logger = logger;
+            _mapper = mapper;
+            _userManager = userManager;
+            _configuration = configuration;
+        }
+
+        public async Task<TokenDto> CreateToken(bool populateExp)
+        {
+            var signinCredentials = GetSignInCredentials();
+            var claims = await GetClaims();
+            var tokenOptions = GenerateTokenOptions(signinCredentials, claims);
+
+            var refreshToken = GenerateRefreshToken();
+            _user.RefreshToken = refreshToken;
+
+            if (populateExp)
+                _user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+
+            await _userManager.UpdateAsync(_user);
+            
+            var accessToken =  new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            return new TokenDto()
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            };
+        }
+
+        public async Task<IdentityResult> RegisterUser(UserForRegistrationDto userForRegistrationDto)
+        {
+            var user = _mapper.Map<User>(userForRegistrationDto);
+
+            var result = await _userManager
+                .CreateAsync(user, userForRegistrationDto.Password);
+
+            if (result.Succeeded)
+                await _userManager.AddToRolesAsync(user, userForRegistrationDto.Roles);
+            return result;
+        }
+
+        public async Task<bool> ValidateUser(UserForAuthenticationDto userForAuthDto) // bir Dto alacak metot içerisindeki 
+        {
+            _user = await _userManager.FindByNameAsync(userForAuthDto.UserName); // UserManager'den kullanıcıadını al.
+            var result = (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuthDto.Password)); // kullanıcı null değilse o zaman parola kontrol et.
+            if(!result) // geçerli değilse o zaman logger'a düşecek hata olduğu.
+            {
+                _logger.LogWarning($"{nameof(ValidateUser)} : Authentication failed. Wrong username or password.");
+            }
+            return result; // bir sıkıntı yoksa o zaman bize doğrulama dönecek. 
+            
+        }
+
+        private SigningCredentials GetSignInCredentials() // giriş için. giriş detayları vs. sign bilgilerini doğrulayacak şekilde ilerleyeceğiz. 
+        {
+
+            var jwtSettings = _configuration.GetSection("JwtSettings"); // "" içerisindeki kelimeler appsettings.json'daki ile aynı olmalıdır.
+            var key = Encoding.UTF8.GetBytes(jwtSettings["secretKey"]);
+            var secret = new SymmetricSecurityKey(key);
+            return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256); // key ve kullanılan algoritma belirtilir.
+
+       }
+
+        private async Task<List<Claim>> GetClaims() // liste içerisinde Claim döneceğiz.
+        {
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Name, _user.UserName) 
+            };
+
+            var roles = await _userManager
+                .GetRolesAsync(_user);
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+            return claims; // kullanıcı adı ve rolleri Claim içerisine ekleyip koyduk. 
+        }
+
+        private JwtSecurityToken GenerateTokenOptions(SigningCredentials signinCredentials, 
+            List<Claim> claims)
+        { // iki parametre alacak. Claimler ve SigningCredentials metotundan gelen bilgiler. 
+            var jwtSettings = _configuration.GetSection("JwtSettings");
+
+            var tokenOptions = new JwtSecurityToken(
+                    issuer: jwtSettings["validIssuer"],
+                    audience: jwtSettings["validAudience"],
+                    claims: claims, 
+                    expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["expires"])), // AddMinutes dedik böylece kaç dakika olacka bunu belirleyebiliriz bu sistemde. expires 60 olduğu için 60dk geçerli olacak bizim tokenimiz. bunu belirleriz aslında.
+                    signingCredentials: signinCredentials); // giriş bilgilerinin detayları buradadır. 
+            
+            return tokenOptions;
+        }
+
+        private string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
+            }
+        }
+
+        private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        {
+            var jwtSettings = _configuration.GetSection("JwtSettings");
+            var secretKey = jwtSettings["secretKey"];
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings["validIssuer"],
+                ValidAudience = jwtSettings["validAudience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters,
+                out securityToken);
+
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+            if(jwtSecurityToken is null ||
+                !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+                StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new SecurityTokenException("Invalid token.");
+            }
+            return principal;
+        }
+
+        public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
+        {
+            var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
+            var user = await _userManager.FindByNameAsync(principal.Identity.Name);
+
+            if (user is null ||
+                user.RefreshToken != tokenDto.RefreshToken ||
+                user.RefreshTokenExpiryTime <= DateTime.Now)
+                throw new RefreshTokenBadRequestException();
+
+            _user = user;
+            return await CreateToken(populateExp: false);
+        }
+    }
+}
+.............................................................. CreateToken. Token oluşturmak için implementasyon. IAuthenticationService.cs'e ekleme yapacağız.
+           Task<TokenDto> CreateToken(bool populateExp); // bunu ekledik.
+// şimdi ise AuthenticationManager'e ekleme yapacağız.
+// System.Identity.Tokens.Jwt indiririz. 
+
+        public async Task<TokenDto> CreateToken(bool populateExp) // async metot olduğu için Task içerisinde. 
+        {
+
+            var signinCredentials = GetSignInCredentials();         // GetSignInCredentials() metotu ekleriz yukarıda var. 
+            var claims = await GetClaims(); // GetClaims metotu yazacağız oda yukarıda var 
+            var tokenOptions = GenerateTokenOptions(signinCredentials, claims); // Token seçenekleri yazacak metot. buda yukarıda.
+
+            var refreshToken = GenerateRefreshToken(); // taze token oluştur dedik.
+            _user.RefreshToken = refreshToken;
+
+            if (populateExp)
+                _user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+
+            await _userManager.UpdateAsync(_user);
+            
+            var accessToken =  new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            return new TokenDto()
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            };
+        }
+
+.....................................................
+....................................................Authenticate. Controller üzerinde bir yapı tanımlayacağız. önce Services katmanına gideceğiz. AuthenticationController var bunun üzerinde bir metot tanımlaması yapacağız. 
+
+using Entities.DataTransferObjects;
+using Microsoft.AspNetCore.Mvc;
+using Presentation.ActionFilters;
+using Services.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Presentation.Controllers
+{
+    [ApiController]
+    [Route("api/authentication")]
+    [ApiExplorerSettings(GroupName = "v1")]
+    public class AuthenticationController : ControllerBase
+    {
+        private readonly IServiceManager _service;
+        public AuthenticationController(IServiceManager service)
+        {
+            _service = service;
+        }
+
+        [HttpPost]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDto userForRegistrationDto)
+        {
+            var result = await _service
+                .AuthenticationService
+                .RegisterUser(userForRegistrationDto);
+
+            if(!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.TryAddModelError(error.Code, error.Description);
+                }
+                return BadRequest(ModelState);
+            }
+
+            return StatusCode(201);
+        }
+
+
+        [HttpPost("login")] // login endpointi 
+        [ServiceFilter(typeof(ValidationFilterAttribute))] // Servis filtreleme için kullanırız. 
+        public async Task<IActionResult> Authenticate([FromBody]  UserForAuthenticationDto user) // çalışacak metot.
+        {
+            if (!await _service.AuthenticationService.ValidateUser(user))
+                return Unauthorized(); // 401 
+
+            var tokenDto = await _service // servisteki token üretici ile token üretiriz. 
+                .AuthenticationService
+                .CreateToken(populateExp: true); // Token oluşmasını sağlarız böylece. 
+
+            return Ok(tokenDto);
+        }
+
+
+        [HttpPost("refresh")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> Refresh([FromBody] TokenDto tokenDto)
+        {
+            var tokenDtoToReturn = await _service
+                .AuthenticationService
+                .RefreshToken(tokenDto);
+            return Ok(tokenDtoToReturn);
+        }
+
+
+    }
+}
+
+..................................................................Token kullanımı.Login metotu bize bir Token dönecek bunu kullanacağız.
+// proje ayakta olmalı. eldeki tokeni kullanarak sunucuya gitmek için. 
+.................................................. Role tabanlı bir yetkilendirme. birden fazla rolü kullanan kullanıcı tanımları. roles kısmına "Admin ekledik mesela"  api/Authentication metotunun istediği verileri verir ve rolleri belirleyebiliriz.
+[Authorize(Roles = "User")] // User olan burayı kullanabilsin. 
+[Authorize(Roles = "Admin","Editor")] // admin veya editör olan burayı kullanabilsin. 
+
+        [Authorize(Roles = "Editor, Admin")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateOneBookAsync([FromRoute(Name = "id")] int id,
+            [FromBody] BookDtoForUpdate bookDto)
+        {
+            await _manager.BookService.UpdateOneBookAsync(id, bookDto, false);
+            return NoContent(); // 204
+        }
+
+.......................................................RefreshToken. 
+
 
 
 

@@ -1,0 +1,348 @@
+//Program.cs içerisi.
+using AkilliKartSistemi.API;
+using AkilliKartSistemi.API.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc;
+using AkilliKartSistemi.API.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// DbContext ve Identity servislerini ekleyin
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AkillikartSystemDb")));
+
+// Identity ayarları
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+// JWT kimlik doğrulama yapılandırması
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["JwtSettings:validIssuer"],
+        ValidAudience = builder.Configuration["JwtSettings:validAudience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:secretKey"])),
+        ClockSkew = TimeSpan.Zero // tokenın üzerine ekstra süre ekleyecek mi bunu belirleriz sunucular arasındaki zaman farkı ile alakalıdır.
+        
+    };
+});
+
+// appsettings.json içerisi.
+
+ "JwtSettings": {
+   "validIssuer": "akillikartsistemi", // normalde www.emre.com falan olabilir.
+   "validAudience": "http://localhost:3000",
+   "secretKey": "s`9&Paw&i6?G~t+XB&e<QUPv}7j4LKsUYcAPXiV$-f,^c(4`tmueS/ziCcTxFf_y",
+   "expires": 60
+ }
+
+// bu iki yapıyı program.cse ekleriz.
+app.UseAuthentication();
+app.UseAuthorization();
+
+//web api içerisinde Security klasörü oluşturduk. içerisine ise Token.cs koyduk.
+namespace AkilliKartSistemi.API.Security
+{
+    public class Token
+    {
+        public string AcsessToken { get; set; }
+        public string RefreshToken {  get; set; } // RefreshToken kullanıcının işi yarıda kalmasın işlemine devam edebilsin yetkilendirmeye göndermesin süreyi uzatsın diye var.
+
+        public DateTime Expiration {  get; set; }
+    }
+}
+
+// Security klasöründe TokenHandler.cs yazacağız. token üreteceğiz.
+
+using DocumentFormat.OpenXml.Drawing;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace AkilliKartSistemi.API.Security
+{
+    public class TokenHandler
+    {
+        public static Token CreateToken(IConfiguration configuration)
+        {
+            Token token = new Token();
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:secretKey"]));
+            SigningCredentials credentials = new SigningCredentials(securityKey,SecurityAlgorithms.HmacSha256);
+            token.Expiration = DateTime.Now.AddMinutes(Convert.ToInt16(configuration["JwtSettings:expires"]));
+            JwtSecurityToken jwtSecurityToken = new(
+
+                issuer: configuration["JwtSettings:validIssuer"],
+                audience:configuration["JwtSettings:validAudience"],
+                expires:token.Expiration,
+                notBefore:DateTime.Now,
+                signingCredentials : credentials
+
+            );
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            token.AcsessToken = tokenHandler.WriteToken(jwtSecurityToken);
+
+            byte[] numbers = new byte[32];
+            using RandomNumberGenerator random =  RandomNumberGenerator.Create();
+            random.GetBytes(numbers);
+            token.RefreshToken = Convert.ToBase64String(numbers);
+
+            return token;
+
+        }
+
+    }
+}
+
+// şimdi bir controller oluştururuz mesela. 
+
+using AkilliKartSistemi.API.Models;
+using AkilliKartSistemi.API.Security;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace AkilliKartSistemi.API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class DenemeController : ControllerBase
+    {
+        private readonly IConfiguration _configuration;
+        public DenemeController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+
+        [HttpGet]
+        public IActionResult Get()
+        {
+            Token token = TokenHandler.CreateToken(_configuration);
+
+            return Ok(token);
+
+        }
+
+
+    }
+}
+
+.....................................................................................................................................................
+.....................................................................................................................................................
+.....................................................................................................................................................
+.....................................................................................................................................................
+.....................................................................................................................................................
+.....................................................................................................................................................
+.....................................................................................................................................................
+Authentication = Kimlik denetimi.
+Authorization = Yetki denetimi.
+tokende şifrelenmiş kısım verify signature kısmıdır.  algoritma secretkey'e göre bir üretim yapar.
+JwtBearer indirmek lazım. IdentityModel.Tokens indirmek lazım. 
+System.IdentityModel.Tokens.Jwt indiririz. 
+
+// appsettings.json kısmı. 
+  "JwtSettings": {
+    "validIssuer": "http://localhost:3000",
+    "validAudience": "http://localhost:3000",
+    "secretKey": "s`9&Paw&i6?G~t+XB&e<QUPv}7j4LKsUYcAPXiV$-f,^c(4`tmueS/ziCcTxFf_y",
+    "expires": 60
+  }
+
+// models klasöründe JwtAyarlari.cs oluşturduk.
+
+    public class JwtAyarlari
+    {
+        public string? Key { get; set; }
+        public string? Issuer {  get; set; }
+        public string? Audience {  get; set; }
+
+    }
+
+//Program.cs'e ekleme. 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["JwtSettings:validIssuer"],
+        ValidAudience = builder.Configuration["JwtSettings:validAudience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:secretKey"] ?? string.Empty))
+
+    };
+});
+
+// Api'ye erişecek kullanıcılar için Models'te yeni bir class User.cs
+// Program.cs'e bu eklendi Controllerlara injection olabilsin diye = builder.Services.Configure<JwtAyarlari>(builder.Configuration.GetSection("JwtSettings"));
+// DenetimController.cs oluşturduk.
+using System.IdentityModel.Tokens.Jwt;
+using AkilliKartSistemi.API.Data;
+using AkilliKartSistemi.API.Extensions;
+using AkilliKartSistemi.API.Models;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
+
+namespace AkilliKartSistemi.API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+
+    public class DenetimController : ControllerBase
+    {
+        private readonly LdapApiService _ldapApiService;
+        private readonly AppDbContext _context;
+        private readonly IConfiguration _configuration;
+
+        private readonly JwtAyarlari _jwtAyarlari;
+        public DenetimController(LdapApiService ldapApiService, AppDbContext context, IConfiguration configuration, IOptions<JwtAyarlari> jwtAyarlari)
+        {
+            _ldapApiService = ldapApiService;
+            _context = context;
+            _configuration = configuration;
+            _jwtAyarlari = jwtAyarlari.Value;
+        }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] AdminLoginModel model)
+        {
+            // Kullanıcı adı ve şifre kontrolü
+            if (string.IsNullOrEmpty(model.KullaniciAdi) || string.IsNullOrEmpty(model.Sifre))
+            {
+                return BadRequest(new { Message = "Kullanıcı adı ve şifre gereklidir." });
+            }
+
+            // Veritabanında kullanıcı adını kontrol et
+            var admin = await _context.Adminler.FirstOrDefaultAsync(a => a.KullaniciAdi == model.KullaniciAdi);
+
+            if (admin == null)
+            {
+                // Eğer kullanıcı yoksa NotFound (404) döndür
+                return NotFound(new { Message = "Girilen kullanıcı adına ait admin bulunamadı." });
+            }
+
+            // LDAP kimlik doğrulama işlemi
+            var isAuthenticated = await _ldapApiService.AuthenticateAsync(model.KullaniciAdi, model.Sifre);
+
+            if (!isAuthenticated)
+            {
+                // Kimlik doğrulama başarısızsa Unauthorized (401) döndür
+                return Unauthorized(new { Message = "Geçersiz kullanıcı adı veya şifre." });
+            }
+
+            // Kimlik doğrulama başarılı ise JWT token üret ve döndür
+            var token = GenerateJwtToken(model.KullaniciAdi);
+
+            return Ok(new
+            {
+                Message = "Giriş başarılı.",
+                Token = token
+            });
+        }
+
+        [HttpGet("kimlikdenetimi")]
+        public async Task<IActionResult> KimlikDenetimi()
+        {
+            // Asenkron olarak kimliği doğrulamak için token'dan bilgileri çekiyoruz
+            var username = User?.Identity?.Name;
+
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Kullanıcı kimliği doğrulanamadı.");
+            }
+
+            // Burada kimlik denetimi yapılırken ekstra bir asenkron işlem gerçekleştirebiliriz
+            // Örneğin: Veritabanında kimliği kontrol etmek ya da kimliği doğrulanmış kullanıcı ile ilgili bilgileri çekmek
+            await Task.Delay(10); // Örnek olarak küçük bir asenkron işlem ekliyoruz
+
+            return Ok($"Kimlik doğrulandı, hoş geldin {username}!");
+        }
+          
+        private string GenerateJwtToken(string username)
+        {
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, username),
+                new Claim(ClaimTypes.Role, "Admin")
+            
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:secretKey"] ?? string.Empty));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["JwtSettings:validIssuer"],
+                audience: _configuration["JwtSettings:validAudience"],
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["JwtSettings:expires"])),
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        [HttpPost("adminekle")]
+        public async Task<IActionResult> AdminEkle([FromBody] Admin admin)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _context.Adminler.Add(admin);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = "Admin başarıyla kaydedildi." });
+        }
+
+        public class AdminLoginModel
+        {
+            public string? KullaniciAdi { get; set; }
+            public string? Sifre { get; set; }
+        }
+    }
+}
+...............................................
+
+
+
+
+
+
+
+
+
+
+
+
+
+
