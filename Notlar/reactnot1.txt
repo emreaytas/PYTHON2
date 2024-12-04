@@ -1,0 +1,333 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+jsx ile hem javascript hemde html css kodlarını aynı anda kullanmamızı sağlar.
+npm install ile kurulumları yapabiliriz.
+npm'in çalışması için node.js'i kurmamız gerekir.
+main.jsx 
+
+...................................
+let name = "emre"
+let name1 = "Aytas"
+<div>
+{name} + {name1}
+</div>
+
+yapısı ile kullanmak lazım
+.....................................................................................................................................................................................................................................................
+src altına genelde components klasörü oluştururuz. tekrar tekrar kullanmak istediğimiz yapılar için vs kullanabiliriz.  api,redux,containers vs gibi klasörler ekleyebiliriz.
+........................................................................................................................................................................
+components:
+
+React'ta components (bileşenler), kullanıcı arayüzünü daha yönetilebilir ve yeniden kullanılabilir küçük parçalara bölmek için kullanılır. Her bileşen, uygulamanın belirli bir kısmının (örneğin bir düğme, bir form veya bir kullanıcı kartı) mantığını, görünümünü ve davranışını kapsar. Bu modüler yapı, kodun okunabilirliğini artırır, tekrar kullanım sağlar ve bakımını kolaylaştırır. Ayrıca, bileşenler arasında veri akışını (props ve state) yöneterek dinamik ve etkileşimli arayüzlerin oluşturulmasını sağlar.
+her yerden çağırabiliriz metot mantığı gibidir bir yerde oluşturup sonra bir yerde çağırıp halledebiliriz.
+
+        Örneğin, bir kullanıcı profili sayfası oluşturduğunuzu düşünelim. Bu sayfa; bir kullanıcı fotoğrafı, kullanıcı bilgileri ve bir düzenleme düğmesi gibi bölümlerden oluşabilir. React'ta bu bölümleri bileşenlere bölebiliriz:
+
+        jsx
+
+        // Kullanıcı Fotoğrafı Bileşeni
+        const ProfilePhoto = ({ photoUrl }) => {
+        return <img src={photoUrl} alt="Profile" className="profile-photo" />;
+        };
+
+        // Kullanıcı Bilgileri Bileşeni
+        const UserInfo = ({ name, email }) => {
+        return (
+            <div>
+            <h2>{name}</h2>
+            <p>{email}</p>
+            </div>
+        );
+        };
+
+        // Düzenleme Düğmesi Bileşeni
+        const EditButton = () => {
+        return <button>Edit Profile</button>;
+        };
+
+        // Kullanıcı Profili Ana Bileşeni
+        const UserProfile = ({ user }) => {
+        return (
+            <div className="user-profile">
+            <ProfilePhoto photoUrl={user.photoUrl} />
+            <UserInfo name={user.name} email={user.email} />
+            <EditButton />
+            </div>
+        );
+        };
+
+        // Kullanımı
+        const user = {
+        photoUrl: "https://example.com/photo.jpg",
+        name: "John Doe",
+        email: "john.doe@example.com",
+        };
+
+        export default function App() {
+        return <UserProfile user={user} />;
+        }
+        Avantaj: Bu şekilde her bileşen kendi sorumluluğunu taşır ve gerektiğinde bağımsız olarak yeniden kullanılabilir. Örneğin, ProfilePhoto bileşeni başka bir sayfada da kullanılabilir.
+
+metot çağrısı mantığı ile tekrar tekrar yazmadan kullanbiliriz istediğimiz sistemleri.
+..........................................................................
+react props: 
+ 
+        React'ta props (properties), bir bileşene dışarıdan veri aktarmak için kullanılan mekanizmadır. Props, bileşenin dışından geçilir ve bileşen içinde bir nesne olarak erişilebilir. Props, bileşenlerin daha dinamik ve tekrar kullanılabilir olmasını sağlar.
+
+        Props'un Temel Özellikleri:
+        Okunabilir (Read-only): Props yalnızca okunabilir olup bileşen içinde değiştirilemez. Bileşenin davranışı props'a göre belirlenir.
+        Dinamik Veri Aktarımı: Bir bileşene farklı props değerleri geçirerek farklı çıktılar alınabilir.
+        Fonksiyonel Bileşenlerde Kullanım: Fonksiyonel bileşenlerde props parametresi üzerinden erişilir.
+        Props Nasıl Kullanılır?
+        Bir bileşene props geçirmenin ve kullanmanın örneği:
+
+        jsx.........
+     
+        // Mesaj Bileşeni
+        const Message = (props) => {
+        return <p>{props.text}</p>;
+        };
+
+        // Kullanımı
+        export default function App() {
+        return (
+            <div>
+            <Message text="Merhaba Dünya!" />
+            <Message text="React öğrenmek çok eğlenceli!" />
+            </div>
+        );
+        }
+        Bu örnekte, Message bileşeni iki farklı props (text) ile çağrılmıştır. Her biri farklı bir metin gösterecektir.
+
+        Destructuring ile Props Kullanımı
+        Kodunuzu daha okunabilir yapmak için destructuring kullanılabilir:
+
+        jsx......
+
+        const Message = ({ text }) => {
+        return <p>{text}</p>;
+        };
+        Bu yöntemle props.text yerine doğrudan text olarak erişebilirsiniz.
+
+        Özet
+        Props, React'ta veri veya işlevsellik taşımanın temel yoludur. Bu sayede bileşenler, aynı yapılarını korurken farklı verilerle dinamik davranışlar gösterebilir.
+
+özellikler vererekte butonları değiştirebiliriz. tek bir yapı üstünde mesela buton üstündeki yazıyı değiştirerek işlemler yapabiliriz.
+..............................................................................
+Hooks: 
+
+
+        React'ta Hooks, fonksiyon bileşenlerine sınıf bileşenlerinde mevcut olan durum (state) ve yaşam döngüsü (lifecycle) özelliklerini eklemenin bir yoludur. React 16.8 sürümüyle tanıtılmıştır. Hooks sayesinde fonksiyonel bileşenler daha güçlü ve esnek hale gelir.
+
+        Hooks'un Temel Amacı:
+        State ve diğer React özelliklerini sınıfsız kullanma: Daha az karmaşık kodla bileşenleri oluşturma.
+        Kodun tekrar kullanılabilirliği: Hook'lar sayesinde kodunuzu daha modüler ve okunabilir hale getirebilirsiniz.
+        Esneklik: Sınıflara bağlı kalmadan React özelliklerinden yararlanabilirsiniz.
+        En Yaygın Kullanılan Hooks:
+        1. useState
+        Bir bileşenin durumunu (state) tanımlamak için kullanılır.
+        State değiştikçe bileşen yeniden render edilir.
+        Örnek:
+
+        jsx
+
+        import React, { useState } from "react";
+
+        const Counter = () => {
+        const [count, setCount] = useState(0);
+
+        return (
+            <div>
+            <p>Sayac: {count}</p>
+            <button onClick={() => setCount(count + 1)}>Arttır</button>
+            </div>
+        );
+        };
+
+        export default Counter;
+        2. useEffect
+        Yan etkileri (side effects) yönetmek için kullanılır. Örneğin: veri çekme (fetching data), DOM güncellemeleri, abonelikler.
+        Örnek:
+
+        jsx
+
+        import React, { useState, useEffect } from "react";
+
+        const DataFetcher = () => {
+        const [data, setData] = useState(null);
+
+        useEffect(() => {
+            fetch("https://jsonplaceholder.typicode.com/posts/1")
+            .then(response => response.json())
+            .then(data => setData(data));
+        }, []); // Boş array, yalnızca ilk render'da çalışır.
+
+        return <div>{data ? data.title : "Yükleniyor..."}</div>;
+        };
+
+        export default DataFetcher;
+        3. useContext
+        Context API ile birlikte kullanılarak, props zincirlemesi yapmadan verileri bileşenler arasında paylaşır.
+        Örnek:
+
+        jsx
+
+        import React, { useContext, createContext } from "react";
+
+        const ThemeContext = createContext();
+
+        const App = () => {
+        return (
+            <ThemeContext.Provider value="dark">
+            <Toolbar />
+            </ThemeContext.Provider>
+        );
+        };
+
+        const Toolbar = () => {
+        const theme = useContext(ThemeContext);
+        return <p>Güncel tema: {theme}</p>;
+        };
+
+        export default App;
+        Hooks'un Avantajları:
+        Daha Basit ve Temiz Kod: Sınıflar yerine fonksiyonlar kullanılır, karmaşıklık azalır.
+        Kodun Tekrar Kullanımı: Özelleştirilmiş Hook'lar (Custom Hooks) oluşturabilirsiniz.
+        Sınıf Karmaşıklığını Azaltır: this anahtar kelimesi veya yaşam döngüsü metotları ile uğraşmaya gerek kalmaz.
+        Esneklik: Fonksiyon bileşenlerinde kullanılabilir.
+        Hooks'un Sınırlamaları:
+        Sadece Fonksiyon Bileşenlerinde Kullanılır: Sınıf bileşenlerinde kullanılamaz.
+        Kurallara Bağlılık:
+        Hook'lar sadece en üst seviyede çağrılmalı, döngüler, koşullar ya da iç içe fonksiyonlar içinde kullanılmamalıdır.
+        Sadece React fonksiyon bileşenlerinde veya özelleştirilmiş Hook'larda kullanılabilir.
+        Özet:
+        Hooks, React bileşenlerinin daha modern, modüler ve güçlü olmasını sağlar. Özellikle state ve yaşam döngüsü yönetimini daha kolay bir şekilde sunar. En yaygın kullanılanları useState ve useEffect olsa da, React'te özel ihtiyaçlara yönelik başka birçok Hook bulunmaktadır.
+
+
+..............................................................................
+Map: arraylerle alakalı bir metottur. 
+
+        React'ta map metodu, bir dizi öğesini tekrarlayarak her öğeden bir JSX elemanı oluşturmak için kullanılır. Genellikle bir listeyi render etmek için tercih edilir. React, her öğenin benzersiz bir şekilde tanımlanabilmesi için bir key özelliği gerektirir.
+
+        Kullanım Şekli:
+        map metodu, bir dizideki her öğeyi döner ve her bir öğeden bir yeni değer (örneğin bir JSX elemanı) döner.
+
+        Sözdizimi:
+
+        jsx
+
+        array.map((element, index) => {
+        // İşlem
+        return JSXElement;
+        });
+        Örnek Kullanım:
+        1. Basit Bir Listeyi Render Etme
+        jsx
+        Kodu kopyala
+        import React from "react";
+
+        const NameList = () => {
+        const names = ["Ali", "Ayşe", "Mehmet", "Zeynep"];
+
+        return (
+            <ul>
+            {names.map((name, index) => (
+                <li key={index}>{name}</li> // key benzersiz bir değer olmalıdır
+            ))}
+            </ul>
+        );
+        };
+
+        export default NameList;
+        Çıktı:
+        Ali
+        Ayşe
+        Mehmet
+        Zeynep
+        2. Bir Dizi Obje Üzerinde map Kullanımı
+        jsx
+        Kodu kopyala
+        import React from "react";
+
+        const ProductList = () => {
+        const products = [
+            { id: 1, name: "Telefon", price: 5000 },
+            { id: 2, name: "Bilgisayar", price: 15000 },
+            { id: 3, name: "Tablet", price: 3000 },
+        ];
+
+        return (
+            <div>
+            <h1>Ürün Listesi</h1>
+            <ul>
+                {products.map((product) => (
+                <li key={product.id}>
+                    {product.name} - {product.price} TL
+                </li>
+                ))}
+            </ul>
+            </div>
+        );
+        };
+
+        export default ProductList;
+        Çıktı:
+        Telefon - 5000 TL
+        Bilgisayar - 15000 TL
+        Tablet - 3000 TL
+        3. Koşullu Render ile map Kullanımı
+        Bir öğeyi belirli bir koşula göre filtreleyerek gösterebilirsiniz:
+
+        jsx
+
+        import React from "react";
+
+        const FilteredList = () => {
+        const numbers = [1, 2, 3, 4, 5, 6];
+
+        return (
+            <ul>
+            {numbers.map((number) =>
+                number % 2 === 0 ? <li key={number}>{number} (Çift)</li> : null
+            )}
+            </ul>
+        );
+        };
+
+        export default FilteredList;
+        Çıktı:
+        2 (Çift)
+        4 (Çift)
+        6 (Çift)
+        React'ta key Özelliği
+        key: React'in her liste öğesini benzersiz bir şekilde tanımlayabilmesi için gereklidir. Performansı artırır ve yanlış render'ların önüne geçer.
+        Doğru key Kullanımı:
+        Benzersiz bir değer (örneğin bir ID) olmalıdır.
+        index yalnızca benzersiz bir ID yoksa kullanılmalıdır.
+        Örnek:
+
+        jsx
+
+        <li key={product.id}>...</li>
+        React'ta map Kullanmanın Avantajları
+        Dinamik Liste Render'ı: Dizi içeriğini kolayca bir bileşene dönüştürür.
+        Temiz ve Okunabilir Kod: Tekrarlı öğeleri render etmek için basit bir yapı sunar.
+        Modülerlik: Dizi öğelerini bileşenlere dönüştürerek tekrar kullanılabilir yapılar oluşturabilirsiniz.
+        Özet:
+        React'ta map, diziler üzerinde tekrar yapmak ve her bir öğeyi JSX elemanına dönüştürmek için kullanılır. Basit bir liste render etmekten karmaşık koşullu yapıları işlemek için geniş bir kullanım alanına sahiptir. Benzersiz bir key ile performans optimizasyonu sağlanabilir.
+
+
+..............................................................................
+
+..............................................................................
+
+..............................................................................
+
+..............................................................................
+
+..............................................................................
+
+
+
+
+
+
