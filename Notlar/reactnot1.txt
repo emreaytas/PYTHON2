@@ -315,12 +315,363 @@ Map: arraylerle alakalı bir metottur.
         Özet:
         React'ta map, diziler üzerinde tekrar yapmak ve her bir öğeyi JSX elemanına dönüştürmek için kullanılır. Basit bir liste render etmekten karmaşık koşullu yapıları işlemek için geniş bir kullanım alanına sahiptir. Benzersiz bir key ile performans optimizasyonu sağlanabilir.
 
+..............................................................................
+useEffect:
+
+        React'ta useEffect, bir fonksiyon bileşeni içinde yan etkileri (side effects) yönetmek için kullanılan bir hook'tur. Yan etkiler, bileşenin işleyişine doğrudan bağlı olmayan işlemler olabilir; örneğin:
+
+        Veri çekme (API çağrıları)
+        DOM manipülasyonları
+        Abonelik işlemleri
+        Zamanlayıcılar veya interval kullanımları
+        Temel Kullanım
+        useEffect, bileşenler her render edildiğinde veya belirli bir bağımlılık değiştiğinde çalışır.
+
+        Sözdizimi:
+
+        jsx
+        Kodu kopyala
+        useEffect(() => {
+        // Yan etki işlemleri
+        return () => {
+            // Temizlik işlemleri (cleanup)
+        };
+        }, [dependencies]); // Bağımlılıklar (dependencies) array'i
+        Kullanım Detayları
+        1. Her Render Sonrası Çalıştırma
+        Varsayılan olarak, useEffect her render işleminden sonra çalışır.
+
+        jsx
+        Kodu kopyala
+        import React, { useEffect } from "react";
+
+        const Example = () => {
+        useEffect(() => {
+            console.log("Bileşen render edildi.");
+        });
+
+        return <div>Merhaba!</div>;
+        };
+
+        export default Example;
+        2. Bir Kere Çalıştırma (ComponentDidMount)
+        Bağımlılık dizisi boş bırakılırsa, useEffect yalnızca bileşen ilk kez yüklendiğinde çalışır.
+
+        jsx
+        Kodu kopyala
+        useEffect(() => {
+        console.log("Bileşen ilk kez yüklendi.");
+        }, []);
+        3. Belirli Değişkenler Değiştiğinde Çalıştırma
+        Bağımlılık dizisine eklenen değişkenler değiştiğinde useEffect tekrar çalışır.
+
+        jsx
+        Kodu kopyala
+        useEffect(() => {
+        console.log("Sayac değeri değişti:", count);
+        }, [count]); // Sadece count değiştiğinde çalışır
+        4. Temizlik İşlemleri (Cleanup)
+        Temizlik işlemleri (örneğin bir aboneliği iptal etmek veya interval'i temizlemek), useEffect'in dönüş fonksiyonunda yapılır.
+
+        jsx
+        Kodu kopyala
+        useEffect(() => {
+        const interval = setInterval(() => {
+            console.log("Interval çalışıyor.");
+        }, 1000);
+
+        return () => {
+            clearInterval(interval); // Bileşen kaldırıldığında interval temizlenir
+        };
+        }, []);
+        Örnek Kullanımlar
+        1. API'den Veri Çekme
+        jsx
+        Kodu kopyala
+        import React, { useState, useEffect } from "react";
+        import axios from "axios";
+
+        const FetchData = () => {
+        const [data, setData] = useState([]);
+
+        useEffect(() => {
+            const fetchData = async () => {
+            const response = await axios.get("https://jsonplaceholder.typicode.com/posts");
+            setData(response.data);
+            };
+
+            fetchData();
+        }, []); // Sadece bileşen ilk kez yüklendiğinde çalışır
+
+        return (
+            <ul>
+            {data.map((item) => (
+                <li key={item.id}>{item.title}</li>
+            ))}
+            </ul>
+        );
+        };
+
+        export default FetchData;
+        2. Zamanlayıcı Kullanımı
+        jsx
+        Kodu kopyala
+        import React, { useState, useEffect } from "react";
+
+        const Timer = () => {
+        const [seconds, setSeconds] = useState(0);
+
+        useEffect(() => {
+            const interval = setInterval(() => {
+            setSeconds((prev) => prev + 1);
+            }, 1000);
+
+            return () => clearInterval(interval); // Bileşen kaldırıldığında temizlenir
+        }, []);
+
+        return <div>Geçen Süre: {seconds} saniye</div>;
+        };
+
+        export default Timer;
+        3. Pencere Boyutu Dinleme
+        jsx
+        Kodu kopyala
+        import React, { useState, useEffect } from "react";
+
+        const WindowSize = () => {
+        const [width, setWidth] = useState(window.innerWidth);
+
+        useEffect(() => {
+            const handleResize = () => setWidth(window.innerWidth);
+
+            window.addEventListener("resize", handleResize);
+
+            return () => {
+            window.removeEventListener("resize", handleResize); // Event temizlenir
+            };
+        }, []); // Bir kere çalışır ve dinleyiciyi ekler
+
+        return <div>Pencere Genişliği: {width}px</div>;
+        };
+
+        export default WindowSize;
+        Avantajları
+        Yan Etki Yönetimi: API çağrıları, zamanlayıcılar, DOM manipülasyonları gibi işlemleri kolayca yönetir.
+        Lifecycle Metotlarını Basitleştirir: Class bileşenlerde kullanılan componentDidMount, componentDidUpdate ve componentWillUnmount gibi lifecycle metotlarının yerine kullanılabilir.
+        Esneklik: Bağımlılık dizisi sayesinde yalnızca gerekli olduğunda çalıştırılabilir.
+        Dezavantajları
+        Yanlış Kullanım: Bağımlılık dizisinin yanlış kullanımı sonsuz döngülere veya yanlış davranışlara yol açabilir.
+        Hata Yönetimi: Karmaşık senaryolarda temiz ve okunabilir kod yazmak zor olabilir.
+        Özet
+        useEffect, React'ta bileşen yaşam döngüsüne bağlı yan etkileri kontrol etmek için kullanılır. API çağrıları, DOM manipülasyonları, zamanlayıcılar gibi işlemler için çok uygundur. Ancak bağımlılık dizisinin doğru kullanımı ve temizlik işlemlerinin yapılması önemlidir. 
+
+
+..............................................................................
+npm install react-router-dom ile routing işlemlerinde kullanacağımız sistemi indiririz.
+..............................................................................
+Route: 
+
+        React'ta Route, kullanıcıların uygulama içinde farklı sayfalara veya bileşenlere yönlendirilmesini sağlayan bir yapıdır. React, tek sayfa uygulamaları (Single Page Applications, SPA) oluşturmak için kullanılır. Bu yapı içinde, farklı URL'lere göre bileşenleri veya sayfaları göstermek için React Router kullanılır. Route, bu yönlendirme işleminin temel yapı taşıdır.
+
+        React Router
+        React Router, React uygulamalarında yönlendirme (routing) işlemlerini yönetmek için kullanılan bir kütüphanedir. Bu kütüphane, uygulamanın farklı bölümleri arasında gezinmeyi sağlar ve kullanıcı deneyimini geliştiren bir SPA davranışı sunar.
+
+        Route'un Çalışma Mantığı
+        URL'yi Dinler: Kullanıcının tarayıcıdaki URL'sine bakar.
+        Bileşen Gösterir: URL'ye göre uygun bileşeni ekrana getirir.
+        Dinamik Yönlendirme: URL'deki değişikliklere dinamik olarak tepki verir ve sayfayı yenilemeden içerik değiştirir.
+        Route Kullanımı
+        1. React Router Kurulumu
+        Öncelikle React Router kütüphanesini yüklemeniz gerekir:
+
+        bash
+        Kodu kopyala
+        npm install react-router-dom
+        2. Temel Kullanım
+        jsx
+        Kodu kopyala
+        import React from "react";
+        import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+        const Home = () => <h1>Home Page</h1>;
+        const About = () => <h1>About Page</h1>;
+        const Contact = () => <h1>Contact Page</h1>;
+
+        const App = () => {
+        return (
+            <Router>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+            </Routes>
+            </Router>
+        );
+        };
+
+        export default App;
+        <Router>: Uygulamanın yönlendirme yeteneklerini sağlar.
+        <Routes>: Tüm <Route> öğelerini kapsar.
+        <Route>: URL ile ilişkilendirilmiş bileşeni belirtir.
+        path: URL yolu.
+        element: Gösterilecek bileşen.
+        Dinamik Route
+        Bazı durumlarda, URL'deki bir parametreye bağlı olarak içerik göstermek isteyebilirsiniz. Örneğin, ürün detay sayfası:
+
+        jsx
+        Kodu kopyala
+        import React from "react";
+        import { BrowserRouter as Router, Route, Routes, useParams } from "react-router-dom";
+
+        const Product = () => {
+        const { id } = useParams(); // URL'deki 'id' parametresini alır
+        return <h1>Product ID: {id}</h1>;
+        };
+
+        const App = () => {
+        return (
+            <Router>
+            <Routes>
+                <Route path="/product/:id" element={<Product />} />
+            </Routes>
+            </Router>
+        );
+        };
+
+        export default App;
+        :id: Dinamik parametre. /product/123 gibi bir URL'de id değeri 123 olur.
+        useParams: Dinamik parametreleri almak için kullanılır.
+        Link Kullanımı
+        React Router ile gezinme işlemi için Link bileşeni kullanılır. Tarayıcıda sayfa yenilenmeden bir URL'ye yönlendirme sağlar.
+
+        jsx
+        Kodu kopyala
+        import React from "react";
+        import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+
+        const Home = () => <h1>Home Page</h1>;
+        const About = () => <h1>About Page</h1>;
+
+        const App = () => {
+        return (
+            <Router>
+            <nav>
+                <Link to="/">Home</Link> | <Link to="/about">About</Link>
+            </nav>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+            </Routes>
+            </Router>
+        );
+        };
+
+        export default App;
+        <Link to="/">: Kullanıcıyı / URL'sine yönlendirir.
+        Tarayıcıda sayfa yenilenmeden, SPA yapısına uygun bir şekilde içerik değiştirilir.
+        Avantajları
+        Hızlı ve Dinamik Gezinme: Sayfa yenileme olmadan yönlendirme yapılır.
+        Basit Yapı: React bileşenleriyle kolayca entegre edilir.
+        Dinamik Yönlendirme: Kullanıcının URL'deki değişikliklerine kolayca tepki verir.
+        Modülerlik: Her sayfa veya bileşeni bir Route ile ilişkilendirerek uygulamayı düzenli tutabilirsiniz.
+        Sonuç
+        React Router, React'ta farklı sayfalara yönlendirme işlemlerini kolaylaştırır. <Route> bileşeni, belirli bir URL'yi bir bileşenle eşleştirerek SPA deneyimini sağlar. Bu yapı, modern web uygulamalarında kullanıcı deneyimini geliştirir ve dinamik içerik sunmayı mümkün kılar.
+
+
+..............................................................................
+useNavigate:
+
+
+        useNavigate, React Router kütüphanesinde bir hook'tur ve React uygulamalarında programlı gezinme (navigasyon) yapmayı sağlar. Yani, kullanıcıyı belirli bir sayfaya yönlendirmek istediğinizde kullanılır. Bu işlem, genellikle bir butona tıklandığında veya bir işlemin tamamlanmasından sonra gerçekleştirilir.
+
+        Özellikleri
+        Tarayıcıdaki geçmiş (history) yığınına yeni bir giriş ekleyerek sayfa yönlendirmesi yapar.
+        SPA (Single Page Application) mantığına uygun olarak sayfa yenilenmeden kullanıcıyı başka bir URL'ye taşır.
+        Eski useHistory hook'unun yerini almıştır.
+        Kullanım Şekli
+        useNavigate React Router'dan import edilerek kullanılır. İşte temel kullanım:
+
+        jsx
+        Kodu kopyala
+        import React from "react";
+        import { useNavigate } from "react-router-dom";
+
+        const HomePage = () => {
+        const navigate = useNavigate();
+
+        const goToAboutPage = () => {
+            navigate("/about"); // Kullanıcıyı '/about' URL'sine yönlendirir
+        };
+
+        return (
+            <div>
+            <h1>Home Page</h1>
+            <button onClick={goToAboutPage}>About Sayfasına Git</button>
+            </div>
+        );
+        };
+
+        export default HomePage;
+        Parametreler
+        navigate(path, options)
+        path: Kullanıcıyı yönlendirmek istediğiniz URL (örn: "/about").
+        options: Opsiyonel ayarlar.
+        replace: true: Gezinmenin, tarayıcı geçmişinde yeni bir giriş oluşturmamasını sağlar (geri butonuyla önceki sayfaya dönülemez).
+        state: Geçilen sayfaya veri gönderir.
+        Örnekler
+        1. Temel Kullanım
+        jsx
+        Kodu kopyala
+        navigate("/about");
+        Kullanıcıyı /about URL'sine yönlendirir.
+
+        2. Geçici Yönlendirme (Replace)
+        jsx
+        Kodu kopyala
+        navigate("/about", { replace: true });
+        Bu yönlendirme, tarayıcı geçmişinde yeni bir giriş oluşturmaz. Kullanıcı geri butonuna tıkladığında yönlendirmeden önceki sayfaya dönemez.
+
+        3. Veri Gönderme
+        jsx
+        Kodu kopyala
+        navigate("/details", { state: { userId: 123 } });
+        state parametresiyle yönlendirilen sayfaya veri gönderebilirsiniz. Bu veri, useLocation hook'u ile alınabilir.
+
+        jsx
+        Kodu kopyala
+        import { useLocation } from "react-router-dom";
+
+        const DetailsPage = () => {
+        const location = useLocation();
+        const { userId } = location.state || {};
+
+        return <h1>Kullanıcı ID: {userId}</h1>;
+        };
+        Senaryolar
+        Form İşlemleri: Form gönderildikten sonra kullanıcıyı teşekkür sayfasına yönlendirme.
+        Doğrulama Sonrası: Kullanıcı girişi tamamlandıktan sonra dashboard sayfasına yönlendirme.
+        Dinamik Yönlendirme: Bir liste elemanına tıklandığında detay sayfasına yönlendirme.
+        Avantajları
+        React Router'ın SPA yapısına uygun olarak yönlendirme yapar.
+        Kullanıcı deneyimini geliştirmek için programlı gezinme sağlar.
+        State ile veri taşıma imkanı sunar.
+        Sonuç
+        useNavigate, React Router ile kullanıcı yönlendirme işlemlerini hızlı ve verimli bir şekilde yapmayı sağlar. Özellikle form gönderimleri, giriş işlemleri veya kullanıcı etkileşimleri sonrasında belirli sayfalara geçiş için sıkça kullanılır.
 
 ..............................................................................
 
-..............................................................................
 
 ..............................................................................
+
+
+..............................................................................
+
+
+..............................................................................
+
+
+..............................................................................
+
 
 ..............................................................................
 
