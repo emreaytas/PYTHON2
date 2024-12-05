@@ -659,7 +659,93 @@ useNavigate:
         useNavigate, React Router ile kullanıcı yönlendirme işlemlerini hızlı ve verimli bir şekilde yapmayı sağlar. Özellikle form gönderimleri, giriş işlemleri veya kullanıcı etkileşimleri sonrasında belirli sayfalara geçiş için sıkça kullanılır.
 
 ..............................................................................
+useRef: 
 
+            useRef ile State Alternatifi:
+            useRef, state'in aksine bir bileşen yeniden render edildiğinde değişmeden kalır. Bu, performans gerektiren durumlarda faydalıdır.
+
+            Örnek:
+            jsx
+            Kodu kopyala
+            import React, { useRef, useState } from "react";
+
+            const Counter = () => {
+            const countRef = useRef(0); // Ref ile sayaç
+            const [state, setState] = useState(0); // State ile sayaç
+
+            const increment = () => {
+                countRef.current += 1; // State'i değiştirmeden artış
+                console.log("Ref Count:", countRef.current);
+
+                setState(state + 1); // State'i artırarak render
+            };
+
+            return (
+                <div>
+                <p>State Count: {state}</p>
+                <p>Ref Count (render yok): {countRef.current}</p>
+                <button onClick={increment}>Artır</button>
+                </div>
+            );
+            };
+
+            export default Counter;
+            Sonuç:
+
+            state değiştiğinde bileşen yeniden render edilir.
+            useRef değiştiğinde render edilmez.
+            DOM Manipülasyonu ve useRef:
+            Bir DOM öğesine doğrudan erişmek için useRef kullanılabilir. Örneğin, bir form alanını temizlemek veya belirli bir HTML elemanını odaklamak için kullanılabilir.
+
+            Örnek:
+            jsx
+            Kodu kopyala
+            import React, { useRef } from "react";
+
+            const DomManipulation = () => {
+            const inputRef = useRef(null);
+
+            const handleClear = () => {
+                inputRef.current.value = ""; // Input alanını temizler
+            };
+
+            return (
+                <div>
+                <input ref={inputRef} type="text" placeholder="Adınızı girin" />
+                <button onClick={handleClear}>Temizle</button>
+                </div>
+            );
+            };
+
+            export default DomManipulation;
+            Önemli Noktalar:
+            useRef ve State Farkı:
+
+            useRef: Değer değişir, ancak render tetiklenmez.
+            state: Değer değişir ve render tetiklenir.
+            Ref'in Başlangıç Değeri:
+
+            useRef(initialValue) ile başlangıç değeri atanabilir.
+            Örneğin: const ref = useRef(0);
+            current Özelliği:
+
+            useRef tarafından döndürülen nesne, current özelliğiyle değer taşır.
+            ref.current üzerinden değer okunur veya yazılır.
+            React'in Ref Kullanımı:
+
+            Ref doğrudan DOM manipülasyonu gerektiğinde kullanılır. Ancak, React'in kontrollü bileşenler kullanımı önerilir.
+            Ne Zaman Kullanılır?
+            DOM'a doğrudan erişim gerektiğinde (örneğin, odaklama, temizleme, animasyon).
+            Bir değeri tutmak ama yeniden render istememek gerektiğinde (örneğin, sayaç, önceki değer saklama).
+            Performansı artırmak için state yerine kullanılabilir.
+            Avantajları:
+            Performansı artırır çünkü bileşen yeniden render edilmez.
+            DOM'a erişimi kolaylaştırır.
+            Dezavantajları:
+            React'in "kontrollü bileşen" prensibini ihlal edebilir.
+            Karmaşık kullanım durumlarında kod okunabilirliğini azaltabilir.
+            Sonuç:
+            useRef, React uygulamalarında hem DOM manipülasyonu hem de render tetiklemeden veri saklama gibi farklı senaryolar için güçlü ve esnek bir araçtır. Ancak, gereksiz yere kullanımı React'in kontrolsüz
 
 ..............................................................................
 
