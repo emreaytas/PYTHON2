@@ -748,10 +748,270 @@ useRef:
             useRef, React uygulamalarında hem DOM manipülasyonu hem de render tetiklemeden veri saklama gibi farklı senaryolar için güçlü ve esnek bir araçtır. Ancak, gereksiz yere kullanımı React'in kontrolsüz
 
 ..............................................................................
+state sayfayı render eder her çalışmada. useref ise kendi alanını değiştirir sadece: 
 
 
+    React'te useState ve useRef iki farklı amaç için kullanılan hook'lardır. Her ikisi de bileşenlerin durumunu yönetmek için kullanılsa da, işlevsel olarak önemli farkları vardır. İşte bu iki hook arasındaki temel farklar:
+
+    1. Temel Fark
+    Özellik	useState	useRef
+    Yeniden Render	Değeri değiştiğinde bileşeni yeniden render eder.	Değeri değişse bile bileşeni yeniden render etmez.
+    Amacı	Bileşen durumunu takip etmek ve değişikliklerde UI'yı güncellemek için kullanılır.	DOM manipülasyonu yapmak veya bir değişkeni saklamak için kullanılır.
+    2. Kullanım Amacı
+    useState:
+
+    Bileşenin durumunu yönetir ve UI'yi otomatik olarak günceller.
+    Kullanıcı etkileşimleri, form verileri gibi bileşenin durumunu etkileyen her şey için kullanılır.
+    useRef:
+
+    Değer değişikliği durumunda bileşeni yeniden render etmeden, bir değişkeni saklamak için kullanılır.
+    DOM elemanlarına doğrudan erişim veya bir değer izleme için uygundur.
+    3. Performans
+    useState: Değeri değiştiğinde React bileşeni yeniden render eder. Bu, performans gereksinimleri yüksek uygulamalarda maliyetli olabilir.
+    useRef: Performans dostudur, çünkü değeri değiştirmek bileşenin yeniden render edilmesine neden olmaz.
+    4. Kullanım Örnekleri
+    useState Kullanımı:
+    jsx
+    Kodu kopyala
+    import React, { useState } from "react";
+
+    const Counter = () => {
+    const [count, setCount] = useState(0);
+
+    return (
+        <div>
+        <p>Sayaç: {count}</p>
+        <button onClick={() => setCount(count + 1)}>Artır</button>
+        </div>
+    );
+    };
+
+    export default Counter;
+    Açıklama:
+    useState ile sayaç durumu takip edilir ve her butona tıklamada bileşen yeniden render edilir.
+    useRef Kullanımı:
+    jsx
+    Kodu kopyala
+    import React, { useRef } from "react";
+
+    const CounterWithRef = () => {
+    const countRef = useRef(0);
+
+    const increment = () => {
+        countRef.current += 1;
+        console.log("Sayaç:", countRef.current); // Konsola yazdırır, render olmaz
+    };
+
+    return (
+        <div>
+        <p>Sayaç: {countRef.current} (Render edilmez)</p>
+        <button onClick={increment}>Artır</button>
+        </div>
+    );
+    };
+
+    export default CounterWithRef;
+    Açıklama:
+    useRef ile sayaç değeri saklanır ama değişim bileşeni yeniden render etmez.
+    5. Değişken Kullanımı
+    Özellik	useState	useRef
+    Başlangıç Değeri	useState(initialValue)	useRef(initialValue)
+    Değeri Güncelleme	setState(newValue)	ref.current = newValue
+    Değere Erişim	state	ref.current
+    6. DOM Manipülasyonu
+    useState: Doğrudan DOM manipülasyonu yapmaz. Ancak bileşenin durumunu güncelleyerek dolaylı olarak DOM'u etkiler.
+    useRef: Bir DOM elemanına doğrudan erişmek için kullanılır.
+    Örnek: DOM Manipülasyonu ile useRef:
+    jsx
+    Kodu kopyala
+    import React, { useRef } from "react";
+
+    const InputFocus = () => {
+    const inputRef = useRef(null);
+
+    const handleFocus = () => {
+        inputRef.current.focus(); // Input'u odaklar
+    };
+
+    return (
+        <div>
+        <input ref={inputRef} type="text" placeholder="Odaklanmak için tıkla" />
+        <button onClick={handleFocus}>Odaklan</button>
+        </div>
+    );
+    };
+
+    export default InputFocus;
+    7. Ortak Kullanım Senaryoları
+    Kullanım Durumu	useState	useRef
+    Form verilerini yönetme	✅	❌
+    Sayaç veya durum takibi	✅	Yalnızca performans gerekliyse ✅
+    Bir önceki değeri saklama	❌	✅
+    DOM'a erişim	❌	✅
+    Performans optimizasyonu	❌	✅
+    8. Avantaj ve Dezavantajlar
+    useState:
+    Avantajlar:
+
+    React'in reaktif yapısını kullanarak UI'yi otomatik günceller.
+    Bileşen durumunu yönetmek için standart bir yol sağlar.
+    Dezavantajlar:
+
+    Her değişiklikte bileşeni yeniden render eder.
+    Performans açısından maliyetli olabilir.
+    useRef:
+    Avantajlar:
+
+    Performans dostudur, çünkü render gerektirmez.
+    DOM elemanlarına doğrudan erişim sağlar.
+    Dezavantajlar:
+
+    React'in durum yönetiminden bağımsızdır, bu nedenle yanlış kullanıldığında karmaşık hatalara yol açabilir.
+    Özet
+    useState: UI güncellemeleri için durum takibini sağlar. Bileşen durumu değiştiğinde yeniden render olur.
+    useRef: Performans dostu bir şekilde değer saklama ve DOM manipülasyonu yapma olanağı sağlar. Değişiklikler render edilmez.
+    İkisinin birlikte kullanılması da mümkün ve farklı ihtiyaçlara uygun çözüm sunar.
+    
 ..............................................................................
+useMemo:
+ 
+        React'te useMemo Nedir?
+        useMemo, React'in bir hook'u olup, bir hesaplamayı yalnızca bağımlılıkları değiştiğinde yeniden yapmak için kullanılır. Performans optimizasyonu amacı taşır. Özellikle pahalı hesaplamaların ya da ağır işlem yüküne sahip fonksiyonların her render işleminde yeniden çalışmasını önlemek için kullanılır.
 
+        Temel Kullanım
+        useMemo, bir memoized (önbelleğe alınmış) değer döndürür. Eğer bağımlılık değerlerinde değişiklik olmazsa, hesaplama tekrar yapılmaz ve önceki değer kullanılır.
+
+        Sözdizimi:
+        javascript
+        Kodu kopyala
+        const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+        () => computeExpensiveValue(a, b): Hesaplama fonksiyonu.
+        [a, b]: Bu bağımlılıklardan biri değiştiğinde, hesaplama yeniden yapılır.
+        Örnek Kullanım
+        1. Pahalı Hesaplama İçin:
+        jsx
+        Kodu kopyala
+        import React, { useState, useMemo } from "react";
+
+        const ExpensiveCalculation = () => {
+        const [count, setCount] = useState(0);
+        const [otherValue, setOtherValue] = useState(0);
+
+        // Pahalı bir işlem
+        const computeExpensiveValue = (num) => {
+            console.log("Pahalı işlem çalıştı...");
+            let total = 0;
+            for (let i = 0; i < 1000000000; i++) {
+            total += i;
+            }
+            return num + total;
+        };
+
+        const expensiveValue = useMemo(() => computeExpensiveValue(count), [count]);
+
+        return (
+            <div>
+            <h1>Pahalı Hesaplama Sonucu: {expensiveValue}</h1>
+            <button onClick={() => setCount(count + 1)}>Artır</button>
+            <button onClick={() => setOtherValue(otherValue + 1)}>
+                Diğer Değeri Artır
+            </button>
+            </div>
+        );
+        };
+
+        export default ExpensiveCalculation;
+        Açıklama:
+        count değiştiğinde, pahalı hesaplama yeniden çalışır.
+        otherValue değiştiğinde, pahalı hesaplama çalışmaz çünkü bağımlılıkları değişmemiştir.
+        Ne Zaman Kullanılır?
+        Pahalı Hesaplamalar:
+
+        Birden çok kez render edilmesine rağmen hesaplama sonucu değişmeyen durumlar.
+        Liste Filtreleme veya Sıralama:
+
+        Büyük bir listeyi filtreleme veya sıralama işlemi yapılacaksa.
+        Kompleks Matematiksel İşlemler:
+
+        CPU'ya yük bindiren işlemleri optimize etmek için.
+        Liste Filtreleme Örneği:
+        jsx
+        Kodu kopyala
+        import React, { useState, useMemo } from "react";
+
+        const FilteredList = ({ items }) => {
+        const [search, setSearch] = useState("");
+
+        const filteredItems = useMemo(() => {
+            console.log("Listeyi filtreliyor...");
+            return items.filter((item) =>
+            item.toLowerCase().includes(search.toLowerCase())
+            );
+        }, [search, items]);
+
+        return (
+            <div>
+            <input
+                type="text"
+                placeholder="Ara..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+            />
+            <ul>
+                {filteredItems.map((item, index) => (
+                <li key={index}>{item}</li>
+                ))}
+            </ul>
+            </div>
+        );
+        };
+
+        export default FilteredList;
+        Açıklama:
+        search veya items değiştiğinde filtreleme işlemi çalışır.
+        Değişiklik yoksa, daha önceki filtreleme sonucu kullanılır.
+        Avantajları
+        Performans İyileştirme:
+
+        Pahalı işlemlerin gereksiz yere çalışmasını önler.
+        Render Optimizasyonu:
+
+        Büyük listelerde veya CPU'ya yük bindiren işlemlerde daha verimli render sağlar.
+        Kaynak Yönetimi:
+
+        Bellek ve işlemci kullanımını azaltır.
+        Dikkat Edilmesi Gerekenler
+        Fazla Kullanım:
+
+        useMemo, yalnızca pahalı işlemler için kullanılmalı. Gereksiz kullanım, kodun karmaşıklığını artırabilir.
+        Hafif İşlemlerde Kullanılmamalı:
+
+        Basit matematiksel işlemler veya hızlı işlemler için kullanılması performansı artırmaz.
+        Bağımlılıklar:
+
+        Yanlış bağımlılık listesi, beklenmedik sonuçlara yol açabilir.
+        useMemo ve useCallback Farkı
+        useMemo:
+
+        Bir değeri önbelleğe alır (örneğin, hesaplama sonucu).
+        Örneğin: Filtrelenmiş liste.
+        useCallback:
+
+        Bir fonksiyonu önbelleğe alır.
+        Örneğin: Bir butonun onClick olayına bağlı bir fonksiyon.
+        jsx
+        Kodu kopyala
+        import React, { useMemo, useCallback } from "react";
+
+        // useMemo ile hesaplama sonucu saklanır
+        const memoizedValue = useMemo(() => computeValue(a, b), [a, b]);
+
+        // useCallback ile fonksiyon saklanır
+        const memoizedFunction = useCallback(() => doSomething(a), [a]);
+        Özet
+        useMemo, pahalı işlemleri optimize etmek ve yalnızca bağımlılıkları değiştiğinde yeniden hesaplamak için kullanılır.
+        Performans odaklı uygulamalarda gereksiz hesaplamaları önler.
+        Doğru kullanıldığında kaynak tasarrufu sağlar ve uygulamayı hızlandırır.
 
 ..............................................................................
 
