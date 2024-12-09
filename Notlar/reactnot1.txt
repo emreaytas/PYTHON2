@@ -1014,6 +1014,110 @@ useMemo:
         Doğru kullanıldığında kaynak tasarrufu sağlar ve uygulamayı hızlandırır.
 
 ..............................................................................
+useCallback ve react.memoized
+
+        useCallback Nedir?
+        useCallback Hook'u, bir fonksiyonun gereksiz yere yeniden oluşturulmasını önlemek için kullanılır. Özellikle bileşenlerin yeniden render edilmesi sırasında performansı artırmak için kullanılır.
+
+        Kullanım Durumu:
+        Eğer bir bileşen yeniden render edildiğinde aynı fonksiyon her defasında yeniden oluşturuluyorsa, bu performans kaybına yol açabilir. useCallback, bir fonksiyonun bağımlılıkları değişmediği sürece referansını aynı tutarak bu sorunu çözer.
+
+        Sözdizimi:
+        javascript
+        Kodu kopyala
+        const memoizedCallback = useCallback(() => {
+        // İşlemler
+        }, [dependency1, dependency2]);
+        Örnek:
+        javascript
+        Kodu kopyala
+        import React, { useState, useCallback } from "react";
+
+        const Counter = () => {
+        const [count, setCount] = useState(0);
+
+        const increment = useCallback(() => {
+            setCount((prevCount) => prevCount + 1);
+        }, []);
+
+        return (
+            <div>
+            <h1>Count: {count}</h1>
+            <button onClick={increment}>Increase</button>
+            </div>
+        );
+        };
+        Avantaj:
+        useCallback, fonksiyonun referansını yeniden oluşturmayı önler.
+        Özellikle React.memo ile kullanılan alt bileşenlerde performansı artırır.
+        React.memo Nedir?
+        React.memo, bir bileşeni yalnızca props'larında veya bağımlılıklarında bir değişiklik olduğunda yeniden render eder. Bu, gereksiz render işlemlerini önleyerek performansı artırır.
+
+        Kullanım Durumu:
+        Bir bileşen, kendisine verilen props'lar değişmediği sürece yeniden render edilmemesi gereken durumlarda kullanılır.
+
+        Sözdizimi:
+        javascript
+        Kodu kopyala
+        const MemoizedComponent = React.memo(MyComponent);
+        Örnek:
+        javascript
+        Kodu kopyala
+        import React from "react";
+
+        const Child = React.memo(({ value }) => {
+        console.log("Child component rendered");
+        return <div>{value}</div>;
+        });
+
+        const Parent = () => {
+        const [count, setCount] = useState(0);
+
+        return (
+            <div>
+            <Child value="Hello, World!" />
+            <button onClick={() => setCount(count + 1)}>Increase Count</button>
+            </div>
+        );
+        };
+        Çıktı:
+        Child bileşeni, value prop'u değişmediği sürece yeniden render edilmez.
+        useCallback ve React.memo'nun Farkları:
+        Kapsam:
+
+        useCallback, bir fonksiyonun referansını aynı tutmak için kullanılır.
+        React.memo, bir bileşenin props'ları değişmediği sürece yeniden render edilmesini önler.
+        Kullanım Amaçları:
+
+        useCallback, özellikle fonksiyonların bağımlılıklarına göre yeniden oluşturulmasını engeller.
+        React.memo, bir bileşenin gereksiz yere yeniden render edilmesini engeller.
+        Birlikte Kullanım:
+
+        useCallback, alt bileşenlere geçirilen fonksiyonların referansını sabitlemek için kullanılabilir ve React.memo ile birlikte çalışır.
+        Birlikte Örnek:
+        javascript
+        Kodu kopyala
+        const Child = React.memo(({ increment }) => {
+        console.log("Child rendered");
+        return <button onClick={increment}>Increment</button>;
+        });
+
+        const Parent = () => {
+        const [count, setCount] = useState(0);
+
+        const increment = useCallback(() => {
+            setCount((prev) => prev + 1);
+        }, []);
+
+        return (
+            <div>
+            <h1>Count: {count}</h1>
+            <Child increment={increment} />
+            </div>
+        );
+        };
+        useCallback, increment fonksiyonunun referansını sabitler.
+        React.memo, Child bileşeninin props'u değişmediği için yeniden render edilmesini önler.
 
 ..............................................................................
 
