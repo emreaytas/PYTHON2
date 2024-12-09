@@ -1120,10 +1120,281 @@ useCallback ve react.memoized
         React.memo, Child bileşeninin props'u değişmediği için yeniden render edilmesini önler.
 
 ..............................................................................
+Axios Nedir?
+            Axios, Promise tabanlı bir HTTP istemcisidir ve JavaScript ile web uygulamalarında API'lere istek göndermek için kullanılır. Hem tarayıcı ortamında hem de Node.js ortamında çalışır. RESTful API'ler ile iletişim kurmak için yaygın olarak kullanılan bir araçtır.
 
+            Axios'un Temel Özellikleri
+            HTTP İsteklerini Yönetir:
+
+            GET, POST, PUT, DELETE gibi HTTP metodlarıyla veri alışverişi sağlar.
+            Promise ve Async/Await Destekler:
+
+            Axios, modern JavaScript'in Promise ve async/await yapısını tam destekler.
+            Otomatik JSON Dönüştürme:
+
+            Yanıtlardaki JSON verilerini otomatik olarak JavaScript nesnesine çevirir.
+            İstek ve Yanıt İçin Interceptor'lar:
+
+            İstek gönderilmeden veya yanıt alınmadan önce özelleştirme yapılabilir.
+            HTTP Başlıklarını Özelleştirme:
+
+            API çağrıları için özel başlıklar tanımlanabilir.
+            Zaman Aşımı Ayarı:
+
+            Uzun süren istekleri belirli bir süreden sonra iptal edebilir.
+            İstekleri İptal Etme:
+
+            Gereksiz veya tekrarlanan istekler iptal edilebilir.
+            Dosya Yükleme/Dinamik Veri Gönderimi:
+
+            Form verilerini ve dosyaları kolayca sunucuya gönderebilir.
+            Axios Kurulumu
+            Axios'u projenize eklemek için şu adımları takip edebilirsiniz:
+
+            Node.js veya React Projelerinde:
+            bash
+            Kodu kopyala
+            npm install axios
+            # veya
+            yarn add axios
+            CDN ile Kullanım:
+            Tarayıcı tabanlı projelerde CDN ile eklenebilir:
+
+            html
+            Kodu kopyala
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+            Axios Kullanımı
+            GET İsteği:
+            javascript
+            Kodu kopyala
+            import axios from "axios";
+
+            axios
+            .get("https://jsonplaceholder.typicode.com/posts")
+            .then((response) => {
+                console.log(response.data); // API'den dönen veriler
+            })
+            .catch((error) => {
+                console.error("Hata oluştu:", error);
+            });
+            POST İsteği:
+            javascript
+            Kodu kopyala
+            axios
+            .post("https://jsonplaceholder.typicode.com/posts", {
+                title: "Yeni Gönderi",
+                body: "Bu bir deneme gönderisidir.",
+                userId: 1,
+            })
+            .then((response) => {
+                console.log("Başarıyla eklendi:", response.data);
+            })
+            .catch((error) => {
+                console.error("Hata oluştu:", error);
+            });
+            Async/Await ile Kullanım:
+            javascript
+            Kodu kopyala
+            const fetchData = async () => {
+            try {
+                const response = await axios.get("https://jsonplaceholder.typicode.com/posts");
+                console.log(response.data);
+            } catch (error) {
+                console.error("Hata oluştu:", error);
+            }
+            };
+
+            fetchData();
+            Axios'un Avantajları
+            Kullanıcı Dostu API:
+
+            Axios, Fetch API'ye kıyasla daha okunabilir ve kısa bir söz dizimine sahiptir.
+            Tarayıcı ve Node.js Desteği:
+
+            Hem istemci tarafında hem de sunucu tarafında kullanılabilir.
+            Daha İyi Hata Yönetimi:
+
+            HTTP hatalarını daha kolay bir şekilde yakalamaya olanak sağlar (response, request, ve message düzeyinde).
+            Interceptors:
+
+            Özellikle yetkilendirme veya hata yönetimi için istek öncesi ve sonrası işlemleri kolaylaştırır.
+            İsteklerin İptali:
+
+            Gereksiz veya uzun süren istekleri iptal etmek mümkündür.
+            Axios ve Fetch Arasındaki Farklar
+            Özellik	Axios	Fetch
+            Söz Dizimi	Daha sade ve kolay	Daha karmaşık
+            JSON Dönüştürme	Otomatik olarak yapar	Manuel yapılmalı
+            Tarayıcı Desteği	Daha eski tarayıcıları da destekler	Fetch yalnızca modern tarayıcılar için çalışır
+            Interceptor Desteği	Var	Yok
+            Kapsamlı Örnek
+            Bir axios örneği için Interceptor ile bir Authorization başlığı ekleyebiliriz:
+
+            javascript
+            Kodu kopyala
+            import axios from "axios";
+
+            const axiosInstance = axios.create({
+            baseURL: "https://api.example.com",
+            timeout: 5000,
+            });
+
+            // Authorization başlığı eklemek için Interceptor
+            axiosInstance.interceptors.request.use((config) => {
+            const token = "Bearer example-token";
+            config.headers.Authorization = token;
+            return config;
+            });
+
+            // API'ye GET isteği
+            axiosInstance
+            .get("/data")
+            .then((response) => console.log(response.data))
+            .catch((error) => console.error("Hata:", error));
+            Axios, modern web uygulamalarında API ile iletişim kurmanın etkili bir yoludur.
 
 ..............................................................................
+Redux: 
 
+            Redux Nedir?
+            Redux, JavaScript uygulamaları için bir durum yönetim kütüphanesidir. Özellikle React gibi UI kütüphaneleri ile birlikte kullanılır ve uygulamanın durumunu (state) merkezi bir şekilde yönetmeye olanak tanır. Redux, predictable state container (öngörülebilir durum konteyneri) olarak tanımlanır ve tek bir kaynak üzerinden tüm uygulama durumunu yönetir.
+
+            Redux'un Temel Prensipleri
+            Redux üç temel prensip üzerine inşa edilmiştir:
+
+            Tekil ve Merkezi Store:
+
+            Uygulamanın tüm durumu (state) bir nesne olarak saklanır ve bu nesne store adı verilen merkezi bir depoda tutulur. Bu, uygulamanın durumunu kolayca takip etmeyi ve yönetmeyi sağlar.
+            Salt Okunabilir Durum (State):
+
+            Redux'ta durum değiştirilemez. Durumun değişmesi için bir action (eylem) tanımlanır ve bu action bir fonksiyon olan reducer aracılığıyla durumu günceller. Böylece durum değişiklikleri daha öngörülebilir hale gelir.
+            Değişiklikler Saf Fonksiyonlarla Yönetilir (Reducers):
+
+            Redux'ta durum değişiklikleri saf fonksiyonlar olan reducer'lar aracılığıyla yapılır. Reducer'lar mevcut durumu ve gelen action'ı alarak yeni bir durum döndürür.
+            Redux'un Temel Bileşenleri
+            Store:
+
+            Uygulamanın tüm durumunun saklandığı merkezi bir depodur. createStore fonksiyonu ile oluşturulur.
+            State:
+
+            Store içinde saklanan uygulamanın mevcut durumudur.
+            Action:
+
+            Durumda bir değişiklik yapılmasını talep eden bir nesnedir. Örneğin, bir kullanıcıyı eklemek için bir ADD_USER action tanımlanabilir.
+            Action genellikle bir type (eylem türü) ve ek veri (payload) içerir:
+            javascript
+            Kodu kopyala
+            {
+            type: "ADD_USER",
+            payload: { name: "Ali", age: 25 }
+            }
+            Reducer:
+
+            Action'ları işleyen ve state üzerinde değişiklikler yapan saf bir fonksiyondur. Eski durumu (state) ve gelen action'ı alır, yeni bir durum döndürür:
+            javascript
+            Kodu kopyala
+            const userReducer = (state = [], action) => {
+            switch (action.type) {
+                case "ADD_USER":
+                return [...state, action.payload];
+                default:
+                return state;
+            }
+            };
+            Dispatch:
+
+            Bir action'ı tetiklemek için kullanılan yöntemdir. Örneğin:
+            javascript
+            Kodu kopyala
+            store.dispatch({ type: "ADD_USER", payload: { name: "Ali", age: 25 } });
+            Selector:
+
+            Store'dan belirli bir veriyi seçmek ve almak için kullanılan fonksiyonlardır.
+            Redux'un Çalışma Akışı
+            Bir Action oluşturulur: Kullanıcı veya bir sistem olayı sonucu bir action tetiklenir.
+            Action Reducer'a gider: Dispatch edilen action, reducer'a iletilir.
+            Reducer yeni state döndürür: Reducer, mevcut durumu ve action'ı işleyerek yeni bir durum döndürür.
+            Store güncellenir: Yeni durum store'da saklanır.
+            UI güncellenir: Yeni duruma göre kullanıcı arayüzü güncellenir.
+            Redux'un Avantajları
+            Merkezi Durum Yönetimi:
+
+            Tüm durum tek bir yerde yönetilir, böylece durumu izlemek ve debug yapmak kolaylaşır.
+            Tahmin Edilebilirlik:
+
+            Reducer'lar sayesinde durum değişiklikleri öngörülebilir hale gelir.
+            Kolay Test Edilebilirlik:
+
+            Reducer ve action gibi saf fonksiyonlar kolayca test edilebilir.
+            Genişletilebilirlik:
+
+            Redux, orta katman (middleware) desteği ile genişletilebilir. Örneğin, redux-thunk ile async işlemler yapılabilir.
+            Redux'un Dezavantajları
+            Kod Karmaşıklığı:
+
+            Küçük uygulamalarda Redux kullanımı aşırı kod yazımına neden olabilir (boilerplate).
+            Yavaş Öğrenme Eğrisi:
+
+            Yeni başlayanlar için Redux'ın çalışma yapısını anlamak zaman alabilir.
+            Performans Maliyetleri:
+
+            Çok büyük state veya fazla action işleme gerektiren durumlarda performans sorunlarına neden olabilir.
+            Redux Kullanımı
+            Redux Kurulumu
+            Redux kullanımı için aşağıdaki bağımlılıkları yükleyin:
+
+            bash
+            Kodu kopyala
+            npm install redux react-redux
+            Redux Örnek: Basit Sayaç
+            Action:
+
+            javascript
+            Kodu kopyala
+            const increment = () => ({ type: "INCREMENT" });
+            const decrement = () => ({ type: "DECREMENT" });
+            Reducer:
+
+            javascript
+            Kodu kopyala
+            const counterReducer = (state = 0, action) => {
+            switch (action.type) {
+                case "INCREMENT":
+                return state + 1;
+                case "DECREMENT":
+                return state - 1;
+                default:
+                return state;
+            }
+            };
+            Store:
+
+            javascript
+            Kodu kopyala
+            import { createStore } from "redux";
+            const store = createStore(counterReducer);
+            React Bağlantısı:
+
+            javascript
+            Kodu kopyala
+            import React from "react";
+            import { useSelector, useDispatch } from "react-redux";
+
+            const Counter = () => {
+            const count = useSelector((state) => state);
+            const dispatch = useDispatch();
+
+            return (
+                <div>
+                <h1>{count}</h1>
+                <button onClick={() => dispatch({ type: "INCREMENT" })}>+</button>
+                <button onClick={() => dispatch({ type: "DECREMENT" })}>-</button>
+                </div>
+            );
+            };
+
+            export default Counter;
+            Redux, özellikle durum yönetimi karmaşık olan büyük uygulamalarda güçlü bir araçtır. Ancak, daha küçük projelerde veya basit durum yönetimi gereken durumlarda gereksiz bir yük olabilir. Bu nedenle, Redux kullanmadan önce ihtiyaçlarınıza uygun olup olmadığını değerlendirin.
 
 ..............................................................................
 
