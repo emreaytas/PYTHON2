@@ -51,6 +51,232 @@ useState ile başlangıç değer belirler ve değişim yapabiliriz ne gibi deği
 jsx html css ve js kodları taşıyabilen dosyadır.
 react componentler üzerinden çalışan bir sistemdir.
 ..............................................................................................................................................................................................................................................................................
+önce bir klasör oluşturur sonra dizin olarak içine gideriz. sonra react projemizi oluştururuz. 
+
+npx create-react-app pizza-menu  bu şekilde terminalde olduğumuz klasörde bir react oluşturduk.
+npx create-react-app@5 pizza-menu   @5 ile 5. sürümde bir react oluşturduk.
+
+npm install web-vitals
+npm start
+
+react bir js kütüphanesidir. next.js ise react üzerine kuruludur.
+
+map filter reduce ve filter sort .................................................................................................................................................................................................................................................................................
+map filter reduce ve filter sort ...
+
+
+        map, filter, reduce, forEach ve sort Nedir, Ne Değildir?
+        Bu beş JavaScript array metodu, React'ta özellikle liste yönetimi ve veri manipülasyonu sırasında sıkça kullanılır. İşte her birinin detaylı açıklaması:
+
+        1. map()
+        map metodu, bir dizideki her bir elemanı dönüştürerek yeni bir dizi oluşturur. Mevcut diziyi değiştirmez, yeni bir dizi döner.
+
+        Kullanım Alanı:
+        React'ta bir listeyi dinamik olarak oluşturmak için kullanılır (örneğin, bir ul içindeki li öğeleri).
+        Özellikleri:
+        Değiştirmez: Orijinal diziyi değiştirmez.
+        Her eleman üzerinde çalışır: Her eleman için bir dönüş değeri döner.
+        Yeni bir dizi döner.
+        Örnek Kullanım:
+        React'ta bir liste oluşturma:
+
+        javascript
+        Kodu kopyala
+        const items = ["Pizza", "Burger", "Pasta"];
+        const list = items.map((item, index) => <li key={index}>{item}</li>);
+
+        return <ul>{list}</ul>;
+        2. filter()
+        filter metodu, bir dizideki elemanları belirli bir koşula göre filtreler ve yalnızca bu koşulu sağlayan elemanlarla yeni bir dizi döner.
+
+        Kullanım Alanı:
+        React'ta belirli bir şarta göre öğeleri göstermek.
+        Özellikleri:
+        Filtreleme yapar: Şarta uygun elemanları seçer.
+        Yeni bir dizi döner: Orijinal dizi değişmez.
+        Örnek Kullanım:
+        React'ta belirli bir kategorideki ürünleri göstermek:
+
+        javascript
+        Kodu kopyala
+        const products = [
+        { name: "Pizza", category: "Food" },
+        { name: "Shampoo", category: "Cosmetic" },
+        { name: "Burger", category: "Food" }
+        ];
+
+        const foodItems = products.filter(product => product.category === "Food");
+
+        return (
+        <ul>
+            {foodItems.map((item, index) => (
+            <li key={index}>{item.name}</li>
+            ))}
+        </ul>
+        );
+        3. reduce()
+        reduce metodu, bir dizideki elemanları belirli bir işleme tabi tutarak tek bir değer döndürür. Bu, toplama, çarpma veya birleştirme gibi işlemler olabilir.
+
+        Kullanım Alanı:
+        React'ta bir listenin toplamını veya özeti hesaplamak.
+        Özellikleri:
+        Bir değer döner: Bu değer bir sayı, string veya başka bir dizi olabilir.
+        İşlemi tekrarlayarak çalışır: İlk değerden başlayarak tüm elemanlar üzerinde çalışır.
+        Örnek Kullanım:
+        React'ta toplam fiyat hesaplama:
+
+        javascript
+        Kodu kopyala
+        const cart = [
+        { name: "Pizza", price: 10 },
+        { name: "Burger", price: 5 },
+        { name: "Pasta", price: 8 }
+        ];
+
+        const totalPrice = cart.reduce((total, item) => total + item.price, 0);
+
+        return <p>Total Price: ${totalPrice}</p>;
+        4. forEach()
+        forEach metodu, bir dizideki her bir eleman üzerinde işlem yapar. Ancak forEach, dönüş değeri döndürmez.
+
+        Kullanım Alanı:
+        Sadece yan etkiler için (ör. konsola yazdırmak, bir API'ye istek yapmak).
+        Özellikleri:
+        Dönüş değeri yoktur: Yeni bir dizi oluşturmaz.
+        Orijinal diziyle çalışır: Yalnızca işlem yapar.
+        Örnek Kullanım:
+        React'ta debug için konsola yazdırma:
+
+        javascript
+        Kodu kopyala
+        const items = ["Pizza", "Burger", "Pasta"];
+
+        items.forEach(item => console.log(item));
+
+        // Liste oluşturma işlemi için kullanılmaz!
+        5. sort()
+        sort metodu, bir dizideki elemanları sıralar. Varsayılan olarak elemanları string olarak sıralar, ancak sayısal veya özel sıralamalar için bir karşılaştırma fonksiyonu ile kullanılabilir.
+
+        Kullanım Alanı:
+        React'ta bir listeyi alfabetik, sayısal veya başka bir düzene göre sıralamak.
+        Özellikleri:
+        Orijinal diziyi değiştirir: sort, orijinal diziyi doğrudan değiştirir.
+        Karşılaştırma Fonksiyonu: Sayısal veya özel sıralamalar için compareFunction kullanılır.
+        Örnek Kullanım:
+        React'ta bir listeyi alfabetik olarak sıralama:
+
+        javascript
+        Kodu kopyala
+        const items = ["Burger", "Pizza", "Pasta"];
+
+        const sortedItems = items.sort(); // Alfabetik sıralama
+
+        return (
+        <ul>
+            {sortedItems.map((item, index) => (
+            <li key={index}>{item}</li>
+            ))}
+        </ul>
+        );
+        Sayısal sıralama:
+
+        javascript
+        Kodu kopyala
+        const numbers = [10, 5, 8];
+
+        const sortedNumbers = numbers.sort((a, b) => a - b); // Küçükten büyüğe
+
+        return (
+        <ul>
+            {sortedNumbers.map((num, index) => (
+            <li key={index}>{num}</li>
+            ))}
+        </ul>
+        );
+        React'ta Kullanım Örnekleri
+        Listeleme (map):
+        javascript
+        Kodu kopyala
+        const todos = ["Learn React", "Practice JavaScript", "Build Projects"];
+
+        return (
+        <ul>
+            {todos.map((todo, index) => (
+            <li key={index}>{todo}</li>
+            ))}
+        </ul>
+        );
+        Filtreleme (filter):
+        javascript
+        Kodu kopyala
+        const tasks = [
+        { name: "Clean room", done: true },
+        { name: "Learn React", done: false }
+        ];
+
+        const pendingTasks = tasks.filter(task => !task.done);
+
+        return (
+        <ul>
+            {pendingTasks.map((task, index) => (
+            <li key={index}>{task.name}</li>
+            ))}
+        </ul>
+        );
+        Toplama (reduce):
+        javascript
+        Kodu kopyala
+        const expenses = [
+        { name: "Groceries", amount: 30 },
+        { name: "Transport", amount: 15 }
+        ];
+
+        const totalExpenses = expenses.reduce((total, expense) => total + expense.amount, 0);
+
+        return <p>Total Expenses: ${totalExpenses}</p>;
+        Sıralama (sort):
+        javascript
+        Kodu kopyala
+        const items = ["Pizza", "Burger", "Pasta"];
+
+        const sortedItems = items.sort(); // Alfabetik sıralama
+
+        return (
+        <ul>
+            {sortedItems.map((item, index) => (
+            <li key={index}>{item}</li>
+            ))}
+        </ul>
+        );
+        Yan Etki (forEach):
+        javascript
+        Kodu kopyala
+        const logItems = ["Item 1", "Item 2", "Item 3"];
+
+        logItems.forEach(item => console.log(item));
+        Genel Karşılaştırma
+        Metod	Ne Yapar?	Döner mi?	Tipik Kullanım
+        map	Her elemanı dönüştürüp yeni bir dizi oluşturur.	Evet	Listeleme, UI öğeleri oluşturma.
+        filter	Koşula uyan elemanları döndürür.	Evet	Şarta göre listeleme.
+        reduce	Tek bir değer hesaplar (ör. toplam, çarpım).	Evet	Toplama, özet değer hesaplama.
+        forEach	Her eleman üzerinde işlem yapar (yan etkiler).	Hayır	Konsola yazdırma, API çağrısı yapma.
+        sort	Elemanları sıralar (alfabetik/sayısal).	Evet (Ama orijinali değiştirir)	Sıralama işlemleri.
+
+
+
+..............................................................................................................................................................................................................................................................................
+const book = getBook(1);
+
+const { title, author, pages, publicationDate, genres, hasMovieAdaptation } =
+  book;
+console.log(title, author, pages, publicationDate, genres);
+const primaryGenre = genres[0]; // [0] , [1] inndexleme böyle böyle gidiyor.
+const [primaryGenre,secondaryGenre] = genres; // burada primaryGenre arrayin ilk değerini diğeri ise 2. değerini alacak 3. olsa üçüncü değerini alacaktı sırasıyla atama yapar.
+
+..............................................................................................................................................................................................................................................................................
+
+const [primaryGenre, secondaryGenre, ...otherGenres] = genres; // sırasıyla 0. 1. index atamaları sonra ... ile geri kalan hepsinin atamasını yapar bu sistem.
+console.log(primaryGenre,secondaryGenre, otherGenres);
 
 
 
@@ -60,6 +286,25 @@ react componentler üzerinden çalışan bir sistemdir.
 
 ..............................................................................................................................................................................................................................................................................
 
+
+
+..............................................................................................................................................................................................................................................................................
+
+
+
+..............................................................................................................................................................................................................................................................................
+
+
+
+..............................................................................................................................................................................................................................................................................
+
+
+
+..............................................................................................................................................................................................................................................................................
+
+
+
+..............................................................................................................................................................................................................................................................................
 
 
 ..........................................................................................................................................................................................................................................................................................................................................
