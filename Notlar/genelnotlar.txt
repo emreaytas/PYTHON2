@@ -522,8 +522,163 @@ mesela windows bir platformdur. veya linux. uygulamın çalıştığı işletim 
   sanal makine sayesinde(.net core ve java) her işletim sistemi için farklı kod yazmak zorunda kalmazsınız.
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+C# dilinde bir Windows Forms uygulaması geliştirirken, özellikle birden fazla iş parçacığı (thread) kullanacaksanız, iş parçacığı senkronizasyonunu ve kaynak yönetimini doğru şekilde yapmanız gerekmektedir. İş parçacıkları, programınızın birden fazla işlemi aynı anda yapmasını sağlar, ancak bu işlemler aynı kaynakları kullanıyorsa (örneğin aynı veriye erişim) çeşitli sorunlar ortaya çıkabilir. Bu tür sorunlara çözüm sağlamak için mutex, semaphore, monitor ve lock gibi senkronizasyon mekanizmaları kullanılır. İşte detaylı bir açıklama:
 
+1. Thread (İş Parçacığı)
+Bir iş parçacığı, bir işlem içinde çalışan bağımsız bir kontrol akışıdır. .NET Framework, System.Threading ad alanı altında iş parçacığı yönetimi için çeşitli araçlar sunar. İş parçacıkları aynı anda birden fazla iş yapabilmenizi sağlar, ancak kaynak paylaşımı ve erişim kontrolü konusunda dikkatli olunmalıdır.
+
+Örnek Kullanım:
+
+csharp
+
+using System.Threading;
+
+Thread thread = new Thread(new ThreadStart(Method));
+thread.Start();
+
+void Method() {
+    Console.WriteLine("Thread başladı.");
+}
+2. Lock
+Lock, belirli bir kod bloğunun bir seferde sadece bir iş parçacığı tarafından erişilebilir olmasını sağlar. C#’da lock anahtar kelimesi ile kolayca kullanılabilir. Bu yöntem, belirli bir nesne üzerinde kilit oluşturarak diğer iş parçacıklarının o nesneye erişimini engeller.
+
+Örnek Kullanım:
+
+csharp
+
+private static object _lockObject = new object();
+
+void CriticalSection() {
+    lock (_lockObject) {
+        // Kritik bölge, bir kere de bir thread tarafından erişilebilir.
+    }
+}
+3. Mutex
+Mutex (Mutual Exclusion Object), iş parçacıklarının kaynaklara sırayla erişimini sağlayan bir senkronizasyon mekanizmasıdır. Mutex, inter-process (işlem arası) senkronizasyon için de kullanılabilir, yani farklı işlemler arasında da kaynak paylaşımını yönetebilir.
+
+Örnek Kullanım:
+
+csharp
+
+using System.Threading;
+
+Mutex mutex = new Mutex();
+mutex.WaitOne();  // Mutex kilidi alınır.
+// Kritik bölge
+mutex.ReleaseMutex();  // Mutex kilidi serbest bırakılır.
+4. Semaphore
+Semaphore, belirli bir kaynağa aynı anda erişebilecek maksimum iş parçacığı sayısını sınırlar. Örneğin, bir veritabanı bağlantısına aynı anda en fazla 10 iş parçacığının erişmesine izin vermek için semafor kullanılabilir.
+
+Örnek Kullanım:
+
+csharp
+
+using System.Threading;
+
+Semaphore semaphore = new Semaphore(0, 10); // Başlangıçta 0, maksimum 10 erişim
+semaphore.WaitOne();  // Erişim için bekler
+// Kritik bölge
+semaphore.Release();  // Erişim hakkını serbest bırakır
+5. Monitor
+Monitor, lock'a benzer bir yapıdır ve genellikle lock anahtar kelimesi ile kullanılır. Ancak, Monitor sınıfı daha karmaşık iş parçacığı senkronizasyon görevleri için ek fonksiyonlar sunar, örneğin iş parçacıklarını uyutma ve uyandırma.
+
+Örnek Kullanım:
+
+csharp
+
+using System.Threading;
+
+object _lock = new object();
+Monitor.Enter(_lock);
+try {
+    // Kritik bölge
+}
+finally {
+    Monitor.Exit(_lock);
+}
+6. Deadlock ve Race Conditions
+İş parçacığı senkronizasyonu sırasında karşılaşılabilecek iki önemli problem "deadlock" ve "race condition"dır.
+
+Deadlock, iki veya daha fazla iş parçacığının, birbirinin serbest bırakmasını beklediği kaynaklar üzerinde sonsuza kadar beklemesi durumudur.
+Race Condition, birden fazla iş parçacığının, değişkenlerin beklenmedik şekillerde değiştirilmesine neden olacak şekilde kaynaklara erişmeye çalışmasıdır.
+Her iki durumda da uygulamanın hatalı çalışmasına veya çökmesine neden olabilir. Bunları önlemek için dikkatli bir tasarım ve doğru senkronizasyon mekanizmalarının kullanımı gereklidir.
+
+Özet
+C#’da iş parçacığı yönetimi ve senkronizasyonu, uygulamanın performansını ve güvenilirliğini artırabilir. Ancak, yanlış kullanıldığında ciddi performans sorunlarına ve hatalara yol açabilir. İş parçacıkları ve senkronizasyon mekanizmaları hakkında sağlam bir anlayışa sahip olmak, çoklu iş parçacığı kullanılan uygulamalar geliştirirken önemlidir.
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+1. Delegate Tanımı ve Kullanımı
+Delegate, belirli bir imzaya sahip metodları referans almak için kullanılan bir tipdir. Özel bir delegate tipi tanımlayabilir veya genel delegate tiplerini (Action, Func) kullanabilirsiniz.
+
+Örnek:
+
+csharp
+Kodu kopyala
+public delegate void Print(int value);
+
+public class Program
+{
+    public static void PrintNumber(int num)
+    {
+        Console.WriteLine($"Number: {num}");
+    }
+
+    public static void Main()
+    {
+        Print printDel = PrintNumber;
+        printDel(100);
+    }
+}
+Bu örnekte, Print isimli bir delegate tanımlanmış ve PrintNumber metodunu işaret etmek için kullanılmıştır. printDel değişkeni üzerinden PrintNumber metodu çağırılmıştır.
+
+2. Action ve Func Delegate'leri
+.NET, çoğu ihtiyaca yönelik hazır delegate tanımları sunar. Action ve Func en yaygın kullanılan iki genel delegate'dir.
+
+Action: Geriye değer döndürmeyen metodlar için kullanılır.
+Func: Geriye değer döndüren metodlar için kullanılır.
+Örnekler:
+
+csharp
+Kodu kopyala
+Action<string> printAction = (message) => Console.WriteLine(message);
+printAction("Hello, World!");
+
+Func<int, int, int> addFunc = (x, y) => x + y;
+int result = addFunc(10, 20);
+Console.WriteLine(result);
+printAction bir string alıp, onu konsola yazdıran bir Action delegate'i iken, addFunc iki integer alıp, bunların toplamını döndüren bir Func delegate'idir.
+
+3. Lambda Expressions
+Lambda ifadeleri, anonim metodları tanımlamak için kullanılan kısa bir sözdizimidir. Lambda ifadeleri, Func, Action gibi delegate tipleri ile sıklıkla kullanılır.
+
+Örnek:
+
+csharp
+Kodu kopyala
+Func<int, int, int> multiply = (x, y) => x * y;
+Console.WriteLine(multiply(5, 2));  // Çıktı: 10
+Bu örnekte, iki parametre alan ve çarpım sonucunu döndüren bir lambda ifadesi tanımlanmıştır.
+
+4. Closures (Kapanışlar)
+Closures, bir dış metodun yerel değişkenlerine erişim sağlayan lambda ifadeleri veya anonim metodlardır. Bu özellik, lambda ifadelerinin dış metodun değişkenlerini "hatırlamasını" sağlar.
+
+Örnek:
+
+csharp
+Kodu kopyala
+Func<int, int> GetMultiplier(int factor)
+{
+    return x => x * factor;
+}
+
+var doubler = GetMultiplier(2);
+Console.WriteLine(doubler(5));  // Çıktı: 10
+Bu örnekte, GetMultiplier fonksiyonu bir lambda ifadesi döndürmekte ve bu lambda ifadesi, GetMultiplier metodunun parametresi olan factor değişkenini kullanmaktadır.
+
+Genel Özet
+C# delegate'leri, programınızda metodları birinci sınıf vatandaşlar gibi kullanmanıza olanak tanır. Bu, özellikle olay yönetimi, callback fonksiyonları ve LINQ gibi senaryolarda oldukça güçlüdür. Action ve Func, çoğu kullanım durumu için yeterli olacak şekilde tasarlanmıştır ve lambda ifadeleri ile birlikte kullanıldıklarında, kodunuzu oldukça temiz ve anlaşılır kılarlar. Closures ise çevresel değişkenleri "hatırlama" yeteneği ile karmaşık işlevsellikleri basitleştirmeye yardımcı olur.
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class UserRepository():
     def __init__(self):
         self.users = []
