@@ -734,6 +734,473 @@ class UserRepository():
             print("Giris yapilmamis...")    
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Asenkron Programlama
+Asenkron programlama, genellikle tek bir iş parçacığındaki bloklayıcı olmayan operasyonları yönetmek için kullanılır. Buradaki amaç, programın diğer bölümlerinin çalışmasını bloke etmeden uzun süren işlemleri arka planda yürütmektir. Bu operasyonlar sıklıkla I/O operasyonlarıdır (disk okumaları, ağ istekleri vb.).
+
+Asenkron Programlama Özellikleri:
+Tek Thread Üzerinde Çalışma: Asenkron metodlar genellikle tek bir iş parçacığı üzerinde çalışır ve bu iş parçacığı bloklanmaz.
+Event Loop: Node.js gibi bazı platformlarda asenkron operasyonlar bir olay döngüsü üzerinden işlenir. C#'da bu, iş parçacığı havuzları ve görev tabanlı asenkron model (TAP) ile yönetilir.
+Kaynak Kullanımı: Asenkron operasyonlar, CPU yerine I/O bağlantılı kaynakları yoğun şekilde kullanır.
+Asenkron Senaryo Örneği:
+Bir web sunucusu, eş zamanlı olarak çok sayıda kullanıcı isteğini işleyebilir çünkü her istek asenkron olarak işlenir ve bu, sunucunun tek bir isteği işlerken diğerlerini beklemesini engeller.
+
+Paralel Programlama
+Paralel programlama, birden fazla işlem veya iş parçacığının aynı anda çalıştırılmasını sağlayarak işleri hızlandırır. Bu yaklaşım, özellikle CPU-yoğun görevler için uygundur.
+
+Paralel Programlama Özellikleri:
+Birden Fazla İş Parçacığı: İşler, birden fazla iş parçacığı arasında bölünür ve her iş parçacığı işlemcinin bir çekirdeği tarafından işlenir.
+Senkronizasyon Mekanizmaları: Mutex, semaphore ve diğer kilitleme mekanizmaları, paylaşılan kaynaklara erişimi kontrol etmek için kullanılır.
+Kaynak Paylaşımı: Paylaşılan kaynaklara erişimde yarış koşulları ve ölü kilitlerin (deadlock) önlenmesi için dikkatli bir tasarım gereklidir.
+Paralel Senaryo Örneği:
+Bir görüntü işleme uygulaması, bir görüntünün işlenmesini birden fazla parçaya bölebilir ve her parçayı ayrı bir iş parçacığında işleyerek işlem süresini kısaltabilir.
+
+Senkronizasyon Mekanizmaları
+Paralel programlama, özellikle birden fazla iş parçacığının aynı kaynağı kullanması gerektiğinde senkronizasyon mekanizmalarına ihtiyaç duyar.
+
+Mutex:
+Mutex, bir kaynağın aynı anda yalnızca bir iş parçacığı tarafından kullanılmasını sağlayan bir kilitleme mekanizmasıdır.
+
+csharp
+
+Mutex mutex = new Mutex();
+mutex.WaitOne(); // Kaynağa erişim sağlamak için bekler
+// Kritik bölge - Kaynak üzerinde işlem yapılır
+mutex.ReleaseMutex(); // Kaynağı serbest bırakır
+Semaphore:
+Semaphore, belirli bir anda belirli sayıda iş parçacığının bir kaynağa erişmesine izin veren bir yapıdır.
+
+csharp
+
+Semaphore semaphore = new Semaphore(0, 5); // En fazla 5 iş parçacığı
+semaphore.WaitOne(); // Erişim için bekler
+// Kritik bölge
+semaphore.Release(); // Erişim iznini serbest bırakır
+Asenkron ve Paralel Programlama Arasındaki Farklar
+Kaynak Kullanımı: Asenkron işlemler genellikle disk veya ağ I/O gibi bloklayıcı olmayan kaynaklarla ilişkilidir, paralel işlemler ise CPU gibi işlem kaynaklarını yoğun kullanır.
+Uygulama Modeli: Asenkron programlama genellikle olaylara dayalı bir modeli takip eder ve genellikle tek bir iş parçacığı üzerinde çalışır, paralel programlama ise çoklu iş parçacıkları veya işlemler üzerinde eş zamanlı işlemleri yönetir.
+Senkronizasyon İhtiyacı: Paralel programlama, kaynak paylaşımı nedeniyle genellikle daha karmaşık senkronizasyon gerektirir. Asenkron programlama ise, genellikle bu tür karmaşık senkronizasyonlardan kaçınır çünkü çoğunlukla tek bir iş parçacığı üzerinde çalışır.
+Her iki yaklaşım da belirli problemlere çözüm sunar ve modern yazılım geliştirme pratiğinde önemli yer tutar. Ancak, senaryonuza en uygun olanı seçmek, uygulamanızın performansını ve kararlılığını doğrudan etkileyecektir.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+C#’da paralel programlama, çok çekirdekli işlemcilerden tam anlamıyla yararlanarak işlemleri eş zamanlı gerçekleştirmek için kullanılan bir programlama paradigmasıdır. Paralel programlama, özellikle CPU-yoğun işlemler ve büyük veri setlerinin işlenmesi gibi senaryolarda performansı artırmak için tercih edilir.
+
+Paralel programlama sırasında kaynak yönetimi ve iş parçacıkları arasında senkronizasyon sağlamak için Mutex, Semaphore, Monitor, lock gibi araçlar kullanılır. Bu araçların her biri farklı senkronizasyon ihtiyaçlarına çözüm sağlar.
+
+1. Paralel Programlama Kavramları
+1.1 İş Parçacığı (Thread)
+İş parçacığı, bir işlemin (process) içinde bağımsız olarak çalışabilen en küçük çalışma birimidir. C#’da, paralel programlamanın temeli iş parçacıklarıdır. Her iş parçacığı, bir işlemci çekirdeği tarafından paralel olarak çalıştırılır.
+
+csharp
+Kodu kopyala
+using System.Threading;
+
+Thread thread = new Thread(() =>
+{
+    Console.WriteLine("Thread çalışıyor.");
+});
+thread.Start();
+1.2 Task Tabanlı Programlama
+Task tabanlı programlama, iş parçacıklarıyla manuel olarak uğraşmak yerine, görevleri (tasks) tanımlayarak paralel işlemleri yönetmenizi sağlar. C#’da System.Threading.Tasks namespace’i bu amaçla kullanılır.
+
+csharp
+Kodu kopyala
+using System.Threading.Tasks;
+
+Task task1 = Task.Run(() =>
+{
+    Console.WriteLine("Task 1 çalışıyor.");
+});
+
+Task task2 = Task.Run(() =>
+{
+    Console.WriteLine("Task 2 çalışıyor.");
+});
+
+Task.WaitAll(task1, task2); // Tüm görevlerin tamamlanmasını bekler
+1.3 Parallel Sınıfı
+Parallel sınıfı, döngü işlemlerini (for ve foreach gibi) otomatik olarak birden fazla iş parçacığına dağıtarak paralel çalıştırır.
+
+csharp
+Kodu kopyala
+using System.Threading.Tasks;
+
+int[] numbers = Enumerable.Range(1, 10).ToArray();
+
+Parallel.For(0, numbers.Length, i =>
+{
+    Console.WriteLine($"Index {i} işleniyor.");
+});
+1.4 PLINQ (Parallel LINQ)
+PLINQ, LINQ sorgularını paralel olarak çalıştırır. Büyük veri setleri üzerinde paralel sorgulamalar yapmayı sağlar.
+
+csharp
+Kodu kopyala
+using System.Linq;
+
+int[] numbers = Enumerable.Range(1, 100).ToArray();
+
+var parallelQuery = numbers.AsParallel()
+    .Where(x => x % 2 == 0)
+    .Select(x => x * x);
+
+foreach (var item in parallelQuery)
+{
+    Console.WriteLine(item);
+}
+2. Senkronizasyon Araçları
+Paralel programlama sırasında birden fazla iş parçacığı aynı kaynağa erişmeye çalışabilir. Bu durumda, veri tutarlılığını sağlamak için senkronizasyon mekanizmalarına ihtiyaç duyulur.
+
+2.1 lock Anahtar Kelimesi
+lock anahtar kelimesi, bir kod bloğunun yalnızca bir iş parçacığı tarafından erişilmesini sağlar.
+
+Örnek:
+
+csharp
+Kodu kopyala
+private static readonly object lockObject = new object();
+
+void CriticalSection()
+{
+    lock (lockObject)
+    {
+        Console.WriteLine("Kritik bölgeye erişildi.");
+    }
+}
+2.2 Monitor Sınıfı
+Monitor, lock anahtar kelimesine benzer, ancak daha fazla kontrol sağlar. Örneğin, bir iş parçacığını bekletebilir veya uyandırabilirsiniz.
+
+Örnek:
+
+csharp
+Kodu kopyala
+object _lock = new object();
+
+Monitor.Enter(_lock);
+try
+{
+    Console.WriteLine("Kritik bölge.");
+}
+finally
+{
+    Monitor.Exit(_lock);
+}
+2.3 Mutex
+Mutex (Mutual Exclusion Object), bir kaynağın aynı anda yalnızca bir iş parçacığı tarafından kullanılmasını sağlar. Mutex, işlemler arası (inter-process) senkronizasyon için de kullanılabilir.
+
+Örnek:
+
+csharp
+Kodu kopyala
+using System.Threading;
+
+Mutex mutex = new Mutex();
+
+void AccessResource()
+{
+    mutex.WaitOne(); // Mutex'i kilitler
+    Console.WriteLine("Kaynak kullanılıyor.");
+    Thread.Sleep(1000); // Kaynağı kullan
+    mutex.ReleaseMutex(); // Mutex'i serbest bırak
+}
+2.4 Semaphore
+Semaphore, aynı anda belirli sayıda iş parçacığının bir kaynağa erişmesine izin verir. Örneğin, bir kaynağa en fazla 3 iş parçacığının erişmesini sağlamak için kullanılabilir.
+
+Örnek:
+
+csharp
+Kodu kopyala
+using System.Threading;
+
+Semaphore semaphore = new Semaphore(2, 2); // Maksimum 2 iş parçacığı
+
+void AccessResource()
+{
+    semaphore.WaitOne(); // Kaynağa erişim izni al
+    Console.WriteLine("Kaynak kullanılıyor.");
+    Thread.Sleep(1000); // Kaynağı kullan
+    semaphore.Release(); // Kaynağı serbest bırak
+}
+2.5 ReaderWriterLockSlim
+Bu sınıf, birden fazla iş parçacığının aynı anda veri okuyabilmesine izin verir, ancak yazma işlemi sırasında yalnızca bir iş parçacığına izin verir.
+
+Örnek:
+
+csharp
+Kodu kopyala
+using System.Threading;
+
+ReaderWriterLockSlim rwLock = new ReaderWriterLockSlim();
+
+void ReadData()
+{
+    rwLock.EnterReadLock();
+    try
+    {
+        Console.WriteLine("Veri okunuyor.");
+    }
+    finally
+    {
+        rwLock.ExitReadLock();
+    }
+}
+
+void WriteData()
+{
+    rwLock.EnterWriteLock();
+    try
+    {
+        Console.WriteLine("Veri yazılıyor.");
+    }
+    finally
+    {
+        rwLock.ExitWriteLock();
+    }
+}
+3. Asenkron ve Paralel Programlama Farkları
+Kriter	Asenkron Programlama	Paralel Programlama
+Temel Amaç	I/O işlemleri sırasında bloklama yapmamak.	CPU-yoğun işlemleri hızlandırmak.
+Çalışma Modeli	Tek iş parçacığında çalışabilir.	Çok iş parçacığında çalışır.
+Senaryolar	Veri tabanı sorguları, dosya okuma, web istekleri.	Matematiksel hesaplamalar, görüntü işleme.
+Senkronizasyon İhtiyacı	Genellikle senkronizasyon gerektirmez.	Paylaşılan kaynaklar için senkronizasyon gerekir.
+4. Deadlock ve Yarış Koşulları (Race Conditions)
+Deadlock (Ölü Kilit)
+Bir iş parçacığı, başka bir iş parçacığının serbest bırakmasını beklediği kaynağa erişmeye çalışırken sonsuza kadar bekler.
+
+Örnek:
+
+csharp
+Kodu kopyala
+lock (obj1)
+{
+    lock (obj2)
+    {
+        // Deadlock riski
+    }
+}
+Race Condition
+İki veya daha fazla iş parçacığı, bir kaynağa eş zamanlı olarak eriştiğinde ve sonuç belirsiz hale geldiğinde oluşur.
+
+Çözüm:
+
+lock, Mutex veya Monitor kullanarak kaynak erişimini kontrol altına alın.
+5. Örnek: Paralel İşlem ve Senkronizasyon
+csharp
+Kodu kopyala
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+class Program
+{
+    static readonly object lockObject = new object();
+    static int sharedResource = 0;
+
+    static void Main(string[] args)
+    {
+        Parallel.For(0, 10, i =>
+        {
+            lock (lockObject)
+            {
+                sharedResource++;
+                Console.WriteLine($"Thread {i}: {sharedResource}");
+            }
+        });
+    }
+}
+Çıktı: Kilitlenmiş lock sayesinde sharedResource değişkeni her seferinde güvenli bir şekilde artırılır.
+
+C#’da paralel programlama, çok çekirdekli sistemlerden maksimum performans elde etmek için güçlü bir araçtır. Ancak, doğru senkronizasyon mekanizmalarını kullanmadan paralel programlama yapmak, veri tutarsızlığına, ölü kilitlere ve yarış koşullarına yol açabilir. Yukarıdaki araçlar ve teknikler, bu sorunları çözmek için etkili yöntemler sunar.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+1. Filtreleme Yöntemleri
+1.1 LINQ (Language-Integrated Query) Kullanarak Filtreleme
+LINQ, C#’da veri sorgulama ve filtreleme işlemlerini kolaylaştıran bir sorgu dilidir. LINQ, SQL'e benzer bir sözdizimine sahiptir ve dizi, koleksiyon, XML veya veritabanı gibi veri kaynakları üzerinde çalışabilir.
+
+Örnek: Temel LINQ Filtreleme
+csharp
+Kodu kopyala
+using System;
+using System.Linq;
+
+class Program
+{
+    static void Main()
+    {
+        int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        var evenNumbers = from num in numbers
+                          where num % 2 == 0
+                          select num;
+
+        foreach (var number in evenNumbers)
+        {
+            Console.WriteLine(number); // 2, 4, 6, 8
+        }
+    }
+}
+1.2 Lambda İfadeleri ile Filtreleme
+Lambda ifadeleri, LINQ ile birlikte sıklıkla kullanılan kısa ve sade bir sözdizimidir. Where metodu, bir koleksiyonda filtreleme yaparken lambda ifadeleriyle birlikte kullanılır.
+
+Örnek: Where ile Lambda İfadesi
+csharp
+Kodu kopyala
+using System;
+using System.Linq;
+
+class Program
+{
+    static void Main()
+    {
+        int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        var evenNumbers = numbers.Where(num => num % 2 == 0);
+
+        foreach (var number in evenNumbers)
+        {
+            Console.WriteLine(number); // 2, 4, 6, 8
+        }
+    }
+}
+2. İleri Seviye Filtreleme Teknikleri
+2.1 Birden Fazla Kriter ile Filtreleme
+Birden fazla kritere göre filtreleme yapılabilir. Örneğin, bir koleksiyondaki çift sayıları ve 5'ten büyük olanları seçebilirsiniz.
+
+Örnek:
+csharp
+Kodu kopyala
+var filteredNumbers = numbers.Where(num => num % 2 == 0 && num > 5);
+
+foreach (var number in filteredNumbers)
+{
+    Console.WriteLine(number); // 6, 8
+}
+2.2 Koleksiyonlarda Obje Filtreleme
+Koleksiyonlar genellikle nesnelerden oluşur. LINQ veya lambda ifadeleri, nesne koleksiyonlarında belirli özelliklere dayalı filtreleme için kullanılabilir.
+
+Örnek:
+csharp
+Kodu kopyala
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+class Program
+{
+    public class Product
+    {
+        public string Name { get; set; }
+        public double Price { get; set; }
+    }
+
+    static void Main()
+    {
+        var products = new List<Product>
+        {
+            new Product { Name = "Laptop", Price = 1200 },
+            new Product { Name = "Phone", Price = 800 },
+            new Product { Name = "Tablet", Price = 400 }
+        };
+
+        var expensiveProducts = products.Where(p => p.Price > 500);
+
+        foreach (var product in expensiveProducts)
+        {
+            Console.WriteLine(product.Name); // Laptop, Phone
+        }
+    }
+}
+2.3 İlk Elemanı veya Son Elemanı Seçme
+Filtreleme sırasında genellikle yalnızca ilk veya son eleman gereklidir. Bunun için First, FirstOrDefault, Last, LastOrDefault metodları kullanılır.
+
+Örnek:
+csharp
+Kodu kopyala
+var firstEven = numbers.First(num => num % 2 == 0);
+Console.WriteLine(firstEven); // 2
+
+var lastEven = numbers.Last(num => num % 2 == 0);
+Console.WriteLine(lastEven); // 8
+Not: Eğer koleksiyonda uygun eleman yoksa FirstOrDefault ve LastOrDefault varsayılan değer (null veya 0 gibi) döner. First ve Last ise hata fırlatır.
+
+2.4 Belirli Sayıda Eleman Seçme
+Take ve Skip metodları belirli sayıda eleman seçmek veya atlamak için kullanılır.
+
+Örnek:
+csharp
+Kodu kopyala
+var firstThree = numbers.Take(3); // İlk 3 eleman
+var skipTwo = numbers.Skip(2); // İlk 2 elemanı atla
+2.5 Gruplama ile Filtreleme
+GroupBy metodu, koleksiyondaki öğeleri belirli bir kritere göre gruplar.
+
+Örnek:
+csharp
+Kodu kopyala
+var groupedNumbers = numbers.GroupBy(num => num % 2 == 0 ? "Even" : "Odd");
+
+foreach (var group in groupedNumbers)
+{
+    Console.WriteLine(group.Key); // "Odd" ve "Even"
+    foreach (var num in group)
+    {
+        Console.WriteLine(num);
+    }
+}
+3. Veritabanı Üzerinde Filtreleme
+C#’da LINQ to SQL veya Entity Framework kullanarak veritabanı sorguları da filtrelenebilir. Bu filtreleme, SQL sorgularına benzer.
+
+Örnek: Entity Framework ile Filtreleme
+csharp
+Kodu kopyala
+using (var context = new MyDbContext())
+{
+    var expensiveProducts = context.Products
+                                   .Where(p => p.Price > 500)
+                                   .ToList();
+
+    foreach (var product in expensiveProducts)
+    {
+        Console.WriteLine(product.Name);
+    }
+}
+4. Performans İpuçları
+AsEnumerable ve AsQueryable:
+
+Veritabanı sorgularında IQueryable kullanımı sorguları optimize eder.
+Ancak veriler belleğe çekildikten sonra AsEnumerable kullanılabilir.
+Lazy Evaluation (Ertelenmiş Çalıştırma):
+
+LINQ sorguları genellikle ancak ToList, ToArray gibi metotlarla sonuç alındığında çalışır. Bu, performans avantajı sağlar.
+5. Özet: Kullanım Örnekleri
+Tüm Sayıları Filtreleme
+csharp
+Kodu kopyala
+int[] numbers = { 1, 2, 3, 4, 5, 6 };
+var evenNumbers = numbers.Where(x => x % 2 == 0);
+Nesne Koleksiyonunda Özellik Bazlı Filtreleme
+csharp
+Kodu kopyala
+var filteredProducts = products.Where(p => p.Price > 1000 && p.Name.Contains("Laptop"));
+İlk/Varsayılan Eleman
+csharp
+Kodu kopyala
+var firstProduct = products.FirstOrDefault(p => p.Price > 1000);
+Gruplama
+csharp
+Kodu kopyala
+var groupedByPrice = products.GroupBy(p => p.Price > 500 ? "Expensive" : "Cheap");
+C#'da filtreleme, gerek küçük koleksiyonlar üzerinde gerekse büyük veri setlerinde etkili bir şekilde kullanılabilir. LINQ, lambda ifadeleri ve koleksiyon metotları ile filtreleme işlemleri hem kolay hem de okunaklı hale gelir. Hangi yöntemlerin kullanılacağı, veri yapısına ve performans gereksinimlerine bağlıdır.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+api ile internet ile olacak diye bir şey yok. mesela bir c# kodu kütüphanelerle api aracıylığıyla konuşur. web api demek internet ortamında www. ile haberleşir kendine ulaşan sistemlere demektir. api zaten uygulama programlama ara birimidir.
+apilar farklı uygulamalarla farklı şekilde konuşabilirler. 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 IPython.display modülü içinde bulunan Image sınıfını kullanarak Jupyter Notebook içinde resim gösterimi yapabilirsiniz. İşte basit bir örnek:
 
