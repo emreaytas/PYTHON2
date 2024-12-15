@@ -8054,13 +8054,136 @@ Web API (Backend): React'ten gelen istekleri işler, iş mantığını uygular v
 Sunucu: Backend uygulamasını çalıştırır ve istemci-sunucu iletişimini yönetir.
 Veritabanı: Kalıcı veri depolar ve backend tarafından erişilir.
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+ bir React uygulamasına birden fazla API bağlamak mümkündür ve bu, modern web uygulamalarında oldukça yaygındır. Çeşitli API'lerin kullanılması, uygulamanızın farklı veri kaynaklarından veya işlevlerden yararlanmasını sağlar. Bu API'ler, hava durumu verileri, kullanıcı bilgileri, sosyal medya hizmetleri veya ödeme sistemleri gibi çeşitli servislerden veri alabilir.
 
+Birden Fazla API'nin React Uygulamasına Bağlanması
+Bir React uygulaması, çeşitli API'lerden veri çekebilir. Örneğin, bir e-ticaret sitesi, ürün bilgilerini almak için bir API, ödeme işlemlerini yönetmek için başka bir API ve kullanıcı yorumlarını göstermek için başka bir API kullanabilir. Bu API'ler, HTTP istekleri aracılığıyla veri alışverişi yapar ve React uygulaması bu verileri kullanıcı arayüzünde uygun şekilde gösterir.
 
+Birden Fazla API Bağlantısı Nasıl Yapılır?
+Birden fazla API ile çalışırken, her bir API için ayrı istekler yapılır. Bunlar genellikle fetch veya axios gibi kütüphaneler kullanılarak gerçekleştirilir. Her bir istekten dönen yanıtlar, React'ın state yönetimi araçları (örneğin, useState veya Redux) kullanılarak yönetilir.
 
+Örnek: Axios ile Birden Fazla API'den Veri Çekmek
+
+javascript
+Kodu kopyala
+import axios from 'axios';
+
+class App extends React.Component {
+  state = {
+    weather: {},
+    products: [],
+    comments: []
+  };
+
+  componentDidMount() {
+    this.fetchWeather();
+    this.fetchProducts();
+    this.fetchComments();
+  }
+
+  fetchWeather = () => {
+    axios.get('https://api.weatherapi.com/v1/current.json?key=your_key&q=London')
+      .then(response => {
+        this.setState({ weather: response.data });
+      })
+      .catch(error => console.error('Error fetching weather:', error));
+  };
+
+  fetchProducts = () => {
+    axios.get('https://api.example.com/products')
+      .then(response => {
+        this.setState({ products: response.data });
+      })
+      .catch(error => console.error('Error fetching products:', error));
+  };
+
+  fetchComments = () => {
+    axios.get('https://api.example.com/comments')
+      .then(response => {
+        this.setState({ comments: response.data });
+      })
+      .catch(error => console.error('Error fetching comments:', error));
+  };
+
+  render() {
+    return (
+      <div>
+        <h1>Weather: {this.state.weather.condition}</h1>
+        <ul>
+          {this.state.products.map(product => (
+            <li key={product.id}>{product.name}</li>
+          ))}
+        </ul>
+        <div>
+          {this.state.comments.map(comment => (
+            <p key={comment.id}>{comment.text}</p>
+          ))}
+        </div>
+      </div>
+    );
+  }
+}
+
+export default App;
+APİ'ler Birleşince Backend mi Olur?
+Birden fazla API'nin kullanılması, bu API'lerin kendi başlarına bir "backend" oluşturduğu anlamına gelmez. Her bir API, kendi bağımsız backend sistemine sahiptir ve bu backend'ler kendi iş mantıklarını, veritabanı işlemlerini ve diğer işlemlerini yürütür. React uygulamanız, bu backend sistemlerin her biriyle ayrı ayrı iletişim kurar.
+
+Özet:
+
+Birden Fazla API: Bir React uygulaması, birden fazla dış API ile iletişim kurabilir.
+API Bağımsızlığı: Her API, kendi backend servisine sahiptir.
+Veri Entegrasyonu: React uygulaması, farklı API'lerden gelen verileri birleştirerek kullanıcıya sunabilir.
+Birden fazla API kullanımı, uygulamanızı daha modüler ve esnek hale getirebilir, farklı servislerden yararlanmanıza olanak tanır ve uygulamanızın genişlemesine yardımcı olur.
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
+REST (Representational State Transfer) mimarisi, web uygulamaları ve API'ler için oldukça yaygın bir tasarım yaklaşımıdır. REST içerisinde endpoint ve URL kavramları, verilerin nasıl organize edildiği ve erişildiği konusunda merkezi bir rol oynar. İşte bu kavramların ayrıntılı açıklamaları:
 
+Endpoint Nedir?
+Bir REST API'de endpoint, bir kaynağa yapılan API çağrılarının belirli bir URL'sidir. Bu, sunucu tarafında kaynakları ifade eden bir adresleme mekanizmasıdır. API endpoint'leri genellikle belirli bir kaynağa (örneğin bir kullanıcı, ürün, sipariş vs.) veya kaynak grubuna (kullanıcılar, ürünler, siparişler gibi çoğul formlar) işlem yapmak için kullanılır.
 
+Özellikler:
+Kaynak tabanlı bir adresleme sunar.
+HTTP metodları (GET, POST, PUT, DELETE vb.) ile kullanılır.
+İstemcinin, sunucudaki veriler üzerinde işlem yapmasını sağlar.
+Endpoint Örnekleri:
+Ürünlerin Listesini Getirme:
+
+Endpoint: /api/products
+HTTP Metodu: GET
+Tek Bir Ürünü Getirme:
+
+Endpoint: /api/products/{id}
+HTTP Metodu: GET
+{id}: URL'deki değişken bir parametredir ve spesifik bir ürünün ID'sini temsil eder.
+Yeni Ürün Ekleme:
+
+Endpoint: /api/products
+HTTP Metodu: POST
+Ürün Güncelleme:
+
+Endpoint: /api/products/{id}
+HTTP Metodu: PUT
+Ürün Silme:
+
+Endpoint: /api/products/{id}
+HTTP Metodu: DELETE
+URL (Uniform Resource Locator) Nedir?
+URL, internet üzerinde bir kaynağın tam adresidir ve genellikle bir web sayfasını, görseli veya belgeyi ifade eder. REST API'lerde URL'ler, kaynakların tam konumlarını belirtmek için kullanılır ve genellikle sunucunun domain adı ve endpoint'in birleşiminden oluşur.
+
+Özellikler:
+Tam yol bilgisini içerir.
+Şemayı (http, https), sunucu adresini (domain/IP), port numarasını ve path'i içerebilir.
+URL Örneği:
+https://api.example.com/api/products
+Burada:
+https: Protokol
+api.example.com: Domain adı
+/api/products: Endpoint path'i
+Endpoint ve URL Arasındaki Farklar:
+Endpoint: API'nin belirli bir fonksiyonuna veya kaynağına işaret eder. Genellikle API'nin yapısal bir parçası olarak görülür ve path ile HTTP metodunun kombinasyonunu içerir.
+URL: Bir kaynağın tam internet adresidir. Protokol, host ve path bilgilerini içerir ve genel internet adresleme standardını takip eder.
+Endpoint ve URL Kullanımı:
+Bir RESTful API tasarlarken, URL'lerin ve endpoint'lerin düzenli ve mantıklı bir yapıda olması önemlidir. Kaynaklar çoğul adlarla ifade edilmeli, kaynaklar arası ilişkiler URL yapılarında mantıklı bir hiyerarşi oluşturacak şekilde tasarlanmalıdır. Ayrıca, URL'lerin ve endpoint'lerin sade ve anlaşılır olması, API'nin kullanılabilirliğini artırır ve geliştiricilere kolaylık sağlar.
 
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 
