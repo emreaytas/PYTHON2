@@ -1192,6 +1192,11 @@ C#'da filtreleme, gerek küçük koleksiyonlar üzerinde gerekse büyük veri se
 api ile internet ile olacak diye bir şey yok. mesela bir c# kodu kütüphanelerle api aracıylığıyla konuşur. web api demek internet ortamında www. ile haberleşir kendine ulaşan sistemlere demektir. api zaten uygulama programlama ara birimidir.
 apilar farklı uygulamalarla farklı şekilde konuşabilirler...
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+web servis platform bağımsız uygulama ve cihazların http protokolü ile iletişim kurmalarını sağlayan yapıdır.
+bir uygulama yazdık mesela bunu yayınladık başka bir kullanıcı talep etti ve indirdi api ile bunu dışarı çıkarabiliriz. mesela java ile yazdık diğerleri .net ile yazdı bunları web servisler ile entegre edebiliriz.
+soap(simple object access protokol)    = xml mesajları web uygulamaları üzerinden birbiriyle haberleştirmeye yarayan mesajlaşma protokolüdür. http post metotunu kullanır. soap mesaj göndermek için kullanılır. soap internet üzerinden iletişim kurmak için tasarlanmıştır.  soap platformdan ve dilden bağımsız bir yapıdır. soap w3c standartıdır.   
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
