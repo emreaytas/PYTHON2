@@ -1195,10 +1195,18 @@ apilar farklı uygulamalarla farklı şekilde konuşabilirler...
 web servis platform bağımsız uygulama ve cihazların http protokolü ile iletişim kurmalarını sağlayan yapıdır.
 bir uygulama yazdık mesela bunu yayınladık başka bir kullanıcı talep etti ve indirdi api ile bunu dışarı çıkarabiliriz. mesela java ile yazdık diğerleri .net ile yazdı bunları web servisler ile entegre edebiliriz.
 soap(simple object access protokol)    = xml mesajları web uygulamaları üzerinden birbiriyle haberleştirmeye yarayan mesajlaşma protokolüdür. http post metotunu kullanır. soap mesaj göndermek için kullanılır. soap internet üzerinden iletişim kurmak için tasarlanmıştır.  soap platformdan ve dilden bağımsız bir yapıdır. soap w3c standartıdır.   
+wsdl soap web servisleri kullanmak için yazılmış bir dildir. bir dökümantasyon gibidir. 
 
-
+SOAP web servisleri genellikle kurumsal uygulamalarda, özellikle banka, telekomünikasyon ve büyük ölçekli iş sistemleri gibi güvenliğin önemli olduğu yerlerde kullanılır.
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+soap ve rest farkları 
+soap ve rest web servis oluşturmak için kullanılır. api oluşturmak içinde ikisi birden kullanılabilir.
+soap bir protokoldür. her şey kurallara bağlıdır. isteklerde bulunurken yapman gereken maddeler belirlenmiştir.
+rest bir protokol değildir katı kuralları yoktur daha esnektir.  kullanımı daha kolaydır. soap sadece xml data formatı ile çalışır. 
+rest url xml http json bunları kullanabilir genelde json kullanır.    
+
 
 
 
