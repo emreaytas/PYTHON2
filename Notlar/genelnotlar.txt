@@ -1207,7 +1207,14 @@ soap bir protokoldür. her şey kurallara bağlıdır. isteklerde bulunurken yap
 rest bir protokol değildir katı kuralları yoktur daha esnektir.  kullanımı daha kolaydır. soap sadece xml data formatı ile çalışır. 
 rest url xml http json bunları kullanabilir genelde json kullanır.    
 
+soap statefull'dür rest ise Stateless'dir
+statefull demek daha önceki işlemlerinizi requestleri saklıyordur sizi tanıyordur.
+Stateless ise her Requesti yeni bir Request gibi kabul eder. 
 
+soap yavaştır daha geniş bant kullanır. data bir bantın içinde gidip gelir. rest hızlıdır bant genişliği azdır. 
+bant genişliği problemi xmlden kaynaklıdır. 
+
+soap'ın güvenlik standartları yüksektir çok güvenli bir protokoldür.
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
