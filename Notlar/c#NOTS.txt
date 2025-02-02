@@ -4554,6 +4554,84 @@ MVC...
 MVC...
 MVC...
 MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
+MVC...
 ........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 HTTP genel bakış. internette bir kaynağa erişmek istersek bir web adresi gireriz buna dns deriz. bir domain name kullanırız sonra onu ana yer belirleyerek sayfa ve sayfanın sayfası gibi bir yapı kurabiliriz.
 endpoint gelen isteği ifade eder. request yani istek endpoint ile son bulur. özel bir kaynağı sunucudan isteriz.
@@ -4566,7 +4644,51 @@ istemci sunucuya http protoklü ile request atar crud işlemlerinden birisi olab
 
 
 stateless olma durumu = bir request geldi ve response üretti sunucu mesela. sunucu normalde istemci ile alakalı durumları tutmaz normalde. buda http'nin durumsuz olma özelliğine karşılığa denk gelir. daha önce bir request gelip gelmediğini tutmaz normal şartlarda sunucu hafızada.
-........................................
+......................................................................
+
+1. Stateless (Durumsuz)
+Tanım: Her isteğin birbirinden bağımsız olduğu sistemlerdir. Sunucu, istemciden gelen önceki istekleri hatırlamaz.
+Özellikler:
+İstemcinin her istekte gerekli tüm bilgileri göndermesi gerekir.
+Sunucu, istemci hakkında herhangi bir oturum bilgisi tutmaz.
+Daha ölçeklenebilir ve performanslıdır.
+
+Avantajları:
+Yük dengeleme kolaydır.
+Daha az sunucu kaynağı tüketir.
+Cache kullanımı daha kolaydır.
+
+Dezavantajları:
+Her istekte tüm verilerin iletilmesi gerekir.
+Kullanıcı durumu sunucuda tutulmadığı için bazı işlemler daha karmaşık olabilir.
+Örnekler:
+REST API (HTTP üzerinden yapılan istekler her zaman stateless olmalıdır.)
+DNS (Her sorgu bağımsızdır.)
+Microservices (Bağımsız çalışan servisler genellikle stateless olur.)
+
+
+2. Stateful (Durumlu)
+Tanım: İstemci ile yapılan her isteğin bir önceki durumla bağlantılı olduğu sistemlerdir. Sunucu, istemcinin önceki isteklerini hatırlar.
+Özellikler:
+Sunucu, oturum veya durum bilgilerini saklar.
+Genellikle bir oturum (session) veya bağlantı yönetimi kullanır.
+Kullanıcının bağlandığı belirli bir sunucuya yönlendirilmesi gerekebilir (session affinity).
+
+Avantajları:
+Kullanıcıya özel bilgiler saklanabilir (örneğin alışveriş sepeti, kullanıcı oturumu).
+Daha az veri transferi yapıldığından bazı senaryolarda daha verimli olabilir.
+
+Dezavantajları:
+Sunucu belleğinde daha fazla kaynak tüketir.
+Yük dengeleme daha zor olabilir.
+Sunucu çökmesi durumunda oturum kaybolabilir.
+Örnekler:
+SOAP Web Servisleri (Çoğu durumda oturum bilgisi saklanabilir.)
+Databases (SQL Transactions) (Bağlantı sürecinde durum saklanır.)
+Online Bankacılık Uygulamaları (Oturum yönetimi gerekir.)
+FTP, SSH gibi bağlantılar (Bağlantı süresince durum korunur.)
+
+..............................................................................
 REQUEST YAPISI:.....
 
 http'nin verb kısmı
@@ -4621,11 +4743,180 @@ content:
     • Binary ve blobs common (.jpg)
     • API'Iarın kendi türleri
 
-...................
+...........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+URL, URI ve Endpoint Kavramları
+ASP.NET MVC veya Web API projelerinde URL, URI ve Endpoint kavramları sıkça kullanılır. Bunların farklarını ve nasıl çalıştığını tam anlamıyla açıklayayım.
+
+1️⃣ URL (Uniform Resource Locator) – Adres Tanımlayıcı
+URL, belirli bir kaynağın (örneğin bir web sayfası veya API) internet üzerindeki tam adresidir.
+Örnek bir URL:
+arduino
+Kopyala
+Düzenle
+https://www.example.com/products/laptops?brand=dell
+https:// → Protokol (HTTP veya HTTPS gibi)
+www.example.com → Alan adı (Domain)
+/products/laptops → Kaynak Yolu (Path)
+?brand=dell → Sorgu Parametreleri (Query Parameters)
+2️⃣ URI (Uniform Resource Identifier) – Kaynak Tanımlayıcı
+URI, bir kaynağı tanımlayan genel bir yapıdır.
+Her URL bir URI'dir ama her URI bir URL olmayabilir.
+Örnekler:
+Tam URL (URI içeren bir URL):
+arduino
+Kopyala
+Düzenle
+https://www.example.com/products/laptops?brand=dell
+Sadece URI (Kaynağı tanımlayan ama internet adresi olmayan bir yapı):
+bash
+Kopyala
+Düzenle
+/products/laptops
+URN (Uniform Resource Name, yalnızca ad olarak kullanılan URI örneği):
+css
+Kopyala
+Düzenle
+urn:isbn:0451450523
+Bir API için URI (HTTP protokolü olmadan):
+bash
+Kopyala
+Düzenle
+/api/products/5
+3️⃣ Endpoint – API Uç Noktaları
+Endpoint, bir API’nin belirli bir işlevselliği sağlayan belirli bir noktasıdır.
+Endpoint bir URL'dir, ancak belirli bir işlem veya veri döndürmek için tasarlanmıştır.
+Örnek API Endpoint’leri:
+GET Tüm Ürünler:
+arduino
+Kopyala
+Düzenle
+https://api.example.com/products
+GET Belirli Bir Ürünü Getir:
+arduino
+Kopyala
+Düzenle
+https://api.example.com/products/5
+POST Yeni Ürün Ekle:
+arduino
+Kopyala
+Düzenle
+https://api.example.com/products
+Body:
+json
+Kopyala
+Düzenle
+{
+  "name": "Laptop",
+  "brand": "Dell",
+  "price": 1200
+}
+🔹 ASP.NET Core MVC ile Örnek
+Aşağıda bir MVC Controller ve Routing (Yönlendirme) yapısının nasıl çalıştığını gösteren örnek var.
+
+📌 Controller:
+
+csharp
+Kopyala
+Düzenle
+using Microsoft.AspNetCore.Mvc;
+
+[Route("api/products")]
+[ApiController]
+public class ProductsController : ControllerBase
+{
+    // GET api/products
+    [HttpGet]
+    public IActionResult GetAllProducts()
+    {
+        return Ok(new { Message = "Tüm ürünler getirildi." });
+    }
+
+    // GET api/products/5
+    [HttpGet("{id}")]
+    public IActionResult GetProductById(int id)
+    {
+        return Ok(new { Message = $"Ürün {id} getirildi." });
+    }
+
+    // POST api/products
+    [HttpPost]
+    public IActionResult AddProduct([FromBody] Product product)
+    {
+        return Created("", new { Message = "Ürün başarıyla eklendi.", Product = product });
+    }
+}
+🔹 MVC Route Mantığı
+Bu controller’da 3 farklı endpoint var:
+
+HTTP Metodu	Endpoint (URL)	Açıklama
+GET	/api/products	Tüm ürünleri getirir
+GET	/api/products/5	ID'si 5 olan ürünü getirir
+POST	/api/products	Yeni ürün ekler
+🔹 API Testi için Postman veya tarayıcıdan deneyebilirsin:
+
+https://localhost:5001/api/products
+https://localhost:5001/api/products/5
+🔹 ASP.NET MVC Route Yapısı
+Eğer klasik MVC Controller ve View kullanıyorsan, Startup.cs veya Program.cs içinde default route şu şekilde belirlenir:
+
+csharp
+Kopyala
+Düzenle
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
+Bu route şu şekilde çalışır:
+
+URL	Hedef Controller & Action
+/	HomeController.Index()
+/products	ProductsController.Index()
+/products/details/5	ProductsController.Details(5)
+📌 Eğer bir View (Razor) kullanıyorsan Controller’ın içi şu şekilde olabilir:
+
+csharp
+Kopyala
+Düzenle
+public class ProductsController : Controller
+{
+    public IActionResult Index()
+    {
+        return View(); // /Views/Products/Index.cshtml açılır
+    }
+
+    public IActionResult Details(int id)
+    {
+        ViewBag.ProductId = id;
+        return View(); // /Views/Products/Details.cshtml açılır
+    }
+}
+🔹 Özet
+Kavram	Açıklama
+URL	Bir kaynağın tam internet adresi (https://api.example.com/products/5)
+URI	Bir kaynağın tanımlayıcısı (URL içerebilir ama içermezse de olabilir)
+Endpoint	API'nin erişim noktasıdır (https://api.example.com/products)
+Bu bilgilerle artık ASP.NET MVC & Web API projelerinde URL, URI ve Endpoint kavramlarını rahatlıkla kullanabilirsin. 🚀
+
+
+
+
+
+
+
+
+
+
+
+..................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+
+.....................................................................................................
 pipeline = iş hattı. bir istek geldi mesela sunucu bunu hata yönetim mekanizmasından geçirebilir, static dosya  kullanır veya kullanmayacak belirleyebilir. bir request endpoint'e ulaştığında ilgili request'e karşılık cevap yani response üretilir.
 iş hattının nasıl konfigüre edileceği kritik bir konudur.
 requestlerin ve responselerin nasıl üretileceğine geliştirici karar verir .net mimarisi ile.
-.....................
+..........................................................................................................
 kestrel default olarak gelir sunucu olarak. iss'de kullanabiliriz aspde.
 mvcde razor pagesler kullanacağız.
 SingalR ve gRPC servislerdir.  daha az maliyetli web socket programları yapabiliriz. canlı sohbet gibi sürekli işlem gerektiren bir iş için kullanabiliriz. 
