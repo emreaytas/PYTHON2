@@ -1420,10 +1420,225 @@ Sayfalar arasında veri taşımak için TempData kullanabilirsin.
 
 Eğer proje büyükse ve daha sağlam bir yapı istiyorsan, kesinlikle ViewModel ile çalışmalısın! 💪😊
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+bir mvc projesinin api gibi de kullanabiliriz asp.net core'de.
+mesela localhost://5074/api/products diyip json veri dönen bir api gibide kullanabileceğiz. tümleşik bir web uygulaması yapabiliriz böylece.
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+Evet, ASP.NET Core MVC ve React Native'i birlikte kullanarak hem web uygulaması hem de mobil uygulama geliştirebilirsin. 🚀
+Bunun için ASP.NET Core MVC'yi API olarak kullanıp, React Native ile mobil uygulamayı bu API'ye bağlayabilirsin.
+
+✅ Genel Mimari Yapı
+Bu senaryoda, MVC uygulamanın API desteği sağlaması gerekiyor.
+📌 Genel yapı şöyle olur:
+
+ASP.NET Core MVC + API (Backend)
+Web uygulaması ve API için ASP.NET Core MVC kullanılır.
+Mobil uygulamanın ihtiyacı olan verileri sağlayan RESTful API'ler yazılır.
+Veritabanı (MSSQL, PostgreSQL, MySQL, vb.) burada yönetilir.
+React Native (Mobil Uygulama)
+ASP.NET Core API'ye HTTP istekleri yaparak verileri çeker.
+Kullanıcı giriş/çıkış işlemleri, sipariş yönetimi, canlı bildirimler React Native içinde çalışır.
+✅ 1️⃣ ASP.NET Core MVC Projesini API Destekli Hale Getirme
+ASP.NET Core MVC içinde API yazmak için ControllerBase kullanmalısın.
+Aşağıda bir API Controller örneği var:
+
+📌 ProductsController.cs - API Endpoint Örneği
+csharp
+Kopyala
+Düzenle
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+
+namespace MyApp.API.Controllers
+{
+    [Route("api/products")]
+    [ApiController]
+    public class ProductsController : ControllerBase
+    {
+        [HttpGet]
+        public IActionResult GetProducts()
+        {
+            var products = new List<object>
+            {
+                new { Id = 1, Name = "Laptop", Price = 1200 },
+                new { Id = 2, Name = "Mouse", Price = 30 }
+            };
+
+            return Ok(products);
+        }
+    }
+}
+📌 Bu API endpoint'ini React Native uygulaman HTTP isteğiyle çağırabilir.
+
+Test için:
+Postman veya tarayıcıdan şu URL'yi açabilirsin:
+
+sh
+Kopyala
+Düzenle
+http://localhost:5000/api/products
+Eğer çalışıyorsa şu gibi bir JSON yanıtı alırsın:
+
+json
+Kopyala
+Düzenle
+[
+    { "Id": 1, "Name": "Laptop", "Price": 1200 },
+    { "Id": 2, "Name": "Mouse", "Price": 30 }
+]
+✅ 2️⃣ React Native Mobil Uygulamadan ASP.NET Core API'ye Bağlanma
+Artık mobil uygulama ile API arasında veri iletişimi sağlayabiliriz.
+React Native içinde Axios veya Fetch API kullanarak bu API'ye istek atabilirsin.
+
+📌 React Native API'ye Bağlanma Örneği
+Öncelikle, React Native projesinde Axios'u yükleyelim:
+
+sh
+Kopyala
+Düzenle
+npm install axios
+📌 Şimdi bir ürün listesi çekelim:
+
+javascript
+Kopyala
+Düzenle
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList } from 'react-native';
+import axios from 'axios';
+
+const ProductList = () => {
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:5000/api/products')
+            .then(response => setProducts(response.data))
+            .catch(error => console.error("API Hatası: ", error));
+    }, []);
+
+    return (
+        <View>
+            <Text>Ürünler</Text>
+            <FlatList
+                data={products}
+                keyExtractor={item => item.Id.toString()}
+                renderItem={({ item }) => (
+                    <Text>{item.Name} - {item.Price} TL</Text>
+                )}
+            />
+        </View>
+    );
+};
+
+export default ProductList;
+📌 Bu kod ne yapıyor?
+
+API'den ürün listesini çekiyor.
+FlatList ile React Native içinde liste halinde gösteriyor.
+Eğer API çalışıyorsa, mobil uygulamada şu gibi bir çıktı görmelisin:
+diff
+Kopyala
+Düzenle
+Ürünler
+- Laptop - 1200 TL
+- Mouse - 30 TL
+✅ 3️⃣ Kullanıcı Girişi (JWT Authentication)
+Eğer mobil uygulama kullanıcı girişi yapacaksa, JWT ile kimlik doğrulama yapmalısın.
+
+📌 1. ASP.NET Core API'de JWT Desteğini Aktif Et
+Öncelikle NuGet'ten JWT paketlerini yükleyelim:
+
+sh
+Kopyala
+Düzenle
+Install-Package Microsoft.AspNetCore.Authentication.JwtBearer
+📌 Şimdi Program.cs içinde JWT doğrulamasını ekleyelim:
+
+csharp
+Kopyala
+Düzenle
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+var builder = WebApplication.CreateBuilder(args);
+
+var key = Encoding.UTF8.GetBytes("super_secret_key_123456");
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
+
+var app = builder.Build();
+app.UseAuthentication();
+app.UseAuthorization();
+app.Run();
+📌 2. Kullanıcı Girişi İçin API Controller Yaz
+csharp
+Kopyala
+Düzenle
+[HttpPost("login")]
+public IActionResult Login([FromBody] LoginRequest request)
+{
+    if (request.Username == "admin" && request.Password == "1234")
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.UTF8.GetBytes("super_secret_key_123456");
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Expires = DateTime.UtcNow.AddHours(1),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return Ok(new { token = tokenHandler.WriteToken(token) });
+    }
+    return Unauthorized();
+}
+📌 Bu API ile kullanıcı giriş yapınca JWT token alır.
+
+✅ 4️⃣ React Native ile Kullanıcı Girişi Yap
+Şimdi React Native'de kullanıcı girişi yapalım ve token alalım:
+
+javascript
+Kopyala
+Düzenle
+import axios from 'axios';
+
+const login = async (username, password) => {
+    try {
+        const response = await axios.post('http://localhost:5000/api/login', {
+            username,
+            password
+        });
+
+        const token = response.data.token;
+        console.log("Giriş başarılı, Token:", token);
+        return token;
+    } catch (error) {
+        console.error("Giriş başarısız!", error);
+        return null;
+    }
+};
+📌 Eğer giriş başarılı olursa, sunucu bir JWT token döndürecek.
+
+🚀 Sonuç ve Mimarinin Avantajları
+✅ ASP.NET Core MVC ve React Native birlikte kullanılabilir.
+✅ MVC projesinde API yazabilir, React Native uygulaması bu API'leri kullanabilir.
+✅ Tek Backend (MVC API) ile hem Web hem Mobil uygulama çalışabilir.
+✅ JWT Authentication ile güvenli giriş-çıkış yapılabilir.
+
+🚀 Bu yapıyı kullanarak ASP.NET Core MVC ile güçlü bir Backend oluşturabilir, React Native ile hem iOS hem Android için modern bir mobil uygulama geliştirebilirsin! 🎯
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
