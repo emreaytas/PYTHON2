@@ -1218,10 +1218,221 @@ soap'ın güvenlik standartları yüksektir çok güvenli bir protokoldür.
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Controller ve ControllerBase arasındaki temel fark Controller sınıfı daha kapsayıcı View falan dönebilir. Ve en kapsayıcı Metot ActionResult'tır. 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Evet, ASP.NET Core MVC'de bir View'e birden fazla veri gönderebilirsin. Bunun için birkaç farklı yöntem var. En yaygın yöntemler şunlardır:
+
+✅ 1️⃣ View'e Model Kullanarak Veri Gönderme (En İyi Yöntem)
+En iyi yöntem View Model kullanmaktır. Birden fazla veri göndermek istiyorsan, bunları bir sınıfta birleştirip View'e gönderebilirsin.
+
+📌 Adım 1: Model Sınıfını Tanımla
+Öncelikle, bir model sınıfı oluştur.
+
+csharp
+Kopyala
+Düzenle
+public class PersonViewModel
+{
+    public string[] Names { get; set; }
+    public string[] Surnames { get; set; }
+    public int[] Ages { get; set; }
+}
+📌 Adım 2: Controller'da Model Kullan
+Şimdi Index2 action metodunu güncelle:
+
+csharp
+Kopyala
+Düzenle
+public ViewResult Index2()
+{
+    var model = new PersonViewModel
+    {
+        Names = new string[] { "Emre", "Ahmet", "Mehmet" },
+        Surnames = new string[] { "Yılmaz", "Demir", "Kaya" },
+        Ages = new int[] { 25, 30, 35 }
+    };
+
+    return View("Index2", model);
+}
+📌 Adım 3: View (Index2.cshtml) İçinde Modeli Kullan
+Şimdi View içinde modeli alıp kullanabilirsin:
+
+html
+Kopyala
+Düzenle
+@model PersonViewModel
+
+<h2>İsimler</h2>
+<ul>
+    @foreach (var name in Model.Names)
+    {
+        <li>@name</li>
+    }
+</ul>
+
+<h2>Soyisimler</h2>
+<ul>
+    @foreach (var surname in Model.Surnames)
+    {
+        <li>@surname</li>
+    }
+</ul>
+
+<h2>Yaşlar</h2>
+<ul>
+    @foreach (var age in Model.Ages)
+    {
+        <li>@age</li>
+    }
+</ul>
+✅ Bu yöntem en temiz ve en düzenli olanıdır. Model View'e direkt bağlandığı için kodun okunaklı olur.
+
+✅ 2️⃣ ViewBag ile Birden Fazla Veri Gönderme (Alternatif)
+Eğer hızlı bir şekilde View'e veri göndermek istersen, ViewBag kullanabilirsin.
+
+📌 Controller:
+csharp
+Kopyala
+Düzenle
+public ViewResult Index2()
+{
+    ViewBag.Names = new string[] { "Emre", "Ahmet", "Mehmet" };
+    ViewBag.Surnames = new string[] { "Yılmaz", "Demir", "Kaya" };
+    ViewBag.Ages = new int[] { 25, 30, 35 };
+
+    return View("Index2");
+}
+📌 View (Index2.cshtml):
+html
+Kopyala
+Düzenle
+<h2>İsimler</h2>
+<ul>
+    @foreach (var name in ViewBag.Names)
+    {
+        <li>@name</li>
+    }
+</ul>
+
+<h2>Soyisimler</h2>
+<ul>
+    @foreach (var surname in ViewBag.Surnames)
+    {
+        <li>@surname</li>
+    }
+</ul>
+
+<h2>Yaşlar</h2>
+<ul>
+    @foreach (var age in ViewBag.Ages)
+    {
+        <li>@age</li>
+    }
+</ul>
+📌 ViewBag dinamik bir yapıdır. Tip güvenliği yoktur ve büyük projelerde pek önerilmez. Küçük projelerde veya test amaçlı kullanabilirsin.
+
+✅ 3️⃣ ViewData ile Birden Fazla Veri Gönderme (Alternatif)
+ViewData, ViewBag gibi dinamik bir yapıdır ancak Dictionary<string, object> gibi çalışır.
+
+📌 Controller:
+csharp
+Kopyala
+Düzenle
+public ViewResult Index2()
+{
+    ViewData["Names"] = new string[] { "Emre", "Ahmet", "Mehmet" };
+    ViewData["Surnames"] = new string[] { "Yılmaz", "Demir", "Kaya" };
+    ViewData["Ages"] = new int[] { 25, 30, 35 };
+
+    return View("Index2");
+}
+📌 View (Index2.cshtml):
+html
+Kopyala
+Düzenle
+<h2>İsimler</h2>
+<ul>
+    @foreach (var name in (string[])ViewData["Names"])
+    {
+        <li>@name</li>
+    }
+</ul>
+
+<h2>Soyisimler</h2>
+<ul>
+    @foreach (var surname in (string[])ViewData["Surnames"])
+    {
+        <li>@surname</li>
+    }
+</ul>
+
+<h2>Yaşlar</h2>
+<ul>
+    @foreach (var age in (int[])ViewData["Ages"])
+    {
+        <li>@age</li>
+    }
+</ul>
+📌 ViewData ile çalışırken veriyi cast ((string[])ViewData["Names"]) etmen gerekir. Bu yüzden hata yapmaya açık bir yöntemdir.
+
+✅ 4️⃣ TempData ile Birden Fazla Veri Gönderme (Sayfalar Arası)
+Eğer veriyi sayfalar arasında taşımak istiyorsan, TempData kullanabilirsin.
+
+📌 Controller:
+csharp
+Kopyala
+Düzenle
+public IActionResult Index2()
+{
+    TempData["Names"] = new string[] { "Emre", "Ahmet", "Mehmet" };
+    TempData["Surnames"] = new string[] { "Yılmaz", "Demir", "Kaya" };
+    TempData["Ages"] = new int[] { 25, 30, 35 };
+
+    return RedirectToAction("ShowData");
+}
+
+public IActionResult ShowData()
+{
+    return View();
+}
+📌 View (ShowData.cshtml):
+html
+Kopyala
+Düzenle
+<h2>İsimler</h2>
+<ul>
+    @foreach (var name in (string[])TempData["Names"])
+    {
+        <li>@name</li>
+    }
+</ul>
+📌 TempData sadece bir sayfa yönlendirmesi süresince saklanır (yani bir kez okunursa, silinir). Keep() veya Peek() metotlarını kullanarak veri kaybolmadan tekrar çağırabilirsin.
+
+🚀 Hangi Yöntemi Kullanmalısın?
+Yöntem	Kullanım Amacı	Avantajları	Dezavantajları
+✅ Model (ViewModel)	En iyi yöntem (Önerilir)	Tip güvenli, düzenli, okunaklı	Kod yazımı daha uzun olabilir
+✅ ViewBag	Küçük veriler için hızlı kullanım	Dinamik olarak çalışır, kolaydır	Tip güvenliği yoktur, büyük projelerde önerilmez
+✅ ViewData	Controller'dan View'e küçük veri gönderme	Aynı isimle farklı tipler tutulabilir	Cast işlemi gerekir, hata yapmaya açıktır
+✅ TempData	Sayfalar arasında veri taşımak	Redirect sonrası veri taşır	Bir kere okunduğunda kaybolur
+🚀 Genellikle ViewModel kullanmak en sağlıklısıdır.
+Ama küçük veriler için ViewBag veya ViewData kullanılabilir.
+Sayfalar arasında veri taşımak için TempData kullanabilirsin.
+
+Eğer proje büyükse ve daha sağlam bir yapı istiyorsan, kesinlikle ViewModel ile çalışmalısın! 💪😊
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

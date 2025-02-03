@@ -5126,13 +5126,19 @@ public IActionResult Index1(){ // bir ViewResult sonucu dönecek bu yapı bize.
 ...Bu sayfanın Controlleri.
         public ViewResult Index2(){ // bir ViewResult sonucu dönecek bu yapı bize.
             
+
             var names = new string[]
             {
+
                 "Emre", "Bmw", "Ford"
+
             };
-            return View("Index2",names);
+
+            return View("Index2",names); // hem hangi sayfanın açılacağını hemde hangi verileri alacağını belirleyebiliriz burada. 
 
         }
+
+
 
 ....verileri controllerden view'e gönderebiliriz.
 cshtml içeriisnde hem html bende c# kodları olur razor engine bunu html koduna çevirir komple.
