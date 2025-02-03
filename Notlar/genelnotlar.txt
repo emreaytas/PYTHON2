@@ -1642,6 +1642,45 @@ const login = async (username, password) => {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+builder.Services.AddControllers(); // program.cs'e bunu ekledik böylece api desteği sağlayabiliriz. 
+api desteği sağlarken'de ilgili endpointelerin düzenlenmesi lazım.   
+................. aşağıdaki yapı ile bunu sağlayabiliriz.  
+
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapAreaControllerRoute(
+        name: "Admin",
+        areaName: "Admin",
+        pattern: "Admin/{controller=Dashboard}/{action=Index}/{id?}"
+    );
+
+    endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+
+    endpoints.MapRazorPages();
+
+    endpoints.MapControllers();
+});
+
+bir api Controller yazarsak eğer bir sıkıntı yaşamdan .net projemizi hem mvc hemde api gibi kullanabilir şekilde kullanabiliriz. 
+
+Program.cs yapılanması önemlidir ama.
+
+bir classlib ekleyebiliriz solutina böylece bir sınıf kütüphanesi ekleyip onu api olarak kullandırabiliriz böyle bir durumda var.
+classlibin içine dotnet add package Microsoft.AspNetCore.Mvc.Core; 
+
+// Program.cs'e eklenmesi gereken yapı ve AssemblyReference.cs lazım 
+builder.Services.AddControllers()
+    .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+
+........... AssemblyReference.cs aşağıda. 
+namespace Presentation
+{
+    public class AssemblyReference
+    {
+
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
