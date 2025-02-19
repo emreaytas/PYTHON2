@@ -2256,11 +2256,25 @@ Authorization = yetki denetimi. bazı kaynaklara erişmek için giriş yapmış 
 
 oturum tabanlı güvenlik = api istemcisi ve sunucusu olsun. kullanıcı adı şifreyi api sunucusuna göndersin. api sunucusu gönderilenler doğruysa(veritabanından kontrol eder.) oturumid yollar api istemcisi bundan sonra istek + oturumid kullanır.   
 jwt = kullanıcı adı ve şifre yollarız. api sunucusu jwt token oluşturur. ne veritabanında ne sunucuda tutulur. api istemcisi jwt + istek olarak gönderir. ve api sunucusu jwt tokeni çözer key'e göre eğer doğru ise cevap döner bundan sonra. jwt içinde hem kullanıcı bilgileri hemde bir imza var. bu imza api sunucusundaki key ile oluşturulmuştur.
-token 3 parçadan oluşuyor. başlık bilgileri algoritma ve token bilgisi. ikincisi kullanıcının verileri. 3. kısım ise imza kısmı. veri ve anahtar ile imza oluşturulur. anahtarda bir değişim olursa imza değişir. veri değişirse de imza değişir. 
+token 3 parçadan oluşuyor. başlık bilgileri algoritma ve token bilgisi. ikincisi kullanıcının verileri. 3. kısım ise imza kısmı. veri ve anahtar ile imza oluşturulur. anahtarda bir değişim olursa imza değişir. veri değişirse de imza değişir. sunucudaki imzaya göre kontrol olur. 
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c 
+token yukarıdaki gibi bir şey. 3 parçadan oluşuyor. noktalar ile ayrılmış 
+ilk kısmı başlık {"alg": "HS256","typ": "JWT"} böyle bir yapı.
+ikincisi ise veri kısmı. {"sub": "1234567890","name": "John Doe","iat": 1516239022} bu şekilde. 
+üçüncüsü ise imza kısmı. HMACSHA256(
+  base64UrlEncode(header) + "." +
+  base64UrlEncode(payload),
+  
+your-256-bit-secret
+)
+
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+.nette async programlama patterni vardır. task based ifadeye odaklanırız genel olarka. istemci bir request üretir ve sunucu ise response üretir. 
 
 
 
