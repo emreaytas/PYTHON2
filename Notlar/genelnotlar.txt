@@ -2275,11 +2275,20 @@ your-256-bit-secret
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 .nette async programlama patterni vardır. task based ifadeye odaklanırız genel olarka. istemci bir request üretir ve sunucu ise response üretir. 
+işlemler bir thread içerisinde yönetilir. işlemler bir iş hattı thread içinde çalışır ve biter. 
+istekler thread pool'a düşüyor. ve oda threadlara bölüp işlemleri yapıyor. thread havuzu tamamen kullanıldıysa diğer isteklerin beklemesi gerekir. buda daha çok ölçeklendirme işidir. 
+ilk gelen işlem devreye girince diğerinin beklemesine gerek yok thread ile mümkündür bu. burda bir husus var. birinci threaddeki işlemle ikinci işlem kaynak kullanımı konusunda    
+.net'te asenkron programlama için thread pool kullanılır. threadler thread pool'dan çekilirler. çalıştırılan thread yapılarının yönetimi sağlanır. bu noktada task kullanılır.  
+task objesi temel olarak üstlendiği işleri thread pool üzerinde asenkron olarak çalıştırır. 
+task anahtar kelimesinin asenkron metot tanımlarken kullanılması gerektiğini ancak sonucu temsil etmediğini anlamak önemlidir. 
+task anahtar kelimesinin asenkron metot tanımlarken kullanmılasını gerektğini ancak sonucu temsil etmediğini anlamak önemlidir. task içinde çok status isCompleted isCanceled isFaulted  gibi çok sayıda property barındırır. 
+task ile biz operasyonun tamamlanıp tamamlanmadığını izleyebiliriz.
+await kelimesi sonuçların asenkron operasyondan çıkartılmasını sağlar. operasyonun başarını doğrular.  zaman uyumsuz yöntemde kodun geri kalanını yürütmek için devamı sağlar. await anahtar kelimesinin kullanılması zorunlu değildir. await anahatar kelimesi yalnızca bir kez kullanılmak zorunda da değildir. 
 
-
-
+async task await vs kullanınca asenkron kodlamayı yapmış olacağız. işin zorluğunu Task bizim üzerimizden alır.  
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 
