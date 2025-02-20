@@ -2242,6 +2242,9 @@ mikroservis kullanırsak eğer o zaman node.js asp vs vs hepsini bir arada kulla
 mesela react ve reactNative yazarız sonra apiler yazarak bir uygulama üretebiliriz.     
 
 bir uygulamadı birden fazla mikroservisleri farklı serverlarda canlıya alarakta bir uygulama üretebiliriz buna dağıtılabilirlik denir. burada bir hız dezavantajı olabilir. 
+loadbalancer duruma göre istekleri sunuculara böler yoğğun işlemlere göre vs. bütün sunucuyu duplicate ettik ama bu bir dezavantaj monolitik mimaride ölçeklendirme sorunu var mesela bir controlleri büyütmek istersek olmuyor komple hepsini ölçeklendiriyoruz. ölçeklendirme kolay ama hepsi büyüyor.   
+yatay ölçeklendirme sunucuyu kopyalamaktır özet olarak dikey olarka ölçeklendirmek diski rami vs büyütmek gibidir. 
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2289,9 +2292,12 @@ async task await vs kullanınca asenkron kodlamayı yapmış olacağız. işin z
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
+Onion architecture...
+5 temel katmandan oluşur domain, persistence, Presentation, application, infrastructure katmanları.
+domain en basit olarak veri tabanı tasarımlarının yapıldığı katmanlardır. uml gibidir veritabanı işlemleri yapılmaz. modelleme yaparız aslında. domain katmanında classlar ile yaparız.
+application katmanında işlevleri burada yaparız. soyut olarak tanımlarız burada void BlockAccountant(Guid accountid) der tanımlarız işlevleri burada tanımlamayız. 
+infrastructure ve persistence = işlevlerin nasıl gerçekleşeceğini ise somut olarak infrastructure veya persistence'ye yazarız. iki katman ayrı sayılmaz aslında daha organize olması için veritabanı olan işlemleri persistence olmayanları ise infrastructure katmanına yazarız. hem veritabanı hemde mesela text işlemi yapan bir işlem varsa o zaman hangisinde kullanacağız. o zaman solid prensiplerine uyarak yapmak gerekmektedir.
+Presentation katmanı = burada bir çalışabilir proje kullanmamız lazım api mvc console farketmez çalıştırılabilir bir proje olması gerekir.  
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
