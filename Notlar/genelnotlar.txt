@@ -2245,6 +2245,12 @@ bir uygulamadı birden fazla mikroservisleri farklı serverlarda canlıya alarak
 loadbalancer duruma göre istekleri sunuculara böler yoğğun işlemlere göre vs. bütün sunucuyu duplicate ettik ama bu bir dezavantaj monolitik mimaride ölçeklendirme sorunu var mesela bir controlleri büyütmek istersek olmuyor komple hepsini ölçeklendiriyoruz. ölçeklendirme kolay ama hepsi büyüyor.   
 yatay ölçeklendirme sunucuyu kopyalamaktır özet olarak dikey olarka ölçeklendirmek diski rami vs büyütmek gibidir. 
 
+mikroservie yapısında her servis kendi sunucusunda çalışır her birinin kendi veritabanı vs var. mikroserviste servislerin amacı küçük bir işi yok iyi yapmaktır bunlar birleşir ve uygulama oluşur. 
+api gateway ile dış dünya ile birleşirler bunlar. böylece birden fazla teknolojiyi bir uygulamada kullanabilirim. 
+Stateless yapılardır bunlar. 
+kolay ölçeklendirebilir mikroservisler ve dikey ölçeklendirilir zaten her biri bir iş yapar. 
+
+api gateway /post veya /post/2023 gibi şeyleri http://server:3000/post gibi yanıtlara çevirir canlıda olan projelerdeki istekleri istenen veriye göre lazım olan sunucuya yönlendiriyor. /users olsa mesela https://server:3010/users 'a yönlendirecekti.
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2298,6 +2304,7 @@ domain en basit olarak veri tabanı tasarımlarının yapıldığı katmanlardı
 application katmanında işlevleri burada yaparız. soyut olarak tanımlarız burada void BlockAccountant(Guid accountid) der tanımlarız işlevleri burada tanımlamayız. 
 infrastructure ve persistence = işlevlerin nasıl gerçekleşeceğini ise somut olarak infrastructure veya persistence'ye yazarız. iki katman ayrı sayılmaz aslında daha organize olması için veritabanı olan işlemleri persistence olmayanları ise infrastructure katmanına yazarız. hem veritabanı hemde mesela text işlemi yapan bir işlem varsa o zaman hangisinde kullanacağız. o zaman solid prensiplerine uyarak yapmak gerekmektedir.
 Presentation katmanı = burada bir çalışabilir proje kullanmamız lazım api mvc console farketmez çalıştırılabilir bir proje olması gerekir.  
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
