@@ -2258,6 +2258,7 @@ kubernetes docker gibi uygulamaların gerçekte çalıştıkları ortamdan soyut
 bu bilgisayar ortamından diğerine hızlı ve güvenilir bir şekilde aktarılıp çalışması için kodu ve tüm bağımlılıklarını paketleyen bir standart yazılım birimidir. 
 mikroservisler için kullanılır genelde. mesela bir mikroservis yazdık canlıya almak istiyoruz saniyede 1000 sorgu geliyor. gün gün farklı sorgu gelmeye başladı sistemin tüm kapasitesini kullanmıyoruz boşuna fatura ödüyoruz. ölçeklendirme olayı budur. gerekli trafiğe göre ölçekleme yapan sistemler vardır. mesela azalırsa kullanıcı uygulama çıkaran artarsa ekleyen bir sistem kurabiliriz. 
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Authentication = kimlik denetimidir. sunucuya kullancı adı şifre göndeririz doğruysa erişime izin verir.
